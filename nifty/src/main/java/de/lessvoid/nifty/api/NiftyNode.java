@@ -316,6 +316,300 @@ public class NiftyNode {
   }
 
   /**
+   * Get the padding string.
+   *
+   * @return the padding string
+   */
+  @NiftyStyleProperty(name = "padding")
+  public String getPadding() {
+    return impl.getPadding();
+  }
+
+  /**
+   * Set the padding string to set all padding values in a single call. The format of the padding string is the same
+   * as in CSS.
+   *
+   * @param padding the new top padding
+   */
+  public void setPadding(final String padding) {
+    setPadding(padding, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the padding string to set all padding values in a single call. The format of the padding string is the same
+   * as in CSS.
+   *
+   * @param padding the new top padding
+   * @param states the NiftyNodeStates to apply the top padding to.
+   */
+  public void setPadding(final String padding, final NiftyNodeState ... states) {
+    impl.setPadding(padding, states);
+  }
+
+  /**
+   * Get the top padding.
+   *
+   * @return the top padding
+   */
+  @NiftyStyleProperty(name = "padding-top", converter = NiftyStyleStringConverterUnitValue.class)
+  public UnitValue getPaddingTop() {
+    return impl.getPaddingTop();
+  }
+
+  /**
+   * Set the top padding.
+   *
+   * @param paddingTop the new top padding
+   */
+  public void setPaddingTop(final UnitValue paddingTop) {
+    setPaddingTop(paddingTop, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the top padding.
+   *
+   * @param paddingTop the new top padding
+   * @param states the NiftyNodeStates to apply the top padding to.
+   */
+  public void setPaddingTop(final UnitValue paddingTop, final NiftyNodeState ... states) {
+    impl.setPaddingTop(paddingTop, states);
+  }
+
+  /**
+   * Get the right padding.
+   *
+   * @return the right padding
+   */
+  @NiftyStyleProperty(name = "padding-right", converter = NiftyStyleStringConverterUnitValue.class)
+  public UnitValue getPaddingRight() {
+    return impl.getPaddingRight();
+  }
+
+  /**
+   * Set the right padding.
+   *
+   * @param paddingRight the new right padding
+   */
+  public void setPaddingRight(final UnitValue paddingRight) {
+    setPaddingRight(paddingRight, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the right padding.
+   *
+   * @param paddingRight the new right padding
+   * @param states the NiftyNodeStates to apply the right padding to
+   */
+  public void setPaddingRight(final UnitValue paddingRight, final NiftyNodeState ... states) {
+    impl.setPaddingRight(paddingRight, states);
+  }
+
+  /**
+   * Get the bottom padding.
+   *
+   * @return the bottom padding
+   */
+  @NiftyStyleProperty(name = "padding-bottom", converter = NiftyStyleStringConverterUnitValue.class)
+  public UnitValue getPaddingBottom() {
+    return impl.getPaddingBottom();
+  }
+
+  /**
+   * Set the bottom padding.
+   *
+   * @param paddingBottom the new bottom padding
+   */
+  public void setPaddingBottom(final UnitValue paddingBottom) {
+    setPaddingBottom(paddingBottom, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the bottom padding.
+   *
+   * @param paddingBottom the new bottom padding
+   * @param states the NiftyNodeStates to apply the bottom padding to
+   */
+  public void setPaddingBottom(final UnitValue paddingBottom, final NiftyNodeState ... states) {
+    impl.setPaddingBottom(paddingBottom, states);
+  }
+
+  /**
+   * Get the left padding.
+   *
+   * @return the left padding
+   */
+  @NiftyStyleProperty(name = "padding-left", converter = NiftyStyleStringConverterUnitValue.class)
+  public UnitValue getPaddingLeft() {
+    return impl.getPaddingLeft();
+  }
+
+  /**
+   * Set the left padding.
+   *
+   * @param paddingLeft the new left padding
+   */
+  public void setPaddingLeft(final UnitValue paddingLeft) {
+    setPaddingLeft(paddingLeft, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the left padding.
+   *
+   * @param paddingLeft the new left padding
+   * @param states the NiftyNodeStates to apply the left padding to
+   */
+  public void setPaddingLeft(final UnitValue paddingLeft, final NiftyNodeState ... states) {
+    impl.setPaddingLeft(paddingLeft, states);
+  }
+
+  /**
+   * Get the margin string.
+   *
+   * @return the margin string
+   */
+  @NiftyStyleProperty(name = "margin")
+  public String getMargin() {
+    return impl.getMargin();
+  }
+
+  /**
+   * Set the margin string to set all margin values in a single call. The format of the margin string is the same
+   * as in CSS.
+   *
+   * @param margin the new margin
+   */
+  public void setMargin(final String margin) {
+    setMargin(margin, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the margin string to set all margin values in a single call. The format of the margin string is the same
+   * as in CSS.
+   *
+   * @param margin the new margin
+   * @param states the NiftyNodeStates to apply the margin to.
+   */
+  public void setMargin(final String margin, final NiftyNodeState ... states) {
+    impl.setMargin(margin, states);
+  }
+
+  /**
+   * Get the top margin.
+   *
+   * @return the top margin
+   */
+  @NiftyStyleProperty(name = "margin-top", converter = NiftyStyleStringConverterUnitValue.class)
+  public UnitValue getMarginTop() {
+    return impl.getMarginTop();
+  }
+
+  /**
+   * Set the top margin.
+   *
+   * @param marginTop the new top margin
+   */
+  public void setMarginTop(final UnitValue marginTop) {
+    setMarginTop(marginTop, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the top margin.
+   *
+   * @param marginTop the new top margin
+   * @param states the NiftyNodeStates to apply the top margin to
+   */
+  public void setMarginTop(final UnitValue marginTop, final NiftyNodeState ... states) {
+    impl.setMarginTop(marginTop, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Get the right margin.
+   *
+   * @return the right margin
+   */
+  @NiftyStyleProperty(name = "margin-right", converter = NiftyStyleStringConverterUnitValue.class)
+  public UnitValue getMarginRight() {
+    return impl.getMarginRight();
+  }
+
+  /**
+   * Set the right margin.
+   *
+   * @param marginRight the new right margin
+   */
+  public void setMarginRight(final UnitValue marginRight) {
+    setMarginRight(marginRight, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the right margin.
+   *
+   * @param marginRight the new right margin
+   * @param states the NiftyNodeStates to apply the right margin to
+   */
+  public void setMarginRight(final UnitValue marginRight, final NiftyNodeState ... states) {
+    impl.setMarginRight(marginRight, states);
+  }
+
+  /**
+   * Get the bottom margin.
+   *
+   * @return the bottom margin
+   */
+  @NiftyStyleProperty(name = "margin-bottom", converter = NiftyStyleStringConverterUnitValue.class)
+  public UnitValue getMarginBottom() {
+    return impl.getMarginBottom();
+  }
+
+  /**
+   * Set the bottom margin.
+   *
+   * @param marginBottom the new bottom margin
+   */
+  public void setMarginBottom(final UnitValue marginBottom) {
+    setMarginBottom(marginBottom, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the bottom margin.
+   *
+   * @param marginBottom the new bottom margin
+   * @param states the NiftyNodeStates to apply the bottom margin to
+   */
+  public void setMarginBottom(final UnitValue marginBottom, final NiftyNodeState ... states) {
+    impl.setMarginBottom(marginBottom, states);
+  }
+
+  /**
+   * Get the left margin.
+   *
+   * @return the left margin
+   */
+  @NiftyStyleProperty(name = "margin-left", converter = NiftyStyleStringConverterUnitValue.class)
+  public UnitValue getMarginLeft() {
+    return impl.getMarginLeft();
+  }
+
+  /**
+   * Set the left margin.
+   *
+   * @param marginLeft the new left margin
+   */
+  public void setMarginLeft(final UnitValue marginLeft) {
+    setMarginLeft(marginLeft, NiftyNodeState.Regular);
+  }
+
+  /**
+   * Set the left margin.
+   *
+   * @param marginLeft the new left margin
+   * @param states the NiftyNodeStates to apply the left margin to
+   */
+  public void setMarginLeft(final UnitValue marginLeft, final NiftyNodeState ... states) {
+    impl.setMarginLeft(marginLeft, states);
+  }
+
+  /**
    * Get the current background color of this node.
    *
    * @return the currently set background color
