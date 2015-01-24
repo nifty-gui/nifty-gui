@@ -26,15 +26,7 @@
  */
 package de.lessvoid.nifty.internal.style.specialparser;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 import self.philbrown.cssparser.Token;
 import self.philbrown.cssparser.TokenSequence;
@@ -266,11 +258,11 @@ public class LinearGradientParser {
     if (first.tokenCode != Token.IDENTIFIER) {
       throw new Exception("expected identifier token after 'to' but was (" + first.toDebugString() + ")");
     }
-    Set<String> supportedSidesH = new HashSet<String>();
+    Set<String> supportedSidesH = new TreeSet<String>();
     supportedSidesH.add(LEFT);
     supportedSidesH.add(RIGHT);
 
-    Set<String> supportedSidesV = new HashSet<String>();
+    Set<String> supportedSidesV = new TreeSet<String>();
     supportedSidesV.add(TOP);
     supportedSidesV.add(BOTTOM);
 
