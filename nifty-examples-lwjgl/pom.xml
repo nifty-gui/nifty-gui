@@ -3,7 +3,7 @@
   <parent>
     <artifactId>nifty-main</artifactId>
     <groupId>lessvoid</groupId>
-    <version>1.4.1</version>
+    <version>1.4.2-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>nifty-examples-lwjgl</artifactId>

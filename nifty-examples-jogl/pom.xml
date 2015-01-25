@@ -3,7 +3,7 @@
   <parent>
     <groupId>lessvoid</groupId>
     <artifactId>nifty-main</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2-SNAPSHOT</version>
   </parent>
   <artifactId>nifty-examples-jogl</artifactId>
   <properties>
@@ -14,17 +14,17 @@
   	<dependency>
   		<groupId>lessvoid</groupId>
   		<artifactId>nifty-jogl-renderer</artifactId>
-  		<version>1.4.1</version>
+  		<version>1.4.2-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>lessvoid</groupId>
   		<artifactId>nifty</artifactId>
-  		<version>1.4.1</version>
+  		<version>1.4.2-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>lessvoid</groupId>
   		<artifactId>nifty-examples</artifactId>
-  		<version>1.4.1</version>
+  		<version>1.4.2-SNAPSHOT</version>
   		<exclusions>
   		  <exclusion>
   		    <groupId>org.lwjgl.lwjgl</groupId>
@@ -39,7 +39,7 @@
     <dependency>
       <groupId>lessvoid</groupId>
       <artifactId>nifty-pauls-soundsystem</artifactId>
-      <version>1.4.1</version>
+      <version>1.4.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.jogamp.jogl</groupId>
