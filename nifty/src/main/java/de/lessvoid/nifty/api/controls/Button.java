@@ -30,8 +30,6 @@ import javax.annotation.Nonnull;
 
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.HAlign;
-import de.lessvoid.nifty.api.NiftyCanvas;
-import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyNode;
@@ -52,7 +50,6 @@ public class Button extends NiftyAbstractControl {
     super.init(niftyNode, stateManager);
 
     niftyNode.setChildLayout(ChildLayout.Center);
-    niftyNode.addCanvasPainter(new ButtonCanvasPainter());
     niftyNode.setStyleClass("button");
 
     label = niftyNode.newControl(Label.class);
@@ -200,15 +197,5 @@ public class Button extends NiftyAbstractControl {
 
   public void setTextColor(final NiftyColor newColor, final NiftyNodeState ... states) {
     label.setTextColor(newColor, states);
-  }
-
-  private class ButtonCanvasPainter implements NiftyCanvasPainter {
-    @Override
-    public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-      /*
-      canvas.setFillStyle(NiftyColor.fromString("#800a"));
-      canvas.fillRect(0., 0., node.getWidth(), node.getHeight());
-      */
-    }
   }
 }
