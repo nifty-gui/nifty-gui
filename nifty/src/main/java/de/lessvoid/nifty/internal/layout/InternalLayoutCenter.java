@@ -59,16 +59,8 @@ public class InternalLayoutCenter implements InternalLayout {
     return boxConstraints.getMarginLeft().getValueAsInt(rootBoxWidth);
   }
 
-  private int rightMargin(final InternalBoxConstraints boxConstraints, final int rootBoxWidth) {
-    return boxConstraints.getMarginRight().getValueAsInt(rootBoxWidth);
-  }
-
   private int topMargin(final InternalBoxConstraints boxConstraints, final int rootBoxHeight) {
     return boxConstraints.getMarginTop().getValueAsInt(rootBoxHeight);
-  }
-
-  private int bottomMargin(final InternalBoxConstraints boxConstraints, final int rootBoxHeight) {
-    return boxConstraints.getMarginBottom().getValueAsInt(rootBoxHeight);
   }
 
   private void layoutElement(final InternalLayoutable element, Box rootBox, InternalBoxConstraints rootBoxConstraints) {
@@ -86,8 +78,8 @@ public class InternalLayoutCenter implements InternalLayout {
       handleHorizontalAlignment(rootBox, rootBoxConstraints, box, constraint);
     }
 
-    box.setX(box.getX() + leftMargin(constraint, rootBox.getWidth()) - rightMargin(constraint, rootBox.getWidth()));
-    box.setY(box.getY() + topMargin(constraint, rootBox.getHeight()) - bottomMargin(constraint, rootBox.getHeight()));
+    box.setX(box.getX() + leftMargin(constraint, rootBox.getWidth()));// - rightMargin(constraint, rootBox.getWidth()));
+    box.setY(box.getY() + topMargin(constraint, rootBox.getHeight()));// - bottomMargin(constraint, rootBox.getHeight()));
   }
 
   void handleHorizontalAlignment(
@@ -134,7 +126,9 @@ public class InternalLayoutCenter implements InternalLayout {
     int rootBoxX = 0 + rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth());
     int rootBoxWidth = rootBox.getWidth() -
                        rootBoxConstraints.getPaddingLeft().getValueAsInt(rootBox.getWidth()) -
-                       rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth());
+                       rootBoxConstraints.getPaddingRight().getValueAsInt(rootBox.getWidth()) -
+                       constraint.getMarginLeft().getValueAsInt(rootBox.getWidth()) -
+                       constraint.getMarginRight().getValueAsInt(rootBox.getWidth());
 
     int boxWidth = (int) constraint.getWidth().getValue(rootBoxWidth);
     if (constraint.getWidth().hasHeightSuffix()) {
@@ -162,7 +156,9 @@ public class InternalLayoutCenter implements InternalLayout {
     int rootBoxY = 0 + rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight());
     int rootBoxHeight = rootBox.getHeight() -
                         rootBoxConstraints.getPaddingTop().getValueAsInt(rootBox.getHeight()) -
-                        rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight());
+                        rootBoxConstraints.getPaddingBottom().getValueAsInt(rootBox.getHeight()) -
+                        constraint.getMarginTop().getValueAsInt(rootBox.getHeight()) -
+                        constraint.getMarginBottom().getValueAsInt(rootBox.getHeight());
 
     int boxHeight = (int) constraint.getHeight().getValue(rootBoxHeight);
     if (constraint.getHeight().hasWidthSuffix()) {
