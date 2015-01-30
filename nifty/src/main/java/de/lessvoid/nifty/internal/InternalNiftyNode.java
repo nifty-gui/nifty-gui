@@ -188,11 +188,11 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   // This is the original padding String so that we can return the same String in the getter if necessary. The actual
   // value will be parsed and translated into the individual left, right, top, bottom calls.
-  private String padding;
+  private UnitValue[] padding = new UnitValue[0];
 
   // This is the original margin String so that we can return the same String in the getter if necessary. The actual
   // value will be parsed and translated into the individual left, right, top, bottom calls.
-  private String margin;
+  private UnitValue[] margin = new UnitValue[0];
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Factory methods
@@ -517,11 +517,11 @@ public class InternalNiftyNode implements InternalLayoutable {
     return backgroundGradient;
   }
 
-  public String getPadding() {
+  public UnitValue[] getPadding() {
     return padding;
   }
 
-  public void setPadding(final String padding, final NiftyNodeState ... states) {
+  public void setPadding(final UnitValue[] padding, final NiftyNodeState ... states) {
     stateManager.setValue(this, padding, stateSetterConstraintPadding, states);
   }
 
@@ -557,11 +557,11 @@ public class InternalNiftyNode implements InternalLayoutable {
     stateManager.setValue(this, paddingLeft, stateSetterConstraintPaddingLeft, states);
   }
 
-  public String getMargin() {
+  public UnitValue[] getMargin() {
     return margin;
   }
 
-  public void setMargin(final String margin, final NiftyNodeState ... states) {
+  public void setMargin(final UnitValue[] margin, final NiftyNodeState ... states) {
     stateManager.setValue(this, margin, stateSetterConstraintMargin, states);
   }
 
@@ -1118,10 +1118,46 @@ public class InternalNiftyNode implements InternalLayoutable {
       target.canvasPainters.add(canvasPainter);
     }
   };
-  private static NiftyStateSetter<InternalNiftyNode, String> stateSetterConstraintPadding = new NiftyStateSetter<InternalNiftyNode, String>() {
+  private static NiftyStateSetter<InternalNiftyNode, UnitValue[]> stateSetterConstraintPadding = new NiftyStateSetter<InternalNiftyNode, UnitValue[]>() {
     @Override
-    public void set(final InternalNiftyNode target, final String value, final NiftyNodeState state) {
-      // FIXME parse the value and call the individual padding setters here
+    public void set(final InternalNiftyNode target, final UnitValue[] value, final NiftyNodeState state) {
+      if (value == null) {
+        target.padding = new UnitValue[0];
+        target.constraints.setPadding(UnitValue.px(0));
+        target.needsLayout = true;
+        return;
+      }
+      int len = value.length;
+      if (len == 0) {
+        target.padding = new UnitValue[0];
+        target.constraints.setPadding(UnitValue.px(0));
+        target.needsLayout = true;
+        return;
+      }
+      if (len == 1) {
+        target.padding = value;
+        target.constraints.setPadding(value[0]);
+        target.needsLayout = true;
+        return;
+      }
+      if (len == 2) {
+        target.padding = value;
+        target.constraints.setPadding(value[0], value[1]);
+        target.needsLayout = true;
+        return;
+      }
+      if (len == 3) {
+        target.padding = value;
+        target.constraints.setPadding(value[0], value[1], value[2]);
+        target.needsLayout = true;
+        return;
+      }
+      if (len == 4) {
+        target.padding = value;
+        target.constraints.setPadding(value[0], value[1], value[2], value[3]);
+        target.needsLayout = true;
+        return;
+      }
     }
   };
   private static NiftyStateSetter<InternalNiftyNode, UnitValue> stateSetterConstraintPaddingTop = new NiftyStateSetter<InternalNiftyNode, UnitValue>() {
@@ -1152,10 +1188,46 @@ public class InternalNiftyNode implements InternalLayoutable {
       target.needsLayout = true;
     }
   };
-  private static NiftyStateSetter<InternalNiftyNode, String> stateSetterConstraintMargin = new NiftyStateSetter<InternalNiftyNode, String>() {
+  private static NiftyStateSetter<InternalNiftyNode, UnitValue[]> stateSetterConstraintMargin = new NiftyStateSetter<InternalNiftyNode, UnitValue[]>() {
     @Override
-    public void set(final InternalNiftyNode target, final String value, final NiftyNodeState state) {
-      // FIXME parse the value and call the individual margin setters here
+    public void set(final InternalNiftyNode target, final UnitValue[] value, final NiftyNodeState state) {
+      if (value == null) {
+        target.margin = new UnitValue[0];
+        target.constraints.setMargin(UnitValue.px(0));
+        target.needsLayout = true;
+        return;
+      }
+      int len = value.length;
+      if (len == 0) {
+        target.margin = new UnitValue[0];
+        target.constraints.setMargin(UnitValue.px(0));
+        target.needsLayout = true;
+        return;
+      }
+      if (len == 1) {
+        target.margin = value;
+        target.constraints.setMargin(value[0]);
+        target.needsLayout = true;
+        return;
+      }
+      if (len == 2) {
+        target.margin = value;
+        target.constraints.setMargin(value[0], value[1]);
+        target.needsLayout = true;
+        return;
+      }
+      if (len == 3) {
+        target.margin = value;
+        target.constraints.setMargin(value[0], value[1], value[2]);
+        target.needsLayout = true;
+        return;
+      }
+      if (len == 4) {
+        target.margin = value;
+        target.constraints.setMargin(value[0], value[1], value[2], value[3]);
+        target.needsLayout = true;
+        return;
+      }
     }
   };
   private static NiftyStateSetter<InternalNiftyNode, UnitValue> stateSetterConstraintMarginTop = new NiftyStateSetter<InternalNiftyNode, UnitValue>() {

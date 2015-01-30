@@ -32,6 +32,7 @@ import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterHAlign;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyColor;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyLinearGradient;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterUnitValue;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterUnitValueArray;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterVAlign;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
@@ -318,10 +319,10 @@ public class NiftyNode {
   /**
    * Get the padding string.
    *
-   * @return the padding string
+   * @return the padding values
    */
-  @NiftyStyleProperty(name = "padding")
-  public String getPadding() {
+  @NiftyStyleProperty(name = "padding", converter = NiftyStyleStringConverterUnitValueArray.class)
+  public UnitValue[] getPadding() {
     return impl.getPadding();
   }
 
@@ -329,10 +330,15 @@ public class NiftyNode {
    * Set the padding string to set all padding values in a single call. The format of the padding string is the same
    * as in CSS.
    *
+   * one value:    [applied to all]
+   * two values:   [top and bottom], [left and right]
+   * three values: [top], [left and right], [bottom]
+   * four values:  [top], [right], [bottom], [left]
+   *
    * @param padding the new top padding
    */
-  public void setPadding(final String padding) {
-    setPadding(padding, NiftyNodeState.Regular);
+  public void setPadding(final UnitValue ... values) {
+    setPadding(values, NiftyNodeState.Regular);
   }
 
   /**
@@ -342,7 +348,7 @@ public class NiftyNode {
    * @param padding the new top padding
    * @param states the NiftyNodeStates to apply the top padding to.
    */
-  public void setPadding(final String padding, final NiftyNodeState ... states) {
+  public void setPadding(final UnitValue[] padding, final NiftyNodeState ... states) {
     impl.setPadding(padding, states);
   }
 
@@ -465,10 +471,10 @@ public class NiftyNode {
   /**
    * Get the margin string.
    *
-   * @return the margin string
+   * @return the margin values
    */
-  @NiftyStyleProperty(name = "margin")
-  public String getMargin() {
+  @NiftyStyleProperty(name = "margin", converter = NiftyStyleStringConverterUnitValueArray.class)
+  public UnitValue[] getMargin() {
     return impl.getMargin();
   }
 
@@ -478,7 +484,7 @@ public class NiftyNode {
    *
    * @param margin the new margin
    */
-  public void setMargin(final String margin) {
+  public void setMargin(final UnitValue ... margin) {
     setMargin(margin, NiftyNodeState.Regular);
   }
 
@@ -489,7 +495,7 @@ public class NiftyNode {
    * @param margin the new margin
    * @param states the NiftyNodeStates to apply the margin to.
    */
-  public void setMargin(final String margin, final NiftyNodeState ... states) {
+  public void setMargin(final UnitValue[] margin, final NiftyNodeState ... states) {
     impl.setMargin(margin, states);
   }
 
