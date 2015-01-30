@@ -24,53 +24,26 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api.annotation;
+package de.lessvoid.nifty.api.converter;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.After;
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyFont;
-import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyFont;
+import de.lessvoid.nifty.api.UnitValue;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterUnitValue;
 
-public class NiftyStyleStringConverterNiftyFontTest {
-  private Nifty niftyMock = createMock(Nifty.class);
-  private NiftyStyleStringConverterNiftyFont converter = new NiftyStyleStringConverterNiftyFont(niftyMock);
+public class NiftyStyleStringConverterUnitValueTest {
+  private NiftyStyleStringConverterUnitValue converter = new NiftyStyleStringConverterUnitValue();
 
-  @After
-  public void after() {
-    verify(niftyMock);
+  @Test
+  public void testFromString() throws Exception {
+    assertEquals(new UnitValue("20px"), converter.fromString("20px"));
   }
 
   @Test
   public void testToString() throws Exception {
-    replay(niftyMock);
-
-    NiftyFont niftyFontMock = createMock(NiftyFont.class);
-    expect(niftyFontMock.getName()).andReturn("my-name");
-    replay(niftyFontMock);
-
-    assertEquals("my-name", converter.toString(niftyFontMock));
-
-    verify(niftyFontMock);
+    assertEquals("20px", converter.toString(new UnitValue("20px")));
   }
 
-  @Test
-  public void testFromString() throws Exception {
-    NiftyFont niftyFontMock = createMock(NiftyFont.class);
-    replay(niftyFontMock);
-
-    expect(niftyMock.createFont("my-name")).andReturn(niftyFontMock);
-    replay(niftyMock);
-
-    assertEquals(niftyFontMock, converter.fromString("my-name"));
-
-    verify(niftyMock);
-  }
 }

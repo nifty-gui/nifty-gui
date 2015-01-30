@@ -24,26 +24,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api.annotation;
+package de.lessvoid.nifty.api.converter;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterUnitValue;
+import de.lessvoid.nifty.api.VAlign;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterVAlign;
 
-public class NiftyStyleStringConverterUnitValueTest {
-  private NiftyStyleStringConverterUnitValue converter = new NiftyStyleStringConverterUnitValue();
+public class NiftyStyleStringConverterVAlignTest {
+  private final NiftyStyleStringConverterVAlign converter = new NiftyStyleStringConverterVAlign();
 
   @Test
-  public void testFromString() throws Exception {
-    assertEquals(new UnitValue("20px"), converter.fromString("20px"));
+  public void testToString() {
+    assertEquals("verticalDefault", converter.toString(VAlign.verticalDefault));
+    assertEquals("top", converter.toString(VAlign.top));
+    assertEquals("center", converter.toString(VAlign.center));
+    assertEquals("bottom", converter.toString(VAlign.bottom));
   }
 
   @Test
-  public void testToString() throws Exception {
-    assertEquals("20px", converter.toString(new UnitValue("20px")));
+  public void testFromString() {
+    assertEquals(VAlign.verticalDefault, converter.fromString("verticalDefault"));
+    assertEquals(VAlign.top, converter.fromString("top"));
+    assertEquals(VAlign.center, converter.fromString("center"));
+    assertEquals(VAlign.bottom, converter.fromString("bottom"));
   }
-
 }

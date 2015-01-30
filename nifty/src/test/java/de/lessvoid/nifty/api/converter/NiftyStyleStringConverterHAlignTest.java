@@ -24,31 +24,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api.annotation;
+package de.lessvoid.nifty.api.converter;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.VAlign;
-import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterVAlign;
+import de.lessvoid.nifty.api.HAlign;
+import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterHAlign;
 
-public class NiftyStyleStringConverterVAlignTest {
-  private final NiftyStyleStringConverterVAlign converter = new NiftyStyleStringConverterVAlign();
+public class NiftyStyleStringConverterHAlignTest {
+  private final NiftyStyleStringConverterHAlign converter = new NiftyStyleStringConverterHAlign();
 
   @Test
   public void testToString() {
-    assertEquals("verticalDefault", converter.toString(VAlign.verticalDefault));
-    assertEquals("top", converter.toString(VAlign.top));
-    assertEquals("center", converter.toString(VAlign.center));
-    assertEquals("bottom", converter.toString(VAlign.bottom));
+    assertEquals("horizontalDefault", converter.toString(HAlign.horizontalDefault));
+    assertEquals("left", converter.toString(HAlign.left));
+    assertEquals("center", converter.toString(HAlign.center));
+    assertEquals("right", converter.toString(HAlign.right));
   }
 
   @Test
   public void testFromString() {
-    assertEquals(VAlign.verticalDefault, converter.fromString("verticalDefault"));
-    assertEquals(VAlign.top, converter.fromString("top"));
-    assertEquals(VAlign.center, converter.fromString("center"));
-    assertEquals(VAlign.bottom, converter.fromString("bottom"));
+    assertEquals(HAlign.horizontalDefault, converter.fromString("horizontalDefault"));
+    assertEquals(HAlign.left, converter.fromString("left"));
+    assertEquals(HAlign.center, converter.fromString("center"));
+    assertEquals(HAlign.right, converter.fromString("right"));
   }
 }
