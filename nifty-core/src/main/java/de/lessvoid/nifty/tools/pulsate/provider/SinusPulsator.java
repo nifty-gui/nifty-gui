@@ -40,6 +40,11 @@ public class SinusPulsator implements PulsatorProvider {
   private boolean cycle = true;
 
   /**
+   * start the pulsator at 1 (true) or 0 (false).
+   */
+  private boolean reverse = false;
+
+  /**
    * Initialize the Pulsator.
    *
    * @param parameter the parameters
@@ -53,6 +58,7 @@ public class SinusPulsator implements PulsatorProvider {
       period = 1000.f;
     }
     this.cycle = Boolean.parseBoolean(parameter.getProperty("cycle", Boolean.toString(true)));
+    this.reverse = Boolean.parseBoolean(parameter.getProperty("reverse", Boolean.toString(false)));
   }
 
   /**
@@ -64,15 +70,10 @@ public class SinusPulsator implements PulsatorProvider {
   @Override
   public float getValue(final long msTime) {
     long t = msTime - startTime;
-    if (cycle) {
-      return getSinusValue(t);
-    } else {
-      if (t > period * HALF) {
-        return 1.0f;
-      } else {
-        return getSinusValue(t);
-      }
-    }
+    if (!cycle && t > period * HALF)
+        return (reverse? 0.0f: 1.0f);
+    else
+	    return getSinusValue(t + (reverse? (long)(period * HALF): 0l));
   }
 
   /**
