@@ -33,16 +33,14 @@ public class TreeBoxItemController<T> extends ListBoxItemController<TreeItem<T>>
    * This function is called in case the expand component of the tree entry is clicked. The event will be forwarded
    * to the parent control in order to update the tree.
    */
-  public void expandButtonClicked() {
-    if (parentControl == null) {
-      log.warning("Can't handle click to expend button as long as the parent control is not applied.");
-      return;
+    public void expandButtonClicked() {
+        if (parentControl == null) {
+            log.warning("Can't handle click to expend button as long as the parent control is not applied.");
+            return;
+        }
+        final TreeItem<T> item = getItem();
+        if (item == null || item.isLeaf())
+            return;
+        parentControl.expand(getItem(), !item.isExpanded());
     }
-    final TreeItem<T> item = getItem();
-    if (item == null || item.isLeaf()) {
-      return;
-    }
-    item.setExpanded(!item.isExpanded());
-    parentControl.updateList(item);
-  }
 }

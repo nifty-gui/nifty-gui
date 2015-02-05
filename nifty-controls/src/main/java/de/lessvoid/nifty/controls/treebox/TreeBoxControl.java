@@ -14,6 +14,7 @@ import de.lessvoid.nifty.screen.Screen;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import java.util.logging.Logger;
 
 /**
@@ -79,11 +80,13 @@ public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> impleme
     return true;
   }
 
-  @Override
-  public void setTree(@Nonnull final TreeItem<T> treeRoot) {
-    this.treeRoot = treeRoot;
-    updateList();
-  }
+    @Override
+    public void setTree(@Nonnull final TreeItem<T> treeRoot) {
+        clear();
+        this.treeRoot = treeRoot;
+        treeRoot.setIndent(-indentWidth);
+        insertChildren(treeRoot, 0);
+    }
 
   /**
    * Get the {@link ListBox} that is used to display the entries.
@@ -153,4 +156,85 @@ public final class TreeBoxControl<T> extends ListBoxControl<TreeItem<T>> impleme
       }
     }
   }
+  
+    @Override
+    public void select(TreeItem<T> item) {
+        if (item != null) {
+            if (!item.isVisible()) {
+                TreeItem<T> parent = item.getParentItem();
+                while (parent != null) {
+                    if (parent.isVisible()) {
+                        expand(parent, true);
+                        break;
+                    } else parent.setExpanded(true);
+                    parent = parent.getParentItem();
+                }
+            }
+            selectItem(item);
+        }
+    }
+    
+    public void insert(TreeItem<T> item) {
+        if (item == null) item = new TreeItem<T>(null);
+        if (item.getParentItem() != null)
+            insert(item.getParentItem(), item);
+        else
+            insert(treeRoot, item);
+    }
+
+    @Override
+    public void insert(TreeItem<T> parent, TreeItem<T> child) {
+        if (parent != null) {
+            parent.addTreeItem(child);
+            int pos = getItems().indexOf(parent);
+            if (pos == -1)
+                return;
+            if (parent.isVisible() && parent.isExpanded()) {
+                child.setIndent(parent.getIndent() + indentWidth);
+                insertItem(child, pos++  + parent.getChildCount());
+                insertChildren(child, pos + parent.getChildCount());
+            }
+            refresh();
+        } else insert(child);
+    }
+    
+    private int insertChildren(TreeItem<T> parent, int pos) {
+        if (parent.isVisible() && parent.isExpanded())
+            for (TreeItem<T> child : parent) {
+                child.setIndent(parent.getIndent() + indentWidth);
+                insertItem(child, pos++);
+                pos = insertChildren(child, pos);
+            }
+        return pos;
+    }
+  
+    @Override
+    public void expand(TreeItem<T> item, boolean show) {
+        if (show == item.isExpanded()) {
+            return;
+        }
+
+        item.setExpanded(show);
+        int pos = getItems().indexOf(item) + 1;
+        if (show)
+            insertChildren(item, pos);
+        else
+            removeChildren(item);
+    }
+    
+    private void removeChildren(TreeItem<T> parent) {
+        for (TreeItem<T> item : parent) {
+            removeItem(item);
+            removeChildren(item);
+        }
+    }
+
+    @Override
+    public void remove(TreeItem<T> item) {
+        if (item.getParentItem() != null) {
+            item.getParentItem().removeTreeItem(item);
+            removeItem(item);
+            removeChildren(item);
+        }
+    }
 }

@@ -15,6 +15,14 @@ public class WindowBuilder extends ControlBuilder {
   }
 
   public void closeable(final boolean closeable) {
-    set("closable", String.valueOf(closeable));
+    set("closeable", String.valueOf(closeable));
+  }
+
+  public void hideOnClose(final boolean hideOnClose) {
+    set("hideOnClose", String.valueOf(hideOnClose));
+  }
+  
+  public void minimized(final boolean minimized) {
+      set("minimized", String.valueOf(minimized));
   }
 }

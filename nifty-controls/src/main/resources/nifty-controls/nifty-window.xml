@@ -4,10 +4,13 @@
     <controlDefinition name="window" style="nifty-window" childRootId="#window-content"
                        controller="de.lessvoid.nifty.controls.window.WindowControl" revert="false" drop="false"
                        handle="#window-bar">
-        <panel style="#frame">
+        <panel id="#window-frame" style="#frame">
             <interact onClick="bringToFront()" onClickMouseMove="drag()" onRelease="dragStop()"/>
             <panel id="#window-bar" style="#bar">
                 <text id="#window-title" style="#title" text="$title"/>
+                <panel id="#window-minimize-button" style="#minimize-button">
+                    <interact onClick="minimizeWindow()"/>
+                </panel>
                 <panel id="#window-close-button" style="#close-button">
                     <interact onClick="closeWindow()"/>
                 </panel>

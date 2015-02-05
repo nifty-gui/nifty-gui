@@ -25,6 +25,11 @@ public interface Window extends NiftyControl {
   void setTitle(@Nonnull String title);
 
   /**
+   * Minimize this Window.
+   */
+  void minimizeWindow();
+
+  /**
    * Close this Window.
    */
   void closeWindow();

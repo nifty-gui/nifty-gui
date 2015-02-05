@@ -20,4 +20,12 @@ public interface TreeBox<T> extends ListBox<TreeItem<T>> {
    * @param treeRoot the root node of the tree
    */
   void setTree(@Nonnull TreeItem<T> treeRoot);
+
+  void select(@Nonnull TreeItem<T> item);
+  
+  void expand(@Nonnull TreeItem<T> item, boolean expand);
+  
+  void insert(@Nonnull TreeItem<T> parent, @Nonnull TreeItem<T> child);
+  
+  void remove(@Nonnull TreeItem<T> item);
 }

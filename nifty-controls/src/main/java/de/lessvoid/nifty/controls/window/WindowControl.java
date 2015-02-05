@@ -11,9 +11,11 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.tools.SizeValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import java.util.logging.Logger;
 
 @Deprecated
@@ -24,8 +26,11 @@ public class WindowControl extends AbstractController implements Window {
   private final DraggableControl draggableControl;
   @Nullable
   private Nifty nifty;
+  private Element content;
   private boolean removeCloseButton;
   private boolean hideOnClose;
+  private boolean minimized;
+  private int origHeight;
 
   public WindowControl() {
     draggableControl = new DraggableControl();
@@ -42,15 +47,21 @@ public class WindowControl extends AbstractController implements Window {
     draggableControl.bind(nifty, screen, element, parameter);
     removeCloseButton = !parameter.getAsBoolean("closeable", true);
     hideOnClose = parameter.getAsBoolean("hideOnClose", false);
+    minimized = parameter.getAsBoolean("minimized", false);
+    origHeight = element.getHeight();
 
     // testing children
-    Element content = getContent();
+    content = getContent();
     if (content == null) {
       log.severe("Content element of window not found. Window will not display properly.");
     }
     Element title = getTitleElement();
     if (title == null) {
       log.severe("Title element of window not found. Window will not display its head properly.");
+    }
+    Element minimizeButton = getMinimizeButton();
+    if (minimizeButton == null) {
+      log.severe("Minimize button of window not found. Window will not offer a control to minimize the window.");
     }
     Element closeButton = getCloseButton();
     if (closeButton == null) {
@@ -66,6 +77,10 @@ public class WindowControl extends AbstractController implements Window {
       if (closeButton != null) {
         closeButton.markForRemoval();
       }
+    }
+    if (minimized) {
+        minimized = false;
+        minimizeWindow();
     }
   }
 
@@ -99,6 +114,15 @@ public class WindowControl extends AbstractController implements Window {
       return null;
     }
     return element.findElementById("#window-title");
+  }
+
+  @Nullable
+  private Element getMinimizeButton() {
+    Element element = getElement();
+    if (element == null) {
+      return null;
+    }
+    return element.findElementById("#window-minimize-button");
   }
 
   @Nullable
@@ -146,6 +170,26 @@ public class WindowControl extends AbstractController implements Window {
       return;
     }
     renderer.setText(title);
+  }
+
+  @Override
+  public void minimizeWindow() {
+      if (nifty != null) {
+          Element element = getElement();
+          if (element != null) {
+              minimized = !minimized;
+              if (minimized) {
+                  content.hide();
+                  element.setHeight(getTitleElement().getHeight());
+                  element.setConstraintHeight(SizeValue.px(getTitleElement().getHeight()));
+              } else {
+                  content.show();
+                  element.setHeight(origHeight);
+                  element.setConstraintHeight(SizeValue.px(origHeight));
+                  element.layoutElements();
+              }
+          }
+      }
   }
 
   @Override

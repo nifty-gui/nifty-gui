@@ -61,8 +61,16 @@ public final class TreeItem<T> implements Iterable<TreeItem<T>> {
   }
   
   public void addTreeItem(final TreeItem<T> item) {
-      children.add(item);
-      item.setParentItem(this);
+      if (item.parentItem == null) {
+          children.add(item);
+          item.setParentItem(this);
+      } else {
+          if (item.parentItem != this) {
+              item.parentItem.removeTreeItem(item);
+              children.add(item);
+              item.setParentItem(this);
+          }
+      }
   }
 
   public void addTreeItems(@Nonnull final Collection<TreeItem<T>> items) {
@@ -78,6 +86,12 @@ public final class TreeItem<T> implements Iterable<TreeItem<T>> {
   public void removeTreeItems(@Nonnull final Collection<TreeItem<T>> items) {
       for (TreeItem<T> t : items)
           removeTreeItem(t);
+  }
+  
+  public void removeAllItems() {
+      for (TreeItem<T> t : children)
+          t.setParentItem(null);
+      children.clear();
   }
 
   /**
@@ -116,6 +130,12 @@ public final class TreeItem<T> implements Iterable<TreeItem<T>> {
   public void setExpanded(final boolean expanded) {
     this.expanded = expanded;
   }
+  
+  public boolean isVisible() {
+      if (parentItem == null)
+          return true;
+      return parentItem.expanded && parentItem.isVisible();
+  }
 
   /**
    * Check if this tree item is a leaf. So if it does not have any children.
@@ -132,5 +152,13 @@ public final class TreeItem<T> implements Iterable<TreeItem<T>> {
 
   public void setIndent(final int indent) {
     this.indent = indent;
+  }
+  
+  public int getChildCount() {
+      return children.size();
+  }
+  
+  public String toString() {
+      return value.toString();
   }
 }

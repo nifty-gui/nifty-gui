@@ -460,6 +460,20 @@ public class Nifty {
    * Initialize this Nifty instance from the given xml file.
    *
    * @param filename    filename to nifty xml
+   * @param controllers controllers to use
+   */
+  public void fromXml(
+      @Nonnull final String filename,
+      final ScreenController... controllers) {
+    registerScreenController(controllers);
+    prepareScreens(filename);
+    loadFromFile(filename);
+  }
+
+  /**
+   * Initialize this Nifty instance from the given xml file.
+   *
+   * @param filename    filename to nifty xml
    * @param startScreen screen to start exec
    */
   public void fromXml(@Nonnull final String filename, @Nonnull final String startScreen) {

@@ -21,6 +21,14 @@
         <attributes width="100%" height="*" padding="8px" backgroundColor="#9996" childLayout="center"/>
     </style>
 
+    <style id="nifty-window#minimize-button">
+        <attributes backgroundImage="window/window-minimize-button.png" width="14px" height="14px" align="center"
+                    valign="center"/>
+        <effect>
+            <onHover name="imageOverlayPulsate" filename="window/window-minimize-button-hover.png" post="true"/>
+        </effect>
+    </style>
+
     <style id="nifty-window#close-button">
         <attributes backgroundImage="window/window-close-button.png" width="14px" height="14px" align="center"
                     valign="center"/>
