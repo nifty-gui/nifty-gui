@@ -25,9 +25,9 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
   protected static final Logger logger = Logger.getLogger(RenderDeviceJava2dImpl.class.getName());
 
   private NiftyResourceLoader resourceLoader;
-  private Graphics2D graphics;
+  private final Graphics2D graphics;
 
-  private Graphics2dHelper graphics2dHelper;
+  private final Graphics2dHelper graphics2dHelper;
 
   @Nullable
   private Rectangle clipRectangle = null;
@@ -53,12 +53,12 @@ public class RenderDeviceJava2dImpl implements RenderDevice {
 
   public RenderDeviceJava2dImpl(GraphicsWrapper graphicsWrapper) {
     this.graphicsWrapper = graphicsWrapper;
+    this.graphics = graphicsWrapper.getGraphics2d();
+    this.graphics2dHelper = new Graphics2dHelper(graphics);
   }
 
   @Override
   public void beginFrame() {
-    graphics = graphicsWrapper.getGraphics2d();
-    graphics2dHelper = new Graphics2dHelper(graphics);
   }
 
   @Override
