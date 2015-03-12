@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>lessvoid</groupId>
+    <artifactId>nifty-main</artifactId>
+    <version>1.4.2-SNAPSHOT</version>
+  </parent>
+  <artifactId>nifty-renderer-processing</artifactId>
+  <name>nifty-renderer-processing</name>
+  <description>Nifty RenderEngine for Processing 2</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.processing</groupId>
+      <artifactId>core</artifactId>
+      <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>lessvoid</groupId>
+      <artifactId>nifty</artifactId>
+      <version>1.4.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>lessvoid</groupId>
+      <artifactId>nifty-java2d-renderer</artifactId>
+      <version>1.4.2-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>
