@@ -19,11 +19,11 @@ public class RenderFontProcessing implements RenderFont {
 	 * @param app PApplet instance Processing is currently running in.
 	 * @param canvas PGraphics canvas Nifty is being drawn on.
 	 * @param filename Path to the .vlw font file.
+	 * @throws IOException 
 	 */
 	public RenderFontProcessing(PApplet app, PGraphics canvas, String filename) {
 		
 		this.canvas = canvas;
-		
 		if (fileExists(filename)) {
 			if ((filename.substring(filename.length() - 3)).equals("vlw")) {				
 				this.font = app.loadFont(filename);

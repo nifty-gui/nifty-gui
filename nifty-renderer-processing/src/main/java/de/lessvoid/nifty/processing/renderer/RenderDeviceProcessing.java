@@ -1,20 +1,12 @@
 package de.lessvoid.nifty.processing.renderer;
 
 import java.io.File;
-import java.io.IOException;
-
 import de.lessvoid.nifty.render.BlendMode;
-import de.lessvoid.nifty.spi.render.MouseCursor;
-import de.lessvoid.nifty.spi.render.RenderDevice;
-import de.lessvoid.nifty.spi.render.RenderFont;
-import de.lessvoid.nifty.spi.render.RenderImage;
+import de.lessvoid.nifty.spi.render.*;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 import de.lessvoid.nifty.tools.resourceloader.FileSystemLocation;
 import de.lessvoid.nifty.java2d.renderer.RenderDeviceJava2dImpl;
-import de.lessvoid.nifty.processing.renderer.GraphicsWrapperProcessing;
-import de.lessvoid.nifty.processing.renderer.MouseCursorProcessing;
-import de.lessvoid.nifty.processing.renderer.RenderFontProcessing;
 import processing.core.*;
 
 /**
@@ -29,7 +21,7 @@ public class RenderDeviceProcessing implements RenderDevice {
 	private NiftyResourceLoader resourceLoader;
 	
 	/**
-	 * Instantiate RenderDeviceProcessing. 
+	 * Instantiate RenderDeviceProcessing.
 	 * @param app PApplet instance that Processing is currently running in.
 	 * @param nifty Nifty instance that is in use.
 	 */
@@ -142,7 +134,7 @@ public class RenderDeviceProcessing implements RenderDevice {
 
 	@Override
 	public MouseCursor createMouseCursor(String filename, int hotspotX,
-			int hotspotY) throws IOException {
+			int hotspotY) {
 		return new MouseCursorProcessing(app, app.loadImage(resourceLoader.getResource(filename).getPath()), hotspotX, hotspotY);
 	}
 
