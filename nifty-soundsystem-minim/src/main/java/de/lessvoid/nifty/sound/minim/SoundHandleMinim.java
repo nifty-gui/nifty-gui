@@ -5,11 +5,22 @@ import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import java.io.File;
 
+/**
+ * Implementation of Nifty's SoundHandle for the Minim Java audio library.
+ * Minim is an audio library built primarily for use with Processing.
+ * @author Xuanming
+ */
 public class SoundHandleMinim implements SoundHandle {
 	
 	AudioPlayer player;
 	
-	public SoundHandleMinim(Minim minim, String filename){
+	/**
+	 * Create an instance of SoundHandleMinim.
+	 * @param minim Instance of Minim currently in use by Processing (or Java).
+	 * @param filename Path to file to be loaded as a sound file.
+	 * Note that only MP3, WAV, AIFF, SND and AU are accepted by Minim.
+	 */
+	public SoundHandleMinim(final Minim minim, final String filename){
 		if (fileExists(filename)) {
 		    String fileType = filename.substring(filename.indexOf(".", filename.length() - 5), filename.length());
 		    if (!fileType.equals(".mp3") && !fileType.equals(".wav") && !fileType.equals(".aiff") && !fileType.equals(".snd") && !fileType.equals(".au")) {
@@ -53,6 +64,11 @@ public class SoundHandleMinim implements SoundHandle {
 	public void dispose() { // Do nothing.
 	}
 
+	/**
+	 * Private function to check if file passed to SoundHandleMinim exists.
+	 * @param filename Path of the file to be loaded as sound.
+	 * @return True if file exists. False if file doesn't exist.
+	 */
 	private boolean fileExists(String filename) {
 		File f = new File(filename);
 		return f.exists(); 
