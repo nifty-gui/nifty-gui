@@ -10,18 +10,10 @@ import de.lessvoid.nifty.java2d.renderer.GraphicsWrapper;
  */
 public class GraphicsWrapperProcessing implements GraphicsWrapper {
 	
-	private PGraphicsJava2D canvas;
+	private final PGraphicsJava2D canvas;
 	
 	/**
 	 * Initialize the GraphicsWrapper.
-	 * @param app PApplet instance Processing is running in.
-	 */
-	public GraphicsWrapperProcessing(PApplet app) {
-		this(app, app.width, app.height);
-	}
-	
-	/**
-	 * Initialize the GraphicsWrapper (verbose version)
 	 * @param app PApplet instance Processing is running in.
 	 * @param width Width of canvas to draw Nifty on.
 	 * @param height Height of canvas to draw Nifty on.

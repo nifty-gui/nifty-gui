@@ -50,7 +50,7 @@ public class RenderFontProcessing implements RenderFont {
 	@Override
 	public int getHeight() {
 		canvas.textFont(font);
-		return (int)(canvas.textDescent() + canvas.textAscent());
+		return (int)((canvas.textDescent() + canvas.textAscent()) * 1.42);
 	}
 
 	@Override

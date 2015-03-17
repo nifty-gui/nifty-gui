@@ -23,10 +23,19 @@ public class RenderDeviceProcessing implements RenderDevice {
 	/**
 	 * Instantiate RenderDeviceProcessing.
 	 * @param app PApplet instance that Processing is currently running in.
-	 * @param nifty Nifty instance that is in use.
 	 */
 	public RenderDeviceProcessing(PApplet app) {
-		GraphicsWrapperProcessing graphicsWrapper = new GraphicsWrapperProcessing(app);
+		this(app, app.width, app.height);
+	}
+	
+	/**
+	 * Instantiate RenderDeviceProcessing (verbose version)
+	 * @param app PApplet instance that Processing is currently running in.
+	 * @param width Desired width of Nifty instance.
+	 * @param height Desired height of Nifty instance.
+	 */
+	public RenderDeviceProcessing(PApplet app, int width, int height) {
+		GraphicsWrapperProcessing graphicsWrapper = new GraphicsWrapperProcessing(app, width, height);
 		this.graphics = graphicsWrapper.getCanvas();
 		this.renderDevice = new RenderDeviceJava2dImpl(graphicsWrapper);
 		this.app = app;
@@ -117,8 +126,8 @@ public class RenderDeviceProcessing implements RenderDevice {
 		if (font instanceof RenderFontProcessing){
 			graphics.textFont(((RenderFontProcessing) font).getFont());
 			graphics.textSize(((RenderFontProcessing) font).getSize() * sizeX);
-			graphics.fill(fontColor.getRed() * 255, fontColor.getBlue() * 255, fontColor.getGreen() * 255, fontColor.getAlpha() * 255);
-			graphics.text(text, x, y + font.getHeight());
+			graphics.fill(fontColor.getRed() * 255, fontColor.getGreen() * 255, fontColor.getBlue() * 255, fontColor.getAlpha() * 255);
+			graphics.text(text, x, y + graphics.textDescent() + graphics.textAscent());
 		}
 	}
 
