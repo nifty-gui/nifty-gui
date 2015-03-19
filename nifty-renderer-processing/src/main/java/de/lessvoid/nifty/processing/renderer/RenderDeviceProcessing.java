@@ -1,6 +1,8 @@
 package de.lessvoid.nifty.processing.renderer;
 
 import java.io.File;
+import java.net.URISyntaxException;
+
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.*;
 import de.lessvoid.nifty.tools.Color;
@@ -58,12 +60,16 @@ public class RenderDeviceProcessing implements RenderDevice {
 
 	@Override
 	public RenderImage createImage(String filename, boolean filterLinear) {
-		return renderDevice.createImage(filename,  filterLinear);
+		return renderDevice.createImage(filename, filterLinear);
 	}
 
 	@Override
 	public RenderFont createFont(String filename) {
-		return new RenderFontProcessing(app, graphics, resourceLoader.getResource(filename).getPath());
+		try {
+			return new RenderFontProcessing(app, graphics, resourceLoader.getResource(filename).toURI().getPath());
+		} catch (URISyntaxException e) {
+			return new RenderFontProcessing(app, graphics, resourceLoader.getResource(filename).getPath());
+		}
 	}
 
 	@Override
@@ -127,7 +133,7 @@ public class RenderDeviceProcessing implements RenderDevice {
 			graphics.textFont(((RenderFontProcessing) font).getFont());
 			graphics.textSize(((RenderFontProcessing) font).getSize() * sizeX);
 			graphics.fill(fontColor.getRed() * 255, fontColor.getGreen() * 255, fontColor.getBlue() * 255, fontColor.getAlpha() * 255);
-			graphics.text(text, x, y + graphics.textDescent() + graphics.textAscent());
+			graphics.text(text, x, y + (int)((graphics.textDescent() + graphics.textAscent()) * 1.21));
 		}
 	}
 
@@ -142,9 +148,12 @@ public class RenderDeviceProcessing implements RenderDevice {
 	}
 
 	@Override
-	public MouseCursor createMouseCursor(String filename, int hotspotX,
-			int hotspotY) {
-		return new MouseCursorProcessing(app, app.loadImage(resourceLoader.getResource(filename).getPath()), hotspotX, hotspotY);
+	public MouseCursor createMouseCursor(String filename, int hotspotX, int hotspotY) {
+		try {
+			return new MouseCursorProcessing(app, app.loadImage(resourceLoader.getResource(filename).toURI().getPath()), hotspotX, hotspotY);
+		} catch (URISyntaxException e) {
+			return new MouseCursorProcessing(app, app.loadImage(resourceLoader.getResource(filename).getPath()), hotspotX, hotspotY);
+		}
 	}
 
 	@Override

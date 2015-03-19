@@ -46,12 +46,12 @@ public final class ClassHelper {
   @Nullable
   public static <T> T getInstance(@Nonnull final String className, @Nonnull final Class<T> type) {
     try {
-      Class<?> cls = Class.forName(className);
-      if (type.isAssignableFrom(cls)) {
-        return type.cast(cls.newInstance());
-      } else {
-        log.warning("given class [" + className + "] does not implement [" + type.getName() + "]");
-      }
+	  Class<?> cls = Class.forName(className);
+	  if (type.isAssignableFrom(cls)) {
+	    return type.cast(cls.newInstance());
+	  } else {
+	    log.warning("given class [" + className + "] does not implement [" + type.getName() + "]");
+	  }
     } catch (Exception e) {
       log.warning("class [" + className + "] could not be instantiated (" + e.toString() + ")");
     }

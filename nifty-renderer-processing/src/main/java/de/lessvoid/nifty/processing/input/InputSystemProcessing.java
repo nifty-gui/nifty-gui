@@ -22,12 +22,23 @@ public class InputSystemProcessing implements InputSystem {
 			new ConcurrentLinkedQueue<KeyboardInputEvent>();
 	private final AwtToNiftyKeyCodeConverter keyConverter = 
 			new AwtToNiftyKeyCodeConverter();
+	private final int scale;
 	
 	/**
 	 * Create an instance of InputSystemProcessing.
 	 * @param app PApplet instance Processing is running in.
 	 */
 	public InputSystemProcessing(final PApplet app){
+		this(app, 1);
+	}
+	
+	/**
+	 * Create an instance of InputSystemProcessing (verbose version).
+	 * @param app PApplet instance Processing is running in.
+	 * @param Scale factor by which UI is scaled (mouse position is scaled accordingly).
+	 */
+	public InputSystemProcessing(final PApplet app, int Scale){
+		this.scale = Scale;
 		this.app = app;
 		
 		// Register methods with Processing.
@@ -44,7 +55,7 @@ public class InputSystemProcessing implements InputSystem {
 	public void forwardEvents(NiftyInputConsumer inputEventConsumer) {
 	    MouseEventProcessing mouseEvent = mouseEvents.poll();
 	    while (mouseEvent != null) {
-	      inputEventConsumer.processMouseEvent(mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getWheel() * (-1), mouseEvent.getButton(), mouseEvent.getState());
+	      inputEventConsumer.processMouseEvent(mouseEvent.getX()/scale, mouseEvent.getY()/scale, mouseEvent.getWheel() * (-1), mouseEvent.getButton(), mouseEvent.getState());
 	      mouseEvent = mouseEvents.poll();
 	    }
 

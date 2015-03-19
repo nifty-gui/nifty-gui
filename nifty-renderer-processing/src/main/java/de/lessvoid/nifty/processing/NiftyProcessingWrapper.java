@@ -3,8 +3,8 @@ package de.lessvoid.nifty.processing;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.processing.input.InputSystemProcessing;
 import de.lessvoid.nifty.processing.renderer.RenderDeviceProcessing;
+import de.lessvoid.nifty.processing.time.TimeProviderProcessing;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
-import de.lessvoid.nifty.spi.time.TimeProvider;
 import processing.core.*;
 
 /**
@@ -23,7 +23,7 @@ public class NiftyProcessingWrapper {
 	 * @param soundDevice Implementation of Nifty's SoundDevice interface.
 	 * @param timeProvider Implementation of Nifty's TimeProvider interface.
 	 */
-	public NiftyProcessingWrapper(final PApplet app, final SoundDevice soundDevice, final TimeProvider timeProvider) {		
+	public NiftyProcessingWrapper(final PApplet app, final SoundDevice soundDevice) {		
 				
 		// Grab PApplet and register draw() method.
 		this.app = app;
@@ -34,7 +34,7 @@ public class NiftyProcessingWrapper {
 		this.graphics = renderDevice.getCanvas();
 		
 		// Initate Nifty.
-		this.nifty = new Nifty(renderDevice, soundDevice, new InputSystemProcessing(app), timeProvider);
+		this.nifty = new Nifty(renderDevice, soundDevice, new InputSystemProcessing(app), new TimeProviderProcessing(app));
 	}
 	
 	/**
