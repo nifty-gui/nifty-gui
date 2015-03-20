@@ -58,6 +58,11 @@ public class DragAndDropDialogController implements Controller {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   @NiftyEventSubscriber(id="chest")
   public void onDrop(final String id, @Nonnull final DroppableDroppedEvent event) {
     if ("key".equals(event.getDraggable().getId())) {

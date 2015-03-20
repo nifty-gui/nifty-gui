@@ -71,6 +71,11 @@ public class TextFieldDialogController implements Controller {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   @NiftyEventSubscriber(id="passwordCharCheckBox")
   public void onPasswordCharCheckBoxChanged(final String id, final CheckBoxStateChangedEvent event) {
     setPasswordCharTextFieldEnableState();

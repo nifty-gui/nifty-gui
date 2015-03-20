@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>lessvoid</groupId>
+        <groupId>com.github.nifty-gui</groupId>
         <artifactId>nifty-examples-libgdx</artifactId>
         <version>1.4.2-SNAPSHOT</version>
     </parent>
@@ -18,33 +18,33 @@
             <version>${gdx.version}</version>
         </dependency>
         <dependency>
-            <groupId>lessvoid</groupId>
+            <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty</artifactId>
         </dependency>
         <dependency>
-            <groupId>lessvoid</groupId>
+            <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty-examples</artifactId>
             <exclusions>
                 <exclusion>
-                    <groupId>lessvoid</groupId>
+                    <groupId>com.github.nifty-gui</groupId>
                     <artifactId>nifty-lwjgl-renderer</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>lessvoid</groupId>
+                    <groupId>com.github.nifty-gui</groupId>
                     <artifactId>nifty-openal-soundsystem</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>lessvoid</groupId>
+            <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty-style-black</artifactId>
         </dependency>
         <dependency>
-            <groupId>lessvoid</groupId>
+            <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty-default-controls</artifactId>
         </dependency>
         <dependency>
-            <groupId>lessvoid</groupId>
+            <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty-libgdx-renderer</artifactId>
         </dependency>
     </dependencies>

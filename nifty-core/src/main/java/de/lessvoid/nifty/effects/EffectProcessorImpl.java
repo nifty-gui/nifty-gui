@@ -89,6 +89,7 @@ public class EffectProcessorImpl implements EffectProcessor {
       Effect e = pushedEffects.get(i);
       activate(listener, e.getAlternate(), e.getCustomKey());
     }
+    pushedEffects.clear();
   }
 
   @Override

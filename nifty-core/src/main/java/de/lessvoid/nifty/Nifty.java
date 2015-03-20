@@ -36,12 +36,14 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.ElementMoveAction;
 import de.lessvoid.nifty.elements.ElementRemoveAction;
 import de.lessvoid.nifty.elements.EndOfFrameElementAction;
+import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventProcessor;
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.LayoutPart;
+import de.lessvoid.nifty.loaderv2.ControllerFactory;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.loaderv2.types.ControlDefinitionType;
@@ -129,6 +131,8 @@ public class Nifty {
   private final Map<String, RegisterEffectType> registeredEffects;
   @Nonnull
   private final Map<String, ScreenController> registeredScreenControllers;
+  @Nonnull
+  private final ControllerFactory controllerFactory;
 
   @Nonnull
   private final FlipFlop<List<DelayedMethodInvoke>> delayedMethodInvokes;
@@ -197,6 +201,7 @@ public class Nifty {
     controlDefinitions = new HashMap<String, ControlDefinitionType>();
     registeredEffects = new HashMap<String, RegisterEffectType>();
     registeredScreenControllers = new HashMap<String, ScreenController>();
+    controllerFactory = new ControllerFactory();
     controlStylesChanged = new HashSet<String>();
 
     delayedMethodInvokes = new FlipFlop<List<DelayedMethodInvoke>>(
@@ -1311,6 +1316,17 @@ public class Nifty {
     }
   }
 
+  /**
+   * Obtain the controllerFactory, used to register and unregister Factories
+   * that create controllers.
+   * <p>
+   * @return
+   */
+  @Nonnull
+  public ControllerFactory getControllerFactory() {
+    return controllerFactory;
+  }
+
   @Nonnull
   public NiftyLoader getLoader() {
     return loader;
@@ -2099,5 +2115,14 @@ public class Nifty {
 
   public boolean isNiftyMethodInvokerDebugEnabled() {
     return niftyMethodInvokerDebugEnabled;
+  }
+
+  /**
+   * Sets the static default NiftyInputMapping used by all input event handlers.
+   * <b>Important note: this change will persist to all Nifty instances.</b>
+   */
+  public static void setDefaultInputMappingType (@Nonnull final Class<? extends NiftyInputMapping> defaultInputMappingType)
+  {
+    NiftyDefaults.setDefaultInputMapping(defaultInputMappingType);
   }
 }

@@ -68,6 +68,11 @@ public class SliderAndScrollbarDialogController implements Controller {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   @NiftyEventSubscriber(id="sliderR")
   public void onRedSliderChange(final String id, @Nonnull final SliderChangedEvent event) {
     red = event.getValue();

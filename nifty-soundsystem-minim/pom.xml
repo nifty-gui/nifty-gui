@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>lessvoid</groupId>
+    <groupId>com.github.nifty-gui</groupId>
     <artifactId>nifty-main</artifactId>
     <version>1.4.2-SNAPSHOT</version>
   </parent>
   <artifactId>nifty-minim-soundsystem</artifactId>
-  <name>nifty-minim-soundsystem</name>
+  <name>Nifty Sound Device for Processing (minim)</name>
   <description>Implementation of Nifty's AudioDevice for the Minim audio library</description>
   <repositories>
     <repository>
@@ -21,7 +21,7 @@
 	  <version>2.2.0</version>
 	</dependency>
     <dependency>
-      <groupId>lessvoid</groupId>
+      <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty</artifactId>
       <version>1.4.2-SNAPSHOT</version>
     </dependency>

@@ -37,6 +37,8 @@ public final class KeyboardEventPressed extends AbstractKeyboardEvent {
    */
   @Override
   public boolean sendToSlick(@Nonnull final InputListener listener) {
+    if(!listener.isAcceptingInput()) return false;
+    
     listener.keyPressed(getKey(), getCharacter());
     return true;
   }

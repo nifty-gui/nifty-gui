@@ -62,6 +62,11 @@ public class ChatControlDialogController implements Controller {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   @NiftyEventSubscriber(id="chat")
   public void onChatTextSendEvent(final String id, @Nonnull final ChatTextSendEvent event) {
     // You should post that text to the server ... 

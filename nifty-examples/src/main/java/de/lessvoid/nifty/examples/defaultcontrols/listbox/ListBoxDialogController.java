@@ -85,6 +85,11 @@ public class ListBoxDialogController implements Controller {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   /**
    * This is an example how we could use a regular expression to select the elements we're interested in.
    * In this example all of our CheckBox Nifty Ids end with "CheckBox" and - in this example - all Checkboxes

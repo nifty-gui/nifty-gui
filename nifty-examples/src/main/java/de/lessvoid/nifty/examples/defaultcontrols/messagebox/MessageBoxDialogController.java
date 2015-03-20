@@ -42,6 +42,11 @@ public class MessageBoxDialogController implements Controller {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   public void displayMessageBoxOk() {
     System.out.println("displaying ok message box");
     // create the messagebox with just the ok button

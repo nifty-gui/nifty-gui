@@ -35,6 +35,8 @@ public final class MouseEventReleased extends AbstractMouseEventButton {
    */
   @Override
   public boolean sendToSlick(@Nonnull final InputListener listener) {
+    if(!listener.isAcceptingInput()) return false;
+    
     listener.mouseReleased(getButton(), getX(), getY());
     return true;
   }

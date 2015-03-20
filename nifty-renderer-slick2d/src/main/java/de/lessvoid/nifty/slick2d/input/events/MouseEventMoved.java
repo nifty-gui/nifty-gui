@@ -48,6 +48,8 @@ public final class MouseEventMoved extends AbstractMouseEvent {
    */
   @Override
   public boolean sendToSlick(@Nonnull final InputListener listener) {
+    if(!listener.isAcceptingInput()) return false;
+    
     listener.mouseMoved(getX(), getY(), targetX, targetY);
     return false;
   }

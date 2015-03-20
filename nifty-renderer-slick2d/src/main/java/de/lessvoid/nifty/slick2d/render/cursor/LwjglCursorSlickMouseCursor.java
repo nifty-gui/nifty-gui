@@ -18,19 +18,38 @@ public class LwjglCursorSlickMouseCursor extends AbstractNativeSlickMouseCursor 
   private final Cursor cursor;
 
   /**
+   * The game container that is supposed to show this cursor.
+   */
+  private final GameContainer container;
+
+  /**
    * Create a new slick mouse cursor that wraps a LWJGL cursor.
    *
    * @param lwjglCursor the lwjgl cursor
+   * @param container the game container that is now supposed to show this cursor
    */
-  public LwjglCursorSlickMouseCursor(final Cursor lwjglCursor) {
+  public LwjglCursorSlickMouseCursor(final Cursor lwjglCursor, @Nonnull final GameContainer container) {
     cursor = lwjglCursor;
+    this.container = container;
+  }
+
+  /**
+   * Start displaying the cursor.
+   */
+  @Override
+  public void enable() {
+    try {
+      container.setMouseCursor(cursor, 0, 0);
+    } catch (@Nonnull final SlickException ignored) {
+      // enabling failed
+    }
   }
 
   /**
    * Switch back to the native default cursor.
    */
   @Override
-  public void disableCursor(@Nonnull final GameContainer container) {
+  public void disable() {
     container.setDefaultMouseCursor();
   }
 
@@ -40,17 +59,5 @@ public class LwjglCursorSlickMouseCursor extends AbstractNativeSlickMouseCursor 
   @Override
   public void dispose() {
     cursor.destroy();
-  }
-
-  /**
-   * Start displaying the cursor.
-   */
-  @Override
-  public void enableCursor(@Nonnull final GameContainer container) {
-    try {
-      container.setMouseCursor(cursor, 0, 0);
-    } catch (@Nonnull final SlickException ignored) {
-      // enabling failed
-    }
   }
 }

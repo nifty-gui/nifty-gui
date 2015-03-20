@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>nifty-main</artifactId>
-    <groupId>lessvoid</groupId>
+    <groupId>com.github.nifty-gui</groupId>
     <version>1.4.2-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
@@ -10,36 +10,36 @@
   <name>Nifty Examples</name>
   <description>Lots of Nifty example code! You can find the source for nearly all demos/tutorials in here.</description>
   <properties>
-    <nifty-version>1.4.1</nifty-version>
+    <nifty-version>1.4.2-SNAPSHOT</nifty-version>
   </properties>
   <dependencies>
     <dependency>
-      <groupId>lessvoid</groupId>
+      <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty</artifactId>
       <version>${nifty-version}</version>
     </dependency>
     <dependency>
-      <groupId>lessvoid</groupId>
+      <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-examples</artifactId>
       <version>${nifty-version}</version>
     </dependency>
     <dependency>
-      <groupId>lessvoid</groupId>
+      <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-lwjgl-renderer</artifactId>
       <version>${nifty-version}</version>
     </dependency>
     <dependency>
-      <groupId>lessvoid</groupId>
+      <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-style-black</artifactId>
       <version>${nifty-version}</version>
     </dependency>
     <dependency>
-      <groupId>lessvoid</groupId>
+      <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-default-controls</artifactId>
       <version>${nifty-version}</version>
     </dependency>
     <dependency>
-      <groupId>lessvoid</groupId>
+      <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-openal-soundsystem</artifactId>
       <version>${nifty-version}</version>
     </dependency>

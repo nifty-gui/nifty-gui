@@ -46,6 +46,11 @@ public class MultiplayerPanelControl implements Controller {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   public void removePanel() {
     nifty.removeElement(screen, element);
   }

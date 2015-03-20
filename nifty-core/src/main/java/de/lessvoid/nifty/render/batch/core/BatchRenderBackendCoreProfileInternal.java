@@ -557,6 +557,7 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
 
   private void beginRendering() {
     gl.glActiveTexture(gl.GL_TEXTURE0());
+    gl.glBindSampler(0, 0); // make sure default tex unit and sampler are bound
     gl.glEnable(gl.GL_BLEND());
     gl.glEnable(gl.GL_PRIMITIVE_RESTART());
     gl.glPrimitiveRestartIndex(PRIMITIVE_RESTART_INDEX);

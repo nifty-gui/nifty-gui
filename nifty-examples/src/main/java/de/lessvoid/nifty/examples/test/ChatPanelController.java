@@ -71,6 +71,11 @@ public class ChatPanelController implements Controller, KeyInputHandler {
     return true;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   public void removePanel() {
     nifty.removeElement(screen, element);
   }

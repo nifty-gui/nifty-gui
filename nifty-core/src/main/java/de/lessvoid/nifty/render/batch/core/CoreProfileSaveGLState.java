@@ -1,11 +1,12 @@
 package de.lessvoid.nifty.render.batch.core;
 
+import java.nio.IntBuffer;
+
+import javax.annotation.Nonnull;
+
 import de.lessvoid.nifty.render.batch.CheckGL;
 import de.lessvoid.nifty.render.batch.spi.BufferFactory;
 import de.lessvoid.nifty.render.batch.spi.core.CoreGL;
-
-import java.nio.IntBuffer;
-import javax.annotation.Nonnull;
 
 /**
  * @author void
@@ -21,6 +22,7 @@ public class CoreProfileSaveGLState {
   private int currentProgram;
   private int textureBinding;
   private int activeTexture;
+  private int samplerBindingTex0;
   private boolean blending;
   private int blendingSrcFactor;
   private int blendingDstFactor;
@@ -40,6 +42,12 @@ public class CoreProfileSaveGLState {
     params.clear();
     gl.glGetIntegerv(gl.GL_ACTIVE_TEXTURE(), params);
     activeTexture = params.get(0);
+
+    params.clear();
+    // set active texture to zero for reading sampler binding
+    gl.glActiveTexture(gl.GL_TEXTURE0 ());
+    gl.glGetIntegerv(gl.GL_SAMPLER_BINDING(), params);
+    samplerBindingTex0 = params.get(0);
 
     params.clear();
     gl.glGetIntegerv(gl.GL_TEXTURE_BINDING_2D(), params);
@@ -67,6 +75,7 @@ public class CoreProfileSaveGLState {
   public void restoreCore() {
     gl.glUseProgram(currentProgram);
     gl.glActiveTexture(activeTexture);
+    gl.glBindSampler(0, samplerBindingTex0);
     gl.glBindTexture(gl.GL_TEXTURE_2D(), textureBinding);
     enable(gl.GL_BLEND(), blending);
     gl.glBlendFunc(blendingSrcFactor, blendingDstFactor);

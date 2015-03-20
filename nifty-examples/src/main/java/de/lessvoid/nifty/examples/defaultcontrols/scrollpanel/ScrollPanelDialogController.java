@@ -49,6 +49,11 @@ public class ScrollPanelDialogController implements Controller {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   @NiftyEventSubscriber(id = "scrollPanel")
   public void onScrollPanelChange(final String id, @Nonnull final ScrollPanelChangedEvent event) {
     getScrollPanelXPosTextField().setText(String.valueOf((int) event.getX()));

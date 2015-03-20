@@ -51,4 +51,9 @@ public class MenuButtonController implements Controller {
     }
     return false;
   }
+
+  @Override
+  public void onEndScreen() {
+
+  }
 }

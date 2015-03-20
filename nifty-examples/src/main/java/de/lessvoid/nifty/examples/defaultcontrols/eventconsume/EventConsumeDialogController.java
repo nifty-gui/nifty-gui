@@ -104,6 +104,11 @@ public class EventConsumeDialogController implements Controller {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   @NiftyEventSubscriber(id="eventConsumeElementDropDown")
   public void eventConsumeElementDropDownChanged(final String id, @Nonnull final DropDownSelectionChangedEvent<ElementInfo> e) {
     eventConsumeIgnoreMouseEventsCheckBox.setChecked(e.getSelection().getElement().isIgnoreMouseEvents());

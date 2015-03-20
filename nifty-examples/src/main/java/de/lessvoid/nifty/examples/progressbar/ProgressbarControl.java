@@ -46,6 +46,11 @@ public class ProgressbarControl implements Controller, NiftyExample {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   public void setProgress(final float progressValue) {
     float progress = progressValue;
     if (progress < 0.0f) {

@@ -6,9 +6,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>lessvoid</groupId>
+        <groupId>com.github.nifty-gui</groupId>
         <artifactId>nifty-examples-libgdx</artifactId>
-        <version>1.4.1-SNAPSHOT</version>
+        <version>1.4.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>nifty-examples-libgdx-android</artifactId>
@@ -28,7 +28,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>lessvoid</groupId>
+            <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty-examples-libgdx-core</artifactId>
             <version>${project.version}</version>
         </dependency>

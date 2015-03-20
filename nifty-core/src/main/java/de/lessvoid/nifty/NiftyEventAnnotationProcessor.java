@@ -76,24 +76,38 @@ public class NiftyEventAnnotationProcessor {
 
   private static void patternProcess(final Object obj, final Method method, final boolean add, @Nonnull final String topicPattern, final Class<?> eventClass, @Nonnull final EventService eventService) {
     Pattern pattern = Pattern.compile(topicPattern);
-    if (add) {
-      Subscriber subscriber = new Subscriber(obj, method, eventClass);
-      eventService.subscribeStrongly(pattern, subscriber);
-      log.fine("-> subscribe [" + pattern + "] -> [" + subscriber + "]");
+    Subscriber subscriber = new Subscriber(obj, method, eventClass);
+    StringBuilder sb = new StringBuilder(" [{0}] -> [{1}]");
+    if (add) {      
+      sb.insert(0, "-> subscribe");
+      if(!eventService.subscribeStrongly(pattern, subscriber)){
+          sb.insert(2, " failed to");
+      }
+      log.log(Level.FINE, sb.toString(), new Object[]{pattern, subscriber});
     } else {
-      eventService.unsubscribe(pattern, obj);
-      log.fine("<- unsubscribe [" + pattern + "] -> [" + obj + "]");
+      sb.insert(0, "<- unsubscribe");
+      if(!eventService.unsubscribe(pattern, subscriber)){
+          sb.insert(2, " failed to");
+      }
+      log.log(Level.FINE, sb.toString(), new Object[]{pattern, subscriber});
     }
   }
 
   private static void idProcess(final Object obj, final Method method, final boolean add, final String id, final Class<?> eventClass, @Nonnull final EventService eventService) {
-    if (add) {
-      Subscriber subscriber = new Subscriber(obj, method, eventClass);
-      eventService.subscribeStrongly(id, subscriber);
-      log.fine("-> subscribe [" + id + "] -> [" + subscriber + "]");
+    Subscriber subscriber = new Subscriber(obj, method, eventClass);
+    StringBuilder sb = new StringBuilder(" [{0}] -> [{1}]");
+    if (add) {      
+      sb.insert(0, "-> subscribe");
+      if(!eventService.subscribeStrongly(id, subscriber)){
+          sb.insert(2, " failed to");
+      }
+      log.log(Level.FINE, sb.toString(), new Object[]{id, subscriber});
     } else {
-      eventService.unsubscribe(id, obj);
-      log.fine("<- unsubscribe [" + id + "] -> [" + obj + "]");
+      sb.insert(0, "<- unsubscribe");
+      if(!eventService.unsubscribe(id, subscriber)){
+          sb.insert(2, " failed to");
+      }
+      log.log(Level.FINE, sb.toString(), new Object[]{id, subscriber});
     }
   }
 

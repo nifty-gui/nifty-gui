@@ -7,6 +7,7 @@ import java.nio.IntBuffer;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL3;
+import com.jogamp.opengl.GL3ES3;
 import com.jogamp.opengl.GLContext;
 
 import de.lessvoid.nifty.render.batch.spi.core.CoreGL;
@@ -139,6 +140,11 @@ public class JoglCoreGL extends JoglGL implements CoreGL {
   }
 
   @Override
+  public int GL_SAMPLER_BINDING() {
+    return GL3ES3.GL_SAMPLER_BINDING;
+  }
+
+  @Override
   public int GL_STATIC_DRAW() {
     return GL.GL_STATIC_DRAW;
   }
@@ -261,6 +267,11 @@ public class JoglCoreGL extends JoglGL implements CoreGL {
   @Override
   public void glBindBuffer(int target, int buffer) {
     GLContext.getCurrentGL().getGL3().glBindBuffer(target, buffer);
+  }
+
+  @Override
+  public void glBindSampler(int unit, int sampler) {
+    GLContext.getCurrentGL().getGL3ES3().glBindSampler(unit, sampler);
   }
 
   @Override
