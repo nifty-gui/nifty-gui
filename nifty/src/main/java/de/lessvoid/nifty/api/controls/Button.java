@@ -28,6 +28,7 @@ package de.lessvoid.nifty.api.controls;
 
 import javax.annotation.Nonnull;
 
+import net.engio.mbassy.listener.Handler;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.NiftyColor;
@@ -41,6 +42,8 @@ import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterHAlign;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyColor;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyFont;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterVAlign;
+import de.lessvoid.nifty.api.event.NiftyPointerClickedEvent;
+import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 
 public class Button extends NiftyAbstractControl {
   private Label label;
@@ -51,6 +54,7 @@ public class Button extends NiftyAbstractControl {
 
     niftyNode.setChildLayout(ChildLayout.Center);
     niftyNode.setStyleClass("button");
+    niftyNode.subscribe(this);
 
     label = niftyNode.newControl(Label.class);
   }
@@ -197,5 +201,18 @@ public class Button extends NiftyAbstractControl {
 
   public void setTextColor(final NiftyColor newColor, final NiftyNodeState ... states) {
     label.setTextColor(newColor, states);
+  }
+
+  @Handler
+  public void onClicked(final NiftyPointerClickedEvent event) {
+    NiftyNodeAccessor.getDefault().getInternalNiftyNode(niftyNode).publish(new ButtonClickedEvent(this));
+  }
+
+  public void subscribe(final Object listener) {
+    niftyNode.subscribe(listener);
+  }
+
+  public void setStyleClass(final String classes) {
+    niftyNode.setStyleClass(classes);
   }
 }

@@ -123,8 +123,11 @@ public class InternalNiftyNodeInputHandler {
     if (pointerEvent.isButtonDown()) {
       if (!buttonDown[pointerEvent.getButton()]) {
         buttonDown[pointerEvent.getButton()] = true;
-        onPressed(eventBus, internalNiftyNode, pointerEvent);
-        wantsToCaptureEvents = true;
+        // TODO rethink this part: currently as soon as we have an eventBus available here we set wantsToCapture to true
+        // which will automatically capture the mouse for this NiftyNode. However, having the EventBus available alone
+        // is not enough since this applies to all NiftyNodes you have called subscribe() at - even those that are
+        // not interested in pointer events!
+        wantsToCaptureEvents = onPressed(eventBus, internalNiftyNode, pointerEvent);
       }
     } else {
       if (pointerEvent.getButton() >= 0) {
@@ -143,6 +146,11 @@ public class InternalNiftyNodeInputHandler {
 
     lastPosX = pointerEvent.getX();
     lastPosY = pointerEvent.getY();
+
+    if (logger.isLoggable(Level.FINE)) {
+      logger.fine("inside returned [" + wantsToCaptureEvents + "] for [" + internalNiftyNode.getId() + "]");
+    }
+
     return wantsToCaptureEvents;
   }
 
@@ -222,13 +230,15 @@ public class InternalNiftyNodeInputHandler {
     }
   }
 
-  private void onPressed(
+  private boolean onPressed(
       final InternalNiftyEventBus eventBus,
       final InternalNiftyNode internalNiftyNode,
       final NiftyPointerEvent pointerEvent) {
     if (eventBus != null) {
       eventBus.publish(new NiftyPointerPressedEvent(internalNiftyNode.getNiftyNode(), pointerEvent.getButton(), pointerEvent.getX(), pointerEvent.getY()));
+      return true;
     }
+    return false;
   }
 
   private void onEnter(final InternalNiftyEventBus eventBus, final InternalNiftyNode internalNiftyNode) {

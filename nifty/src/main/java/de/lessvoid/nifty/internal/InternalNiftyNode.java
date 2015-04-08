@@ -53,6 +53,7 @@ import de.lessvoid.nifty.api.NiftyStateSetter;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.controls.NiftyControl;
+import de.lessvoid.nifty.api.event.NiftyEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.accessor.NiftyCanvasAccessor;
@@ -485,6 +486,10 @@ public class InternalNiftyNode implements InternalLayoutable {
 
   public void subscribe(final Object object) {
     eventBus().subscribe(object);
+  }
+
+  public void publish(final NiftyEvent message) {
+    eventBus().publish(message);
   }
 
   public void forceStates(final NiftyNodeState ... newStates) {
@@ -981,7 +986,6 @@ public class InternalNiftyNode implements InternalLayoutable {
       Map<String, String> properties = styleClassInfo.getProperties(instance);
       for (Map.Entry<String, String> entry : properties.entrySet()) {
         try {
-          System.out.println(entry.getKey() + " => " + entry.getValue());
           styleClassInfo.writeValue(instance, entry.getKey(), entry.getValue(), Arrays.asList(NiftyNodeState.Regular));
         } catch (Exception e) {
           log.log(Level.WARNING, "writeValue exception", e);

@@ -39,6 +39,18 @@ public class NiftyPointerHoverEvent implements NiftyEvent {
     this.y = y;
   }
 
+  public NiftyNode getNiftyNode() {
+    return niftyNode;
+  }
+
+  public int getX() {
+    return x;
+  }
+
+  public int getY() {
+    return y;
+  }
+
   public String toString() {
     return "pointer hover [" + niftyNode.toString() + "] (" + x + ", " + y + ")";
   }
