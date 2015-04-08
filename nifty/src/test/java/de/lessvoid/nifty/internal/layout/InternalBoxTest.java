@@ -63,7 +63,7 @@ public class InternalBoxTest {
   @Test
   public void testToString() {
     Box box = new Box(100, 100, 200, 200);
-    assertTrue(box.toString().startsWith("InternalBox [x=100, y=100, width=200, height=200] "));
+    assertTrue(box.toString().startsWith("InternalBox [x=100, y=100, width=200, height=200]"));
   }
 
   @Test
