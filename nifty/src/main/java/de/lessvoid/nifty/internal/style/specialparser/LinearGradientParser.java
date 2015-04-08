@@ -244,7 +244,6 @@ public class LinearGradientParser {
     StringBuilder number = new StringBuilder();
     while (peekColorPart(tokenSeq)) {
       Token next = tokenSeq.poll();
-      System.out.println(next.tokenCode  +" -> " + next.attribute);
       number.append(next.attribute);
       if (number.length() == 3 || number.length() == 6) {
         return number.toString();
