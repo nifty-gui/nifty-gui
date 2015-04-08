@@ -45,7 +45,7 @@ class RenderNodeStateLogger {
       final boolean needsRender,
       final StringBuilder result,
       final String offset) {
-    result.append(offset).append("- ").append("[").append(renderNode.getNodeId()).append("]\n");
+    result.append(offset).append("- ").append("[").append(renderNode.getNodeId()).append("] ").append("indexInParent [").append(renderNode.getIndexInParent()).append("]\n");
     outputDimension(renderNode.getWidth(), renderNode.getHeight(), attributesOffset(result, offset));
     outputChanged(needsContentChange, result);
     outputRender(needsRender, result);
