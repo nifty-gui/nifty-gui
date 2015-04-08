@@ -35,9 +35,14 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
 import de.lessvoid.nifty.api.NiftyNode;
+import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
+import de.lessvoid.nifty.internal.render.sync.RenderNodeSync;
+import de.lessvoid.nifty.internal.render.sync.RendererNodeSyncInternal;
+import de.lessvoid.nifty.internal.render.sync.RendererNodeSyncNodeFactory;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**
@@ -63,10 +68,13 @@ public class NiftyRenderer implements NiftyRendererMXBean {
   private final NiftyRenderDevice renderDevice;
 
   // the helper class to sync real nifty nodes with render nodes 
-  private final RendererNodeSync rendererSync;
+  private final RenderNodeSync rendererSync;
 
   // the list of root render nodes representing the real Nifty root nodes (and their hierarchy)
   private final List<RenderNode> renderNodes = new ArrayList<RenderNode>();
+
+  // we keep this list around to not allocate a list each frame - it's being reused
+  private final List<InternalNiftyNode> internalConvertList = new ArrayList<InternalNiftyNode>();
 
   /**
    * Constructor.
@@ -77,7 +85,9 @@ public class NiftyRenderer implements NiftyRendererMXBean {
   public NiftyRenderer(final Statistics stats, final NiftyRenderDevice renderDevice) {
     this.stats = stats;
     this.renderDevice = renderDevice;
-    this.rendererSync = new RendererNodeSync(renderDevice);
+    this.rendererSync = new RenderNodeSync(
+        new RendererNodeSyncNodeFactory(renderDevice),
+        new RendererNodeSyncInternal());
 
     try {
       MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); 
@@ -101,20 +111,26 @@ public class NiftyRenderer implements NiftyRendererMXBean {
       return false;
     }
 
-//    for (String s : getRenderTree()) {
-//      System.out.println(s);
-//    }
-
     render();
     return true;
   }
 
   private boolean synchronize(final List<NiftyNode> sourceNodes, final List<RenderNode> destinationNodes) {
     stats.startSynchronize();
-    boolean changed = rendererSync.synchronize(sourceNodes, destinationNodes);
+    boolean changed = rendererSync.synchronize(toInternal(sourceNodes), destinationNodes);
     sortNodes(destinationNodes);
     stats.stopSynchronize();
     return changed;
+  }
+
+  private List<InternalNiftyNode> toInternal(final List<NiftyNode> sourceNodes) {
+    NiftyNodeAccessor niftyNodeAccessor = NiftyNodeAccessor.getDefault();
+
+    internalConvertList.clear();
+    for (int i=0; i<sourceNodes.size(); i++) {
+      internalConvertList.add(niftyNodeAccessor.getInternalNiftyNode(sourceNodes.get(i)));
+    }
+    return internalConvertList;
   }
 
   private void sortNodes(final List<RenderNode> destinationNodes) {

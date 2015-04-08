@@ -181,7 +181,14 @@ public class RenderNode {
   }
 
   public void outputStateInfo(final StringBuilder result, final String offset) {
-    RenderNodeStateLogger.stateInfo(this, new AABB(width, height), commands, needsContentUpdate, needsRender, result, offset);
+    RenderNodeStateLogger.stateInfo(
+        this,
+        new AABB(width, height),
+        commands,
+        needsContentUpdate,
+        needsRender,
+        result,
+        offset);
     for (int i=0; i<children.size(); i++) {
       children.get(i).outputStateInfo(result, offset + "  ");
     }
