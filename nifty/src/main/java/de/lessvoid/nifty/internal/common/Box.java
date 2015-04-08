@@ -269,8 +269,7 @@ public class Box {
     result.append(width);
     result.append(", height=");
     result.append(height);
-    result.append("] ");
-    result.append(super.toString());
+    result.append("]");
     return result.toString();
   }
 
@@ -283,8 +282,7 @@ public class Box {
     result.append(width);
     result.append(", height=");
     result.append(height);
-    result.append("] ");
-    result.append(super.toString());
+    result.append("]");
     return result;
   }
 }
