@@ -191,14 +191,14 @@ public class Nifty {
 
   // sorts in place (the source list) and returns the sorted source list
   private List<NiftyNode> sortInputReceivers(final List<NiftyNode> source) {
-    Collections.sort(source, inputEventReceiversComparator);
+    Collections.sort(source, Collections.reverseOrder(inputEventReceiversComparator));
     return source;
   }
 
   private void logInputReceivers(final List<NiftyNode> source) {
     str.setLength(0);
     str.append("inputReceivers: ");
-    for (int j=source.size()-1; j>=0; j--) {
+    for (int j=0; j<source.size(); j++) {
       str.append("[");
       str.append(source.get(j).getImpl().getId());
       str.append("]");
@@ -219,8 +219,9 @@ public class Nifty {
               nodeThatCapturedPointerEvents = null;
             }
           } else {
-            for (int j=inputReceivers.size()-1; j>=0; j--) {
-              if (inputReceivers.get(j).getImpl().pointerEvent(pointerEvents[i])) {
+            for (int j=0; j<inputReceivers.size(); j++) {
+              InternalNiftyNode impl = inputReceivers.get(j).getImpl();
+              if (impl.pointerEvent(pointerEvents[i])) {
                 nodeThatCapturedPointerEvents = inputReceivers.get(j);
                 break;
               }
