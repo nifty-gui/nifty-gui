@@ -1,12 +1,5 @@
 package de.lessvoid.nifty.renderer.jogl.render;
 
-import com.jogamp.common.nio.Buffers;
-
-import de.lessvoid.nifty.render.io.ImageLoader;
-import de.lessvoid.nifty.render.io.ImageLoaderFactory;
-import de.lessvoid.nifty.spi.render.RenderImage;
-import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -14,11 +7,19 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.annotation.Nonnull;
-import javax.media.opengl.GL;
-import javax.media.opengl.GLContext;
-import javax.media.opengl.glu.GLU;
-import javax.media.opengl.glu.gl2.GLUgl2;
+
+import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLContext;
+import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.glu.gl2.GLUgl2;
+
+import de.lessvoid.nifty.render.io.ImageLoader;
+import de.lessvoid.nifty.render.io.ImageLoaderFactory;
+import de.lessvoid.nifty.spi.render.RenderImage;
+import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 
 /**
  * @author Julien Gouesse

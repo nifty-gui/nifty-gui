@@ -10,12 +10,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
-import javax.media.nativewindow.util.Dimension;
-import javax.media.nativewindow.util.DimensionImmutable;
-import javax.media.nativewindow.util.PixelFormat;
-import javax.media.nativewindow.util.PixelRectangle;
 
 import com.jogamp.common.nio.Buffers;
+import com.jogamp.nativewindow.util.Dimension;
+import com.jogamp.nativewindow.util.DimensionImmutable;
+import com.jogamp.nativewindow.util.PixelFormat;
+import com.jogamp.nativewindow.util.PixelRectangle;
 import com.jogamp.newt.Display.PointerIcon;
 import com.jogamp.newt.Window;
 
@@ -58,8 +58,8 @@ public class JoglMouseCursor implements MouseCursor {
 			// find compatible PixelFormat
 			PixelFormat pixFormat = null;
 			for (final PixelFormat pf : PixelFormat.values()) {
-				if (pf.componentCount == image.getColorModel().getNumComponents()
-						&& pf.bytesPerPixel() == image.getColorModel().getPixelSize() / 8) { // divide by 8 for bits -> bytes
+				if (pf.comp.componentCount() == image.getColorModel().getNumComponents()
+						&& pf.comp.bytesPerPixel() == image.getColorModel().getPixelSize() / 8) { // divide by 8 for bits -> bytes
 					pixFormat = pf;
 					break;
 				}
