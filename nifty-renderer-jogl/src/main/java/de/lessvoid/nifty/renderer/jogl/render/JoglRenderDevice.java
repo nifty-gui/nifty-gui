@@ -8,12 +8,12 @@ import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLContext;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.newt.Window;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLContext;
 
 import de.lessvoid.nifty.render.BlendMode;
 import de.lessvoid.nifty.spi.render.MouseCursor;
@@ -78,7 +78,7 @@ public class JoglRenderDevice implements RenderDevice {
   public JoglRenderDevice(final boolean displayFPS) {
   	this(null, displayFPS);
   }
-  
+
   /**
    * The standard constructor. You'll use this in production code. Using this constructor will
    * configure the RenderDevice to not log FPS on System.out.
@@ -91,7 +91,7 @@ public class JoglRenderDevice implements RenderDevice {
     time = timeProvider.getMsTime();
     frames = 0;
   }
-  
+
   /**
    * The development mode constructor allows to display the FPS on screen when the given flag is
    * set to true. Note that setting displayFPS to false will still log the FPS on System.out every
