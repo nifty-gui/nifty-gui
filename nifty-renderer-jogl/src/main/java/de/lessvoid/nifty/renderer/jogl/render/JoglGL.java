@@ -6,16 +6,16 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
-import javax.media.opengl.GL2;
-import javax.media.opengl.GL2ES2;
-import javax.media.opengl.GLContext;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL2ES2;
+import com.jogamp.opengl.GLContext;
 
 import de.lessvoid.nifty.render.batch.spi.GL;
 
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
- *         N.B: Please never store a GL instance as it might 
- *         become invalidated at runtime and it would allow to 
+ *         N.B: Please never store a GL instance as it might
+ *         become invalidated at runtime and it would allow to
  *         call OpenGL when there is no current context on this thread
  */
 public class JoglGL implements GL {

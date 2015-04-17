@@ -3,15 +3,16 @@
  */
 package de.lessvoid.nifty.renderer.jogl.render.font;
 
-import com.jogamp.common.nio.Buffers;
-
-import javax.annotation.Nonnull;
-import javax.media.opengl.GL;
-import javax.media.opengl.GLContext;
-import javax.media.opengl.glu.GLU;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+
+import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLContext;
+import com.jogamp.opengl.glu.GLU;
 
 /**
  * @author void

@@ -1,15 +1,15 @@
 package de.lessvoid.nifty.renderer.jogl.render;
 
-import de.lessvoid.nifty.render.batch.spi.core.CoreGL;
-import de.lessvoid.nifty.renderer.jogl.render.JoglGL;
-
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GL3;
-import javax.media.opengl.GLContext;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL3;
+import com.jogamp.opengl.GLContext;
+
+import de.lessvoid.nifty.render.batch.spi.core.CoreGL;
 
 /**
  * Note: Requires OpenGL 3.2 or higher.

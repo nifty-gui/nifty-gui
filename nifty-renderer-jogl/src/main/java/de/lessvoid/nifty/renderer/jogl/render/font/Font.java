@@ -1,18 +1,20 @@
 package de.lessvoid.nifty.renderer.jogl.render.font;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLContext;
+import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
+
 import de.lessvoid.nifty.elements.tools.FontHelper;
 import de.lessvoid.nifty.renderer.jogl.render.JoglRenderImage;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.ColorValueParser;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
-
-import javax.annotation.Nonnull;
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLContext;
-import javax.media.opengl.fixedfunc.GLMatrixFunc;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * OpenGL display list based Font.
