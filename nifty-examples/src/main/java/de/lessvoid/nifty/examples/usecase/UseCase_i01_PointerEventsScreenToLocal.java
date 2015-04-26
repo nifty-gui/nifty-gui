@@ -28,9 +28,6 @@ package de.lessvoid.nifty.examples.usecase;
 
 import java.io.IOException;
 
-import net.engio.mbassy.listener.Handler;
-import net.engio.mbassy.listener.Listener;
-import net.engio.mbassy.listener.References;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyColor;
@@ -39,7 +36,11 @@ import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.controls.Label;
+import de.lessvoid.nifty.api.event.NiftyPointerExitNodeEvent;
 import de.lessvoid.nifty.api.event.NiftyPointerHoverEvent;
+import net.engio.mbassy.listener.Handler;
+import net.engio.mbassy.listener.Listener;
+import net.engio.mbassy.listener.References;
 
 /**
  * Mouse hover over an element with output of local coordinates.
@@ -60,6 +61,7 @@ public class UseCase_i01_PointerEventsScreenToLocal {
     nifty.clearScreenBeforeRender();
     font = nifty.createFont("fonts/aurulent-sans-16.fnt");
 
+    // the color rectangles in the middle
     parentNode = nifty.createRootNode(UnitValue.px(512), UnitValue.px(512), ChildLayout.Center);
     parentNode.setBackgroundColor(NiftyColor.red());
 
@@ -69,6 +71,7 @@ public class UseCase_i01_PointerEventsScreenToLocal {
     grandChildNode = childNode.newChildNode(UnitValue.percent(50), UnitValue.percent(50));
     grandChildNode.setBackgroundColor(NiftyColor.green());
 
+    // status labels to highlight the elements we hover on
     labelParentNode = nifty.createRootNodeFullscreen(ChildLayout.Vertical);
     labelParentNode.setPaddingTop(UnitValue.px(100));
     labelParentNode.setPaddingLeft(UnitValue.px(50));
@@ -95,14 +98,23 @@ public class UseCase_i01_PointerEventsScreenToLocal {
 
     public OnHover(final Label label) {
       this.label = label;
+      pointerOutsideLabel();
     }
 
     @Handler
     public void onPointerHover(final NiftyPointerHoverEvent event) {
       label.setText(event.getNiftyNode().screenToLocal(event.getX(), event.getY()).toString());
-      System.out.println(event.getNiftyNode().screenToLocal(event.getX(), event.getY()).toString());
     }
-  }
+
+    @Handler
+    public void onExitNode(final NiftyPointerExitNodeEvent event) {
+      pointerOutsideLabel();
+    }
+
+    private void pointerOutsideLabel() {
+      label.setText("pointer outside");
+    }
+}
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_i01_PointerEventsScreenToLocal.class, args);

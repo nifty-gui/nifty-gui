@@ -965,7 +965,7 @@ public class InternalNiftyNode implements InternalLayoutable {
     localTransformation = new Mat4(buildLocalTransformation());
     localTransformationInverse = Mat4.invert(localTransformation, new Mat4());
 
-    Mat4 parentTransformation = getParentLocalTransformation();
+    Mat4 parentTransformation = getParentScreenToLocalTransformation();
     screenToLocalTransformation = Mat4.mul(parentTransformation, localTransformation);
     screenToLocalTransformationInverse = Mat4.invert(screenToLocalTransformation, new Mat4());
 
@@ -973,11 +973,11 @@ public class InternalNiftyNode implements InternalLayoutable {
     layoutPos.resetTransformationChanged();
   }
 
-  private Mat4 getParentLocalTransformation() {
+  private Mat4 getParentScreenToLocalTransformation() {
     if (parentNode == null) {
       return new Mat4();
     }
-    return parentNode.getLocalTransformation();
+    return parentNode.getScreenToLocalTransformation();
   }
 
   public void initDefaultProperties(final Object instance) {

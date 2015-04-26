@@ -26,7 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import net.engio.mbassy.listener.Handler;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.Nifty;
@@ -34,10 +33,10 @@ import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.VAlign;
 import de.lessvoid.nifty.api.controls.Button;
 import de.lessvoid.nifty.api.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.api.controls.Label;
+import net.engio.mbassy.listener.Handler;
 
 /**
  * Display some simple Button - with style ;)
