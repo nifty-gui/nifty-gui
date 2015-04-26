@@ -40,9 +40,9 @@ import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
-import de.lessvoid.nifty.internal.render.sync.RenderNodeSync;
-import de.lessvoid.nifty.internal.render.sync.RendererNodeSyncInternal;
-import de.lessvoid.nifty.internal.render.sync.RendererNodeSyncNodeFactory;
+import de.lessvoid.nifty.internal.render.sync.TreeSync;
+import de.lessvoid.nifty.internal.render.sync.TreeSyncRenderNodeFactory;
+import de.lessvoid.nifty.internal.render.sync.TreeSyncRenderState;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 /**
@@ -67,8 +67,9 @@ public class NiftyRenderer implements NiftyRendererMXBean {
   // since we need to render stuff we'll keep the NiftyRenderDevice instance around
   private final NiftyRenderDevice renderDevice;
 
-  // the helper class to sync real nifty nodes with render nodes 
-  private final RenderNodeSync rendererSync;
+  // the helper classes to sync real nifty nodes with render nodes 
+  private final TreeSync treeSync;
+  private final TreeSyncRenderState treeSyncRenderState;
 
   // the list of root render nodes representing the real Nifty root nodes (and their hierarchy)
   private final List<RenderNode> renderNodes = new ArrayList<RenderNode>();
@@ -85,9 +86,8 @@ public class NiftyRenderer implements NiftyRendererMXBean {
   public NiftyRenderer(final Statistics stats, final NiftyRenderDevice renderDevice) {
     this.stats = stats;
     this.renderDevice = renderDevice;
-    this.rendererSync = new RenderNodeSync(
-        new RendererNodeSyncNodeFactory(renderDevice),
-        new RendererNodeSyncInternal());
+    this.treeSync = new TreeSync(new TreeSyncRenderNodeFactory(renderDevice));
+    this.treeSyncRenderState = new TreeSyncRenderState();
 
     try {
       MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); 
@@ -117,10 +117,12 @@ public class NiftyRenderer implements NiftyRendererMXBean {
 
   private boolean synchronize(final List<NiftyNode> sourceNodes, final List<RenderNode> destinationNodes) {
     stats.startSynchronize();
-    boolean changed = rendererSync.synchronize(toInternal(sourceNodes), destinationNodes);
+    List<InternalNiftyNode> internal = toInternal(sourceNodes);
+    boolean syncChanged = treeSync.synchronizeTree(internal, destinationNodes);
+    int renderStateChanged = treeSyncRenderState.synchronize(internal, destinationNodes);
     sortNodes(destinationNodes);
     stats.stopSynchronize();
-    return changed;
+    return syncChanged || (renderStateChanged != 0);
   }
 
   private List<InternalNiftyNode> toInternal(final List<NiftyNode> sourceNodes) {

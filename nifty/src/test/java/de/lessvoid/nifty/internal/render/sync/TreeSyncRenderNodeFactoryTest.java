@@ -26,7 +26,13 @@
  */
 package de.lessvoid.nifty.internal.render.sync;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.anyInt;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -42,16 +48,15 @@ import de.lessvoid.nifty.internal.canvas.Command;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.render.RenderNode;
-import de.lessvoid.nifty.internal.render.sync.RendererNodeSyncNodeFactory;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
-public class RendererNodeSyncNodeFactoryTest {
+public class TreeSyncRenderNodeFactoryTest {
   private NiftyRenderDevice renderDevice = createNiceMock(NiftyRenderDevice.class);
   private NiftyTexture niftyTexture = createNiceMock(NiftyTexture.class);
   private InternalNiftyCanvas niftyCanvas = createNiceMock(InternalNiftyCanvas.class);
-  private RendererNodeSyncNodeFactory factory;
+  private TreeSyncRenderNodeFactory factory;
 
   @Before
   public void before() {
@@ -63,7 +68,7 @@ public class RendererNodeSyncNodeFactoryTest {
     expect(renderDevice.createTexture(anyInt(), anyInt(), eq(FilterMode.Linear))).andReturn(niftyTexture).anyTimes();
     replay(renderDevice);
 
-    factory = new RendererNodeSyncNodeFactory(renderDevice);
+    factory = new TreeSyncRenderNodeFactory(renderDevice);
   }
 
   @After
@@ -89,101 +94,6 @@ public class RendererNodeSyncNodeFactoryTest {
         "  AABB old [x=0, y=0, width=0, height=0]\n" +
         "  AABB cur [x=0, y=0, width=100, height=200]\n" +
         "  command count [0]\n", stateInfo(renderNode));
-  }
-
-  @Test
-  public void testWithChild() {
-    InternalNiftyNode node = niftyNode("1", 100, 200,
-                               niftyNode("2", 100, 200));
-
-    RenderNode renderNode = factory.createRenderNode(node);
-
-    assertEquals(
-        "- [49] indexInParent [0]\n" +
-        "  width [100] height [200] content [true] render [true]\n" +
-        "  local [1.0 0.0 0.0 0.0]\n" +
-        "  local [0.0 1.0 0.0 0.0]\n" +
-        "  local [0.0 0.0 1.0 0.0]\n" +
-        "  local [0.0 0.0 0.0 1.0]\n" +
-        "  AABB old [x=0, y=0, width=0, height=0]\n" +
-        "  AABB cur [x=0, y=0, width=100, height=200]\n" +
-        "  command count [0]\n" +
-        "  - [50] indexInParent [0]\n" +
-        "    width [100] height [200] content [true] render [true]\n" +
-        "    local [1.0 0.0 0.0 0.0]\n" +
-        "    local [0.0 1.0 0.0 0.0]\n" +
-        "    local [0.0 0.0 1.0 0.0]\n" +
-        "    local [0.0 0.0 0.0 1.0]\n" +
-        "    AABB old [x=0, y=0, width=0, height=0]\n" +
-        "    AABB cur [x=0, y=0, width=100, height=200]\n" +
-        "    command count [0]\n", stateInfo(renderNode));
-  }
-
-  @Test
-  public void testWithTwoChilds() {
-    InternalNiftyNode node = niftyNode("1", 100, 200,
-                               niftyNode("2", 100, 200),
-                               niftyNode("3", 100, 200));
-
-    RenderNode renderNode = factory.createRenderNode(node);
-
-    assertEquals(
-        "- [49] indexInParent [0]\n" +
-        "  width [100] height [200] content [true] render [true]\n" +
-        "  local [1.0 0.0 0.0 0.0]\n" +
-        "  local [0.0 1.0 0.0 0.0]\n" +
-        "  local [0.0 0.0 1.0 0.0]\n" +
-        "  local [0.0 0.0 0.0 1.0]\n" +
-        "  AABB old [x=0, y=0, width=0, height=0]\n" +
-        "  AABB cur [x=0, y=0, width=100, height=200]\n" +
-        "  command count [0]\n" +
-        "  - [50] indexInParent [0]\n" +
-        "    width [100] height [200] content [true] render [true]\n" +
-        "    local [1.0 0.0 0.0 0.0]\n" +
-        "    local [0.0 1.0 0.0 0.0]\n" +
-        "    local [0.0 0.0 1.0 0.0]\n" +
-        "    local [0.0 0.0 0.0 1.0]\n" +
-        "    AABB old [x=0, y=0, width=0, height=0]\n" +
-        "    AABB cur [x=0, y=0, width=100, height=200]\n" +
-        "    command count [0]\n" +
-        "  - [51] indexInParent [1]\n" +
-        "    width [100] height [200] content [true] render [true]\n" +
-        "    local [1.0 0.0 0.0 0.0]\n" +
-        "    local [0.0 1.0 0.0 0.0]\n" +
-        "    local [0.0 0.0 1.0 0.0]\n" +
-        "    local [0.0 0.0 0.0 1.0]\n" +
-        "    AABB old [x=0, y=0, width=0, height=0]\n" +
-        "    AABB cur [x=0, y=0, width=100, height=200]\n" +
-        "    command count [0]\n", stateInfo(renderNode));
-  }
-
-  @Test
-  public void testWithChildZeroWidth() {
-    InternalNiftyNode node = niftyNode("1", 100, 200,
-                               niftyNode("2", 0, 200),
-                               niftyNode("3", 100, 200));
-
-    RenderNode renderNode = factory.createRenderNode(node);
-
-    assertEquals(
-        "- [49] indexInParent [0]\n" +
-        "  width [100] height [200] content [true] render [true]\n" +
-        "  local [1.0 0.0 0.0 0.0]\n" +
-        "  local [0.0 1.0 0.0 0.0]\n" +
-        "  local [0.0 0.0 1.0 0.0]\n" +
-        "  local [0.0 0.0 0.0 1.0]\n" +
-        "  AABB old [x=0, y=0, width=0, height=0]\n" +
-        "  AABB cur [x=0, y=0, width=100, height=200]\n" +
-        "  command count [0]\n" +
-        "  - [51] indexInParent [0]\n" +
-        "    width [100] height [200] content [true] render [true]\n" +
-        "    local [1.0 0.0 0.0 0.0]\n" +
-        "    local [0.0 1.0 0.0 0.0]\n" +
-        "    local [0.0 0.0 1.0 0.0]\n" +
-        "    local [0.0 0.0 0.0 1.0]\n" +
-        "    AABB old [x=0, y=0, width=0, height=0]\n" +
-        "    AABB cur [x=0, y=0, width=100, height=200]\n" +
-        "    command count [0]\n", stateInfo(renderNode));
   }
 
   private String stateInfo(RenderNode renderNode) {

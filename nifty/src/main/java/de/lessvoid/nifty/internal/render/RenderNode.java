@@ -117,6 +117,7 @@ public class RenderNode {
     needsRender = false;
   }
 
+  @Deprecated
   public void addChildNode(final RenderNode childNode) {
     children.add(childNode);
     childNode.setIndexInParent(children.size() - 1);
@@ -207,5 +208,9 @@ public class RenderNode {
     for (int i=0; i<children.size(); i++) {
       children.get(i).sortChildren();
     }
+  }
+
+  public List<RenderNode> getChildren() {
+    return children;
   }
 }

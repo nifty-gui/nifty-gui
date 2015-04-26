@@ -31,16 +31,27 @@ import de.lessvoid.nifty.internal.render.RenderNode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 
-public class RendererNodeSyncNodeFactory {
-  // we need to create render resources like textures we'll keep an NiftyRenderDevice around as well
+/**
+ * Factory to create new RenderNodes.
+ *
+ * @author void
+ */
+public class TreeSyncRenderNodeFactory {
   private final NiftyRenderDevice renderDevice;
 
-  public RendererNodeSyncNodeFactory(final NiftyRenderDevice renderDevice) {
+  public TreeSyncRenderNodeFactory(final NiftyRenderDevice renderDevice) {
     this.renderDevice = renderDevice;
   }
 
-  RenderNode createRenderNode(final InternalNiftyNode node) {
-    RenderNode renderNode = new RenderNode(
+  /**
+   * Create a new RenderNode from the given InternalNiftyNode.
+   * Please note that this will only create the given node WITHOUT any child nodes.
+   *
+   * @param node the source InternalNiftyNode to create a RenderNode for
+   * @return the newly created RenderNode
+   */
+  public RenderNode createRenderNode(final InternalNiftyNode node) {
+    return new RenderNode(
         node.getId().hashCode(),
         node.getLocalTransformation(),
         node.getWidth(),
@@ -50,22 +61,6 @@ public class RendererNodeSyncNodeFactory {
         renderDevice.createTexture(node.getWidth(), node.getHeight(), FilterMode.Linear),
         node.getCompositeOperation(),
         node.getRenderOrder());
-
-    int indexInParent = 0;
-    for (int i=0; i<node.getChildren().size(); i++) {
-      InternalNiftyNode srcNode = node.getChildren().get(i);
-
-      // we don't add nodes with zero width or height
-      if (srcNode.getWidth() <= 0 || srcNode.getHeight() <= 0) {
-        continue;
-      }
-
-      RenderNode childRenderNode = createRenderNode(srcNode);
-      childRenderNode.setIndexInParent(indexInParent++);
-
-      renderNode.addChildNode(childRenderNode);
-    }
-
-    return renderNode;
   }
+
 }
