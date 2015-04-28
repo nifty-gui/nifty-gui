@@ -29,19 +29,9 @@ package de.lessvoid.nifty.internal.style;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import se.fishtank.css.selectors.NodeSelector;
-import se.fishtank.css.selectors.generic.GenericNodeSelector;
-import self.philbrown.cssparser.CSSHandler;
-import self.philbrown.cssparser.CSSParser;
-import self.philbrown.cssparser.Declaration;
-import self.philbrown.cssparser.FontFace;
-import self.philbrown.cssparser.KeyFrame;
-import self.philbrown.cssparser.RuleSet;
-import self.philbrown.cssparser.TokenSequence;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyNodeState;
@@ -49,6 +39,14 @@ import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.common.ListBuilder;
 import de.lessvoid.nifty.internal.style.specialparser.PseudoClassExtractor;
+import se.fishtank.css.selectors.Selectors;
+import self.philbrown.cssparser.CSSHandler;
+import self.philbrown.cssparser.CSSParser;
+import self.philbrown.cssparser.Declaration;
+import self.philbrown.cssparser.FontFace;
+import self.philbrown.cssparser.KeyFrame;
+import self.philbrown.cssparser.RuleSet;
+import self.philbrown.cssparser.TokenSequence;
 
 public class NiftyStyle {
   private final static Logger log = Logger.getLogger(NiftyStyle.class.getName());
@@ -68,12 +66,10 @@ public class NiftyStyle {
     private final Nifty nifty;
     private final NiftyStyleClassInfoCache classInfoCache;
     private final List<InternalNiftyNode> rootNodes = new ArrayList<InternalNiftyNode>();
-    private final NiftyStyleNodeAdapter nodeAdapter;
 
     NiftyNodeCSSHandler(final Nifty nifty, final List<NiftyNode> rootNodes, final NiftyStyleClassInfoCache classInfoCache) {
       this.nifty = nifty;
       this.classInfoCache = classInfoCache;
-      this.nodeAdapter = new NiftyStyleNodeAdapter(nifty, classInfoCache);
 
       for (int i=0; i<rootNodes.size(); i++) {
         this.rootNodes.add(NiftyNodeAccessor.getDefault().getInternalNiftyNode(rootNodes.get(i)));
@@ -143,9 +139,10 @@ public class NiftyStyle {
     @Override
     public void handleRuleSet(final RuleSet ruleSet) {
       for (int i=0; i<rootNodes.size(); i++) {
-        NodeSelector<InternalNiftyNode> selector = new GenericNodeSelector<InternalNiftyNode>(nodeAdapter, rootNodes.get(i));
+        Selectors<InternalNiftyNode, InternalNiftyNodeDOMNode> selector = new Selectors<>(new InternalNiftyNodeDOMNode(rootNodes.get(i), nifty, classInfoCache));
         try {
-          Set<InternalNiftyNode> result = selector.querySelectorAll(ruleSet.getSelector().toString());
+          System.out.println(ruleSet.getSelector().toString());
+          List<InternalNiftyNode> result = selector.querySelectorAll(ruleSet.getSelector().toString());
           List<String> dynamicPseudoClasses = pseudoClassExtractor.parse(ruleSet.getSelector().getTokens());
           log.fine("found: " + result.size() + " " + ListBuilder.makeString(new ArrayList<InternalNiftyNode>(result)));
           for (InternalNiftyNode r : result) {

@@ -40,7 +40,7 @@ public class UseCase_c03_LabelControlAllStyles {
 
   public UseCase_c03_LabelControlAllStyles(final Nifty nifty) throws Exception {
     NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
-    Label label = niftyNode.newControl(Label.class);
+    niftyNode.newControl(Label.class);
     nifty.applyStyle(UseCase_c03_LabelControlAllStyles.class.getResourceAsStream("UseCase_c03_LabelControlAllStyles.css"));
   }
 

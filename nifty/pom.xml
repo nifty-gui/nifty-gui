@@ -28,24 +28,11 @@
       <artifactId>mbassador</artifactId>
       <version>1.2.0</version>
     </dependency>
-    <!--
-       for now we require our pull request to be applied and a release:
-       https://github.com/chrsan/css-selectors/pull/13
-       so that we can use the css-selectors project as a dependency so that we can use it for Nifty.
-
-       Until that has happend we've included the packages of that project directly into our source tree - which we
-       hate doing but the alternative would be to deploy some SNAPSHOT dependency from our fork of the project which
-       doesn't sound a lot better to me right now.
-
-       Once our pull request has been applied and the project has been released by https://github.com/chrsan
-       we can remove the source again and use the dependency as it was meant to be :)
-       
     <dependency>
       <groupId>se.fishtank</groupId>
       <artifactId>css-selectors</artifactId>
-      <version>1.0.6</version>
+      <version>2.0</version>
     </dependency>
-    -->
   </dependencies>
   <build>
     <plugins>
