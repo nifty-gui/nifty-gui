@@ -9,6 +9,7 @@
   <modules>
     <module>nifty</module>
     <module>nifty-renderer-opengl</module>
+    <module>nifty-renderer-java2d</module>
     <module>nifty-input-lwjgl</module>
     <module>nifty-examples</module>
   </modules>

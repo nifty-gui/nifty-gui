@@ -26,18 +26,14 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.LogManager;
 
+import de.lessvoid.coregl.jogl.CoreSetupJogl;
+import de.lessvoid.coregl.jogl.JoglCoreGL;
 import de.lessvoid.coregl.lwjgl.CoreSetupLwjgl;
 import de.lessvoid.coregl.lwjgl.LwjglCoreGL;
-import de.lessvoid.coregl.spi.CoreGL;
-import de.lessvoid.coregl.spi.CoreSetup;
-import de.lessvoid.coregl.spi.CoreSetup.RenderLoopCallback;
-import de.lessvoid.nifty.api.AccurateTimeProvider;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.input.lwjgl.NiftyInputDeviceLWJGL;
-import de.lessvoid.nifty.renderer.opengl.NiftyRenderDeviceOpenGL;
-import de.lessvoid.nifty.spi.NiftyInputDevice;
 
 /**
  * A helper class that initializes the rendering subsystem and the main Nifty instance. It will then instantiate
@@ -46,55 +42,29 @@ import de.lessvoid.nifty.spi.NiftyInputDevice;
  * @author void
  */
 public class UseCaseRunner {
-  private static Logger log = Logger.getLogger(UseCaseRunner.class.getName());
+
+  // We register all the UseCaseRunnerAdapters that will initialize Nifty
+  // with the corresponding NiftyRenderDevices and then run the UseCase class.
+  static Map<String, UseCaseRunnerAdapter> initAdapters = new HashMap<>();
+  static {
+    initAdapters.put("lwjgl", new UseCaseRunnerAdapterOpenGL(new CoreSetupLwjgl(new LwjglCoreGL()), new LwjglCoreGL()));
+    initAdapters.put("jogl", new UseCaseRunnerAdapterOpenGL(new CoreSetupJogl(new JoglCoreGL()), new JoglCoreGL()));
+    initAdapters.put("java2d", new UseCaseRunnerAdapterJava2D());
+  }
 
   static void run(final Class<?> useCaseClass, final String[] args) throws Exception {
-    CoreSetup setup = new CoreSetupLwjgl(new LwjglCoreGL());
-    setup.initializeLogging("/logging.properties");
-    setup.initialize(caption(useCaseClass.getSimpleName()), 1024, 768);
-    setup.enableVSync(false);
+    LogManager.getLogManager().readConfiguration(UseCaseRunner.class.getResourceAsStream("/logging.properties"));
 
-    // create nifty instance
-    final Nifty nifty = createNifty();
-    final Object useCase = useCaseClass.getConstructor(Nifty.class).newInstance(nifty);
-    logScene(nifty);
-
-    setup.renderLoop(new RenderLoopCallback() {
-
-      @Override
-      public void init(final CoreGL gl) {
-      }
-
-      @Override
-      public boolean render(final CoreGL gl, final float deltaTime) {
-        nifty.update();
-        return nifty.render();
-      }
-
-      @Override
-      public boolean endLoop() {
-        return false;
-      }
-    });
+    UseCaseRunnerAdapter adapter = initAdapters.get(provideAdapterName(args));
+    adapter.run(useCaseClass, args);
   }
 
-  private static String caption(final String caption) {
-    return "Nifty 2.0 (" + caption + ")";
-  }
-
-  private static void logScene(final Nifty nifty) {
-    log.info(nifty.getSceneInfoLog());
-  }
-
-  private static Nifty createNifty() throws Exception {
-    return new Nifty(createRenderDevice(), createInputDevice(), new AccurateTimeProvider());
-  }
-
-  private static NiftyRenderDeviceOpenGL createRenderDevice() throws Exception {
-    return new NiftyRenderDeviceOpenGL(new LwjglCoreGL());
-  }
-
-  private static NiftyInputDevice createInputDevice() throws Exception {
-    return new NiftyInputDeviceLWJGL();
+  private static String provideAdapterName(final String[] args) {
+    String adapter = "lwjgl";
+    if (args.length > 0) {
+      adapter = args[0];
+    }
+    System.out.println("Using '" + adapter + "' to initialize Nifty instance");
+    return adapter;
   }
 }
