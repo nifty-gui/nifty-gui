@@ -53,7 +53,6 @@ public class UseCase_c10_ButtonBasic {
     NiftyNode centerNode = rootNode.newChildNode(ChildLayout.Vertical);
     centerNode.setWidthConstraint(UnitValue.percent(25));
     centerNode.setHeightConstraint(UnitValue.percent(10));
-    centerNode.setBackgroundColor(NiftyColor.red());
 
     niftyNode = centerNode.newChildNode(ChildLayout.Horizontal);
 
@@ -71,8 +70,8 @@ public class UseCase_c10_ButtonBasic {
     statusLabel = centerNode.newControl(Label.class);
     statusLabel.setFont(nifty.createFont("fonts/aurulent-sans-16.fnt"));
     statusLabel.setTextColor(NiftyColor.white());
-    statusLabel.setText("Huhu");
-    statusLabel.getNode().setBackgroundColor(NiftyColor.aqua());
+    statusLabel.setText("Press a button!");
+    statusLabel.getNode().setBackgroundColor(NiftyColor.black());
     statusLabel.getNode().setHAlign(HAlign.center);
 
     nifty.applyStyle(UseCase_c10_ButtonBasic.class.getResourceAsStream("UseCase_c10_ButtonBasic.css"));
