@@ -141,10 +141,11 @@ public class NiftyStyle {
       for (int i=0; i<rootNodes.size(); i++) {
         Selectors<InternalNiftyNode, InternalNiftyNodeDOMNode> selector = new Selectors<>(new InternalNiftyNodeDOMNode(rootNodes.get(i), nifty, classInfoCache));
         try {
-          System.out.println(ruleSet.getSelector().toString());
-          List<InternalNiftyNode> result = selector.querySelectorAll(ruleSet.getSelector().toString());
+          String ruleSelector = pseudoClassExtractor.extractSelector(ruleSet.getSelector().getTokens());
+          log.fine("selector: " + ruleSelector);
+          List<InternalNiftyNode> result = selector.querySelectorAll(ruleSelector);
           List<String> dynamicPseudoClasses = pseudoClassExtractor.parse(ruleSet.getSelector().getTokens());
-          log.fine("found: " + result.size() + " " + ListBuilder.makeString(new ArrayList<InternalNiftyNode>(result)));
+          log.fine("found: " + result.size() + " " + ListBuilder.makeString(new ArrayList<InternalNiftyNode>(result)) + " (dynamic pseudo classes: " + ListBuilder.makeString(new ArrayList<String>(dynamicPseudoClasses)) + ")");
           for (InternalNiftyNode r : result) {
             applyRuleSet(r, ruleSet, dynamicPseudoClasses);
           }

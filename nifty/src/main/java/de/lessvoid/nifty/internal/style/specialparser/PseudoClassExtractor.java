@@ -63,6 +63,33 @@ public class PseudoClassExtractor {
     return result;
   }
 
+  public String extractSelector(final List<Token> tokenList) {
+    StringBuilder result = new StringBuilder();
+    Queue<Token> tokenSeq = new LinkedList<Token>(tokenList);
+    while (tokenSeq.peek() != null) {
+      Token next = tokenSeq.poll();
+      while (next != null && next.tokenCode != Token.COLON) {
+        result.append(next.toString());
+        next = tokenSeq.poll();
+      }
+      if (next == null) {
+        break;
+      }
+      Token colon = next;
+      if (tokenSeq.peek() == null) {
+        result.append(colon.toString());
+        break;
+      }
+      Token identifier = tokenSeq.poll();
+      if (PSEUDO_CLASSES.contains(identifier.tokenCode)) {
+        break;
+      }
+      result.append(colon.toString());
+      result.append(identifier.toString());
+    }
+    return result.toString();
+  }
+
   private Token scanToColon(final Queue<Token> tokenSeq) {
     Token next = tokenSeq.poll();
     while (next != null && next.tokenCode != Token.COLON) {
