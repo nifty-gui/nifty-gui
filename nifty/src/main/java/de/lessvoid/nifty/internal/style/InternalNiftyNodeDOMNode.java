@@ -72,7 +72,7 @@ public class InternalNiftyNodeDOMNode implements DOMNode<InternalNiftyNodeDOMNod
    */
   @Override
   public Type getType() {
-    log.fine("getType(" + this + ")");
+    log.fine("getType(" + this + ") -> " + Type.ELEMENT);
     return Type.ELEMENT;
   }
 
@@ -81,7 +81,7 @@ public class InternalNiftyNodeDOMNode implements DOMNode<InternalNiftyNodeDOMNod
    */
   @Override
   public String getData() {
-    log.fine("getData(" + this + ")");
+    log.fine("getData(" + this + ") -> " + null);
     return null;
   }
 
@@ -90,7 +90,6 @@ public class InternalNiftyNodeDOMNode implements DOMNode<InternalNiftyNodeDOMNod
    */
   @Override
   public Map<String, String> getAttributes() {
-    log.fine("getAttributes(" + this + ")");
     try {
       NiftyNode internal = node.getNiftyNode();
       Map<String, String> attr = removeNullValues(classInfoCache.getNiftyStyleClass(nifty, internal.getClass()).getProperties(internal));
@@ -98,6 +97,7 @@ public class InternalNiftyNodeDOMNode implements DOMNode<InternalNiftyNodeDOMNod
       return attr;
     } catch (Exception e) {
       log.log(Level.WARNING, "failed to get properties for {" + node + "}", e);
+      log.fine("getAttributes(" + this + ") -> failed");
       return new HashMap<String, String>();
     }
   }
@@ -107,11 +107,13 @@ public class InternalNiftyNodeDOMNode implements DOMNode<InternalNiftyNodeDOMNod
    */
   @Override
   public InternalNiftyNodeDOMNode getFirstChild() {
-    log.fine("getFirstChild(" + this + ")");
     if (node.getChildren().size() == 0) {
+      log.fine("getFirstChild(" + this + ") -> null");
       return null;
     }
-    return wrap(node.getChildren().get(0));
+    InternalNiftyNodeDOMNode result = wrap(node.getChildren().get(0));
+    log.fine("getFirstChild(" + this + ") -> " + result);
+    return result;
   }
 
   /**
@@ -119,17 +121,19 @@ public class InternalNiftyNodeDOMNode implements DOMNode<InternalNiftyNodeDOMNod
    */
   @Override
   public InternalNiftyNodeDOMNode getPreviousSibling() {
-    log.fine("getPreviousSibling(" + this + ")");
-
     InternalNiftyNode parent = node.getParent();
     if (parent == null) {
+      log.fine("getPreviousSibling(" + this + ") -> null");
       return null;
     }
     int indexInParent = parent.getChildren().indexOf(node);
     if (indexInParent <= 0) {
+      log.fine("getPreviousSibling(" + this + ") -> null");
       return null;
     }
-    return wrap(parent.getChildren().get(indexInParent - 1));
+    InternalNiftyNodeDOMNode result = wrap(parent.getChildren().get(indexInParent - 1));
+    log.fine("getPreviousSibling(" + this + ") -> " + result);
+    return result;
   }
 
   /**
@@ -139,13 +143,17 @@ public class InternalNiftyNodeDOMNode implements DOMNode<InternalNiftyNodeDOMNod
   public InternalNiftyNodeDOMNode getNextSibling() {
     InternalNiftyNode parent = node.getParent();
     if (parent == null) {
+      log.fine("getNextSibling(" + this + ") -> null");
       return null;
     }
     int indexInParent = parent.getChildren().indexOf(node);
     if (indexInParent >= parent.getChildren().size() - 1) {
+      log.fine("getNextSibling(" + this + ") -> null");
       return null;
     }
-    return wrap(parent.getChildren().get(indexInParent + 1));
+    InternalNiftyNodeDOMNode result = wrap(parent.getChildren().get(indexInParent + 1));
+    log.fine("getNextSibling(" + this + ") -> " + result);
+    return result;
   }
 
   /**
@@ -153,8 +161,9 @@ public class InternalNiftyNodeDOMNode implements DOMNode<InternalNiftyNodeDOMNod
    */
   @Override
   public InternalNiftyNodeDOMNode getParentNode() {
-    log.fine("getParentNode(" + this + ")");
-    return wrap(node.getParent());
+    InternalNiftyNodeDOMNode result = wrap(node.getParent());
+    log.fine("getParentNode(" + this + ") -> " + result);
+    return result;
   }
 
   /**
