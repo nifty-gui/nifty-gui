@@ -12,7 +12,7 @@ import java.awt.event.KeyEvent;
  *
  * @author acoppes
  */
-class AwtToNiftyKeyCodeConverter {
+public class AwtToNiftyKeyCodeConverter {
 
   public int convertToNiftyKeyCode(int key_code, int location) {
     // manually map positioned keys

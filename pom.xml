@@ -22,6 +22,8 @@
     <module>nifty-examples-libgdx</module>
     <module>nifty-examples-lwjgl</module>
     <module>nifty-examples-slick2d</module>
+    <module>nifty-renderer-processing</module>
+    <module>nifty-minim-soundsystem</module>
   </modules>
   <url>http://sourceforge.net/projects/nifty-gui/</url>
   <licenses>
