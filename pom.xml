@@ -23,7 +23,7 @@
     <module>nifty-examples-lwjgl</module>
     <module>nifty-examples-slick2d</module>
     <module>nifty-renderer-processing</module>
-    <module>nifty-minim-soundsystem</module>
+    <module>nifty-soundsystem-minim</module>
   </modules>
   <url>http://sourceforge.net/projects/nifty-gui/</url>
   <licenses>

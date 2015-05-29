@@ -6,7 +6,7 @@
     <version>1.4.2-SNAPSHOT</version>
   </parent>
   <artifactId>nifty-minim-soundsystem</artifactId>
-  <name>nifty-minim-soundsystem</name>
+  <name>Nifty Sound Device for Processing (minim)</name>
   <description>Implementation of Nifty's AudioDevice for the Minim audio library</description>
   <repositories>
     <repository>
