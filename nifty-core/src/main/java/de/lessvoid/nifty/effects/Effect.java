@@ -95,15 +95,13 @@ public class Effect {
     controllerArray = controllers.toArray();
     effectEvents.init(nifty, controllerArray, parameter);
     customFlag = false;
-
-    if (hoverEffect) {
-      element.setVisibleToMouseEvents(true);
-    }
   }
 
   public void enableHover(final Falloff falloffParameter) {
     hoverEffect = true;
     falloff = falloffParameter;
+
+    element.setVisibleToMouseEvents(true);
   }
 
   public void disableHover() {

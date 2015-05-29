@@ -152,7 +152,7 @@ public class Hint implements EffectImpl {
       hintPanel.markForRemoval(new EndNotify() {
         @Override
         public void perform() {
-          if (hintLayer.getChildrenCount() == 1) {
+          if (hintLayer.getChildrenCount() <= 1) {
             hintLayer.hide();
           }
         }
