@@ -10,7 +10,7 @@
   <name>Nifty Examples</name>
   <description>Lots of Nifty example code! You can find the source for nearly all demos/tutorials in here.</description>
   <properties>
-    <nifty-version>1.4.1</nifty-version>
+    <nifty-version>1.4.2-SNAPSHOT</nifty-version>
   </properties>
   <dependencies>
     <dependency>
