@@ -81,8 +81,9 @@ public class InternalNiftyNodeDOMNode implements DOMNode<InternalNiftyNodeDOMNod
    */
   @Override
   public String getData() {
-    log.fine("getData(" + this + ") -> " + null);
-    return null;
+    String name = node.getNiftyNode().getClass().getSimpleName();
+    log.fine("getData(" + this + ") -> " + name);
+    return name;
   }
 
   /**
