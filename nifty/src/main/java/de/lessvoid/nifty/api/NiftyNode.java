@@ -1,17 +1,17 @@
 /*
  * Copyright (c) 2015, Nifty GUI Community 
  * All rights reserved. 
- * 
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions are 
- * met: 
- * 
- *  * Redistributions of source code must retain the above copyright 
- *    notice, this list of conditions and the following disclaimer. 
- *  * Redistributions in binary form must reproduce the above copyright 
- *    notice, this list of conditions and the following disclaimer in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *  * Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  * Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND 
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
@@ -34,6 +34,7 @@ import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterNiftyLinearGradi
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterUnitValue;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterUnitValueArray;
 import de.lessvoid.nifty.api.converter.NiftyStyleStringConverterVAlign;
+import de.lessvoid.nifty.api.types.Point;
 import de.lessvoid.nifty.internal.InternalNiftyNode;
 import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
 import de.lessvoid.nifty.internal.math.Vec4;
@@ -908,9 +909,9 @@ public class NiftyNode {
    * @param y the y coordinate to convert
    * @return a Vec4 containing the coordinates in local space
    */
-  public NiftyPoint screenToLocal(final int x, final int y) {
+  public Point screenToLocal(final int x, final int y) {
     Vec4 v = impl.screenToLocal(x, y);
-    return new NiftyPoint(v.getX(), v.getY());
+    return new Point(v.getX(), v.getY());
   }
 
   /**
@@ -920,9 +921,9 @@ public class NiftyNode {
    * @param y the y coordinate in local node coordinates to convert to screen coordinates
    * @return the screen coordinates
    */
-  public NiftyPoint localToScreen(final int x, final int y) {
+  public Point localToScreen(final int x, final int y) {
     Vec4 v = impl.localToScreen(x, y);
-    return new NiftyPoint(v.getX(), v.getY());
+    return new Point(v.getX(), v.getY());
   }
 
   /**
