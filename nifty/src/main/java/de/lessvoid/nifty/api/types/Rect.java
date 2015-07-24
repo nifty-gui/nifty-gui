@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2015, Nifty GUI Community 
- * All rights reserved. 
+ * Copyright (c) 2015, Nifty GUI Community
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -24,44 +24,43 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package de.lessvoid.nifty.api.types;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 /**
- * A point in 2D-Space defined by a X and a Y coordinate.
+ * A rectangle marking a area at a specific location.
  *
- * @author void
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 @Immutable
-public final class Point {
-  private final float x;
-  private final float y;
+public final class Rect {
+  @Nonnull
+  private final Point origin;
 
-  /**
-   * @throws IllegalArgumentException Thrown in case {@code x} or {@code y} aren't finite values.
-   */
-  public Point(final float x, final float y) {
-    if (!Float.isFinite(x)) throw new IllegalArgumentException("x is expected to be a finite value.");
-    if (!Float.isFinite(y)) throw new IllegalArgumentException("y is expected to be a finite value.");
+  @Nonnull
+  private final Size size;
 
-    this.x = x;
-    this.y = y;
+  public Rect(@Nonnull final Point origin, @Nonnull final Size size) {
+    this.origin = origin;
+    this.size = size;
   }
 
-  public float getX() {
-    return x;
+  @Nonnull
+  public Point getOrigin() {
+    return origin;
   }
 
-  public float getY() {
-    return y;
+  @Nonnull
+  public Size getSize() {
+    return size;
   }
 
   @Nonnull
   @Override
   public String toString() {
-    return x + ", " + y;
+    return size + " at " + origin;
   }
 }

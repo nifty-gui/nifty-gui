@@ -35,17 +35,14 @@ import javax.annotation.concurrent.Immutable;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 @Immutable
-public class Size {
+public final class Size {
+  public static final Size INVALID = new Size(Float.NaN, Float.NaN);
+  public static final Size INFINITE = new Size(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
+
   private final float width;
   private final float height;
 
-  /**
-   * @throws IllegalArgumentException Thrown in case {@code width} or {@code height} aren't numbers.
-   */
   public Size(final float width, final float height) {
-    if (!Float.isNaN(width)) throw new IllegalArgumentException("width is expected to be a number and not NaN.");
-    if (!Float.isNaN(height)) throw new IllegalArgumentException("height is expected to be a number and not NaN.");
-
     this.width = width;
     this.height = height;
   }
@@ -59,6 +56,7 @@ public class Size {
   }
 
   @Nonnull
+  @Override
   public String toString() {
     return width + " x " + height;
   }
