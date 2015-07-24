@@ -25,8 +25,9 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package de.lessvoid.nifty.api;
+package de.lessvoid.nifty.api.node;
 
+import de.lessvoid.nifty.api.NiftyLayout;
 import de.lessvoid.nifty.api.types.Rect;
 import de.lessvoid.nifty.api.types.Size;
 
@@ -38,7 +39,7 @@ import javax.annotation.Nonnull;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public interface NiftyLayoutNode {
+public interface NiftyLayoutNode extends NiftyNode {
   /**
    * Check if the measure of this node is valid.
    * <p />
@@ -65,12 +66,17 @@ public interface NiftyLayoutNode {
   /**
    * Set the measurement value to invalid. This flags the component to be measured again during the next run of the
    * layout phase.
+   * <p><b>Implementations of this method are expected to report to {@link NiftyLayout} in case the measure
+   * turns invalid.</b></p>
    */
   void invalidateMeasure();
 
   /**
    * Set the arrangement of this node to invalid. This means that the positions of the children of this node have to
    * change and during the next run of the layout phase this node has to fix the arrangement of it's children.
+   *
+   * <p><b>Implementations of this method are expected to report to {@link NiftyLayout} in case the arrangement
+   * turns invalid.</b></p>
    */
   void invalidateArrage();
 

@@ -8,6 +8,8 @@ import de.lessvoid.nifty.internal.node.NiftyTreeNodeClassFilterIterator;
 import de.lessvoid.nifty.internal.node.NiftyTreeNodeDepthFirstIterator;
 import de.lessvoid.nifty.internal.node.NiftyTreeNodeValueIterator;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -90,6 +92,30 @@ public class InternalNiftyTree {
    */
   public <X> Iterator<NiftyNode> filteredChildIterator(final Class<X> clazz, final NiftyNode startNode) {
     return filteredValueIterator(clazz, treeNode(startNode));
+  }
+
+  @Nullable
+  public NiftyNode getParent(@Nonnull final NiftyNode current) {
+    return getParent(NiftyNode.class, current);
+  }
+
+  @Nullable
+  public <X extends NiftyNode> X getParent(@Nonnull final Class<X> clazz, @Nonnull final NiftyNode current) {
+    NiftyTreeNode<NiftyNode> currentTreeNode = treeNode(current).getParent();
+    while (currentTreeNode != null) {
+      NiftyNode candidate = currentTreeNode.getValue();
+      if (clazz.isAssignableFrom(candidate.getClass())) {
+        //noinspection unchecked
+        return (X) candidate;
+      }
+      currentTreeNode = currentTreeNode.getParent();
+    }
+    return null;
+  }
+
+  @Nonnull
+  public NiftyNode getRootNode() {
+    return root.getValue();
   }
 
   // Internals /////////////////////////////////////////////////////////////////////////////////////////////////////////

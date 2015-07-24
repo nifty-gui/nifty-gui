@@ -27,7 +27,14 @@
 
 package de.lessvoid.nifty.api;
 
+import de.lessvoid.nifty.api.node.*;
+import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.api.types.Size;
+import de.lessvoid.nifty.internal.InternalNiftyTree;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -50,9 +57,25 @@ public final class NiftyLayout {
   @Nonnull
   private final Queue<NiftyLayoutNode> invalidArrangeReports;
 
-  NiftyLayout() {
+  /**
+   * The node tree that is used to locate parent and children nodes.
+   * <p />
+   * TODO: Verify if the internal implementation for the public implementation should be used
+   */
+  @Nonnull
+  private final InternalNiftyTree nodeTree;
+
+  /**
+   * Nifty... everyone needs some.
+   */
+  @Nonnull
+  private final Nifty nifty;
+
+  NiftyLayout(@Nonnull final Nifty nifty, @Nonnull final InternalNiftyTree tree) {
     invalidMeasureReports = new LinkedList<>();
     invalidArrangeReports = new LinkedList<>();
+    this.nifty = nifty;
+    nodeTree = tree;
   }
 
   /**
@@ -79,6 +102,46 @@ public final class NiftyLayout {
    * This function triggers the entire layout process.
    */
   void update() {
+    updateInvalidMeasureFlags();
+  }
 
+  /**
+   * Spread the invalid measure flags inside the tree.
+   */
+  private void updateInvalidMeasureFlags() {
+    @Nullable NiftyLayoutNode currentLayoutNode;
+    while ((currentLayoutNode = invalidMeasureReports.poll()) != null) {
+      NiftyLayoutNode parentNode = nodeTree.getParent(NiftyLayoutNode.class, currentLayoutNode);
+      if (parentNode != null && parentNode.isMeasureValid()) {
+        parentNode.invalidateMeasure();
+      }
+    }
+  }
+
+  private void measure() {
+    /*
+     TODO:
+     It needs to be verified if that is a acceptable way to get the size of the root node or if anything should
+     be done differently.
+    */
+    Size size = new Size(nifty.getScreenWidth(), nifty.getScreenHeight());
+    de.lessvoid.nifty.api.node.NiftyNode rootNode = nodeTree.getRootNode();
+    if (rootNode instanceof NiftyLayoutNode) {
+      measure((NiftyLayoutNode) rootNode, size);
+    } else {
+      Iterator<de.lessvoid.nifty.api.node.NiftyNode> itr = nodeTree.filteredChildIterator(NiftyLayoutNode.class);
+      while (itr.hasNext()) {
+        NiftyNode node = itr.next();
+        if (node instanceof NiftyLayoutNode) {
+          measure((NiftyLayoutNode) node, size);
+        }
+      }
+    }
+  }
+
+  private void measure(@Nonnull final NiftyLayoutNode node, @Nonnull final Size size) {
+    if (!node.isMeasureValid()) {
+      node.measure(size);
+    }
   }
 }
