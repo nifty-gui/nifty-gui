@@ -18,8 +18,18 @@ public class InternalNiftyTree {
   private final Map<NiftyNode, NiftyTreeNode<NiftyNode>> nodeLookup = new HashMap<>();
 
   public InternalNiftyTree(final NiftyNode rootNode) {
+    assertNotNull(rootNode);
     this.root = new NiftyTreeNode<>(rootNode);
     registerNode(rootNode, root);
+  }
+
+  /**
+   * Returns the root NiftyNode of this tree.
+   * @return the root NiftyNode
+   */
+  @Nonnull
+  public NiftyNode getRootNode() {
+    return root.getValue();
   }
 
   /**
@@ -41,7 +51,11 @@ public class InternalNiftyTree {
    * @param niftyNode the NiftyNode to remove
    */
   public void remove(final NiftyNode niftyNode) {
-    treeNode(niftyNode).remove();
+    NiftyTreeNode<NiftyNode> niftyTreeNode = treeNode(niftyNode);
+    if (niftyTreeNode == root) {
+      throw new NiftyRuntimeException("can't remove the root node");
+    }
+    niftyTreeNode.remove();
     unregisterNode(niftyNode);
   }
 
@@ -58,8 +72,7 @@ public class InternalNiftyTree {
    * @return the Iterator
    */
   public Iterable<NiftyNode> childNodes(final NiftyNode startNode) {
-    NiftyTreeNode<NiftyNode> startTreeNode = treeNode(startNode);
-    return makeIterable(valueIterator(startTreeNode));
+    return makeIterable(valueIterator(treeNode(startNode)));
   }
 
   /**
@@ -67,7 +80,7 @@ public class InternalNiftyTree {
    * @param clazz only return entries if they are instances of this clazz
    * @return the Iterator
    */
-  public <X> Iterable<X> filteredChildNodes(final Class<X> clazz) {
+  public <X extends NiftyNode> Iterable<X> filteredChildNodes(final Class<X> clazz) {
     return makeIterable(filteredValueIterator(clazz, root));
   }
 
@@ -77,10 +90,15 @@ public class InternalNiftyTree {
    * @param startNode the start node
    * @return the Iterator
    */
-  public <X> Iterable<X> filteredChildNodes(final Class<X> clazz, final NiftyNode startNode) {
+  public <X extends NiftyNode> Iterable<X> filteredChildNodes(final Class<X> clazz, final NiftyNode startNode) {
     return makeIterable(filteredValueIterator(clazz, treeNode(startNode)));
   }
 
+  /**
+   * Get the parent NiftyNode of the niftyNode given.
+   * @param current the NiftyNode in question
+   * @return the parent NiftyNode or null
+   */
   @Nullable
   public NiftyNode getParent(@Nonnull final NiftyNode current) {
     return getParent(NiftyNode.class, current);
@@ -98,11 +116,6 @@ public class InternalNiftyTree {
       currentTreeNode = currentTreeNode.getParent();
     }
     return null;
-  }
-
-  @Nonnull
-  public NiftyNode getRootNode() {
-    return root.getValue();
   }
 
   @Override
@@ -156,5 +169,11 @@ public class InternalNiftyTree {
         return iterator;
       }
     };
+  }
+
+  private void assertNotNull(final NiftyNode rootNode) {
+    if (rootNode == null) {
+      throw new NiftyRuntimeException("rootNode must not be null when constructing tree");
+    }
   }
 }

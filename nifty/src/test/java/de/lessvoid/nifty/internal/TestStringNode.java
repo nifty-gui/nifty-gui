@@ -28,10 +28,10 @@ package de.lessvoid.nifty.internal;
 
 import de.lessvoid.nifty.api.node.NiftyNode;
 
-public class TestNode implements NiftyNode {
+public class TestStringNode implements NiftyNode {
   private final String value;
 
-  public TestNode(final String value) {
+  public TestStringNode(final String value) {
     this.value = value;
   }
 
@@ -39,8 +39,8 @@ public class TestNode implements NiftyNode {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    TestNode testNode = (TestNode) o;
-    return !(value != null ? !value.equals(testNode.value) : testNode.value != null);
+    TestStringNode testStringNode = (TestStringNode) o;
+    return !(value != null ? !value.equals(testStringNode.value) : testStringNode.value != null);
   }
 
   @Override
