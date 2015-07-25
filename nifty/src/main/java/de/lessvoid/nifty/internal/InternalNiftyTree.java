@@ -1,12 +1,8 @@
 package de.lessvoid.nifty.internal;
 
-import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyRuntimeException;
 import de.lessvoid.nifty.api.node.NiftyNode;
 import de.lessvoid.nifty.internal.node.NiftyTreeNode;
-import de.lessvoid.nifty.internal.node.NiftyTreeNodeClassFilterIterator;
-import de.lessvoid.nifty.internal.node.NiftyTreeNodeDepthFirstIterator;
-import de.lessvoid.nifty.internal.node.NiftyTreeNodeValueIterator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,29 +19,20 @@ public class InternalNiftyTree {
 
   public InternalNiftyTree(final NiftyNode rootNode) {
     this.root = new NiftyTreeNode<>(rootNode);
+    registerNode(rootNode, root);
   }
 
   /**
-   * Add the given NiftyNode directly to the root node.
-   *
-   * @param child the new NiftyNode to add to the root node as a new childs
-   * @param additionalChilds additional childs to add as well
-   * @return the last NiftyNode added
-   */
-  public NiftyNode add(final NiftyNode child, NiftyNode ... additionalChilds) {
-    return addNodes(child, root, additionalChilds);
-  }
-
-  /**
-   * Add the given child NiftyNode to the parent NiftyNode.
+   * Add the given child(s) NiftyNode(s) to the given parent NiftyNode.
    *
    * @param parent the NiftyNode parent to add the child to
    * @param child the child NiftyNode to add to the parent
-   * @param additionalChilds additional childs to add as well
-   * @return the last child NiftyNode just added
+   * @param additionalChilds additional childNodes to add as well
+   * @return this
    */
-  public NiftyNode add(final NiftyNode parent, final NiftyNode child, NiftyNode ... additionalChilds) {
-    return addNodes(child, treeNode(parent), additionalChilds);
+  public InternalNiftyTree addChild(final NiftyNode parent, final NiftyNode child, NiftyNode... additionalChilds) {
+    addNodes(treeNode(parent), child, additionalChilds);
+    return this;
   }
 
   /**
@@ -62,17 +49,17 @@ public class InternalNiftyTree {
    * Return a depth first Iterator for all NiftyNodes in this tree.
    * @return the Iterator
    */
-  public Iterator<NiftyNode> childIterator() {
-    return valueIterator(root);
+  public Iterable<NiftyNode> childNodes() {
+    return makeIterable(valueIterator(root));
   }
 
   /**
    * Return a depth first Iterator for all child nodes of the given parent node.
    * @return the Iterator
    */
-  public Iterator<NiftyNode> childIterator(final NiftyNode startNode) {
+  public Iterable<NiftyNode> childNodes(final NiftyNode startNode) {
     NiftyTreeNode<NiftyNode> startTreeNode = treeNode(startNode);
-    return valueIterator(startTreeNode);
+    return makeIterable(valueIterator(startTreeNode));
   }
 
   /**
@@ -80,8 +67,8 @@ public class InternalNiftyTree {
    * @param clazz only return entries if they are instances of this clazz
    * @return the Iterator
    */
-  public <X> Iterator<NiftyNode> filteredChildIterator(final Class<X> clazz) {
-    return filteredValueIterator(clazz, root);
+  public <X> Iterable<NiftyNode> filteredChildNodes(final Class<X> clazz) {
+    return makeIterable(filteredValueIterator(clazz, root));
   }
 
   /**
@@ -90,8 +77,8 @@ public class InternalNiftyTree {
    * @param startNode the start node
    * @return the Iterator
    */
-  public <X> Iterator<NiftyNode> filteredChildIterator(final Class<X> clazz, final NiftyNode startNode) {
-    return filteredValueIterator(clazz, treeNode(startNode));
+  public <X> Iterable<NiftyNode> filteredChildNodes(final Class<X> clazz, final NiftyNode startNode) {
+    return makeIterable(filteredValueIterator(clazz, treeNode(startNode)));
   }
 
   @Nullable
@@ -118,14 +105,18 @@ public class InternalNiftyTree {
     return root.getValue();
   }
 
+  @Override
+  public String toString() {
+    return root.toStringTree();
+  }
+
   // Internals /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  private NiftyNode addNodes(final NiftyNode child, final NiftyTreeNode<NiftyNode> parentTreeNode, final NiftyNode ... additionalChilds) {
-    NiftyNode result = addChild(parentTreeNode, child);
+  private void addNodes(final NiftyTreeNode<NiftyNode> parentTreeNode, final NiftyNode child, final NiftyNode... additionalChilds) {
+    addChild(parentTreeNode, child);
     for (int i=0; i<additionalChilds.length; i++) {
-      result = addChild(parentTreeNode, additionalChilds[i]);
+      addChild(parentTreeNode, additionalChilds[i]);
     }
-    return result;
   }
 
   private Iterator<NiftyNode> valueIterator(final NiftyTreeNode<NiftyNode> startTreeNode) {
@@ -152,10 +143,18 @@ public class InternalNiftyTree {
     return niftyTreeNode;
   }
 
-  private NiftyNode addChild(final NiftyTreeNode parent, final NiftyNode child) {
+  private void addChild(final NiftyTreeNode parent, final NiftyNode child) {
     NiftyTreeNode<NiftyNode> childTreeNode = new NiftyTreeNode<>(child);
     parent.addChild(childTreeNode);
     registerNode(child, childTreeNode);
-    return child;
+  }
+
+  private Iterable<NiftyNode> makeIterable(final Iterator<NiftyNode> niftyNodeIterator) {
+    return new Iterable<NiftyNode>() {
+      @Override
+      public Iterator<NiftyNode> iterator() {
+        return valueIterator(root);
+      }
+    };
   }
 }

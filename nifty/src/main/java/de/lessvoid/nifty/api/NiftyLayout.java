@@ -27,14 +27,13 @@
 
 package de.lessvoid.nifty.api;
 
-import de.lessvoid.nifty.api.node.*;
+import de.lessvoid.nifty.api.node.NiftyLayoutNode;
 import de.lessvoid.nifty.api.node.NiftyNode;
 import de.lessvoid.nifty.api.types.Size;
 import de.lessvoid.nifty.internal.InternalNiftyTree;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -129,9 +128,7 @@ public final class NiftyLayout {
     if (rootNode instanceof NiftyLayoutNode) {
       measure((NiftyLayoutNode) rootNode, size);
     } else {
-      Iterator<de.lessvoid.nifty.api.node.NiftyNode> itr = nodeTree.filteredChildIterator(NiftyLayoutNode.class);
-      while (itr.hasNext()) {
-        NiftyNode node = itr.next();
+      for (NiftyNode node : nodeTree.filteredChildNodes(NiftyLayoutNode.class)) {
         if (node instanceof NiftyLayoutNode) {
           measure((NiftyLayoutNode) node, size);
         }
