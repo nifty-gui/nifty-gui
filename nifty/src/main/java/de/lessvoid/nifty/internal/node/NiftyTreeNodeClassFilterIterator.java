@@ -32,12 +32,12 @@ import java.util.NoSuchElementException;
 /**
  * Wrapper iterator to return only NiftyTreeNodes which value class matches a given class.
  */
-public class NiftyTreeNodeClassFilterIterator<T> implements Iterator<NiftyTreeNode<T>> {
+public class NiftyTreeNodeClassFilterIterator<T, X> implements Iterator<NiftyTreeNode<X>> {
   private final Iterator<NiftyTreeNode<T>> it;
-  private final Class<?> clazz;
-  private NiftyTreeNode<T> cached;
+  private final Class<X> clazz;
+  private NiftyTreeNode<X> cached;
 
-  public NiftyTreeNodeClassFilterIterator(final Iterator<NiftyTreeNode<T>> it, final Class<?> clazz) {
+  public NiftyTreeNodeClassFilterIterator(final Iterator<NiftyTreeNode<T>> it, final Class<X> clazz) {
     this.it = it;
     this.clazz = clazz;
   }
@@ -52,13 +52,13 @@ public class NiftyTreeNodeClassFilterIterator<T> implements Iterator<NiftyTreeNo
   }
 
   @Override
-  public NiftyTreeNode<T> next() {
+  public NiftyTreeNode<X> next() {
     if (cached != null) {
-      NiftyTreeNode<T> result = cached;
+      NiftyTreeNode<X> result = cached;
       cached = null;
       return result;
     }
-    NiftyTreeNode<T> result = findNext();
+    NiftyTreeNode<X> result = findNext();
     if (result == null) {
       throw new NoSuchElementException();
     }
@@ -70,11 +70,12 @@ public class NiftyTreeNodeClassFilterIterator<T> implements Iterator<NiftyTreeNo
     throw new UnsupportedOperationException();
   }
 
-  private NiftyTreeNode<T> findNext() {
+  private NiftyTreeNode<X> findNext() {
     while (it.hasNext()) {
       NiftyTreeNode<T> next = it.next();
-      if (clazz.isInstance(next.getValue())) {
-        return next;
+      T value = next.getValue();
+      if (clazz.isAssignableFrom(value.getClass())) {
+        return (NiftyTreeNode<X>) next;
       }
     }
     return null;

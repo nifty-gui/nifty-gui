@@ -40,7 +40,7 @@ public class NiftyTreeNodeClassFilterIteratorTest {
   @Test
   public void testIterateRoot() {
     NiftyTreeNode<Object> root = new NiftyTreeNode<>((Object)new Long(26L));
-    Iterator<Object> it = createIterator(root);
+    Iterator<String> it = createIterator(root);
 
     assertFalse(it.hasNext());
     try {
@@ -56,7 +56,7 @@ public class NiftyTreeNodeClassFilterIteratorTest {
     NiftyTreeNode<Object> child = new NiftyTreeNode<>((Object)"child");
     root.addChild(child);
 
-    Iterator<Object> it = createIterator(root);
+    Iterator<String> it = createIterator(root);
     assertTrue(it.hasNext());
     assertEquals("child", it.next());
 
@@ -68,8 +68,10 @@ public class NiftyTreeNodeClassFilterIteratorTest {
     }
   }
 
-  private Iterator<Object> createIterator(final NiftyTreeNode<Object> root) {
-    return new NiftyTreeNodeValueIterator<>(new NiftyTreeNodeClassFilterIterator<>(new NiftyTreeNodeDepthFirstIterator<>(root), String.class));
+  private Iterator<String> createIterator(final NiftyTreeNode<Object> root) {
+    NiftyTreeNodeDepthFirstIterator<Object> bla = new NiftyTreeNodeDepthFirstIterator<>(root);
+    NiftyTreeNodeClassFilterIterator<Object, String> bla2 = new NiftyTreeNodeClassFilterIterator<>(bla, String.class);
+    return new NiftyTreeNodeValueIterator<>(bla2);
   }
 
 }

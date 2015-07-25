@@ -67,7 +67,7 @@ public class InternalNiftyTree {
    * @param clazz only return entries if they are instances of this clazz
    * @return the Iterator
    */
-  public <X> Iterable<NiftyNode> filteredChildNodes(final Class<X> clazz) {
+  public <X> Iterable<X> filteredChildNodes(final Class<X> clazz) {
     return makeIterable(filteredValueIterator(clazz, root));
   }
 
@@ -77,7 +77,7 @@ public class InternalNiftyTree {
    * @param startNode the start node
    * @return the Iterator
    */
-  public <X> Iterable<NiftyNode> filteredChildNodes(final Class<X> clazz, final NiftyNode startNode) {
+  public <X> Iterable<X> filteredChildNodes(final Class<X> clazz, final NiftyNode startNode) {
     return makeIterable(filteredValueIterator(clazz, treeNode(startNode)));
   }
 
@@ -123,7 +123,7 @@ public class InternalNiftyTree {
     return startTreeNode.valueIterator();
   }
 
-  private <X> Iterator<NiftyNode> filteredValueIterator(final Class<X> clazz, final NiftyTreeNode<NiftyNode> startTreeNode) {
+  private <X> Iterator<X> filteredValueIterator(final Class<X> clazz, final NiftyTreeNode<NiftyNode> startTreeNode) {
     return startTreeNode.filteredChildIterator(clazz);
   }
 
@@ -149,11 +149,11 @@ public class InternalNiftyTree {
     registerNode(child, childTreeNode);
   }
 
-  private Iterable<NiftyNode> makeIterable(final Iterator<NiftyNode> niftyNodeIterator) {
-    return new Iterable<NiftyNode>() {
+  private <X> Iterable<X> makeIterable(final Iterator<X> iterator) {
+    return new Iterable<X>() {
       @Override
-      public Iterator<NiftyNode> iterator() {
-        return valueIterator(root);
+      public Iterator<X> iterator() {
+        return iterator;
       }
     };
   }

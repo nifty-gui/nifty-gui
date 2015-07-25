@@ -78,7 +78,7 @@ public class NiftyTreeNode<T> {
     return new NiftyTreeNodeValueIterator<>(new NiftyTreeNodeDepthFirstIterator<>(this));
   }
 
-  public <X> Iterator<T> filteredChildIterator(final Class<X> clazz) {
+  public <X> Iterator<X> filteredChildIterator(final Class<X> clazz) {
     return new NiftyTreeNodeValueIterator<>(new NiftyTreeNodeClassFilterIterator<>(treeIterator(), clazz));
   }
 

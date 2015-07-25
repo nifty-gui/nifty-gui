@@ -28,7 +28,6 @@
 package de.lessvoid.nifty.api;
 
 import de.lessvoid.nifty.api.node.NiftyLayoutNode;
-import de.lessvoid.nifty.api.node.NiftyNode;
 import de.lessvoid.nifty.api.types.Size;
 import de.lessvoid.nifty.internal.InternalNiftyTree;
 
@@ -128,10 +127,8 @@ public final class NiftyLayout {
     if (rootNode instanceof NiftyLayoutNode) {
       measure((NiftyLayoutNode) rootNode, size);
     } else {
-      for (NiftyNode node : nodeTree.filteredChildNodes(NiftyLayoutNode.class)) {
-        if (node instanceof NiftyLayoutNode) {
-          measure((NiftyLayoutNode) node, size);
-        }
+      for (NiftyLayoutNode node : nodeTree.filteredChildNodes(NiftyLayoutNode.class)) {
+        measure(node, size);
       }
     }
   }
