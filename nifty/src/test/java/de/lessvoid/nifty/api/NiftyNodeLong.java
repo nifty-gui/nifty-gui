@@ -24,14 +24,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal;
+package de.lessvoid.nifty.api;
 
 import de.lessvoid.nifty.api.node.NiftyNode;
 
-public class TestStringNode implements NiftyNode {
-  private final String value;
+public class NiftyNodeLong implements NiftyNode {
+  private final Long value;
 
-  public TestStringNode(final String value) {
+  public NiftyNodeLong(final Long value) {
     this.value = value;
   }
 
@@ -39,8 +39,8 @@ public class TestStringNode implements NiftyNode {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    TestStringNode testStringNode = (TestStringNode) o;
-    return !(value != null ? !value.equals(testStringNode.value) : testStringNode.value != null);
+    NiftyNodeLong that = (NiftyNodeLong) o;
+    return !(value != null ? !value.equals(that.value) : that.value != null);
   }
 
   @Override
@@ -50,6 +50,11 @@ public class TestStringNode implements NiftyNode {
 
   @Override
   public String toString() {
-    return value;
+    return String.valueOf(value);
   }
+
+  public static NiftyNodeLong niftyNodeLong(final long value) {
+    return new NiftyNodeLong(value);
+  }
+
 }

@@ -1,35 +1,7 @@
-/*
- * Copyright (c) 2015, Nifty GUI Community
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- *  * Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *  * Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
- * THE POSSIBILITY OF SUCH DAMAGE.
- */
-package de.lessvoid.nifty.internal;
+package de.lessvoid.nifty.api;
 
-import de.lessvoid.nifty.api.NiftyNodeLong;
-import de.lessvoid.nifty.api.NiftyNodeString;
-import de.lessvoid.nifty.api.NiftyRuntimeException;
 import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.internal.InternalNiftyTree;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -37,24 +9,17 @@ import java.util.List;
 
 import static de.lessvoid.nifty.api.NiftyNodeLong.niftyNodeLong;
 import static de.lessvoid.nifty.api.NiftyNodeString.niftyNodeString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
- * Created by void on 23.07.15.
+ * Created by void on 26.07.15.
  */
-public class InternalNiftyTreeTest {
-  private InternalNiftyTree tree;
+public class NiftyTreeTest {
+  private NiftyTree tree;
 
   @Test(expected = NiftyRuntimeException.class)
   public void testNullRootNode() {
-    createTree(null);
-  }
-
-  @Test
-  public void testGetRootNode() {
-    createTree(niftyNodeString("root"));
-    assertEquals(niftyNodeString("root"), tree.getRootNode());
+    tree = createTree(null);
   }
 
   @Test
@@ -132,7 +97,7 @@ public class InternalNiftyTreeTest {
 
   @Test
   public void testChildNodes() {
-    createTree(niftyNodeString("root"));
+    tree = createTree(niftyNodeString("root"));
     assertChildNodes(niftyNodeString("root"));
   }
 
@@ -224,35 +189,8 @@ public class InternalNiftyTreeTest {
     assertFilteredChildNodesFromParent(NiftyNodeString.class, niftyNodeString("c2"), niftyNodeString("c2"));
   }
 
-  @Test
-  public void testGetParentOfRootNode() {
-    tree = createTree(niftyNodeString("root"))
-        .addChild(niftyNodeString("root"), niftyNodeString("c1"), niftyNodeString("c2"), niftyNodeString("c3"), niftyNodeString("c4"))
-        .addChild(niftyNodeString("c2"), niftyNodeLong(46L));
-    assertNull(tree.getParent(niftyNodeString("root")));
-  }
-
-  @Test
-  public void testGetParentOfNiftyNode() {
-    tree = createTree(niftyNodeString("root"))
-        .addChild(niftyNodeString("root"), niftyNodeString("c1"), niftyNodeString("c2"), niftyNodeString("c3"), niftyNodeString("c4"))
-        .addChild(niftyNodeString("c2"), niftyNodeLong(46L));
-    assertEquals(niftyNodeString("root"), tree.getParent(niftyNodeString("c1")));
-    assertEquals(niftyNodeString("c2"), tree.getParent(niftyNodeLong(46L)));
-  }
-
-  @Test
-  public void testGetParentOfNiftyNodeFiltered() {
-    tree = createTree(niftyNodeString("root"))
-        .addChild(niftyNodeString("root"), niftyNodeLong(46L))
-        .addChild(niftyNodeLong(46L), niftyNodeString("c2"))
-        .addChild(niftyNodeString("c2"), niftyNodeString("46"));
-    assertEquals(niftyNodeLong(46L), tree.getParent(NiftyNodeLong.class, niftyNodeString("46")));
-  }
-
-  private InternalNiftyTree createTree(final NiftyNodeString root) {
-    tree = new InternalNiftyTree(root);
-    return tree;
+  private NiftyTree createTree(final NiftyNode root) {
+    return NiftyTree.newInstance(new InternalNiftyTree(root));
   }
 
   private void assertTree(final String ... expected) {
