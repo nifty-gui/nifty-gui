@@ -32,6 +32,7 @@ import de.lessvoid.nifty.api.types.Rect;
 import de.lessvoid.nifty.api.types.Size;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This interface defines the simple layout node for Nifty. These nodes are the backbone of the layout system in Nifty.
@@ -78,7 +79,7 @@ public interface NiftyLayoutNode extends NiftyNode {
    * <p><b>Implementations of this method are expected to report to {@link NiftyLayout} in case the arrangement
    * turns invalid.</b></p>
    */
-  void invalidateArrage();
+  void invalidateArrange();
 
   /**
    * The size that was calculated during the last measuring.
@@ -90,6 +91,15 @@ public interface NiftyLayoutNode extends NiftyNode {
    */
   @Nonnull
   Size getDesiredSize();
+
+  /**
+   * The this element was arranged in last. This value is valid as long as the parent of this node has a valid
+   * arrangement.
+   *
+   * @return the arrangement rectangle
+   */
+  @Nonnull
+  Rect getArrangedRect();
 
   /**
    * Perform the measuring operation for this node. This has to measure the size of all children to this node and

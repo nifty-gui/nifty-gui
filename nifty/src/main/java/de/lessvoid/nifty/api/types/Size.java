@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.api.types;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 /**
@@ -38,6 +39,7 @@ import javax.annotation.concurrent.Immutable;
 public final class Size {
   public static final Size INVALID = new Size(Float.NaN, Float.NaN);
   public static final Size INFINITE = new Size(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
+  public static final Size ZERO = new Size(0, 0);
 
   private final float width;
   private final float height;
@@ -47,12 +49,55 @@ public final class Size {
     this.height = height;
   }
 
+  @Nonnull
+  public static Size max(@Nonnull final Size size1, @Nonnull final Size size2) {
+    if ((size1.width >= size2.width) && (size1.height >= size2.height)) {
+      return size1;
+    } else if ((size1.width <= size2.width) && (size1.height <= size2.height)) {
+      return size2;
+    } else {
+      return new Size(Math.max(size1.width, size2.width), Math.max(size1.height, size2.height));
+    }
+  }
+
   public float getWidth() {
     return width;
   }
 
   public float getHeight() {
     return height;
+  }
+
+  public boolean isInvalid() {
+    return Float.isNaN(width) || Float.isNaN(height);
+  }
+
+  public boolean isInfinite() {
+    return Float.isInfinite(width) || Float.isInfinite(height);
+  }
+
+  @Override
+  public boolean equals(@Nullable final Object other) {
+    return (other instanceof Size) && equals((Size) other);
+  }
+
+  public boolean equals(@Nullable final Size other) {
+    return (other != null) &&
+        (Float.floatToIntBits(width) == Float.floatToIntBits(other.width)) &&
+        (Float.floatToIntBits(height) == Float.floatToIntBits(other.height));
+  }
+
+  public boolean equals(@Nullable final Size other, final float tolerance) {
+    return (other != null) &&
+        (Math.abs(width - other.width) <= tolerance) &&
+        (Math.abs(height - other.height) <= tolerance);
+  }
+
+  public int hashCode() {
+    int hash = 31;
+    hash = hash * 27 + Float.floatToIntBits(width);
+    hash = hash * 27 + Float.floatToIntBits(height);
+    return hash;
   }
 
   @Nonnull
