@@ -38,6 +38,9 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class Rect {
   @Nonnull
+  public static final Rect INVALID = new Rect(new Point(0, 0), Size.INVALID);
+
+  @Nonnull
   private final Point origin;
 
   @Nonnull

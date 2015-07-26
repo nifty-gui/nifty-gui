@@ -109,9 +109,8 @@ public class InternalNiftyTree {
     NiftyTreeNode<NiftyNode> currentTreeNode = treeNode(current).getParent();
     while (currentTreeNode != null) {
       NiftyNode candidate = currentTreeNode.getValue();
-      if (clazz.isAssignableFrom(candidate.getClass())) {
-        //noinspection unchecked
-        return (X) candidate;
+      if (clazz.isInstance(candidate)) {
+        return clazz.cast(candidate);
       }
       currentTreeNode = currentTreeNode.getParent();
     }
