@@ -26,14 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCanvas;
-import de.lessvoid.nifty.api.NiftyCanvasPainter;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyLinearGradient;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * custom canvas painter rendering gradients.
  * @author void

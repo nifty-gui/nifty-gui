@@ -26,15 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.io.IOException;
-
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCanvas;
-import de.lessvoid.nifty.api.NiftyCanvasPainter;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * Demonstrate the scale transform of the NiftyCanvas.
  * @author void

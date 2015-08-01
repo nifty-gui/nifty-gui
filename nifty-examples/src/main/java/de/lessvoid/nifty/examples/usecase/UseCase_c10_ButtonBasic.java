@@ -26,14 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.HAlign;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyStatisticsMode;
-import de.lessvoid.nifty.api.UnitValue;
-import net.engio.mbassy.listener.Handler;
-
 /**
  * Display some simple Button - with style ;)
  * @author void

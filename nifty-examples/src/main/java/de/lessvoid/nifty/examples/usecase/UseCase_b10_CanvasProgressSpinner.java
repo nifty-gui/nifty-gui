@@ -26,17 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.io.IOException;
-
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCanvas;
-import de.lessvoid.nifty.api.NiftyCanvasPainter;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyMutableColor;
-import de.lessvoid.nifty.api.NiftyStatisticsMode;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * An example how to use an animated NiftyCanvas for a custom progress spinner animation.
  * @author void

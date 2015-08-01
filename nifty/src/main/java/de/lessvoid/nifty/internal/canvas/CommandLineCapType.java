@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.api.NiftyLineCapType;
+import de.lessvoid.nifty.api.types.NiftyLineCapType;
 
 public class CommandLineCapType implements Command {
   private NiftyLineCapType lineCapType;

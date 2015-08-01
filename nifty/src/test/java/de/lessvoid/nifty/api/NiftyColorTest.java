@@ -30,6 +30,7 @@ import static de.lessvoid.nifty.AssertColor.assertColor;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import de.lessvoid.nifty.api.types.NiftyColor;
 import org.junit.Test;
 
 public class NiftyColorTest {

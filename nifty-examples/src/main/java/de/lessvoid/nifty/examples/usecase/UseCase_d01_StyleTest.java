@@ -26,10 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * Demonstrates style support in Nifty.
  * @author void

@@ -29,9 +29,9 @@ package de.lessvoid.nifty.internal.render.batch;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyCompositeOperation;
-import de.lessvoid.nifty.api.NiftyLinearGradient;
+import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyCompositeOperation;
+import de.lessvoid.nifty.api.types.NiftyLinearGradient;
 import de.lessvoid.nifty.internal.canvas.LineParameters;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;

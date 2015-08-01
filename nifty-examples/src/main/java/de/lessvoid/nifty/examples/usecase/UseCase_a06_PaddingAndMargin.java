@@ -26,16 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.io.IOException;
-
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.HAlign;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyFont;
-import de.lessvoid.nifty.api.NiftyStatisticsMode;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * Padding and Margin demonstration.
  * @author void

@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.api.NiftyLineJoinType;
+import de.lessvoid.nifty.api.types.NiftyLineJoinType;
 
 public class CommandLineJoinType implements Command {
   private NiftyLineJoinType lineJoinType;

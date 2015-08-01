@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.internal.render.batch;
 
-import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyColor;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 public class EndPathBatch implements Batch<Void> {

@@ -26,30 +26,10 @@
  */
 package de.lessvoid.nifty.internal.render.sync;
 
-import static org.easymock.EasyMock.anyInt;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.createNiceMock;
 import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import de.lessvoid.nifty.api.NiftyCompositeOperation;
-import de.lessvoid.nifty.internal.canvas.Command;
-import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
-import de.lessvoid.nifty.internal.math.Mat4;
-import de.lessvoid.nifty.internal.render.RenderNode;
-import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
-import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class TreeSyncRenderNodeFactoryTest {
   /* FIXME

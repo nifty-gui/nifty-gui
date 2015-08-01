@@ -26,9 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyColor;
-
 /**
  * A single root node that fills the whole screen and has a red background color.
  * @author void

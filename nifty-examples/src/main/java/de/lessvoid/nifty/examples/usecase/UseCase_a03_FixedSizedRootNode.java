@@ -26,11 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * A single root node with a fixed size and a blue background color.
  * @author void

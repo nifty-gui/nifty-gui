@@ -28,6 +28,8 @@ package de.lessvoid.nifty.api;
 
 import static de.lessvoid.nifty.AssertColor.assertColor;
 
+import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyMutableColor;
 import org.junit.Test;
 
 public class NiftyMutableColorTest {

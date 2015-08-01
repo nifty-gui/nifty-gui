@@ -31,7 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.api.canvas.NiftyCanvasPainter;
+import de.lessvoid.nifty.api.canvas.NiftyCanvasPainterShader;
 import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.internal.NiftyResourceLoader;
 import org.jglfont.JGLFontFactory;
 
 import de.lessvoid.nifty.api.input.NiftyInputConsumer;
@@ -101,7 +104,10 @@ public class Nifty {
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
    * @param newTimeProvider the TimeProvider implementation to use
    */
-  public Nifty(final NiftyRenderDevice newRenderDevice, final NiftyInputDevice newInputDevice, final TimeProvider newTimeProvider) {
+  public Nifty(
+      final NiftyRenderDevice newRenderDevice,
+      final NiftyInputDevice newInputDevice,
+      final TimeProvider newTimeProvider) {
     renderDevice = newRenderDevice;
     renderDevice.setResourceLoader(resourceLoader);
 

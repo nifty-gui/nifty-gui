@@ -26,12 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.HAlign;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * A single root node that is only a quarter of the screen, placed in the upper right corner and contains two child
  * nodes using a horizontal child layout.

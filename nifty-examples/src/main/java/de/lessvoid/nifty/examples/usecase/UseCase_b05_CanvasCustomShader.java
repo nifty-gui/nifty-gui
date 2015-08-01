@@ -26,12 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.io.IOException;
-
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyStatisticsMode;
-
 /**
  * custom canvas painter using a custom fragment shader ... read that last sentence again! =D
  * @author void

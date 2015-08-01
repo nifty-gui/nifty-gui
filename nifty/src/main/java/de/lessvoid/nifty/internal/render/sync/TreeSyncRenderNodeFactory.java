@@ -29,7 +29,6 @@ package de.lessvoid.nifty.internal.render.sync;
 import de.lessvoid.nifty.api.node.NiftyNode;
 import de.lessvoid.nifty.internal.render.RenderNode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 
 /**
  * Factory to create new RenderNodes.

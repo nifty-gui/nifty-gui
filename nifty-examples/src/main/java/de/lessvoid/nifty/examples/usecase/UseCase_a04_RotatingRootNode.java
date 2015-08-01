@@ -26,12 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCallback;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * A single root node of a fixed size with a background color that is constantly rotating.
  * @author void

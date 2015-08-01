@@ -33,9 +33,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyColorStop;
-import de.lessvoid.nifty.api.NiftyLinearGradient;
+import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyColorStop;
+import de.lessvoid.nifty.api.types.NiftyLinearGradient;
 
 public class LinearGradientTest {
   private static final double EPSILON = 0.001;

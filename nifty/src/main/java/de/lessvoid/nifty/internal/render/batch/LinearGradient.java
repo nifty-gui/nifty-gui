@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import de.lessvoid.nifty.api.NiftyColorStop;
-import de.lessvoid.nifty.api.NiftyLinearGradient;
+import de.lessvoid.nifty.api.types.NiftyColorStop;
+import de.lessvoid.nifty.api.types.NiftyLinearGradient;
 
 /**
  * A linear gradient between two points that contains a number of color stops. This is a linear gradient as the

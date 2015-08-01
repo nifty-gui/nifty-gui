@@ -29,13 +29,13 @@ package de.lessvoid.nifty.internal.canvas;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyCompositeOperation;
+import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyImage;
-import de.lessvoid.nifty.api.NiftyLineCapType;
-import de.lessvoid.nifty.api.NiftyLineJoinType;
-import de.lessvoid.nifty.api.NiftyLinearGradient;
+import de.lessvoid.nifty.api.types.NiftyLineCapType;
+import de.lessvoid.nifty.api.types.NiftyLineJoinType;
+import de.lessvoid.nifty.api.types.NiftyLinearGradient;
 
 public class InternalNiftyCanvas {
   private final List<Command> commands = new ArrayList<Command>();

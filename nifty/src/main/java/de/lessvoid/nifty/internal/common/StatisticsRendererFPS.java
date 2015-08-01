@@ -26,15 +26,7 @@
  */
 package de.lessvoid.nifty.internal.common;
 
-import java.io.IOException;
-
-import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCallback;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyRuntimeException;
-import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.node.NiftyNode;
 
 public class StatisticsRendererFPS {
 

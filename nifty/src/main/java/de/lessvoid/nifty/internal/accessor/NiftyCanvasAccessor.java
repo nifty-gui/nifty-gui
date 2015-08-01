@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.internal.accessor;
 
-import de.lessvoid.nifty.api.NiftyCanvas;
+import de.lessvoid.nifty.api.canvas.NiftyCanvas;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
 
 public abstract class NiftyCanvasAccessor {

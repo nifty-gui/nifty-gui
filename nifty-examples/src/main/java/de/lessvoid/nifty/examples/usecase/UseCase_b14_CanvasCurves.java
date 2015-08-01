@@ -26,21 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.io.IOException;
-
-import net.engio.mbassy.listener.Handler;
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCanvas;
-import de.lessvoid.nifty.api.NiftyCanvasPainter;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyStatisticsMode;
-import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.event.NiftyPointerDraggedEvent;
-import de.lessvoid.nifty.api.event.NiftyPointerEnterNodeEvent;
-import de.lessvoid.nifty.api.event.NiftyPointerExitNodeEvent;
-import de.lessvoid.nifty.api.event.NiftyPointerPressedEvent;
-
 /**
  * An example how to draw bezier curves.
  * @author void

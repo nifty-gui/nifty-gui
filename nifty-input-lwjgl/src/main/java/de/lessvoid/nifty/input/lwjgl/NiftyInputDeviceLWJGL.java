@@ -42,7 +42,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import de.lessvoid.nifty.api.NiftyResourceLoader;
+import de.lessvoid.nifty.internal.NiftyResourceLoader;
 import de.lessvoid.nifty.api.input.NiftyInputConsumer;
 import de.lessvoid.nifty.api.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;

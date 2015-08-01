@@ -26,9 +26,6 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-
 /**
  * Show case CSS styles for the label control. This will use all common CSS attributes to all controls as well as the
  * ones specific to the Label.

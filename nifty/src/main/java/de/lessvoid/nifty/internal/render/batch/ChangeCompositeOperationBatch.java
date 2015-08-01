@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.internal.render.batch;
 
-import de.lessvoid.nifty.api.NiftyCompositeOperation;
+import de.lessvoid.nifty.api.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
 public class ChangeCompositeOperationBatch implements Batch<NiftyCompositeOperation> {
