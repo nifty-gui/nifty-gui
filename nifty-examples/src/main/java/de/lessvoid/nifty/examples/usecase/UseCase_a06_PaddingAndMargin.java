@@ -33,16 +33,15 @@ import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyFont;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.controls.Label;
 
 /**
  * Padding and Margin demonstration.
  * @author void
  */
 public class UseCase_a06_PaddingAndMargin {
+  /* FIXME
   private NiftyFont font;
 
   public UseCase_a06_PaddingAndMargin(final Nifty nifty) throws IOException {
@@ -133,4 +132,5 @@ public class UseCase_a06_PaddingAndMargin {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a06_PaddingAndMargin.class, args);
   }
+  */
 }

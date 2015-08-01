@@ -35,7 +35,6 @@ import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyLineCapType;
 import de.lessvoid.nifty.api.NiftyLineJoinType;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 
@@ -44,6 +43,7 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_b11_CanvasLines {
+  /* FIXME
   private static final float Y_POS = 60.f;
 
   public UseCase_b11_CanvasLines(final Nifty nifty) throws IOException {
@@ -104,4 +104,5 @@ public class UseCase_b11_CanvasLines {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b11_CanvasLines.class, args);
   }
+  */
 }

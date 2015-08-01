@@ -26,9 +26,7 @@
  */
 package de.lessvoid.nifty.api.controls;
 
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.NiftyStateManager;
-import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
+import de.lessvoid.nifty.api.node.NiftyNode;
 
 /**
  * This abstract class already implements a couple of NiftyControl method. Use this class as the base class for
@@ -38,13 +36,11 @@ import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
  */
 public abstract class NiftyAbstractControl implements NiftyControl {
   protected NiftyNode niftyNode;
-  protected NiftyStateManager stateManager;
 
   @Override
-  public void init(final NiftyNode niftyNode, final NiftyStateManager stateManager) {
+  public void init(final NiftyNode niftyNode) {
     this.niftyNode = niftyNode;
-    this.stateManager = stateManager;
-    NiftyNodeAccessor.getDefault().getInternalNiftyNode(niftyNode).setControl(this);
+    // FIXME NiftyNodeAccessor.getDefault().getInternalNiftyNode(niftyNode).setControl(this);
   }
 
   @Override

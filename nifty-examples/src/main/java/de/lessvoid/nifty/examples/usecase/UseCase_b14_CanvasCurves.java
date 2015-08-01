@@ -34,7 +34,6 @@ import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.event.NiftyPointerDraggedEvent;
@@ -47,6 +46,7 @@ import de.lessvoid.nifty.api.event.NiftyPointerPressedEvent;
  * @author void
  */
 public class UseCase_b14_CanvasCurves {
+  /* FIXME
   ControlPoint cp0;
   ControlPoint cp1;
   ControlPoint cp2;
@@ -160,4 +160,5 @@ public class UseCase_b14_CanvasCurves {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b14_CanvasCurves.class, args);
   }
+  */
 }

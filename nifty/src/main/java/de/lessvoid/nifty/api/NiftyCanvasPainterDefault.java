@@ -26,6 +26,8 @@
  */
 package de.lessvoid.nifty.api;
 
+import de.lessvoid.nifty.api.node.NiftyNode;
+
 /**
  * The DefaultNiftyCanvasPainter will be used when you don't set a specific one for a NiftyNode. It is part of the
  * public API so that you can use it as well (f.i. when you want the default behavior in your own NiftyCanvasPainter.
@@ -36,6 +38,7 @@ public class NiftyCanvasPainterDefault implements NiftyCanvasPainter {
 
   @Override
   public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+    /* FIXME
     canvas.setFillStyle(node.getBackgroundColor());
     canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
@@ -43,5 +46,6 @@ public class NiftyCanvasPainterDefault implements NiftyCanvasPainter {
       canvas.setFillStyle(node.getBackgroundGradient());
       canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
     }
+    */
   }
 }

@@ -33,16 +33,15 @@ import de.lessvoid.nifty.api.HAlign;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyFont;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VAlign;
-import de.lessvoid.nifty.api.controls.Label;
 
 /**
  * Display a simple text.
  * @author void
  */
 public class UseCase_c01_LabelControlTextAlign {
+  /* FIXME
   private final NiftyNode niftyNode;
   private final NiftyFont font;
 
@@ -75,4 +74,5 @@ public class UseCase_c01_LabelControlTextAlign {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_c01_LabelControlTextAlign.class, args);
   }
+  */
 }

@@ -32,15 +32,14 @@ import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCallback;
 import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyRuntimeException;
 import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.controls.Label;
-import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
+import de.lessvoid.nifty.api.node.NiftyNode;
 
 public class StatisticsRendererFPS {
 
   public StatisticsRendererFPS(final Nifty nifty) {
+    /* FIXME
     NiftyNode fpsNode = nifty.createRootNode(ChildLayout.Vertical, UnitValue.percent(100), UnitValue.wildcard(), ChildLayout.Horizontal);
     NiftyNodeAccessor.getDefault().getInternalNiftyNode(fpsNode).setNiftyPrivateNode();
     fpsNode.setRenderOrder(1000);
@@ -58,5 +57,6 @@ public class StatisticsRendererFPS {
     } catch (IOException e) {
       throw new NiftyRuntimeException(e);
     }
+    */
   }
 }

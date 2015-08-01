@@ -31,7 +31,6 @@ import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCallback;
 import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.event.NiftyPointerClickedEvent;
@@ -46,6 +45,7 @@ import de.lessvoid.nifty.api.event.NiftyPointerPressedEvent;
  * @author void
  */
 public class UseCase_i01_PointerEvents {
+  /* FIXME
   private NiftyNode niftyNode;
   private NiftyNode childNode;
   private int mouseStartX;
@@ -115,4 +115,5 @@ public class UseCase_i01_PointerEvents {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_i01_PointerEvents.class, args);
   }
+  */
 }

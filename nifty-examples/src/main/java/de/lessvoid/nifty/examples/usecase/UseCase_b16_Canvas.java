@@ -31,7 +31,6 @@ import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 
@@ -40,7 +39,7 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_b16_Canvas {
-
+/* FIXME
   public UseCase_b16_Canvas(final Nifty nifty) {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
@@ -68,4 +67,5 @@ public class UseCase_b16_Canvas {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b16_Canvas.class, args);
   }
+  */
 }

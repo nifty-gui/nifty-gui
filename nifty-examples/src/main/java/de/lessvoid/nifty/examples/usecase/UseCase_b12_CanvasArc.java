@@ -35,7 +35,6 @@ import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyFont;
 import de.lessvoid.nifty.api.NiftyLineCapType;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 import de.lessvoid.nifty.api.VAlign;
@@ -45,6 +44,7 @@ import de.lessvoid.nifty.api.VAlign;
  * @author void
  */
 public class UseCase_b12_CanvasArc {
+  /* FIXME
   private static NiftyFont font;
   private static float v = 1.99f;
 
@@ -143,4 +143,5 @@ public class UseCase_b12_CanvasArc {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b12_CanvasArc.class, args);
   }
+  */
 }

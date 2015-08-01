@@ -28,8 +28,6 @@ package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.controls.Label;
 
 /**
  * Show case CSS styles for the label control. This will use all common CSS attributes to all controls as well as the
@@ -37,7 +35,7 @@ import de.lessvoid.nifty.api.controls.Label;
  * @author void
  */
 public class UseCase_c03_LabelControlAllStyles {
-
+/* FIXME
   public UseCase_c03_LabelControlAllStyles(final Nifty nifty) throws Exception {
     NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     niftyNode.newControl(Label.class);
@@ -47,4 +45,5 @@ public class UseCase_c03_LabelControlAllStyles {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_c03_LabelControlAllStyles.class, args);
   }
+  */
 }

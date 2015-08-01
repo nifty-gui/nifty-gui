@@ -29,8 +29,6 @@ package de.lessvoid.nifty.examples.usecase;
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.NiftyNodeState;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 
@@ -39,7 +37,7 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_i02_StateChange {
-
+/* FIXME
   public UseCase_i02_StateChange(final Nifty nifty) {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
     nifty.clearScreenBeforeRender();
@@ -64,4 +62,5 @@ public class UseCase_i02_StateChange {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_i02_StateChange.class, args);
   }
+  */
 }

@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.internal.render.sync;
 
-import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.api.node.NiftyNode;
 import de.lessvoid.nifty.internal.render.RenderNode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
@@ -50,7 +50,9 @@ public class TreeSyncRenderNodeFactory {
    * @param node the source InternalNiftyNode to create a RenderNode for
    * @return the newly created RenderNode
    */
-  public RenderNode createRenderNode(final InternalNiftyNode node) {
+  public RenderNode createRenderNode(final NiftyNode node) {
+    return null;
+    /*
     return new RenderNode(
         node.getId().hashCode(),
         node.getLocalTransformation(),
@@ -61,6 +63,7 @@ public class TreeSyncRenderNodeFactory {
         renderDevice.createTexture(node.getWidth(), node.getHeight(), FilterMode.Linear),
         node.getCompositeOperation(),
         node.getRenderOrder());
+        */
   }
 
 }

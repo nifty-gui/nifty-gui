@@ -26,8 +26,7 @@
  */
 package de.lessvoid.nifty.api.controls;
 
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.NiftyStateManager;
+import de.lessvoid.nifty.api.node.NiftyNode;
 
 /**
  * Interface for all Nifty Controls.
@@ -40,7 +39,7 @@ public interface NiftyControl {
    * Initialize this NiftyControl with the given NiftyNode.
    * @param node NiftyNode
    */
-  void init(NiftyNode node, NiftyStateManager stateManager);
+  void init(NiftyNode node);
 
   /**
    * Get the NiftyNode for this Nifty control.

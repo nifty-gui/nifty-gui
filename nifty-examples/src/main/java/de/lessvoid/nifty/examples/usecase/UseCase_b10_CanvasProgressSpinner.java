@@ -34,7 +34,6 @@ import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyMutableColor;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 
@@ -43,6 +42,7 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_b10_CanvasProgressSpinner {
+  /* FIXME
   private int pos = 0;
 
   public UseCase_b10_CanvasProgressSpinner(final Nifty nifty) throws IOException {
@@ -86,4 +86,5 @@ public class UseCase_b10_CanvasProgressSpinner {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b10_CanvasProgressSpinner.class, args);
   }
+  */
 }

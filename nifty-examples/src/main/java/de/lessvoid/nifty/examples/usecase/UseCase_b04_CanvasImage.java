@@ -32,7 +32,6 @@ import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyImage;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 
 /**
@@ -40,7 +39,7 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_b04_CanvasImage {
-
+/* FIXME
   public UseCase_b04_CanvasImage(final Nifty nifty) {
     final NiftyImage image = nifty.createNiftyImage("nifty.png");
 
@@ -58,4 +57,5 @@ public class UseCase_b04_CanvasImage {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b04_CanvasImage.class, args);
   }
+  */
 }

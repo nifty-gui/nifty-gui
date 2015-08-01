@@ -28,7 +28,6 @@ package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 
 /**
@@ -36,7 +35,7 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_d01_StyleTest {
-
+/* FIXME
   public UseCase_d01_StyleTest(final Nifty nifty) throws Exception {
     NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     niftyNode.setStyleClass("my");
@@ -50,4 +49,5 @@ public class UseCase_d01_StyleTest {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_d01_StyleTest.class, args);
   }
+  */
 }

@@ -34,7 +34,6 @@ import de.lessvoid.nifty.api.NiftyCanvas;
 import de.lessvoid.nifty.api.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.NiftyColor;
 import de.lessvoid.nifty.api.NiftyFont;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.UnitValue;
 
 /**
@@ -42,7 +41,7 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_b03_CanvasText {
-
+/* FIXME
   public UseCase_b03_CanvasText(final Nifty nifty) throws IOException {
     final NiftyFont font = nifty.createFont("fonts/aurulent-sans-16.fnt");
 
@@ -78,4 +77,5 @@ public class UseCase_b03_CanvasText {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b03_CanvasText.class, args);
   }
+  */
 }

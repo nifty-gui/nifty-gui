@@ -32,7 +32,6 @@ import de.lessvoid.nifty.api.ChildLayout;
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyCallback;
 import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.NiftyStatisticsMode;
 import de.lessvoid.nifty.api.UnitValue;
 
@@ -41,7 +40,7 @@ import de.lessvoid.nifty.api.UnitValue;
  * @author void
  */
 public class UseCase_a05_RotatingChildNode {
-
+/* FIXME
   public UseCase_a05_RotatingChildNode(final Nifty nifty) throws IOException {
     nifty.clearScreenBeforeRender();
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
@@ -80,4 +79,5 @@ public class UseCase_a05_RotatingChildNode {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a05_RotatingChildNode.class, args);
   }
+  */
 }
