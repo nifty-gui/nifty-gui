@@ -26,15 +26,7 @@
  */
 package de.lessvoid.nifty.internal.render;
 
-import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
-
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.internal.InternalNiftyTree;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
@@ -42,6 +34,14 @@ import de.lessvoid.nifty.internal.render.sync.TreeSync;
 import de.lessvoid.nifty.internal.render.sync.TreeSyncRenderNodeFactory;
 import de.lessvoid.nifty.internal.render.sync.TreeSyncRenderState;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Take a list of public NiftyNodes and render them.
@@ -59,6 +59,8 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
  * @author void
  */
 public class NiftyRenderer implements NiftyRendererMXBean {
+  private final static Logger logger = Logger.getLogger(NiftyRenderer.class.getName());
+
   // the reference to the Statistics instance we'll update
   private final Statistics stats;
 
@@ -81,7 +83,7 @@ public class NiftyRenderer implements NiftyRendererMXBean {
    * @param stats the Statistics instance to gather stats about rendering
    * @param renderDevice the NiftyRenderDevice used for rendering
    */
-  public NiftyRenderer(final Statistics stats, final NiftyRenderDevice renderDevice) {
+  public  NiftyRenderer(final Statistics stats, final NiftyRenderDevice renderDevice) {
     this.stats = stats;
     this.renderDevice = renderDevice;
     this.treeSync = new TreeSync(new TreeSyncRenderNodeFactory(renderDevice));
@@ -89,23 +91,27 @@ public class NiftyRenderer implements NiftyRendererMXBean {
 
     try {
       MBeanServer mbs = ManagementFactory.getPlatformMBeanServer(); 
-      ObjectName name = new ObjectName("de.lessvoid.nifty:type=NiftyRenderer"); 
-      mbs.registerMBean(this, name);
+      ObjectName name = new ObjectName("de.lessvoid.nifty:type=NiftyRenderer");
+      if (mbs.isRegistered(name)) {
+        logger.warning(name + " already registered");
+      } else {
+        mbs.registerMBean(this, name);
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
   /**
-   * Render the given list of root NiftyNodes. This class will translate the Nodes into RenderNodes and keep a list.
-   * On each following call this list will be synchronized with the list of root nodes.
+   * Render the given InternalNiftyTree. This class will translate the Nodes into RenderNodes and keep a list.
+   * On each following call this list will be synchronized with the tree.
    *
-   * @param rootNodes the list of Nifty root nodes that should be rendered
+   * @param tree the Nifty tree that should be rendered
    * @return true when any content of the new frame changed and false if nothing has been rendered (since the frame
    * looks exactly as the last one). 
    */
-  public boolean render(final List<NiftyNode> rootNodes) {
-    if (!synchronize(rootNodes, renderNodes)) {
+  public boolean render(final InternalNiftyTree tree) {
+    if (!synchronize(tree, renderNodes)) {
       return false;
     }
 
@@ -113,7 +119,7 @@ public class NiftyRenderer implements NiftyRendererMXBean {
     return true;
   }
 
-  private boolean synchronize(final List<NiftyNode> sourceNodes, final List<RenderNode> destinationNodes) {
+  private boolean synchronize(final InternalNiftyTree sourceTree, final List<RenderNode> destinationNodes) {
     /*
     stats.startSynchronize();
     List<InternalNiftyNode> internal = toInternal(sourceNodes);

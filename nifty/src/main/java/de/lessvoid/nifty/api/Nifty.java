@@ -26,22 +26,17 @@
  */
 package de.lessvoid.nifty.api;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
 import de.lessvoid.nifty.api.canvas.NiftyCanvasPainter;
 import de.lessvoid.nifty.api.canvas.NiftyCanvasPainterShader;
-import de.lessvoid.nifty.api.node.NiftyNode;
-import de.lessvoid.nifty.internal.NiftyResourceLoader;
-import org.jglfont.JGLFontFactory;
-
 import de.lessvoid.nifty.api.input.NiftyInputConsumer;
 import de.lessvoid.nifty.api.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
+import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.api.node.RootNode;
 import de.lessvoid.nifty.internal.InternalNiftyEventBus;
 import de.lessvoid.nifty.internal.InternalNiftyImage;
+import de.lessvoid.nifty.internal.InternalNiftyTree;
+import de.lessvoid.nifty.internal.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.common.StatisticsRendererFPS;
@@ -52,6 +47,12 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
 import de.lessvoid.nifty.spi.TimeProvider;
+import org.jglfont.JGLFontFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * The main control class of all things Nifty.
@@ -72,9 +73,6 @@ public class Nifty {
 
   // The TimeProvider to use.
   private final TimeProvider timeProvider;
-
-  // The list of root nodes.
-  private final List<NiftyNode> rootNodes = new ArrayList<NiftyNode>();
 
   // The list of nodes that are able to receive input events
   private final List<NiftyNode> nodesToReceiveEvents = new ArrayList<NiftyNode>();
@@ -99,6 +97,9 @@ public class Nifty {
   // all pointer events will be send to that node unless the pointer is released again.
   private NiftyNode nodeThatCapturedPointerEvents;
 
+  // The main data structure to keep the Nifty scene graph
+  private InternalNiftyTree tree;
+
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
@@ -119,6 +120,7 @@ public class Nifty {
     stats = statistics.getImpl();
     renderer = new NiftyRenderer(statistics.getImpl(), newRenderDevice);
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
+    tree = new InternalNiftyTree(new RootNode());
   }
 
   /**
@@ -215,7 +217,7 @@ public class Nifty {
         */
         return false;
       }
-      
+
       @Override
       public boolean processKeyboardEvent(final NiftyKeyboardEvent keyEvent) {
         return false;
@@ -230,7 +232,7 @@ public class Nifty {
    */
   public boolean render() {
     stats.startRender();
-    boolean frameChanged = renderer.render(rootNodes);
+    boolean frameChanged = renderer.render(tree);
     stats.stopRender();
     stats.endFrame();
     return frameChanged;
@@ -244,7 +246,7 @@ public class Nifty {
    * @param height the height of the root node
    * @param childLayout the childLayout for the root node (this determines the way any child nodes will be laid out
    * in the new rootNode)
-   * 
+   *
    * @return a new NiftyNode acting as the root of a Nifty scene graph
    */
   /* FIXME
@@ -265,7 +267,7 @@ public class Nifty {
    * @param height the height of the root node
    * @param childLayout the childLayout for the root node (this determines the way any child nodes will be laid out
    * in the new rootNode)
-   * 
+   *
    * @return a new NiftyNode acting as the root of a Nifty scene graph
    */
   /* FIXME
@@ -286,7 +288,7 @@ public class Nifty {
    * @see #createRootNode(UnitValue, UnitValue, ChildLayout)
    *
    * Additionally this method will make the created root node the same size as the current screen.
-   * 
+   *
    * @return a new NiftyNode
    */
   /* FIXME
@@ -299,7 +301,7 @@ public class Nifty {
    * @see #createRootNode(UnitValue, UnitValue, ChildLayout)
    *
    * Additionally this method will make the created root node the same size as the current screen.
-   * 
+   *
    * @param childLayout the childLayout for the root node (this determines the way any child nodes will be layed out
    * in the new rootNode)
    * @return a new NiftyNode
@@ -351,7 +353,7 @@ public class Nifty {
   }
 
   /**
-   * Output the state of all root nodes (and the whole tree below) to a String. This is meant to aid in debugging.
+   * Output the state of all Nifty to a String. This is meant to aid in debugging.
    * DON'T RELY ON ANY INFORMATION IN HERE SINCE THIS CAN BE CHANGED IN FUTURE RELEASES!
    *
    * @param filter regexp to filter the output (Example: "position" will only output position info)
@@ -359,9 +361,7 @@ public class Nifty {
    */
   public String getSceneInfoLog(final String filter) {
     StringBuilder result = new StringBuilder("Nifty scene info log\n");
-    for (int i=0; i<rootNodes.size(); i++) {
-      // FIXME rootNodes.get(i).getStateInfo(result, filter);
-    }
+    result.append(tree.toString());
     return result.toString();
   }
 
@@ -413,10 +413,81 @@ public class Nifty {
     return new NiftyCanvasPainterShader(renderDevice, shaderName);
   }
 
+  /////////////////////////////////////////////////////////////////////////////
+  // NiftyTree
+  /////////////////////////////////////////////////////////////////////////////
+
+  /**
+   * Add the given NiftyNode to the root node.
+   *
+   * @param child the child to add as well
+   * @return this
+   */
+  public NiftyNodeBuilder addNode(final NiftyNode child) {
+    tree.addChild(tree.getRootNode(), child);
+    return new NiftyNodeBuilder(this, child);
+  }
+
+  /**
+   * Add the given child(s) NiftyNode(s) to the given parent NiftyNode.
+   *
+   * @param parent the NiftyNode parent to add the child to
+   * @param child the child NiftyNode to add to the parent
+   * @return this
+   */
+  public NiftyNodeBuilder addNode(final NiftyNode parent, final NiftyNode child) {
+    tree.addChild(parent, child);
+    return new NiftyNodeBuilder(this, child);
+  }
+
+  /**
+   * Remove the NiftyNode from the tree.
+   *
+   * @param niftyNode the NiftyNode to remove
+   */
+  public void remove(final NiftyNode niftyNode) {
+    tree.remove(niftyNode);
+  }
+
+  /**
+   * Return a depth first Iterator for all NiftyNodes in this tree.
+   * @return the Iterator
+   */
+  public Iterable<NiftyNode> childNodes() {
+    return tree.childNodes();
+  }
+
+  /**
+   * Return a depth first Iterator for all child nodes of the given parent node.
+   * @return the Iterator
+   */
+  public Iterable<NiftyNode> childNodes(final NiftyNode startNode) {
+    return tree.childNodes(startNode);
+  }
+
+  /**
+   * Return a depth first Iterator for all NiftyNodes in this tree that are instances of the given class.
+   * @param clazz only return entries if they are instances of this clazz
+   * @return the Iterator
+   */
+  public <X extends NiftyNode> Iterable<X> filteredChildNodes(final Class<X> clazz) {
+    return tree.filteredChildNodes(clazz);
+  }
+
+  /**
+   * Return a depth first Iterator for all child nodes of the given startNode.
+   * @param clazz only return entries if they are instances of this clazz
+   * @param startNode the start node
+   * @return the Iterator
+   */
+  public <X extends NiftyNode> Iterable<X> filteredChildNodes(final Class<X> clazz, final NiftyNode startNode) {
+    return tree.filteredChildNodes(clazz, startNode);
+  }
+
   // Friend methods
 
   NiftyRenderDevice getRenderDevice() {
-    return renderDevice;   
+    return renderDevice;
   }
 
   InternalNiftyEventBus getEventBus() {

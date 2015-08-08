@@ -24,58 +24,61 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.node;
+package de.lessvoid.nifty.api;
 
+import de.lessvoid.nifty.api.node.NiftyNode;
+import org.junit.After;
 import org.junit.Test;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 /**
- * Created by void on 23.07.15.
+ * Created by void on 09.08.15.
  */
-public class NiftyTreeNodeDepthFirstIteratorTest {
+public class NiftyNodeBuilderTest {
+  private Nifty nifty = createMock(Nifty.class);
+  private NiftyNode child = createMock(NiftyNode.class);
+  private NiftyNode parent = createMock(NiftyNode.class);
+  private NiftyNodeBuilder builder = new NiftyNodeBuilder(nifty, parent);
 
-  @Test
-  public void testIterateRoot() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    Iterator<NiftyTreeNode<String>> it = createIterator(root);
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next().getValue());
-
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
-    }
+  @After
+  public void after() {
+    verify(nifty);
+    verify(child);
+    verify(parent);
   }
 
   @Test
-  public void testIterateOneChild() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    NiftyTreeNode<String> child = new NiftyTreeNode<>("child");
-    root.addChild(child);
+  public void testAddNode() {
+    replay(parent);
+    replay(child);
 
-    Iterator<NiftyTreeNode<String>> it = createIterator(root);
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next().getValue());
+    expect(nifty.addNode(child)).andReturn(builder);
+    replay(nifty);
 
-    assertTrue(it.hasNext());
-    assertEquals("child", it.next().getValue());
-
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
-    }
+    assertEquals(builder, builder.addNode(child));
   }
 
-  private Iterator<NiftyTreeNode<String>> createIterator(final NiftyTreeNode<String> root) {
-    return new NiftyTreeNodeDepthFirstIterator<>(root);
+  @Test
+  public void testAddNodeToChild() {
+    replay(parent);
+    replay(child);
+
+    expect(nifty.addNode(parent, child)).andReturn(builder);
+    replay(nifty);
+
+    assertEquals(builder, builder.addNode(parent, child));
   }
 
+  @Test
+  public void testAddChildNode() {
+    replay(parent);
+    replay(child);
+
+    expect(nifty.addNode(parent, child)).andReturn(builder);
+    replay(nifty);
+
+    assertEquals(builder, builder.addChildNode(child));
+  }
 }
