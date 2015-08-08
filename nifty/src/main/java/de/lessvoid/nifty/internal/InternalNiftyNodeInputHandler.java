@@ -49,7 +49,7 @@ public class InternalNiftyNodeInputHandler {
   private boolean buttonDown[] = new boolean[NiftyPointerEvent.BUTTON_COUNT];
   private int lastPosX;
   private int lastPosY;
-
+/* FIXME
   public boolean pointerEvent(
       final InternalNiftyEventBus eventBus,
       final InternalNiftyNode internalNiftyNode,
@@ -61,7 +61,7 @@ public class InternalNiftyNodeInputHandler {
       return false;
     }
   }
-
+*/
   /**
    * This is called with pointer events when this node has captured pointer events.
    *
@@ -70,6 +70,7 @@ public class InternalNiftyNodeInputHandler {
    * @param pointerEvent
    * @return true when this node will give up capturing and false if it still wants to receive captured events
    */
+  /* FIXME
   public boolean capturedPointerEvent(
       final InternalNiftyEventBus eventBus,
       final InternalNiftyNode internalNiftyNode,
@@ -246,4 +247,5 @@ public class InternalNiftyNodeInputHandler {
       eventBus.publish(new NiftyPointerEnterNodeEvent(internalNiftyNode.getNiftyNode()));
     }
   }
+  */
 }

@@ -27,8 +27,8 @@
 package de.lessvoid.nifty;
 
 import static org.junit.Assert.assertEquals;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyMutableColor;
+import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyMutableColor;
 
 public class AssertColor {
   public static void assertColor(final double r, final double g, final double b, final double a, final NiftyColor c) {

@@ -32,6 +32,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyColorStop;
+import de.lessvoid.nifty.api.types.NiftyLinearGradient;
 import org.junit.Test;
 
 public class NiftyLinearGradientTest {

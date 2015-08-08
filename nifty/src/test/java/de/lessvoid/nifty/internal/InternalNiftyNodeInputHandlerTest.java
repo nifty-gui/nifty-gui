@@ -37,7 +37,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.api.NiftyNode;
 import de.lessvoid.nifty.api.event.NiftyPointerClickedEvent;
 import de.lessvoid.nifty.api.event.NiftyPointerDraggedEvent;
 import de.lessvoid.nifty.api.event.NiftyPointerEnterNodeEvent;
@@ -49,6 +48,7 @@ import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.internal.math.Vec4;
 
 public class InternalNiftyNodeInputHandlerTest {
+  /*
   private InternalNiftyNodeInputHandler inputHandler;
   private InternalNiftyNode internalNiftyNode;
   private NiftyNode niftyNode;
@@ -291,4 +291,5 @@ public class InternalNiftyNodeInputHandlerTest {
   private void execPointerDownEvent(final int x, final int y) {
     inputHandler.pointerEvent(eventBus, internalNiftyNode, makePointerDownEvent(x, y));
   }
+  */
 }

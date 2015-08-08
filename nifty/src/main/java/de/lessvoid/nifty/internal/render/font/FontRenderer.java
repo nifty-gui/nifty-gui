@@ -36,8 +36,8 @@ import javax.annotation.Nonnull;
 
 import org.jglfont.spi.JGLFontRenderer;
 
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyMutableColor;
+import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyMutableColor;
 import de.lessvoid.nifty.internal.common.ColorValueParser;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;

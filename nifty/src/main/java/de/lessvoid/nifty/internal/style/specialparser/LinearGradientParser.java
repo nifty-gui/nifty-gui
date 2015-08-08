@@ -30,7 +30,7 @@ import java.util.*;
 
 import self.philbrown.cssparser.Token;
 import self.philbrown.cssparser.TokenSequence;
-import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyColor;
 
 /**
  * from: http://dev.w3.org/csswg/css-images-3/#linear-gradients

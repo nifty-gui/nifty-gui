@@ -26,19 +26,12 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.io.IOException;
-
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.NiftyStatisticsMode;
-
 /**
  * custom canvas painter using a custom fragment shader ... read that last sentence again! =D
  * @author void
  */
 public class UseCase_b05_CanvasCustomShader {
-
+/* FIXME
   public UseCase_b05_CanvasCustomShader(final Nifty nifty) throws IOException {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
@@ -50,4 +43,5 @@ public class UseCase_b05_CanvasCustomShader {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b05_CanvasCustomShader.class, args);
   }
+  */
 }

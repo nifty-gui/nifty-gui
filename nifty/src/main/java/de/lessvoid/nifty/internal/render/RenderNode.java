@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyCompositeOperation;
+import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.internal.canvas.Command;
 import de.lessvoid.nifty.internal.canvas.Context;
 import de.lessvoid.nifty.internal.math.Mat4;

@@ -26,9 +26,9 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyLineCapType;
-import de.lessvoid.nifty.api.NiftyLineJoinType;
+import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyLineCapType;
+import de.lessvoid.nifty.api.types.NiftyLineJoinType;
 
 
 /**

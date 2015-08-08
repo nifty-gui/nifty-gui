@@ -26,27 +26,12 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.io.IOException;
-
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyFont;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.NiftyStatisticsMode;
-import de.lessvoid.nifty.api.UnitValue;
-import de.lessvoid.nifty.api.controls.Label;
-import de.lessvoid.nifty.api.event.NiftyPointerExitNodeEvent;
-import de.lessvoid.nifty.api.event.NiftyPointerHoverEvent;
-import net.engio.mbassy.listener.Handler;
-import net.engio.mbassy.listener.Listener;
-import net.engio.mbassy.listener.References;
-
 /**
  * Mouse hover over an element with output of local coordinates.
  * @author void
  */
 public class UseCase_i01_PointerEventsScreenToLocal {
+  /* FIXME
   private NiftyNode parentNode;
   private NiftyNode childNode;
   private NiftyNode grandChildNode;
@@ -119,4 +104,5 @@ public class UseCase_i01_PointerEventsScreenToLocal {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_i01_PointerEventsScreenToLocal.class, args);
   }
+  */
 }

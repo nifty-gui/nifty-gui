@@ -26,22 +26,12 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.io.IOException;
-
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCanvas;
-import de.lessvoid.nifty.api.NiftyCanvasPainter;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.NiftyStatisticsMode;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * An example how to draw arcs and lines as part of one path into a NiftyCanvas.
  * @author void
  */
 public class UseCase_b13_CanvasLineAndArc {
+  /* FIXME
   public UseCase_b13_CanvasLineAndArc(final Nifty nifty) throws IOException {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
@@ -158,4 +148,5 @@ public class UseCase_b13_CanvasLineAndArc {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b13_CanvasLineAndArc.class, args);
   }
+  */
 }

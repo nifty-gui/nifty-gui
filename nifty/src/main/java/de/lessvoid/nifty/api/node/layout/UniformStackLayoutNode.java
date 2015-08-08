@@ -2,14 +2,12 @@ package de.lessvoid.nifty.api.node.layout;
 
 import de.lessvoid.nifty.api.NiftyLayout;
 import de.lessvoid.nifty.api.Orientation;
-import de.lessvoid.nifty.api.node.NiftyLayoutNode;
 import de.lessvoid.nifty.api.node.NiftyNode;
 import de.lessvoid.nifty.api.types.Point;
 import de.lessvoid.nifty.api.types.Rect;
 import de.lessvoid.nifty.api.types.Size;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
 
 /**

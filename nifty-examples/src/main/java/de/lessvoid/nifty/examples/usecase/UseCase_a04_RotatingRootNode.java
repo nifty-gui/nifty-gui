@@ -26,19 +26,12 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCallback;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * A single root node of a fixed size with a background color that is constantly rotating.
  * @author void
  */
 public class UseCase_a04_RotatingRootNode {
-
+/* FIXME
   public UseCase_a04_RotatingRootNode(final Nifty nifty) {
     nifty.clearScreenBeforeRender();
 
@@ -62,4 +55,5 @@ public class UseCase_a04_RotatingRootNode {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a04_RotatingRootNode.class, args);
   }
+  */
 }

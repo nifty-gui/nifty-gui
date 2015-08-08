@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.api.NiftyCompositeOperation;
+import de.lessvoid.nifty.api.types.NiftyCompositeOperation;
 
 public class CommandGlobalCompositeOperation implements Command {
   private final NiftyCompositeOperation compositeOperation;

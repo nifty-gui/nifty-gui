@@ -28,7 +28,7 @@ package de.lessvoid.nifty.spi;
 
 import javax.annotation.Nonnull;
 
-import de.lessvoid.nifty.api.NiftyResourceLoader;
+import de.lessvoid.nifty.internal.NiftyResourceLoader;
 import de.lessvoid.nifty.api.input.NiftyInputConsumer;
 
 /**

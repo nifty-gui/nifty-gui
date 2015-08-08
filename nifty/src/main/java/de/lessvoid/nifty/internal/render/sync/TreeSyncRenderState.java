@@ -26,11 +26,9 @@
  */
 package de.lessvoid.nifty.internal.render.sync;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.api.node.NiftyNode;
 import de.lessvoid.nifty.internal.render.RenderNode;
 
 public class TreeSyncRenderState {
@@ -44,13 +42,15 @@ public class TreeSyncRenderState {
    * @param dstNodes the destination list of RenderNodes
    * @return
    */
-  public int synchronize(final List<InternalNiftyNode> srcNodes, final List<RenderNode> dstNodes) {
-    Map<Integer, InternalNiftyNode> niftyNodeLookup = buildNiftyNodeLookup(srcNodes);
+  public int synchronize(final List<NiftyNode> srcNodes, final List<RenderNode> dstNodes) {
+    // FIXME Map<Integer, NiftyNode> niftyNodeLookup = buildNiftyNodeLookup(srcNodes);
 
     int result = 0;
+/*
     for (int i=0; i<dstNodes.size(); i++) {
       result |= syncNodes(dstNodes.get(i), niftyNodeLookup);
     }
+*/
     return result;
   }
 
@@ -66,6 +66,7 @@ public class TreeSyncRenderState {
    * @param niftyNodeLookup a map to lookup InternalNiftyNode by id
    * @return a combination of NEEDS_RENDER and NEEDS_CANVAS_UPDATE or 0 if nothing has changed
    */
+  /* FIXME
   private int syncNodes(final RenderNode dst, final Map<Integer, InternalNiftyNode> niftyNodeLookup) {
     InternalNiftyNode src = niftyNodeLookup.get(dst.getNodeId());
     boolean needsCanvasUpdate = needsCanvasUpdate(src, dst);
@@ -120,5 +121,5 @@ public class TreeSyncRenderState {
       buildRenderNodeLookupInternal(lookup, node.getChildren());
     }
   }
-
+*/
 }

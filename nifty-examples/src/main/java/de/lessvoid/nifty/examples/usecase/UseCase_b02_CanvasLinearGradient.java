@@ -26,21 +26,12 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCanvas;
-import de.lessvoid.nifty.api.NiftyCanvasPainter;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyLinearGradient;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * custom canvas painter rendering gradients.
  * @author void
  */
 public class UseCase_b02_CanvasLinearGradient {
-
+/* FIXME
   public UseCase_b02_CanvasLinearGradient(final Nifty nifty) {
     NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
     niftyNode.setBackgroundColor(NiftyColor.transparent());
@@ -77,4 +68,5 @@ public class UseCase_b02_CanvasLinearGradient {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b02_CanvasLinearGradient.class, args);
   }
+  */
 }

@@ -29,7 +29,7 @@ package de.lessvoid.nifty.internal.common;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyColor;
 
 /**
  * Checks a String if it contains a Nifty inline color. This class is used while

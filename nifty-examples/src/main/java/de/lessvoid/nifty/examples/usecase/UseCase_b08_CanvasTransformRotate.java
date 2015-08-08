@@ -26,22 +26,12 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.io.IOException;
-
-import de.lessvoid.nifty.api.ChildLayout;
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.NiftyCanvas;
-import de.lessvoid.nifty.api.NiftyCanvasPainter;
-import de.lessvoid.nifty.api.NiftyColor;
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.api.UnitValue;
-
 /**
  * Demonstrate the rotate transform of the NiftyCanvas.
  * @author void
  */
 public class UseCase_b08_CanvasTransformRotate {
-
+/* FIXME
   public UseCase_b08_CanvasTransformRotate(final Nifty nifty) throws IOException {
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
 
@@ -66,4 +56,5 @@ public class UseCase_b08_CanvasTransformRotate {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b08_CanvasTransformRotate.class, args);
   }
+  */
 }

@@ -29,6 +29,8 @@ package de.lessvoid.nifty.api;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyColorStop;
 import org.junit.Test;
 
 public class NiftyColorStopTest {

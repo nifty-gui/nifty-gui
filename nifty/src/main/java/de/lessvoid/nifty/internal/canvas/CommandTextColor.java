@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.api.NiftyColor;
+import de.lessvoid.nifty.api.types.NiftyColor;
 
 public class CommandTextColor implements Command {
   private final NiftyColor textColor;

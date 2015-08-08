@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.internal.canvas;
 
-import de.lessvoid.nifty.api.NiftyLinearGradient;
+import de.lessvoid.nifty.api.types.NiftyLinearGradient;
 
 public class CommandFillLinearGradient implements Command {
   private final NiftyLinearGradient gradient;

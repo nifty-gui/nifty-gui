@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.lessvoid.nifty.internal.InternalNiftyNode;
+import de.lessvoid.nifty.api.node.NiftyNode;
 import de.lessvoid.nifty.internal.render.RenderNode;
 
 /**
@@ -58,18 +58,20 @@ public class TreeSync {
    * @param dstNodes the destination list of RenderNodes
    * @return
    */
-  public boolean synchronizeTree(final List<InternalNiftyNode> srcNodes, final List<RenderNode> dstNodes) {
+  public boolean synchronizeTree(final List<NiftyNode> srcNodes, final List<RenderNode> dstNodes) {
     Map<Integer, RenderNode> renderNodeLookup = buildRenderNodeLookup(dstNodes);
     return syncNodes(srcNodes, dstNodes, renderNodeLookup);
   }
 
   private boolean syncNodes(
-      final List<InternalNiftyNode> srcNodes,
+      final List<NiftyNode> srcNodes,
       final List<RenderNode> dstNodes,
       final Map<Integer, RenderNode> renderNodeLookup) {
     boolean result = false;
+    // FIXME
+    /*
     for (int i=0; i<srcNodes.size(); i++) {
-      InternalNiftyNode niftyNode = srcNodes.get(i);
+      NiftyNode niftyNode = srcNodes.get(i);
       RenderNode renderNode = renderNodeLookup.get(niftyNode.getId().hashCode());
 
       if (hasInvalidDimension(niftyNode)) {
@@ -96,13 +98,14 @@ public class TreeSync {
     for (int i=0; i<dstNodes.size(); i++) {
       dstNodes.get(i).setIndexInParent(i);
     }
-
+*/
     return result;
   }
-
+/* FIXME
   private boolean hasInvalidDimension(InternalNiftyNode niftyNode) {
     return niftyNode.getWidth() == 0 || niftyNode.getHeight() == 0;
   }
+  */
 
   private Map<Integer, RenderNode> buildRenderNodeLookup(final List<RenderNode> dstNodes) {
     Map<Integer, RenderNode> result = new HashMap<Integer, RenderNode>();

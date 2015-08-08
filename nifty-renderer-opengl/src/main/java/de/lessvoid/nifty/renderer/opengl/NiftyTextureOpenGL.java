@@ -33,7 +33,7 @@ import de.lessvoid.coregl.CoreTexture2D;
 import de.lessvoid.coregl.ResizeFilter;
 import de.lessvoid.coregl.Type;
 import de.lessvoid.coregl.spi.CoreGL;
-import de.lessvoid.nifty.api.NiftyResourceLoader;
+import de.lessvoid.nifty.internal.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.render.io.ImageLoader;
 import de.lessvoid.nifty.internal.render.io.ImageLoaderFactory;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;

@@ -34,9 +34,7 @@ import java.util.List;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import de.lessvoid.nifty.api.NiftyNode;
-import de.lessvoid.nifty.internal.InternalNiftyNode;
-import de.lessvoid.nifty.internal.accessor.NiftyNodeAccessor;
+import de.lessvoid.nifty.api.node.NiftyNode;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;
@@ -75,7 +73,7 @@ public class NiftyRenderer implements NiftyRendererMXBean {
   private final List<RenderNode> renderNodes = new ArrayList<RenderNode>();
 
   // we keep this list around to not allocate a list each frame - it's being reused
-  private final List<InternalNiftyNode> internalConvertList = new ArrayList<InternalNiftyNode>();
+  // FIXME private final List<InternalNiftyNode> internalConvertList = new ArrayList<InternalNiftyNode>();
 
   /**
    * Constructor.
@@ -116,6 +114,7 @@ public class NiftyRenderer implements NiftyRendererMXBean {
   }
 
   private boolean synchronize(final List<NiftyNode> sourceNodes, final List<RenderNode> destinationNodes) {
+    /*
     stats.startSynchronize();
     List<InternalNiftyNode> internal = toInternal(sourceNodes);
     boolean syncChanged = treeSync.synchronizeTree(internal, destinationNodes);
@@ -123,8 +122,11 @@ public class NiftyRenderer implements NiftyRendererMXBean {
     sortNodes(destinationNodes);
     stats.stopSynchronize();
     return syncChanged || (renderStateChanged != 0);
+    */
+    // FIXME
+    return false;
   }
-
+/* FIXME
   private List<InternalNiftyNode> toInternal(final List<NiftyNode> sourceNodes) {
     NiftyNodeAccessor niftyNodeAccessor = NiftyNodeAccessor.getDefault();
 
@@ -134,7 +136,7 @@ public class NiftyRenderer implements NiftyRendererMXBean {
     }
     return internalConvertList;
   }
-
+*/
   private void sortNodes(final List<RenderNode> destinationNodes) {
     Collections.sort(destinationNodes, new RenderNodeComparator());
     for (int i=0; i<destinationNodes.size(); i++) {

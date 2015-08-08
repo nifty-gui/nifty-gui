@@ -27,13 +27,14 @@
 package de.lessvoid.nifty.api;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import de.lessvoid.nifty.api.canvas.NiftyCanvasPainter;
+import de.lessvoid.nifty.api.canvas.NiftyCanvasPainterShader;
+import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.internal.NiftyResourceLoader;
 import org.jglfont.JGLFontFactory;
 
 import de.lessvoid.nifty.api.input.NiftyInputConsumer;
@@ -41,16 +42,11 @@ import de.lessvoid.nifty.api.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.internal.InternalNiftyEventBus;
 import de.lessvoid.nifty.internal.InternalNiftyImage;
-import de.lessvoid.nifty.internal.InternalNiftyNode;
-import de.lessvoid.nifty.internal.InternalNiftyNodeRenderOrderComparator;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.common.StatisticsRendererFPS;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.internal.render.font.FontRenderer;
-import de.lessvoid.nifty.internal.style.NiftyStyle;
-import de.lessvoid.nifty.internal.style.NiftyStyleClassInfo;
-import de.lessvoid.nifty.internal.style.NiftyStyleClassInfoCache;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
@@ -92,9 +88,6 @@ public class Nifty {
   // the FontFactory
   private final JGLFontFactory fontFactory;
 
-  // the comparator used to sort the list of inputEventReceivers
-  private final Comparator<? super NiftyNode> inputEventReceiversComparator = new InternalNiftyNodeRenderOrderComparator();
-
   // whenever we need to build a string we'll re-use this instance instead of creating new instances all the time
   private final StringBuilder str = new StringBuilder();
 
@@ -106,18 +99,15 @@ public class Nifty {
   // all pointer events will be send to that node unless the pointer is released again.
   private NiftyNode nodeThatCapturedPointerEvents;
 
-  // The NiftyStyleClassInfoCache keeps style informations about classes.
-  private NiftyStyleClassInfoCache styleClassInfoCache = new NiftyStyleClassInfoCache();
-
-  // this class takes care of applying styles to a list for root nodes
-  private NiftyStyle niftyStyle = new NiftyStyle(styleClassInfoCache);
-
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
    * @param newTimeProvider the TimeProvider implementation to use
    */
-  public Nifty(final NiftyRenderDevice newRenderDevice, final NiftyInputDevice newInputDevice, final TimeProvider newTimeProvider) {
+  public Nifty(
+      final NiftyRenderDevice newRenderDevice,
+      final NiftyInputDevice newInputDevice,
+      final TimeProvider newTimeProvider) {
     renderDevice = newRenderDevice;
     renderDevice.setResourceLoader(resourceLoader);
 
@@ -152,16 +142,6 @@ public class Nifty {
   }
 
   /**
-   * This is somewhat beta API - I'm not yet sure when to apply styles or if at all. So for the meantime this is a
-   * manual process. You provide a style file (normal CSS, with Nifty specific styles) and this method will do it's best
-   * to apply them to all the rootNodes (and child nodes).
-   * @throws IOException 
-   */
-  public void applyStyle(final InputStream source) throws Exception {
-    niftyStyle.applyStyle(this, source, rootNodes);
-  }
-
-  /**
    * Update.
    */
   public void update() {
@@ -172,13 +152,16 @@ public class Nifty {
     stats.stopInputProcessing();
 
     stats.startUpdate();
+    /* FIXME
     for (int i=0; i<rootNodes.size(); i++) {
       rootNodes.get(i).getImpl().update();
     }
+    */
     stats.stopUpdate();
   }
 
   private List<NiftyNode> collectInputReceivers() {
+    /* FIXME
     nodesToReceiveEvents.clear();
     for (int i=0; i<rootNodes.size(); i++) {
       InternalNiftyNode impl = rootNodes.get(i).getImpl();
@@ -186,12 +169,13 @@ public class Nifty {
         impl.addInputNodes(nodesToReceiveEvents);
       }
     }
+    */
     return sortInputReceivers(nodesToReceiveEvents);
   }
 
   // sorts in place (the source list) and returns the sorted source list
   private List<NiftyNode> sortInputReceivers(final List<NiftyNode> source) {
-    Collections.sort(source, Collections.reverseOrder(inputEventReceiversComparator));
+// FIXME    Collections.sort(source, Collections.reverseOrder(inputEventReceiversComparator));
     return source;
   }
 
@@ -200,7 +184,7 @@ public class Nifty {
     str.append("inputReceivers: ");
     for (int j=0; j<source.size(); j++) {
       str.append("[");
-      str.append(source.get(j).getImpl().getId());
+      // FIXME str.append(source.get(j).getImpl().getId());
       str.append("]");
       str.append(" ");
     }
@@ -212,7 +196,7 @@ public class Nifty {
       @Override
       public boolean processPointerEvent(final NiftyPointerEvent... pointerEvents) {
         logInputReceivers(inputReceivers);
-
+/*  FIXME
         for (int i=0; i<pointerEvents.length; i++) {
           if (nodeThatCapturedPointerEvents != null) {
             if (nodeThatCapturedPointerEvents.getImpl().capturedPointerEvent(pointerEvents[i])) {
@@ -228,6 +212,7 @@ public class Nifty {
             }
           }
         }
+        */
         return false;
       }
       
@@ -255,7 +240,6 @@ public class Nifty {
    * Create a new root node with a given width, height and child layout. A root node is just a regular NiftyNode that
    * forms the base node of a scene graph. You can add several root nodes!
    *
-   * @param rootNodePlacementLayout the child layout that defines how to place the new root node on the screen
    * @param width the width of the root node
    * @param height the height of the root node
    * @param childLayout the childLayout for the root node (this determines the way any child nodes will be laid out
@@ -263,12 +247,14 @@ public class Nifty {
    * 
    * @return a new NiftyNode acting as the root of a Nifty scene graph
    */
+  /* FIXME
   public NiftyNode createRootNode(
       final UnitValue width,
       final UnitValue height,
       final ChildLayout childLayout) {
     return createRootNode(ChildLayout.Center, width, height, childLayout);
   }
+  */
 
   /**
    * Create a new root node with a given width, height and child layout. A root node is just a regular NiftyNode that
@@ -282,6 +268,7 @@ public class Nifty {
    * 
    * @return a new NiftyNode acting as the root of a Nifty scene graph
    */
+  /* FIXME
   public NiftyNode createRootNode(
       final ChildLayout rootNodePlacementLayout,
       final UnitValue width,
@@ -293,6 +280,7 @@ public class Nifty {
     rootNodeInternal.setChildLayout(childLayout);
     return rootNodeInternal;
   }
+  */
 
   /**
    * @see #createRootNode(UnitValue, UnitValue, ChildLayout)
@@ -301,9 +289,11 @@ public class Nifty {
    * 
    * @return a new NiftyNode
    */
+  /* FIXME
   public NiftyNode createRootNodeFullscreen() {
     return createRootNode(ChildLayout.Center, UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), ChildLayout.None);
   }
+  */
 
   /**
    * @see #createRootNode(UnitValue, UnitValue, ChildLayout)
@@ -314,9 +304,11 @@ public class Nifty {
    * in the new rootNode)
    * @return a new NiftyNode
    */
+  /* FIXME
   public NiftyNode createRootNodeFullscreen(final ChildLayout childLayout) {
     return createRootNode(ChildLayout.Center, UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), childLayout);
   }
+  */
 
   /**
    * Create a new NiftyImage.
@@ -368,7 +360,7 @@ public class Nifty {
   public String getSceneInfoLog(final String filter) {
     StringBuilder result = new StringBuilder("Nifty scene info log\n");
     for (int i=0; i<rootNodes.size(); i++) {
-      rootNodes.get(i).getStateInfo(result, filter);
+      // FIXME rootNodes.get(i).getStateInfo(result, filter);
     }
     return result.toString();
   }
@@ -431,21 +423,7 @@ public class Nifty {
     return eventBus;
   }
 
-  NiftyStyleClassInfo getStyleClassInfo(final Class<?> controlClass) throws Exception {
-    return styleClassInfoCache.getNiftyStyleClass(this, controlClass);
-  }
-
   // Internal methods
-
-  private NiftyNode createRootNode(final ChildLayout rootNodePlacementLayout) {
-    NiftyNode rootNodeInternal = createRootNodeInternal(rootNodePlacementLayout);
-    rootNodes.add(rootNodeInternal);
-    return rootNodeInternal;
-  }
-
-  private NiftyNode createRootNodeInternal(final ChildLayout rootNodePlacementLayout) {
-    return NiftyNode.newInstance(InternalNiftyNode.newRootNode(this, rootNodePlacementLayout));
-  }
 
   static {
     NiftyAccessor.DEFAULT = new InternalNiftyAccessorImpl();

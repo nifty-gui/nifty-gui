@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillNotClose;
 
-import de.lessvoid.nifty.api.NiftyResourceLocation;
+import de.lessvoid.nifty.internal.NiftyResourceLocation;
 
 /**
  * A resource location that searches the classpath
