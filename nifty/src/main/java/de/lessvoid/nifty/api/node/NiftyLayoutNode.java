@@ -42,6 +42,14 @@ import javax.annotation.Nullable;
  */
 public interface NiftyLayoutNode extends NiftyNode {
   /**
+   * Activate the LayoutNode by supplying the required instance of Nifty-Layout. This has to be done before the
+   * node is subject to the layout run for the first time.
+   *
+   * @param layout the instance of Nifty-Layout that handles the layout for this node.
+   */
+  void activate(@Nonnull NiftyLayout layout);
+
+  /**
    * Check if the measure of this node is valid.
    * <p />
    * The return value of this function is only reliable during the layout phase.
@@ -108,6 +116,7 @@ public interface NiftyLayoutNode extends NiftyNode {
    * @param availableSize the size available that is offered by the outer element. One or two dimensions of the
    *                      size may be infinite
    * @return the size measured that is required by this node.
+   * @throws IllegalStateException in case the layout node is not yet activated.
    */
   @Nonnull
   Size measure(@Nonnull Size availableSize);
@@ -116,6 +125,7 @@ public interface NiftyLayoutNode extends NiftyNode {
    * Arrange this component and it's children inside specified area.
    *
    * @param area this component and it's children should fill
+   * @throws IllegalStateException in case the layout node is not yet activated.
    */
   void arrange(@Nonnull Rect area);
 }

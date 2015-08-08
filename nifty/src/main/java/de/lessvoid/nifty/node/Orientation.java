@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.api;
+package de.lessvoid.nifty.node;
 
 /**
  * Enums for horizontal and vertical orientation.
