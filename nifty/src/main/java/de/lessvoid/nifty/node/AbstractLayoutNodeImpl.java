@@ -24,13 +24,25 @@ abstract class AbstractLayoutNodeImpl implements NiftyLayoutNode {
   protected AbstractLayoutNodeImpl() {}
 
   @Override
-  public void activate(@Nonnull final NiftyLayout layout) {
+  public void onAttach(@Nonnull final NiftyLayout layout) {
     if (this.layout != null) {
       throw new IllegalStateException("This node was already activated.");
     }
     this.layout = layout;
     invalidateMeasure();
     invalidateArrange();
+  }
+
+  public void onDetach(@Nonnull final NiftyLayout layout) {
+    if (this.layout == null) {
+      throw new IllegalStateException("This node was never attached.");
+    }
+    if (this.layout != layout) {
+      throw new IllegalArgumentException("The node is attached, but it seems it is handled by a different instance of" +
+          " the layout system.");
+    }
+    layout.reportRemoval(this);
+    this.layout = null;
   }
 
   @Override
