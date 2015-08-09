@@ -24,58 +24,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.node;
-
-import org.junit.Test;
-
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-import static org.junit.Assert.*;
+package de.lessvoid.nifty.api.node;
 
 /**
- * Created by void on 23.07.15.
+ * Created by void on 09.08.15.
  */
-public class NiftyTreeNodeDepthFirstIteratorTest {
-
-  @Test
-  public void testIterateRoot() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    Iterator<NiftyTreeNode<String>> it = createIterator(root);
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next().getValue());
-
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
-    }
-  }
-
-  @Test
-  public void testIterateOneChild() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    NiftyTreeNode<String> child = new NiftyTreeNode<>("child");
-    root.addChild(child);
-
-    Iterator<NiftyTreeNode<String>> it = createIterator(root);
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next().getValue());
-
-    assertTrue(it.hasNext());
-    assertEquals("child", it.next().getValue());
-
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
-    }
-  }
-
-  private Iterator<NiftyTreeNode<String>> createIterator(final NiftyTreeNode<String> root) {
-    return new NiftyTreeNodeDepthFirstIterator<>(root);
-  }
-
+public class NiftyContent implements NiftyNode {
 }

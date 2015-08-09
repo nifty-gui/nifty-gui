@@ -27,38 +27,51 @@
 package de.lessvoid.nifty.api;
 
 import de.lessvoid.nifty.api.node.NiftyNode;
-import de.lessvoid.nifty.spi.NiftyNodeImpl;
 
-public class NiftyNodeString implements NiftyNode {
-  private final String value;
+/**
+ * A fluent API to help building the NiftyNode structure.
+ *
+ * Created by void on 09.08.15.
+ */
+public class NiftyNodeBuilder {
+  private final Nifty nifty;
+  private final NiftyNode child;
 
-  public NiftyNodeString(final String value) {
-    this.value = value;
+  /**
+   * Nifty will return this instance for you. You're not supposed to construct it yourself.
+   * @param nifty the Nifty instance
+   * @param child the child node just added
+   */
+  NiftyNodeBuilder(final Nifty nifty, final NiftyNode child) {
+    this.nifty = nifty;
+    this.child = child;
   }
 
-  public NiftyNodeImpl getImpl() {
-    return null;
+  /**
+   * Add a new top level child node to the root node.
+   * @param child the new child to add
+   * @return this containing the new child node
+   */
+  public NiftyNodeBuilder addNode(final NiftyNode child) {
+    return nifty.addNode(child);
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    NiftyNodeString niftyNodeString = (NiftyNodeString) o;
-    return !(value != null ? !value.equals(niftyNodeString.value) : niftyNodeString.value != null);
+  /**
+   * Add a new child node to the parent node given.
+   * @param parent the parent to add the child node to
+   * @param child the child node to add
+   * @return this containing the new child node
+   */
+  public NiftyNodeBuilder addNode(final NiftyNode parent, final NiftyNode child) {
+    return nifty.addNode(parent, child);
   }
 
-  @Override
-  public int hashCode() {
-    return value != null ? value.hashCode() : 0;
-  }
-
-  @Override
-  public String toString() {
-    return value;
-  }
-
-  public static NiftyNodeString niftyNodeString(final String value) {
-    return new NiftyNodeString(value);
+  /**
+   * Add a new child node as a child to this node.
+   * @param child the new child node
+   * @return this containing the new child node
+   */
+  public NiftyNodeBuilder addChildNode(final NiftyNode child) {
+    return nifty.addNode(this.child, child);
   }
 }
