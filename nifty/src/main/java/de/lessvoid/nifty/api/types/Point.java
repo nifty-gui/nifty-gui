@@ -44,8 +44,9 @@ public final class Point {
    * @throws IllegalArgumentException Thrown in case {@code x} or {@code y} aren't finite values.
    */
   public Point(final float x, final float y) {
-    if (!Float.isFinite(x)) throw new IllegalArgumentException("x is expected to be a finite value.");
-    if (!Float.isFinite(y)) throw new IllegalArgumentException("y is expected to be a finite value.");
+    // @mkaring: Float.isFinite is Java 8 which, unfortunately we can't support yet - how to replace that?
+    //if (!Float.isFinite(x)) throw new IllegalArgumentException("x is expected to be a finite value.");
+    //if (!Float.isFinite(y)) throw new IllegalArgumentException("y is expected to be a finite value.");
 
     this.x = x;
     this.y = y;
