@@ -43,10 +43,10 @@ public final class StackLayoutNode {
   }
 
   public void attachNode(@Nonnull final NiftyNodeBuilder builder) {
-    builder.addChildNode(implementation);
+    builder.childNode(implementation);
   }
 
   public void attachNode(@Nonnull final Nifty nifty, @Nonnull NiftyNode parentNode) {
-    nifty.addNode(parentNode, implementation);
+    nifty.node(parentNode, implementation);
   }
 }

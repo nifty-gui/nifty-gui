@@ -26,18 +26,13 @@
  */
 package de.lessvoid.nifty.internal.style.specialparser;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-
-import org.junit.Test;
-
-import self.philbrown.cssparser.Token;
-import self.philbrown.cssparser.TokenSequence;
 import de.lessvoid.nifty.internal.style.specialparser.LinearGradientParser.ColorStop;
 import de.lessvoid.nifty.internal.style.specialparser.LinearGradientParser.Result;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class LinearGradientParserTest {
   private final LinearGradientParser parser = new LinearGradientParser();
@@ -139,7 +134,7 @@ public class LinearGradientParserTest {
 
   @Test
   public void testStartsWithAngleGrad() throws Exception {
-    execTest("linear-gradient(10grad, red);", 10, new ColorStop("red"));
+    execTest("linear-gradient(10grad, red);", 9, new ColorStop("red"));
   }
 
   @Test
@@ -164,7 +159,7 @@ public class LinearGradientParserTest {
 
   @Test
   public void testStartsWithAngleGradUpperCase() throws Exception {
-    execTest("linear-gradient(10GRAD, red);", 10, new ColorStop("red"));
+    execTest("linear-gradient(10GRAD, red);", 9, new ColorStop("red"));
   }
 
   @Test
@@ -184,12 +179,12 @@ public class LinearGradientParserTest {
 
   @Test
   public void testWithLeftTop() throws Exception {
-    execTest("linear-gradient(to left top, red);", 325, new ColorStop("red"));
+    execTest("linear-gradient(to left top, red);", 315, new ColorStop("red"));
   }
 
   @Test
   public void testWithTopLeft() throws Exception {
-    execTest("linear-gradient(to top left, red);", 325, new ColorStop("red"));
+    execTest("linear-gradient(to top left, red);", 315, new ColorStop("red"));
   }
 
   @Test
@@ -209,7 +204,7 @@ public class LinearGradientParserTest {
 
   @Test
   public void testWithRightTop() throws Exception {
-    execTest("linear-gradient(to right top, red);", 10, new ColorStop("red"));
+    execTest("linear-gradient(to right top, red);", 45, new ColorStop("red"));
   }
 
   @Test
@@ -224,7 +219,7 @@ public class LinearGradientParserTest {
 
   @Test
   public void testWithTopRight() throws Exception {
-    execTest("linear-gradient(to top right, red);", 10, new ColorStop("red"));
+    execTest("linear-gradient(to top right, red);", 45, new ColorStop("red"));
   }
 
   private void execTest(final String string, final double expectedAngle, final ColorStop ... stops) throws Exception {
