@@ -28,6 +28,7 @@
 package de.lessvoid.nifty.api.types;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 /**
@@ -59,6 +60,27 @@ public final class Rect {
   @Nonnull
   public Size getSize() {
     return size;
+  }
+
+  @Override
+  public boolean equals(@Nullable final Object other) {
+    return (other instanceof Rect) && equals((Rect) other);
+  }
+
+  public boolean equals(@Nullable final Rect other) {
+    return (other != null) && size.equals(other.size) && origin.equals(other.origin);
+  }
+
+  public boolean equals(@Nullable final Rect other, final float tolerance) {
+    return (other != null) && size.equals(other.size, tolerance) && origin.equals(other.origin, tolerance);
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 31;
+    hash = hash * 27 + size.hashCode();
+    hash = hash * 27 + origin.hashCode();
+    return hash;
   }
 
   @Nonnull

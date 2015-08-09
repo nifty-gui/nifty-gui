@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-abstract class AbstractLayoutNode implements NiftyLayoutNode {
+abstract class AbstractLayoutNodeImpl implements NiftyLayoutNode {
   @Nullable
   private NiftyLayout layout;
   private boolean measureValid;
@@ -21,7 +21,7 @@ abstract class AbstractLayoutNode implements NiftyLayoutNode {
   @Nullable
   private Rect arrangeRect;
 
-  protected AbstractLayoutNode() {}
+  protected AbstractLayoutNodeImpl() {}
 
   @Override
   public void activate(@Nonnull final NiftyLayout layout) {
@@ -97,6 +97,9 @@ abstract class AbstractLayoutNode implements NiftyLayoutNode {
 
   @Nonnull
   protected final NiftyLayout getLayout() {
+    if (layout == null) {
+      throw new IllegalStateException("The layout node is not activated yet.");
+    }
     return layout;
   }
 }

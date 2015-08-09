@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-final class StackLayoutNodeImpl extends AbstractLayoutNode {
+final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl {
   @Nonnull
   private Orientation orientation;
   private boolean stretchLast;
@@ -86,7 +86,7 @@ final class StackLayoutNodeImpl extends AbstractLayoutNode {
         remainingSize = new Size(remainingSize.getWidth() - arrangedSize.getWidth(), remainingSize.getHeight());
         nextOrigin = new Point(currentOrigin.getX() + arrangedSize.getWidth(), currentOrigin.getY());
       } else {
-        arrangedSize = new Size(remainingSize.getWidth(), Math.min(remainingSize.getHeight(), childSize.getWidth()));
+        arrangedSize = new Size(remainingSize.getWidth(), Math.min(remainingSize.getHeight(), childSize.getHeight()));
         remainingSize = new Size(remainingSize.getWidth(), remainingSize.getHeight() - arrangedSize.getHeight());
         nextOrigin = new Point(currentOrigin.getX(), currentOrigin.getY() + arrangedSize.getHeight());
       }

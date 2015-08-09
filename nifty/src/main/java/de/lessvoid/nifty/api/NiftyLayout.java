@@ -44,7 +44,7 @@ import java.util.logging.Logger;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class NiftyLayout {
+public class NiftyLayout {
   @Nonnull
   private final static Logger logger = Logger.getLogger(NiftyLayout.class.getName());
 

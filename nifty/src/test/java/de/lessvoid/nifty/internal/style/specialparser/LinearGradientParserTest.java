@@ -234,7 +234,7 @@ public class LinearGradientParserTest {
   }
 
   private void assertAngle(final double expectedAngle, final Result result) {
-    assertEquals(toRad(expectedAngle), result.getAngleInRadiants());
+    assertEquals(toRad(expectedAngle), result.getAngleInRadiants(), 0.0001);
   }
 
   private void assertStops(final ColorStop[] expectedStops, List<ColorStop> actualStops) {

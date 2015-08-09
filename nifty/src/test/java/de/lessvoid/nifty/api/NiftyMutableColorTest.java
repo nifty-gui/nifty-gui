@@ -54,7 +54,7 @@ public class NiftyMutableColorTest {
 
   @Test
   public void testMultiply() {
-    assertColor(0.25f, 0.f, 0.f, 0.25f, color.mutiply(0.25f));
+    assertColor(0.f, 0.f, 0.f, 0.f, color.mutiply(0.25f));
   }
 
 }

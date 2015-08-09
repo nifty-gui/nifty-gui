@@ -1,10 +1,6 @@
 package de.lessvoid.nifty.internal.canvas.path;
 
-import static org.easymock.EasyMock.capture;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 import org.easymock.Capture;
@@ -54,7 +50,7 @@ public class PathRendererArcStrokeTest {
 
   @Test
   public void testStrokeSingleArc() {
-    Capture<ArcParameters> capture = new Capture<ArcParameters>();
+    Capture<ArcParameters> capture = newCapture();
 
     batchManager.addArc(eq(100.), eq(75.), eq(transform), capture(capture));
     replay(batchManager);
@@ -68,7 +64,7 @@ public class PathRendererArcStrokeTest {
 
   @Test
   public void testStrokeConnectedArcs() {
-    Capture<ArcParameters> capture = new Capture<ArcParameters>();
+    Capture<ArcParameters> capture = newCapture();
 
     batchManager.addArc(eq(100.), eq(100.), eq(transform), capture(capture));
     batchManager.addFirstLineVertex(eq(150.f), eq(100.f), eq(transform), eq(lineParameters));
@@ -86,7 +82,7 @@ public class PathRendererArcStrokeTest {
 
   @Test
   public void testStrokeWithClosePath() {
-    Capture<ArcParameters> capture = new Capture<ArcParameters>();
+    Capture<ArcParameters> capture = newCapture();
 
     batchManager.addArc(eq(100.), eq(75.), eq(transform), capture(capture));
     batchManager.addFirstLineVertex(50.f, 75.f, transform, lineParameters);
@@ -107,8 +103,8 @@ public class PathRendererArcStrokeTest {
       final float endAngle,
       final float radius) {
     assertEquals(lineParameters, arcParameters.getLineParameters());
-    assertEquals(startAngle, arcParameters.getStartAngle());
-    assertEquals(endAngle, arcParameters.getEndAngle());
-    assertEquals(radius, arcParameters.getRadius());
+    assertEquals(startAngle, arcParameters.getStartAngle(), 0.01);
+    assertEquals(endAngle, arcParameters.getEndAngle(), 0.01);
+    assertEquals(radius, arcParameters.getRadius(), 0.001);
   }
 }
