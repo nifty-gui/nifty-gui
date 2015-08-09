@@ -52,8 +52,8 @@ public class NiftyNodeBuilder {
    * @param child the new child to add
    * @return this containing the new child node
    */
-  public NiftyNodeBuilder addNode(final NiftyNode child) {
-    return nifty.addNode(child);
+  public NiftyNodeBuilder node(final NiftyNode child) {
+    return nifty.node(child);
   }
 
   /**
@@ -62,8 +62,8 @@ public class NiftyNodeBuilder {
    * @param child the child node to add
    * @return this containing the new child node
    */
-  public NiftyNodeBuilder addNode(final NiftyNode parent, final NiftyNode child) {
-    return nifty.addNode(parent, child);
+  public NiftyNodeBuilder node(final NiftyNode parent, final NiftyNode child) {
+    return nifty.node(parent, child);
   }
 
   /**
@@ -71,7 +71,7 @@ public class NiftyNodeBuilder {
    * @param child the new child node
    * @return this containing the new child node
    */
-  public NiftyNodeBuilder addChildNode(final NiftyNode child) {
-    return nifty.addNode(this.child, child);
+  public NiftyNodeBuilder childNode(final NiftyNode child) {
+    return nifty.node(this.child, child);
   }
 }
