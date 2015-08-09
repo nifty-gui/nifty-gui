@@ -27,9 +27,10 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.node.NiftyBackgroundColor;
-import de.lessvoid.nifty.api.node.NiftyContent;
 import de.lessvoid.nifty.api.types.NiftyColor;
+
+import static de.lessvoid.nifty.api.node.NiftyBackgroundColor.backgroundColorNode;
+import static de.lessvoid.nifty.api.node.NiftyContent.niftyContentNode;
 
 /**
  * Fill the whole screen with red using a background color and a content node.
@@ -39,8 +40,8 @@ public class UseCase_a01_FullScreenColorNode {
 
   public UseCase_a01_FullScreenColorNode(final Nifty nifty) {
     nifty
-        .addNode(new NiftyBackgroundColor(NiftyColor.red()))
-          .addChildNode(new NiftyContent());
+        .node(backgroundColorNode(NiftyColor.red()))
+          .childNode(niftyContentNode());
   }
 
   public static void main(final String[] args) throws Exception {

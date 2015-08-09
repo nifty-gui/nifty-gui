@@ -423,7 +423,7 @@ public class Nifty {
    * @param child the child to add as well
    * @return this
    */
-  public NiftyNodeBuilder addNode(final NiftyNode child) {
+  public NiftyNodeBuilder node(final NiftyNode child) {
     tree.addChild(tree.getRootNode(), child);
     return new NiftyNodeBuilder(this, child);
   }
@@ -435,7 +435,7 @@ public class Nifty {
    * @param child the child NiftyNode to add to the parent
    * @return this
    */
-  public NiftyNodeBuilder addNode(final NiftyNode parent, final NiftyNode child) {
+  public NiftyNodeBuilder node(final NiftyNode parent, final NiftyNode child) {
     tree.addChild(parent, child);
     return new NiftyNodeBuilder(this, child);
   }

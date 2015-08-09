@@ -30,4 +30,7 @@ package de.lessvoid.nifty.api.node;
  * Created by void on 09.08.15.
  */
 public class NiftyContent implements NiftyNode {
+  public static NiftyContent niftyContentNode() {
+    return new NiftyContent();
+  }
 }

@@ -34,6 +34,10 @@ import de.lessvoid.nifty.api.types.NiftyColor;
 public class NiftyBackgroundColor implements NiftyNode {
   private NiftyColor backgroundColor;
 
+  public static NiftyBackgroundColor backgroundColorNode(final NiftyColor backgroundColor) {
+    return new NiftyBackgroundColor(backgroundColor);
+  }
+
   public NiftyBackgroundColor(final NiftyColor backgroundColor) {
     this.backgroundColor = backgroundColor;
   }

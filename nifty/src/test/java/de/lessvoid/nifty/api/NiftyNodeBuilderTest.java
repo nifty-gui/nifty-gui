@@ -54,10 +54,10 @@ public class NiftyNodeBuilderTest {
     replay(parent);
     replay(child);
 
-    expect(nifty.addNode(child)).andReturn(builder);
+    expect(nifty.node(child)).andReturn(builder);
     replay(nifty);
 
-    assertEquals(builder, builder.addNode(child));
+    assertEquals(builder, builder.node(child));
   }
 
   @Test
@@ -65,10 +65,10 @@ public class NiftyNodeBuilderTest {
     replay(parent);
     replay(child);
 
-    expect(nifty.addNode(parent, child)).andReturn(builder);
+    expect(nifty.node(parent, child)).andReturn(builder);
     replay(nifty);
 
-    assertEquals(builder, builder.addNode(parent, child));
+    assertEquals(builder, builder.node(parent, child));
   }
 
   @Test
@@ -76,9 +76,9 @@ public class NiftyNodeBuilderTest {
     replay(parent);
     replay(child);
 
-    expect(nifty.addNode(parent, child)).andReturn(builder);
+    expect(nifty.node(parent, child)).andReturn(builder);
     replay(nifty);
 
-    assertEquals(builder, builder.addChildNode(child));
+    assertEquals(builder, builder.childNode(child));
   }
 }

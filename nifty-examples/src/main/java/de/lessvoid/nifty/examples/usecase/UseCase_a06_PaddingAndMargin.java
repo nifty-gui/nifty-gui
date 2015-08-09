@@ -55,10 +55,10 @@ public class UseCase_a06_PaddingAndMargin {
 
     row.newChildNode(UnitValue.px(10), UnitValue.px(10));
 
-    addNode(row, NiftyColor.yellow(), "paddingTop = 25").setPaddingTop(UnitValue.px(25));
-    addNode(row, NiftyColor.red(), "paddingRight = 25").setPaddingRight(UnitValue.px(25));
-    addNode(row, NiftyColor.blue(), "paddingBottom = 25").setPaddingBottom(UnitValue.px(25));
-    addNode(row, NiftyColor.lime(), "paddingLeft = 25").setPaddingLeft(UnitValue.px(25));
+    node(row, NiftyColor.yellow(), "paddingTop = 25").setPaddingTop(UnitValue.px(25));
+    node(row, NiftyColor.red(), "paddingRight = 25").setPaddingRight(UnitValue.px(25));
+    node(row, NiftyColor.blue(), "paddingBottom = 25").setPaddingBottom(UnitValue.px(25));
+    node(row, NiftyColor.lime(), "paddingLeft = 25").setPaddingLeft(UnitValue.px(25));
 
     niftyNode.newChildNode(UnitValue.percent(100), UnitValue.px(10)).setBackgroundColor(NiftyColor.gray());
   }
@@ -67,10 +67,10 @@ public class UseCase_a06_PaddingAndMargin {
     final NiftyNode row = addRow(niftyNode, NiftyColor.gray());
     row.newChildNode(UnitValue.px(10), UnitValue.px(10));
 
-    addNode(row, NiftyColor.yellow(), "padding = 10").setPadding(UnitValue.px(10));
-    addNode(row, NiftyColor.red(), "padding = 10 20").setPadding(UnitValue.px(10), UnitValue.px(20));
-    addNode(row, NiftyColor.blue(), "padding = 10 20 30").setPadding(UnitValue.px(10), UnitValue.px(20), UnitValue.px(30));
-    addNode(row, NiftyColor.lime(), "padding = 10 20 30 40").setPadding(UnitValue.px(10), UnitValue.px(20), UnitValue.px(30), UnitValue.px(40));
+    node(row, NiftyColor.yellow(), "padding = 10").setPadding(UnitValue.px(10));
+    node(row, NiftyColor.red(), "padding = 10 20").setPadding(UnitValue.px(10), UnitValue.px(20));
+    node(row, NiftyColor.blue(), "padding = 10 20 30").setPadding(UnitValue.px(10), UnitValue.px(20), UnitValue.px(30));
+    node(row, NiftyColor.lime(), "padding = 10 20 30 40").setPadding(UnitValue.px(10), UnitValue.px(20), UnitValue.px(30), UnitValue.px(40));
 
     niftyNode.newChildNode(UnitValue.percent(100), UnitValue.px(10)).setBackgroundColor(NiftyColor.gray());
   }
@@ -79,20 +79,20 @@ public class UseCase_a06_PaddingAndMargin {
     final NiftyNode row = addRow(niftyNode, NiftyColor.black());
     row.newChildNode(UnitValue.px(10), UnitValue.px(10));
 
-    addNode(row, NiftyColor.yellow(), "marginTop = 25").setMarginTop(UnitValue.px(25));
-    addNode(row, NiftyColor.red(), "marginRight = 25").setMarginRight(UnitValue.px(25));
-    addNode(row, NiftyColor.blue(), "marginBottom = 25").setMarginBottom(UnitValue.px(25));
-    addNode(row, NiftyColor.lime(), "marginLeft = 25").setMarginLeft(UnitValue.px(25));
+    node(row, NiftyColor.yellow(), "marginTop = 25").setMarginTop(UnitValue.px(25));
+    node(row, NiftyColor.red(), "marginRight = 25").setMarginRight(UnitValue.px(25));
+    node(row, NiftyColor.blue(), "marginBottom = 25").setMarginBottom(UnitValue.px(25));
+    node(row, NiftyColor.lime(), "marginLeft = 25").setMarginLeft(UnitValue.px(25));
   }
 
   private void secondRowMarginExamples(final NiftyNode niftyNode) {
     final NiftyNode row = addRow(niftyNode, NiftyColor.gray());
     row.newChildNode(UnitValue.px(10), UnitValue.px(10));
 
-    addNode(row, NiftyColor.yellow(), "marginTop = 10").setMargin(UnitValue.px(10));
-    addNode(row, NiftyColor.red(), "marginRight = 10 20").setMargin(UnitValue.px(10), UnitValue.px(20));
-    addNode(row, NiftyColor.blue(), "marginBottom = 10 20 30").setMargin(UnitValue.px(10), UnitValue.px(20), UnitValue.px(30));
-    addNode(row, NiftyColor.lime(), "marginLeft = 10 20 30 40").setMargin(UnitValue.px(10), UnitValue.px(20), UnitValue.px(30), UnitValue.px(40));
+    node(row, NiftyColor.yellow(), "marginTop = 10").setMargin(UnitValue.px(10));
+    node(row, NiftyColor.red(), "marginRight = 10 20").setMargin(UnitValue.px(10), UnitValue.px(20));
+    node(row, NiftyColor.blue(), "marginBottom = 10 20 30").setMargin(UnitValue.px(10), UnitValue.px(20), UnitValue.px(30));
+    node(row, NiftyColor.lime(), "marginLeft = 10 20 30 40").setMargin(UnitValue.px(10), UnitValue.px(20), UnitValue.px(30), UnitValue.px(40));
   }
 
   private NiftyNode addRow(final NiftyNode niftyNode, final NiftyColor color) {
@@ -102,7 +102,7 @@ public class UseCase_a06_PaddingAndMargin {
     return row;
   }
 
-  private NiftyNode addNode(final NiftyNode niftyNode, final NiftyColor color, final String description) {
+  private NiftyNode node(final NiftyNode niftyNode, final NiftyColor color, final String description) {
     NiftyNode node = niftyNode.newChildNode(UnitValue.px(200), UnitValue.px(100), ChildLayout.Center);
     node.setBackgroundColor(color);
 
