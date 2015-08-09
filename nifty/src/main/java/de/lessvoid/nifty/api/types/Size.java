@@ -93,6 +93,7 @@ public final class Size {
         (Math.abs(height - other.height) <= tolerance);
   }
 
+  @Override
   public int hashCode() {
     int hash = 31;
     hash = hash * 27 + Float.floatToIntBits(width);

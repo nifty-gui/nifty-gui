@@ -1,6 +1,5 @@
-package de.lessvoid.nifty.api.node.layout;
+package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.api.NiftyLayout;
 import de.lessvoid.nifty.api.node.NiftyNode;
 import de.lessvoid.nifty.api.types.Point;
 import de.lessvoid.nifty.api.types.Rect;
@@ -17,13 +16,12 @@ import java.util.Collection;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class UniformStackLayoutNode extends AbstractLayoutNode {
+final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl {
   @Nonnull
   private Orientation orientation;
 
-  public UniformStackLayoutNode(@Nonnull final NiftyLayout layout) {
-    super(layout);
-    orientation = Orientation.Vertical;
+  public UniformStackLayoutNodeImpl(@Nonnull final Orientation orientation) {
+    this.orientation = orientation;
   }
 
   @Override

@@ -31,18 +31,20 @@ import de.lessvoid.nifty.api.types.NiftyColor;
 import de.lessvoid.nifty.api.types.NiftyMutableColor;
 
 public class AssertColor {
+  private static final float DELTA = 1.f / 255.f;
+
   public static void assertColor(final double r, final double g, final double b, final double a, final NiftyColor c) {
-    assertEquals(r, c.getRed());
-    assertEquals(g, c.getGreen());
-    assertEquals(b, c.getBlue());
-    assertEquals(a, c.getAlpha());
+    assertEquals(r, c.getRed(), DELTA);
+    assertEquals(g, c.getGreen(), DELTA);
+    assertEquals(b, c.getBlue(), DELTA);
+    assertEquals(a, c.getAlpha(), DELTA);
   }
 
   public static void assertColor(final double r, final double g, final double b, final double a, final NiftyMutableColor c) {
-    assertEquals(r, c.getRed());
-    assertEquals(g, c.getGreen());
-    assertEquals(b, c.getBlue());
-    assertEquals(a, c.getAlpha());
+    assertEquals(r, c.getRed(), DELTA);
+    assertEquals(g, c.getGreen(), DELTA);
+    assertEquals(b, c.getBlue(), DELTA);
+    assertEquals(a, c.getAlpha(), DELTA);
   }
 
   public static void assertColor(final String expected, final NiftyColor c) {

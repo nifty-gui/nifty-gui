@@ -38,7 +38,7 @@ public class NiftyColorStopTest {
   @Test
   public void testCreate() {
     NiftyColorStop stop = new NiftyColorStop(1.0, NiftyColor.blue());
-    assertEquals(1.0, stop.getStop());
+    assertEquals(1.0, stop.getStop(), 1.f / 255.f);
     assertEquals("#0000ffff {0.0, 0.0, 1.0, 1.0}", stop.getColor().toString());
   }
 

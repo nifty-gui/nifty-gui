@@ -1,4 +1,4 @@
-package de.lessvoid.nifty.api.node.layout;
+package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.api.NiftyLayout;
 import de.lessvoid.nifty.api.node.NiftyLayoutNode;
@@ -11,9 +11,9 @@ import javax.annotation.Nullable;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public abstract class AbstractLayoutNode implements NiftyLayoutNode {
-  @Nonnull
-  private final NiftyLayout layout;
+abstract class AbstractLayoutNodeImpl implements NiftyLayoutNode {
+  @Nullable
+  private NiftyLayout layout;
   private boolean measureValid;
   private boolean arrangeValid;
   @Nullable
@@ -21,8 +21,16 @@ public abstract class AbstractLayoutNode implements NiftyLayoutNode {
   @Nullable
   private Rect arrangeRect;
 
-  public AbstractLayoutNode(@Nonnull final NiftyLayout layout) {
+  protected AbstractLayoutNodeImpl() {}
+
+  @Override
+  public void activate(@Nonnull final NiftyLayout layout) {
+    if (this.layout != null) {
+      throw new IllegalStateException("This node was already activated.");
+    }
     this.layout = layout;
+    invalidateMeasure();
+    invalidateArrange();
   }
 
   @Override
@@ -37,7 +45,7 @@ public abstract class AbstractLayoutNode implements NiftyLayoutNode {
 
   @Override
   public void invalidateMeasure() {
-    if (isMeasureValid()) {
+    if ((layout != null) && isMeasureValid()) {
       measureValid = false;
       layout.reportMeasureInvalid(this);
     }
@@ -45,7 +53,7 @@ public abstract class AbstractLayoutNode implements NiftyLayoutNode {
 
   @Override
   public void invalidateArrange() {
-    if (isArrangeValid()) {
+    if ((layout != null) && isArrangeValid()) {
       arrangeValid = false;
       layout.reportArrangeInvalid(this);
     }
@@ -89,6 +97,9 @@ public abstract class AbstractLayoutNode implements NiftyLayoutNode {
 
   @Nonnull
   protected final NiftyLayout getLayout() {
+    if (layout == null) {
+      throw new IllegalStateException("The layout node is not activated yet.");
+    }
     return layout;
   }
 }

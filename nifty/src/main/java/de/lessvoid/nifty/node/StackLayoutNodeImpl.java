@@ -1,6 +1,5 @@
-package de.lessvoid.nifty.api.node.layout;
+package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.api.NiftyLayout;
 import de.lessvoid.nifty.api.node.NiftyNode;
 import de.lessvoid.nifty.api.types.Point;
 import de.lessvoid.nifty.api.types.Rect;
@@ -17,14 +16,14 @@ import java.util.List;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class StackLayoutNode extends AbstractLayoutNode {
+final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl {
   @Nonnull
   private Orientation orientation;
   private boolean stretchLast;
 
-  public StackLayoutNode(@Nonnull final NiftyLayout layout) {
-    super(layout);
-    orientation = Orientation.Vertical;
+  public StackLayoutNodeImpl(@Nonnull final Orientation orientation, final boolean stretchLast) {
+    this.orientation = orientation;
+    this.stretchLast = stretchLast;
   }
 
   @Nonnull
@@ -87,7 +86,7 @@ public final class StackLayoutNode extends AbstractLayoutNode {
         remainingSize = new Size(remainingSize.getWidth() - arrangedSize.getWidth(), remainingSize.getHeight());
         nextOrigin = new Point(currentOrigin.getX() + arrangedSize.getWidth(), currentOrigin.getY());
       } else {
-        arrangedSize = new Size(remainingSize.getWidth(), Math.min(remainingSize.getHeight(), childSize.getWidth()));
+        arrangedSize = new Size(remainingSize.getWidth(), Math.min(remainingSize.getHeight(), childSize.getHeight()));
         remainingSize = new Size(remainingSize.getWidth(), remainingSize.getHeight() - arrangedSize.getHeight());
         nextOrigin = new Point(currentOrigin.getX(), currentOrigin.getY() + arrangedSize.getHeight());
       }

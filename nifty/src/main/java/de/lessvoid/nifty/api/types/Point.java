@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.api.types;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 /**
@@ -58,6 +59,31 @@ public final class Point {
 
   public float getY() {
     return y;
+  }
+
+  @Override
+  public boolean equals(@Nullable final Object other) {
+    return (other instanceof Point) && equals((Point) other);
+  }
+
+  public boolean equals(@Nullable final Point other) {
+    return (other != null) &&
+        (Float.floatToIntBits(x) == Float.floatToIntBits(other.x)) &&
+        (Float.floatToIntBits(y) == Float.floatToIntBits(other.y));
+  }
+
+  public boolean equals(@Nullable final Point other, final float tolerance) {
+    return (other != null) &&
+        (Math.abs(x - other.x) <= tolerance) &&
+        (Math.abs(y - other.y) <= tolerance);
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 31;
+    hash = hash * 27 + Float.floatToIntBits(x);
+    hash = hash * 27 + Float.floatToIntBits(y);
+    return hash;
   }
 
   @Nonnull

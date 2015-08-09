@@ -48,16 +48,16 @@ public class NiftyLinearGradientTest {
     source.setScale(2.);
 
     NiftyLinearGradient gradient = new NiftyLinearGradient(source);
-    assertEquals(Math.PI/2, gradient.getAngleInRadiants());
+    assertEquals(Math.PI/2, gradient.getAngleInRadiants(), 0.0001);
     assertColorStops(gradient.getColorStops(), new NiftyColorStop(0.0, NiftyColor.blue()));
     assertTrue(gradient.isFlip());
-    assertEquals(2., gradient.getScale());
+    assertEquals(2., gradient.getScale(), 0.0001);
   }
 
   @Test
   public void testPoints() {
     NiftyLinearGradient gradient = createNiftyLinearGradient();
-    assertEquals(Math.PI/2, gradient.getAngleInRadiants());
+    assertEquals(Math.PI/2, gradient.getAngleInRadiants(), 0.0001);
   }
 
   @Test
@@ -103,7 +103,7 @@ public class NiftyLinearGradientTest {
   public void testScale() {
     NiftyLinearGradient gradient = createNiftyLinearGradient();
     assertEquals(gradient, gradient.setScale(1.23));
-    assertEquals(1.23, gradient.getScale());
+    assertEquals(1.23, gradient.getScale(), 0.0001);
   }
 
   @Test

@@ -37,22 +37,22 @@ public class InternalColorStringParserTest {
 
   @Test
   public void testShortWithoutAlpha() {
-    assertColor(1.f, 0.f, 0.55f, 1.f, parser.fromString("#f08"));
+    assertColor(1.f, 0.f, 0x88 / 255.f, 1.f, parser.fromString("#f08"));
   }
 
   @Test
   public void testLongWithoutAlpha() {
-    assertColor(1.f, 0.f, 0.55f, 1.f, parser.fromString("#ff0088"));
+    assertColor(1.f, 0.f, 0x88 / 255.f, 1.f, parser.fromString("#ff0088"));
   }
 
   @Test
   public void testShort() {
-    assertColor(1.f, 0.f, 0.55f, 0.f, parser.fromString("#f080"));
+    assertColor(1.f, 0.f, 0x88 / 255.f, 0.f, parser.fromString("#f080"));
   }
 
   @Test
   public void testLong() {
-    assertColor(1.f, 0.f, 0.55f, 0.f, parser.fromString("#ff008800"));
+    assertColor(1.f, 0.f, 0x88 / 255.f, 0.f, parser.fromString("#ff008800"));
   }
 
   @Test
