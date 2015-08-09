@@ -89,7 +89,7 @@ public class StackLayoutNodeImplTest {
 
     testInstance.setOrientation(Orientation.Horizontal);
     testInstance.setStretchLast(false);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     assertEquals(new Size(30, 15), testInstance.measure(availableSize));
 
     testInstance.arrange(new Rect(new Point(0, 0), availableSize));
@@ -129,7 +129,7 @@ public class StackLayoutNodeImplTest {
 
     testInstance.setOrientation(Orientation.Horizontal);
     testInstance.setStretchLast(true);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     assertEquals(new Size(30, 15), testInstance.measure(availableSize));
 
     testInstance.arrange(new Rect(new Point(0, 0), availableSize));
@@ -168,7 +168,7 @@ public class StackLayoutNodeImplTest {
 
     testInstance.setOrientation(Orientation.Vertical);
     testInstance.setStretchLast(false);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     assertEquals(new Size(20, 20), testInstance.measure(availableSize));
 
     testInstance.arrange(new Rect(new Point(0, 0), availableSize));
@@ -208,7 +208,7 @@ public class StackLayoutNodeImplTest {
 
     testInstance.setOrientation(Orientation.Vertical);
     testInstance.setStretchLast(true);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     assertEquals(new Size(20, 20), testInstance.measure(availableSize));
 
     testInstance.arrange(new Rect(new Point(0, 0), availableSize));
@@ -222,7 +222,7 @@ public class StackLayoutNodeImplTest {
         .andReturn(Collections.<NiftyNode>emptyList())
         .anyTimes();
     replay(layout);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     assertEquals(Size.ZERO, testInstance.measure(Size.INFINITE));
     verify(layout);
   }
@@ -240,7 +240,7 @@ public class StackLayoutNodeImplTest {
         .andReturn(Collections.<NiftyNode>emptyList())
         .anyTimes();
     replay(layout);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     testInstance.arrange(new Rect(new Point(0, 0), new Size(10, 20)));
     verify(layout);
   }

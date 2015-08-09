@@ -82,6 +82,23 @@ public class NiftyLayout {
   }
 
   /**
+   * Report the removal of a specific node. This causes the parent node to require a recalculation.
+   *
+   * @param node the node that was removed
+   */
+  public void reportRemoval(@Nonnull final NiftyLayoutNode node) {
+    NiftyLayoutNode parentNode = nodeTree.getParent(NiftyLayoutNode.class, node);
+    if (parentNode != null) {
+      if (parentNode.isMeasureValid()) {
+        reportMeasureInvalid(parentNode);
+      }
+      if (parentNode.isArrangeValid()) {
+        reportArrangeInvalid(parentNode);
+      }
+    }
+  }
+
+  /**
    * Report the measure of the specific node as invalid. The layout master will mark the measure value of every parent
    * layout node as invalid during the next update of the layout.
    *

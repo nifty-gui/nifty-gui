@@ -75,7 +75,7 @@ public class UniformStackLayoutNodeImplTest {
     replay(layout, firstChildMock, secondChildMock);
 
     testInstance.setOrientation(Orientation.Horizontal);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     assertEquals(new Size(40, 15), testInstance.measure(availableSize));
 
     testInstance.arrange(new Rect(new Point(0, 0), availableSize));
@@ -113,7 +113,7 @@ public class UniformStackLayoutNodeImplTest {
     replay(layout, firstChildMock, secondChildMock);
 
     testInstance.setOrientation(Orientation.Horizontal);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     assertEquals(new Size(40, 15), testInstance.measure(availableSize));
 
     testInstance.arrange(new Rect(new Point(0, 0), new Size(100, 100)));
@@ -151,7 +151,7 @@ public class UniformStackLayoutNodeImplTest {
     replay(layout, firstChildMock, secondChildMock);
 
     testInstance.setOrientation(Orientation.Vertical);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     assertEquals(new Size(20, 30), testInstance.measure(availableSize));
 
     testInstance.arrange(new Rect(new Point(0, 0), availableSize));
@@ -189,7 +189,7 @@ public class UniformStackLayoutNodeImplTest {
     replay(layout, firstChildMock, secondChildMock);
 
     testInstance.setOrientation(Orientation.Vertical);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     assertEquals(new Size(20, 30), testInstance.measure(availableSize));
 
     testInstance.arrange(new Rect(new Point(0, 0), new Size(100, 100)));
@@ -203,7 +203,7 @@ public class UniformStackLayoutNodeImplTest {
         .andReturn(Collections.<NiftyNode>emptyList())
         .anyTimes();
     replay(layout);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     assertEquals(Size.ZERO, testInstance.measure(Size.INFINITE));
     verify(layout);
   }
@@ -221,7 +221,7 @@ public class UniformStackLayoutNodeImplTest {
         .andReturn(Collections.<NiftyNode>emptyList())
         .anyTimes();
     replay(layout);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     testInstance.arrange(new Rect(new Point(0, 0), new Size(10, 20)));
     verify(layout);
   }

@@ -35,25 +35,51 @@ public class AbstractLayoutNodeImplTest {
   }
 
   @Test
-  public void testActivate() throws Exception {
+  public void testAttach() throws Exception {
     EasyMock.replay(layout, testInstance);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     EasyMock.verify(layout, testInstance);
   }
 
   @Test(expected = IllegalStateException.class)
-  public void testActivateException() throws Exception {
+  public void testAttachException() throws Exception {
     EasyMock.replay(layout, testInstance);
-    testInstance.activate(layout);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
+    testInstance.onAttach(layout);
     EasyMock.verify(layout, testInstance);
+  }
+
+  @Test
+  public void testDetach() throws Exception {
+    layout.reportRemoval(testInstance);
+    EasyMock.expectLastCall();
+    EasyMock.replay(layout, testInstance);
+    testInstance.onAttach(layout);
+    testInstance.onDetach(layout);
+    EasyMock.verify(layout, testInstance);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testDetachException1() throws Exception {
+    EasyMock.replay(layout, testInstance);
+    testInstance.onDetach(layout);
+    EasyMock.verify(layout, testInstance);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testDetachException2() throws Exception {
+    NiftyLayout secondLayout = EasyMock.createMock(NiftyLayout.class);
+    EasyMock.replay(layout, secondLayout, testInstance);
+    testInstance.onAttach(layout);
+    testInstance.onDetach(secondLayout);
+    EasyMock.verify(layout, secondLayout, testInstance);
   }
 
   @Test
   public void testIsMeasureValid() throws Exception {
     assertFalse(testInstance.isMeasureValid());
     EasyMock.replay(layout, testInstance);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     EasyMock.verify(layout, testInstance);
     assertFalse(testInstance.isMeasureValid());
   }
@@ -62,7 +88,7 @@ public class AbstractLayoutNodeImplTest {
   public void testIsArrangeValid() throws Exception {
     assertFalse(testInstance.isArrangeValid());
     EasyMock.replay(layout, testInstance);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     EasyMock.verify(layout, testInstance);
     assertFalse(testInstance.isArrangeValid());
   }
@@ -76,7 +102,7 @@ public class AbstractLayoutNodeImplTest {
     EasyMock.replay(layout, testInstance);
 
     /* Execute Test */
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     testInstance.measure(Size.INFINITE);
 
     assertTrue(testInstance.isMeasureValid());
@@ -98,7 +124,7 @@ public class AbstractLayoutNodeImplTest {
     EasyMock.replay(layout, testInstance);
 
     /* Execute Test */
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     testInstance.measure(tempSize);
     testInstance.arrange(tempRect);
 
@@ -117,7 +143,7 @@ public class AbstractLayoutNodeImplTest {
     EasyMock.replay(layout, testInstance);
 
     /* Execute Test */
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     testInstance.measure(Size.INFINITE);
 
     assertTrue(testInstance.isMeasureValid());
@@ -136,7 +162,7 @@ public class AbstractLayoutNodeImplTest {
     EasyMock.replay(layout, testInstance);
 
     /* Execute Test */
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     testInstance.measure(tempSize);
     testInstance.arrange(tempRect);
 
@@ -156,7 +182,7 @@ public class AbstractLayoutNodeImplTest {
   @Test
   public void testGetLayout() throws Exception {
     EasyMock.replay(layout, testInstance);
-    testInstance.activate(layout);
+    testInstance.onAttach(layout);
     assertEquals(layout, testInstance.getLayout());
     EasyMock.verify(layout, testInstance);
   }

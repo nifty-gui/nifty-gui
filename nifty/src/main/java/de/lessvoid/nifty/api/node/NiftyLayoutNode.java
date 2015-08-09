@@ -42,12 +42,20 @@ import javax.annotation.Nullable;
  */
 public interface NiftyLayoutNode extends NiftyNode {
   /**
-   * Activate the LayoutNode by supplying the required instance of Nifty-Layout. This has to be done before the
-   * node is subject to the layout run for the first time.
+   * Called once the layout node is attached to the node tree. This function is required
+   * to inform the layout system about this node correctly.
    *
    * @param layout the instance of Nifty-Layout that handles the layout for this node.
    */
-  void activate(@Nonnull NiftyLayout layout);
+  void onAttach(@Nonnull NiftyLayout layout);
+
+  /**
+   * Called just before the layout node is detached to the node tree. This function is required
+   * to inform the layout system about this node correctly.
+   *
+   * @param layout the instance of Nifty-Layout that handles the layout for this node.
+   */
+  void onDetach(@Nonnull NiftyLayout layout);
 
   /**
    * Check if the measure of this node is valid.
