@@ -24,13 +24,24 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api.node;
+package de.lessvoid.nifty.internal.node;
+
+import de.lessvoid.nifty.api.node.NiftyContent;
+import de.lessvoid.nifty.spi.NiftyNodeImpl;
 
 /**
- * The public NiftyNode marker interface. Everything a Nifty scene graph stores is required
- * to implement NiftyNode.
- *
- * Created by void on 23.07.15.
+ * Created by void on 09.08.15.
  */
-public interface NiftyNode {
+public class NiftyContentImpl implements NiftyNodeImpl<NiftyContent> {
+  private NiftyContent niftyNode;
+
+  @Override
+  public void initialize(final NiftyContent niftyNode) {
+    this.niftyNode = niftyNode;
+  }
+
+  @Override
+  public NiftyContent getNiftyNode() {
+    return niftyNode;
+  }
 }

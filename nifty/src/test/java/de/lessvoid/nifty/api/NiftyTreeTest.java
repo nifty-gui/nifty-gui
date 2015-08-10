@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.api;
 
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.TimeProvider;

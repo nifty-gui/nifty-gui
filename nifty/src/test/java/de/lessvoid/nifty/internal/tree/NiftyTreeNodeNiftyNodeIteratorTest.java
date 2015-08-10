@@ -24,9 +24,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.node;
+package de.lessvoid.nifty.internal.tree;
 
-import de.lessvoid.nifty.spi.NiftyNodeImpl;
+import de.lessvoid.nifty.internal.tree.NiftyTreeNode;
+import de.lessvoid.nifty.internal.tree.NiftyTreeNodeDepthFirstIterator;
+import de.lessvoid.nifty.internal.tree.NiftyTreeNodeNiftyNodeIterator;
+import de.lessvoid.nifty.spi.NiftyNode;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -38,14 +41,14 @@ import static org.junit.Assert.*;
 /**
  * Created by void on 23.07.15.
  */
-public class NiftyTreeNodeNiftyNodeImplIteratorTest {
+public class NiftyTreeNodeNiftyNodeIteratorTest {
 
   @Test
   public void testIterateRoot() {
     NiftyTreeNode root = new NiftyTreeNode(niftyNodeStringImpl("root"));
-    Iterator<NiftyNodeImpl> it = createIterator(root);
+    Iterator<NiftyNode> it = createIterator(root);
     assertTrue(it.hasNext());
-    assertEquals("root", it.next().getNiftyNode().toString());
+    assertEquals("root", it.next().toString());
 
     assertFalse(it.hasNext());
     try {
@@ -61,12 +64,12 @@ public class NiftyTreeNodeNiftyNodeImplIteratorTest {
     NiftyTreeNode child = new NiftyTreeNode(niftyNodeStringImpl("child"));
     root.addChild(child);
 
-    Iterator<NiftyNodeImpl> it = createIterator(root);
+    Iterator<NiftyNode> it = createIterator(root);
     assertTrue(it.hasNext());
-    assertEquals("root", it.next().getNiftyNode().toString());
+    assertEquals("root", it.next().toString());
 
     assertTrue(it.hasNext());
-    assertEquals("child", it.next().getNiftyNode().toString());
+    assertEquals("child", it.next().toString());
 
     assertFalse(it.hasNext());
     try {
@@ -76,7 +79,7 @@ public class NiftyTreeNodeNiftyNodeImplIteratorTest {
     }
   }
 
-  private Iterator<NiftyNodeImpl> createIterator(final NiftyTreeNode root) {
-    return new NiftyTreeNodeNiftyNodeImplIterator(new NiftyTreeNodeDepthFirstIterator(root));
+  private Iterator<NiftyNode> createIterator(final NiftyTreeNode root) {
+    return new NiftyTreeNodeNiftyNodeIterator(new NiftyTreeNodeDepthFirstIterator(root));
   }
 }

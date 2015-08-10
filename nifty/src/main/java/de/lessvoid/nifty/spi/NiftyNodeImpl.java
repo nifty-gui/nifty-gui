@@ -26,8 +26,6 @@
  */
 package de.lessvoid.nifty.spi;
 
-import de.lessvoid.nifty.api.node.NiftyNode;
-
 /**
  * The NiftyNodeImpl is the base of the NiftyNode implementation hierachy.
  * Created by void on 08.08.15.

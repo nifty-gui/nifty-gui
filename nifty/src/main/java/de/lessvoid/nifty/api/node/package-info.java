@@ -25,7 +25,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- * The Nifty Service Provider Interface (SPI) package for custom NiftyNodes.
+ * Standard NiftyNodes
  * <p>
  * @since 2.0
  */

@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.api.node;
 
 import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.spi.NiftyNode;
 
 /**
  * The API for the NiftyBackgroundColor node.

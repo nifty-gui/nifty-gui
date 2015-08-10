@@ -28,10 +28,10 @@
 package de.lessvoid.nifty.api;
 
 import de.lessvoid.nifty.api.node.NiftyLayoutNode;
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 import de.lessvoid.nifty.api.types.Rect;
 import de.lessvoid.nifty.api.types.Size;
-import de.lessvoid.nifty.internal.InternalNiftyTree;
+import de.lessvoid.nifty.internal.tree.InternalNiftyTree;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -28,7 +28,7 @@ package de.lessvoid.nifty.internal.render.sync;
 
 import java.util.List;
 
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 import de.lessvoid.nifty.internal.render.RenderNode;
 
 public class TreeSyncRenderState {

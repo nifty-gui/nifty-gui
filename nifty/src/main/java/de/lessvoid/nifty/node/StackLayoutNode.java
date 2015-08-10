@@ -2,7 +2,7 @@ package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.api.Nifty;
 import de.lessvoid.nifty.api.NiftyNodeBuilder;
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 
 import javax.annotation.Nonnull;
 

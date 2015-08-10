@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.api.canvas;
 
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 
 /**
  * The NiftyCanvasPainter allows you to provide the content of a NiftyNode. When it is time to render the content the

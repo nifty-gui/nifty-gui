@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.api;
 
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 
 public class NiftyNodeLong implements NiftyNode {
   private final Long value;

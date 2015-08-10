@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.api.NiftyLayout;
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 import de.lessvoid.nifty.api.types.Point;
 import de.lessvoid.nifty.api.types.Rect;
 import de.lessvoid.nifty.api.types.Size;

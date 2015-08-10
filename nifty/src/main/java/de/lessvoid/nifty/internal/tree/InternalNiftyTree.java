@@ -24,11 +24,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal;
+package de.lessvoid.nifty.internal.tree;
 
 import de.lessvoid.nifty.api.NiftyRuntimeException;
-import de.lessvoid.nifty.api.node.NiftyNode;
-import de.lessvoid.nifty.internal.node.NiftyTreeNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 import de.lessvoid.nifty.spi.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;

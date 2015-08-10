@@ -24,27 +24,31 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.node;
+package de.lessvoid.nifty.internal.tree;
 
-import de.lessvoid.nifty.api.NiftyNodeString;
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.internal.tree.NiftyTreeNode;
+import de.lessvoid.nifty.internal.tree.NiftyTreeNodeDepthFirstIterator;
+import de.lessvoid.nifty.internal.tree.NiftyTreeNodeNiftyNodeImplIterator;
+import de.lessvoid.nifty.spi.NiftyNodeImpl;
 import org.junit.Test;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static de.lessvoid.nifty.api.NiftyNodeLongImpl.niftyNodeLongImpl;
 import static de.lessvoid.nifty.api.NiftyNodeStringImpl.niftyNodeStringImpl;
 import static org.junit.Assert.*;
 
 /**
  * Created by void on 23.07.15.
  */
-public class NiftyTreeNodeNiftyNodeClassFilterIteratorTest {
+public class NiftyTreeNodeNiftyNodeImplIteratorTest {
+
   @Test
   public void testIterateRoot() {
-    NiftyTreeNode root = new NiftyTreeNode(niftyNodeLongImpl(26L));
-    Iterator<NiftyNode> it = createIterator(root);
+    NiftyTreeNode root = new NiftyTreeNode(niftyNodeStringImpl("root"));
+    Iterator<NiftyNodeImpl> it = createIterator(root);
+    assertTrue(it.hasNext());
+    assertEquals("root", it.next().getNiftyNode().toString());
 
     assertFalse(it.hasNext());
     try {
@@ -56,13 +60,16 @@ public class NiftyTreeNodeNiftyNodeClassFilterIteratorTest {
 
   @Test
   public void testIterateOneChild() {
-    NiftyTreeNode root = new NiftyTreeNode(niftyNodeLongImpl(26L));
+    NiftyTreeNode root = new NiftyTreeNode(niftyNodeStringImpl("root"));
     NiftyTreeNode child = new NiftyTreeNode(niftyNodeStringImpl("child"));
     root.addChild(child);
 
-    Iterator<NiftyNode> it = createIterator(root);
+    Iterator<NiftyNodeImpl> it = createIterator(root);
     assertTrue(it.hasNext());
-    assertEquals("child", it.next().toString());
+    assertEquals("root", it.next().getNiftyNode().toString());
+
+    assertTrue(it.hasNext());
+    assertEquals("child", it.next().getNiftyNode().toString());
 
     assertFalse(it.hasNext());
     try {
@@ -72,12 +79,7 @@ public class NiftyTreeNodeNiftyNodeClassFilterIteratorTest {
     }
   }
 
-  private Iterator<NiftyNode> createIterator(final NiftyTreeNode root) {
-    return
-        new NiftyTreeNodeNiftyNodeIterator(
-          new NiftyTreeNodeNiftyNodeClassFilterIterator<>(
-              new NiftyTreeNodeDepthFirstIterator(root),
-              NiftyNodeString.class));
+  private Iterator<NiftyNodeImpl> createIterator(final NiftyTreeNode root) {
+    return new NiftyTreeNodeNiftyNodeImplIterator(new NiftyTreeNodeDepthFirstIterator(root));
   }
-
 }

@@ -24,15 +24,13 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api.node;
-
-import de.lessvoid.nifty.spi.NiftyNode;
+package de.lessvoid.nifty.spi;
 
 /**
- * Created by void on 09.08.15.
+ * The public NiftyNode marker interface. Everything a Nifty scene graph stores is required
+ * to implement NiftyNode.
+ *
+ * Created by void on 23.07.15.
  */
-public class NiftyContent implements NiftyNode {
-  public static NiftyContent niftyContentNode() {
-    return new NiftyContent();
-  }
+public interface NiftyNode {
 }

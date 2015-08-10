@@ -31,25 +31,22 @@ import de.lessvoid.nifty.api.canvas.NiftyCanvasPainterShader;
 import de.lessvoid.nifty.api.input.NiftyInputConsumer;
 import de.lessvoid.nifty.api.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
-import de.lessvoid.nifty.api.node.NiftyLayoutNode;
-import de.lessvoid.nifty.api.node.NiftyNode;
-import de.lessvoid.nifty.api.node.NiftyRootNode;
-import de.lessvoid.nifty.api.node.NiftyRootNodeImpl;
+import de.lessvoid.nifty.api.node.*;
 import de.lessvoid.nifty.internal.InternalNiftyEventBus;
 import de.lessvoid.nifty.internal.InternalNiftyImage;
-import de.lessvoid.nifty.internal.InternalNiftyTree;
+import de.lessvoid.nifty.internal.node.NiftyBackgroundColorImpl;
+import de.lessvoid.nifty.internal.node.NiftyContentImpl;
+import de.lessvoid.nifty.internal.node.NiftyRootNodeImpl;
+import de.lessvoid.nifty.internal.tree.InternalNiftyTree;
 import de.lessvoid.nifty.internal.NiftyResourceLoader;
 import de.lessvoid.nifty.internal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.common.StatisticsRendererFPS;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.internal.render.font.FontRenderer;
-import de.lessvoid.nifty.spi.NiftyInputDevice;
-import de.lessvoid.nifty.spi.NiftyNodeImpl;
-import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.*;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
-import de.lessvoid.nifty.spi.TimeProvider;
 import org.jglfont.JGLFontFactory;
 
 import javax.annotation.Nonnull;
@@ -82,7 +79,7 @@ public class Nifty {
   private final TimeProvider timeProvider;
 
   // The list of nodes that are able to receive input events
-  private final List<NiftyNode> nodesToReceiveEvents = new ArrayList<NiftyNode>();
+  private final List<NiftyNode> nodesToReceiveEvents = new ArrayList<>();
 
   // the class performing the conversion from NiftyNode to RenderNode and takes care of all rendering.
   private final NiftyRenderer renderer;
@@ -102,7 +99,7 @@ public class Nifty {
   // in case someone presses and holds a pointer on a node this node will capture all pointer events unless the pointer
   // is released again. the node that captured the pointer events will be stored in this member variable. if it is set
   // all pointer events will be send to that node unless the pointer is released again.
-  private NiftyNode nodeThatCapturedPointerEvents;
+  //private NiftyNode nodeThatCapturedPointerEvents;
 
   // The main data structure to keep the Nifty scene graph
   private final InternalNiftyTree tree;
@@ -111,7 +108,7 @@ public class Nifty {
   private final NiftyLayout layout;
 
   // node impl class mapping
-  private Map<Class<?>, Class<?>> nodeImplMapping = new HashMap<>();
+  private Map<Class<? extends NiftyNode>, Class<? extends NiftyNodeImpl<? extends NiftyNode>>> nodeImplMapping = new HashMap<>();
 
   /**
    * Create a new Nifty instance.
@@ -129,11 +126,14 @@ public class Nifty {
     inputDevice.setResourceLoader(resourceLoader);
 
     timeProvider = newTimeProvider;
+
+    registerStandardNodes();
+
     statistics = new NiftyStatistics(new Statistics(timeProvider));
     stats = statistics.getImpl();
     renderer = new NiftyRenderer(statistics.getImpl(), newRenderDevice);
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
-    tree = new InternalNiftyTree(makeRootNode());
+    tree = new InternalNiftyTree(niftyNodeImpl(new NiftyRootNode()));
     layout = new NiftyLayout(this, tree);
   }
 
@@ -362,9 +362,7 @@ public class Nifty {
    * @return String that contains the debugging info for all root nodes
    */
   public String getSceneInfoLog(final String filter) {
-    StringBuilder result = new StringBuilder("Nifty scene info log\n");
-    result.append(tree.toString());
-    return result.toString();
+    return "Nifty scene info log\n" + tree.toString();
   }
 
   /**
@@ -416,9 +414,9 @@ public class Nifty {
   }
 
   /////////////////////////////////////////////////////////////////////////////
-
   // NiftyTree
   /////////////////////////////////////////////////////////////////////////////
+
   /**
    * Register a NiftyNode class with it's corresponding NiftyNodeImpl class.
    *
@@ -426,7 +424,7 @@ public class Nifty {
    * @param niftyNodeImplClass the NiftyNodeImpl class
    * @param <T> a NiftyNode implementation
    */
-  public <T extends NiftyNode, I extends NiftyNodeImpl> void registerNodeImpl(
+  public <T extends NiftyNode, I extends NiftyNodeImpl<T>> void registerNodeImpl(
       @Nonnull final Class<T> niftyNodeClass,
       @Nonnull final Class<I> niftyNodeImplClass) {
     nodeImplMapping.put(niftyNodeClass, niftyNodeImplClass);
@@ -505,21 +503,21 @@ public class Nifty {
     return tree.filteredChildNodes(clazz, startNode);
   }
 
+  private void registerStandardNodes() {
+    registerNodeImpl(NiftyRootNode.class, NiftyRootNodeImpl.class);
+    registerNodeImpl(NiftyContent.class, NiftyContentImpl.class);
+    registerNodeImpl(NiftyBackgroundColor.class, NiftyBackgroundColorImpl.class);
+  }
+
   private <T extends NiftyNode> NiftyNodeImpl<T> niftyNodeImpl(final T child) {
     try {
-      NiftyNodeImpl niftyNodeImpl = (NiftyNodeImpl) nodeImplMapping.get(child.getClass()).newInstance();
+      NiftyNodeImpl<T> niftyNodeImpl = (NiftyNodeImpl<T>) nodeImplMapping.get(child.getClass()).newInstance();
       niftyNodeImpl.initialize(child);
       return niftyNodeImpl;
     } catch (Exception e) {
       logger.log(Level.WARNING, "failed to instantiate NiftyNodeImpl", e);
       throw new NiftyRuntimeException(e);
     }
-  }
-
-  private NiftyRootNodeImpl makeRootNode() {
-    NiftyRootNodeImpl rootNode = new NiftyRootNodeImpl();
-    rootNode.initialize(new NiftyRootNode());
-    return rootNode;
   }
 
   // Friend methods

@@ -1,5 +1,6 @@
-package de.lessvoid.nifty.api.node;
+package de.lessvoid.nifty.internal.node;
 
+import de.lessvoid.nifty.api.node.NiftyRootNode;
 import de.lessvoid.nifty.spi.NiftyNodeImpl;
 
 /**

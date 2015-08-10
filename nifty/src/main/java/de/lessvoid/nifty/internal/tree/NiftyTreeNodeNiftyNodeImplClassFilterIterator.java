@@ -24,62 +24,62 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.node;
+package de.lessvoid.nifty.internal.tree;
+
+import de.lessvoid.nifty.spi.NiftyNodeImpl;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Stack;
 
 /**
- * Depth-first, on tree elements
- *
- * @author jkee
+ * Wrapper iterator to return only NiftyTreeNodes which value class matches a given class.
  */
-public class NiftyTreeNodeDepthFirstIterator implements Iterator<NiftyTreeNode> {
-  private final Stack<Integer> stack = new Stack<>();
-  private NiftyTreeNode current;
+public class NiftyTreeNodeNiftyNodeImplClassFilterIterator<T extends NiftyNodeImpl> implements Iterator<NiftyTreeNode> {
+  private final Iterator<NiftyTreeNode> it;
+  private final Class<T> clazz;
+  private NiftyTreeNode cached;
 
-  public NiftyTreeNodeDepthFirstIterator(final NiftyTreeNode tree) {
-    current = tree;
+  public NiftyTreeNodeNiftyNodeImplClassFilterIterator(final Iterator<NiftyTreeNode> it, final Class<T> clazz) {
+    this.it = it;
+    this.clazz = clazz;
   }
 
   @Override
   public boolean hasNext() {
-    return current != null;
+    if (cached != null) {
+      return true;
+    }
+    cached = findNext();
+    return cached != null;
   }
 
   @Override
   public NiftyTreeNode next() {
-    if (current == null) throw new NoSuchElementException();
-    NiftyTreeNode toReturn = current;
-    List<NiftyTreeNode> children = current.getChildren();
-    if (children != null && !children.isEmpty()) {
-      //starting next level
-      NiftyTreeNode firstChild = children.get(0);
-      stack.push(0);
-      current = firstChild;
-    } else {
-      //moving up
-      NiftyTreeNode localCurrent = current;
-      while (!stack.empty()) {
-        NiftyTreeNode parent = localCurrent.getParent();
-        Integer parentIndex = stack.pop();
-        int nextIndex = parentIndex + 1;
-        if (nextIndex < parent.getChildren().size()) {
-          stack.push(nextIndex);
-          current = parent.getChildren().get(nextIndex);
-          return toReturn;
-        }
-        localCurrent = parent;
-      }
-      current = null;
+    if (cached != null) {
+      NiftyTreeNode result = cached;
+      cached = null;
+      return result;
     }
-    return toReturn;
+    NiftyTreeNode result = findNext();
+    if (result == null) {
+      throw new NoSuchElementException();
+    }
+    return result;
   }
 
   @Override
   public void remove() {
     throw new UnsupportedOperationException();
+  }
+
+  private NiftyTreeNode findNext() {
+    while (it.hasNext()) {
+      NiftyTreeNode next = it.next();
+      NiftyNodeImpl value = next.getValue();
+      if (clazz.isAssignableFrom(value.getClass())) {
+        return next;
+      }
+    }
+    return null;
   }
 }

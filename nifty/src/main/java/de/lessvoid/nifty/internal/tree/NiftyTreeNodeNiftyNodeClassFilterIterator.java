@@ -24,34 +24,62 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.node;
+package de.lessvoid.nifty.internal.tree;
 
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
- * Wrapper iterator to return the NiftyTreeNode values directly.
+ * Wrapper iterator to return only NiftyTreeNodes which value class matches a given class.
  */
-public class NiftyTreeNodeNiftyNodeIterator<T extends NiftyNode> implements Iterator<T> {
+public class NiftyTreeNodeNiftyNodeClassFilterIterator<T extends NiftyNode> implements Iterator<NiftyTreeNode> {
   private final Iterator<NiftyTreeNode> it;
+  private final Class<T> clazz;
+  private NiftyTreeNode cached;
 
-  public NiftyTreeNodeNiftyNodeIterator(final Iterator<NiftyTreeNode> it) {
+  public NiftyTreeNodeNiftyNodeClassFilterIterator(final Iterator<NiftyTreeNode> it, final Class<T> clazz) {
     this.it = it;
+    this.clazz = clazz;
   }
 
   @Override
   public boolean hasNext() {
-    return it.hasNext();
+    if (cached != null) {
+      return true;
+    }
+    cached = findNext();
+    return cached != null;
   }
 
   @Override
-  public T next() {
-    return (T) it.next().getValue().getNiftyNode();
+  public NiftyTreeNode next() {
+    if (cached != null) {
+      NiftyTreeNode result = cached;
+      cached = null;
+      return result;
+    }
+    NiftyTreeNode result = findNext();
+    if (result == null) {
+      throw new NoSuchElementException();
+    }
+    return result;
   }
 
   @Override
   public void remove() {
     throw new UnsupportedOperationException();
+  }
+
+  private NiftyTreeNode findNext() {
+    while (it.hasNext()) {
+      NiftyTreeNode next = it.next();
+      NiftyNode value = next.getValue().getNiftyNode();
+      if (clazz.isAssignableFrom(value.getClass())) {
+        return next;
+      }
+    }
+    return null;
   }
 }

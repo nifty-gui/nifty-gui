@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.api.canvas;
 
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 
 /**
  * The DefaultNiftyCanvasPainter will be used when you don't set a specific one for a NiftyNode. It is part of the

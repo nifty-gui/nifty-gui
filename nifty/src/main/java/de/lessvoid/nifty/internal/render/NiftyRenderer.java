@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.internal.render;
 
-import de.lessvoid.nifty.internal.InternalNiftyTree;
+import de.lessvoid.nifty.internal.tree.InternalNiftyTree;
 import de.lessvoid.nifty.internal.common.Statistics;
 import de.lessvoid.nifty.internal.math.Mat4;
 import de.lessvoid.nifty.internal.render.batch.BatchManager;

@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.api.control;
 
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 
 /**
  * This abstract class already implements a couple of NiftyControl method. Use this class as the base class for

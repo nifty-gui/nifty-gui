@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.api.canvas;
 
-import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNode;
 import de.lessvoid.nifty.internal.canvas.InternalNiftyCanvas;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
