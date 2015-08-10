@@ -26,16 +26,20 @@
  */
 package de.lessvoid.nifty.internal.node;
 
+import de.lessvoid.nifty.api.NiftyNodeLong;
+import de.lessvoid.nifty.api.NiftyNodeLongImpl;
+import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNodeImpl;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import static de.lessvoid.nifty.api.NiftyNodeLongImpl.niftyNodeLongImpl;
+import static de.lessvoid.nifty.api.NiftyNodeStringImpl.niftyNodeStringImpl;
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
@@ -45,75 +49,75 @@ public class NiftyTreeNodeTest {
 
   @Test
   public void testSimpleConstructor() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
+    NiftyTreeNode root = niftyTreeNode("root");
     assertEquals("node{root}", root.toString());
   }
 
   @Test
   public void testGetValue() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    assertEquals("root", root.getValue());
+    NiftyTreeNode root = niftyTreeNode("root");
+    assertEquals("root", root.getValue().getNiftyNode().toString());
   }
 
   @Test
   public void testGetParentForRootNode() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
+    NiftyTreeNode root = niftyTreeNode("root");
     assertNull(root.getParent());
   }
 
   @Test
   public void testAddChildren() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    root.addChild(new NiftyTreeNode<>("child-1"));
+    NiftyTreeNode root = niftyTreeNode("root");
+    root.addChild(niftyTreeNode("child-1"));
   }
 
   @Test
   public void testAddChildrenParent() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    NiftyTreeNode<String> child = new NiftyTreeNode<>("child-1");
+    NiftyTreeNode root = niftyTreeNode("root");
+    NiftyTreeNode child = niftyTreeNode("child-1");
     root.addChild(child);
     assertEquals(root, child.getParent());
-    assertArrayEquals(toTreeNodeArray("child-1"), root.getChildren().toArray());
+    assertListEquals(toTreeNodeList("child-1"), root.getChildren());
   }
 
   @Test
   public void testToStringTree() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
+    NiftyTreeNode root = niftyTreeNode("root");
     assertEquals("root", root.toStringTree());
   }
 
   @Test
   public void testToStringTreeWithChildren() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    root.addChild(new NiftyTreeNode<>("hello"));
+    NiftyTreeNode root = niftyTreeNode("root");
+    root.addChild(niftyTreeNode("hello"));
     assertEquals(
         "root\n" +
-        "  hello", root.toStringTree());
+            "  hello", root.toStringTree());
   }
 
   @Test
   public void testGetChildrenWithNoChildren() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
+    NiftyTreeNode root = niftyTreeNode("root");
     assertNull(root.getChildren());
   }
 
   @Test
   public void testGetChildren() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    root.addChild(new NiftyTreeNode<>("hello"));
-    assertArrayEquals(toTreeNodeArray("hello"), root.getChildren().toArray());
+    NiftyTreeNode root = niftyTreeNode("root");
+    root.addChild(niftyTreeNode("hello"));
+    assertListEquals(toTreeNodeList("hello"), root.getChildren());
   }
 
   @Test
   public void testRemoveRoot() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
+    NiftyTreeNode root = niftyTreeNode("root");
     root.remove();
   }
 
   @Test
   public void testRemoveSelf() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    NiftyTreeNode<String> child = new NiftyTreeNode<>("hello");
+    NiftyTreeNode root = niftyTreeNode("root");
+    NiftyTreeNode child = niftyTreeNode("hello");
     root.addChild(child);
 
     assertEquals(
@@ -129,8 +133,8 @@ public class NiftyTreeNodeTest {
 
   @Test
   public void testRemoveChild() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    NiftyTreeNode<String> child = new NiftyTreeNode<>("hello");
+    NiftyTreeNode root = niftyTreeNode("root");
+    NiftyTreeNode child = niftyTreeNode("hello");
     root.addChild(child);
 
     assertEquals(
@@ -146,10 +150,10 @@ public class NiftyTreeNodeTest {
 
   @Test
   public void testRemoveMiddleChildren() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    NiftyTreeNode<String> child1 = new NiftyTreeNode<>("hello-1");
+    NiftyTreeNode root = niftyTreeNode("root");
+    NiftyTreeNode child1 = niftyTreeNode("hello-1");
     root.addChild(child1);
-    NiftyTreeNode<String> child2 = new NiftyTreeNode<>("hello-2");
+    NiftyTreeNode child2 = niftyTreeNode("hello-2");
     child1.addChild(child2);
 
     assertEquals(
@@ -158,7 +162,7 @@ public class NiftyTreeNodeTest {
         "    hello-2", root.toStringTree());
 
     child1.remove();
-    assertArrayEquals(toTreeNodeArray("hello-2"), root.getChildren().toArray());
+    assertListEquals(toTreeNodeList("hello-2"), root.getChildren());
     assertEquals(root, child2.getParent());
 
     assertEquals(
@@ -168,46 +172,109 @@ public class NiftyTreeNodeTest {
   }
 
   @Test
-  public void testTreeIterator() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    NiftyTreeNode<String> child1 = new NiftyTreeNode<>("hello-1");
+  public void testNiftyTreeNodeIterator() {
+    NiftyTreeNode root = niftyTreeNode("root");
+    NiftyTreeNode child1 = niftyTreeNode("hello-1");
     root.addChild(child1);
-    NiftyTreeNode<String> child11 = new NiftyTreeNode<>("hello-1-1");
+    NiftyTreeNode child11 = niftyTreeNode("hello-1-1");
     child1.addChild(child11);
-    NiftyTreeNode<String> child2 = new NiftyTreeNode<>("hello-2");
+    NiftyTreeNode child2 = niftyTreeNode("hello-2");
     root.addChild(child2);
 
-    Iterator<NiftyTreeNode<String>> it = root.treeIterator();
-    assertEquals("root", it.next().getValue());
-    assertEquals("hello-1", it.next().getValue());
-    assertEquals("hello-1-1", it.next().getValue());
-    assertEquals("hello-2", it.next().getValue());
+    Iterator<NiftyTreeNode> it = root.niftyTreeNodeIterator();
+    assertEquals("root", it.next().getValue().toString());
+    assertEquals("hello-1", it.next().getValue().toString());
+    assertEquals("hello-1-1", it.next().getValue().toString());
+    assertEquals("hello-2", it.next().getValue().toString());
     assertFalse(it.hasNext());
   }
 
   @Test
-  public void testTreeValueIterator() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    NiftyTreeNode<String> child1 = new NiftyTreeNode<>("hello-1");
+  public void testNiftyNodeImplIterator() {
+    NiftyTreeNode root = niftyTreeNode("root");
+    NiftyTreeNode child1 = niftyTreeNode("hello-1");
     root.addChild(child1);
-    NiftyTreeNode<String> child11 = new NiftyTreeNode<>("hello-1-1");
+    NiftyTreeNode child11 = niftyTreeNode("hello-1-1");
     child1.addChild(child11);
-    NiftyTreeNode<String> child2 = new NiftyTreeNode<>("hello-2");
+    NiftyTreeNode child2 = niftyTreeNode("hello-2");
     root.addChild(child2);
 
-    Iterator<String> it = root.valueIterator();
-    assertEquals("root", it.next());
-    assertEquals("hello-1", it.next());
-    assertEquals("hello-1-1", it.next());
-    assertEquals("hello-2", it.next());
+    Iterator<NiftyNodeImpl> it = root.niftyNodeImplIterator();
+    assertEquals("root", it.next().toString());
+    assertEquals("hello-1", it.next().toString());
+    assertEquals("hello-1-1", it.next().toString());
+    assertEquals("hello-2", it.next().toString());
     assertFalse(it.hasNext());
   }
 
-  private Object[] toTreeNodeArray(final String... values) {
-    List<NiftyTreeNode<String>> list = new ArrayList<>();
-    for (String v : values) {
-      list.add(new NiftyTreeNode<>(v));
+  @Test
+  public void testFilteredNiftyNodeImplIterator() {
+    NiftyTreeNode root = niftyTreeNode("root");
+    NiftyTreeNode child1 = niftyTreeNode("hello-1");
+    root.addChild(child1);
+    NiftyTreeNode child11 = niftyTreeNode(42L);
+    child1.addChild(child11);
+    NiftyTreeNode child2 = niftyTreeNode("hello-2");
+    root.addChild(child2);
+
+    Iterator<NiftyNodeLongImpl> it = root.filteredNiftyNodeImplIterator(NiftyNodeLongImpl.class);
+    assertEquals(42L, it.next().getNiftyNode().getValue());
+    assertFalse(it.hasNext());
+  }
+
+  @Test
+  public void testNiftyNodeIterator() {
+    NiftyTreeNode root = niftyTreeNode("root");
+    NiftyTreeNode child1 = niftyTreeNode("hello-1");
+    root.addChild(child1);
+    NiftyTreeNode child11 = niftyTreeNode("hello-1-1");
+    child1.addChild(child11);
+    NiftyTreeNode child2 = niftyTreeNode("hello-2");
+    root.addChild(child2);
+
+    Iterator<? extends NiftyNode> it = root.niftyNodeIterator();
+    assertEquals("root", it.next().toString());
+    assertEquals("hello-1", it.next().toString());
+    assertEquals("hello-1-1", it.next().toString());
+    assertEquals("hello-2", it.next().toString());
+    assertFalse(it.hasNext());
+  }
+
+  @Test
+  public void testFilteredNiftyNodeIterator() {
+    NiftyTreeNode root = niftyTreeNode("root");
+    NiftyTreeNode child1 = niftyTreeNode("hello-1");
+    root.addChild(child1);
+    NiftyTreeNode child11 = niftyTreeNode(42L);
+    child1.addChild(child11);
+    NiftyTreeNode child2 = niftyTreeNode("hello-2");
+    root.addChild(child2);
+
+    Iterator<NiftyNodeLong> it = root.filteredNiftyNodeIterator(NiftyNodeLong.class);
+    assertEquals(42L, it.next().getValue());
+    assertFalse(it.hasNext());
+  }
+
+  private NiftyTreeNode niftyTreeNode(final String value) {
+    return new NiftyTreeNode(niftyNodeStringImpl(value));
+  }
+
+  private NiftyTreeNode niftyTreeNode(final long value) {
+    return new NiftyTreeNode(niftyNodeLongImpl(value));
+  }
+
+  private void assertListEquals(final List<NiftyTreeNode> expected, final List<NiftyTreeNode> actual) {
+    assertEquals(expected.size(), actual.size());
+    for (int i=0; i<actual.size(); i++) {
+      assertEquals(expected.get(i).getValue().toString(), actual.get(i).getValue().toString());
     }
-    return list.toArray();
+  }
+
+  private List<NiftyTreeNode> toTreeNodeList(final String... values) {
+    List<NiftyTreeNode> list = new ArrayList<>();
+    for (String v : values) {
+      list.add(niftyTreeNode(v));
+    }
+    return list;
   }
 }

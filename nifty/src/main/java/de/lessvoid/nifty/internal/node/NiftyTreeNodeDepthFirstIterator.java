@@ -36,11 +36,11 @@ import java.util.Stack;
  *
  * @author jkee
  */
-public class NiftyTreeNodeDepthFirstIterator<T> implements Iterator<NiftyTreeNode<T>> {
+public class NiftyTreeNodeDepthFirstIterator implements Iterator<NiftyTreeNode> {
   private final Stack<Integer> stack = new Stack<>();
-  private NiftyTreeNode<T> current;
+  private NiftyTreeNode current;
 
-  public NiftyTreeNodeDepthFirstIterator(final NiftyTreeNode<T> tree) {
+  public NiftyTreeNodeDepthFirstIterator(final NiftyTreeNode tree) {
     current = tree;
   }
 
@@ -50,20 +50,20 @@ public class NiftyTreeNodeDepthFirstIterator<T> implements Iterator<NiftyTreeNod
   }
 
   @Override
-  public NiftyTreeNode<T> next() {
+  public NiftyTreeNode next() {
     if (current == null) throw new NoSuchElementException();
-    NiftyTreeNode<T> toReturn = current;
-    List<NiftyTreeNode<T>> children = current.getChildren();
+    NiftyTreeNode toReturn = current;
+    List<NiftyTreeNode> children = current.getChildren();
     if (children != null && !children.isEmpty()) {
       //starting next level
-      NiftyTreeNode<T> firstChild = children.get(0);
+      NiftyTreeNode firstChild = children.get(0);
       stack.push(0);
       current = firstChild;
     } else {
       //moving up
-      NiftyTreeNode<T> localCurrent = current;
+      NiftyTreeNode localCurrent = current;
       while (!stack.empty()) {
-        NiftyTreeNode<T> parent = localCurrent.getParent();
+        NiftyTreeNode parent = localCurrent.getParent();
         Integer parentIndex = stack.pop();
         int nextIndex = parentIndex + 1;
         if (nextIndex < parent.getChildren().size()) {

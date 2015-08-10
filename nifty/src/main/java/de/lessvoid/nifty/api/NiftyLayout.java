@@ -162,7 +162,7 @@ public class NiftyLayout {
       return measure((NiftyLayoutNode) node, availableSize);
     } else {
       Size currentSize = Size.ZERO;
-      for (NiftyLayoutNode childNode : nodeTree.filteredChildNodes(NiftyLayoutNode.class, node)) {
+      for (NiftyLayoutNode childNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNode.class, node)) {
         Size nodeSize = measure(childNode, availableSize);
         currentSize = Size.max(nodeSize, currentSize);
       }
@@ -197,7 +197,7 @@ public class NiftyLayout {
       return ((NiftyLayoutNode) node).getDesiredSize();
     } else {
       Size currentSize = Size.ZERO;
-      for (NiftyLayoutNode childNode : nodeTree.filteredChildNodes(NiftyLayoutNode.class, node)) {
+      for (NiftyLayoutNode childNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNode.class, node)) {
         Size nodeSize = childNode.getDesiredSize();
         currentSize = Size.max(nodeSize, currentSize);
       }
@@ -210,7 +210,7 @@ public class NiftyLayout {
       return; // There are no dirty arrange entries reported. So we are done here.
     }
 
-    for (NiftyLayoutNode layoutNode : nodeTree.filteredChildNodes(NiftyLayoutNode.class)) {
+    for (NiftyLayoutNode layoutNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNode.class)) {
       if (layoutNode.isArrangeValid()) {
         layoutNode.arrange(layoutNode.getArrangedRect());
         removeArranged();
@@ -225,7 +225,7 @@ public class NiftyLayout {
     if (node instanceof NiftyLayoutNode) {
       arrange((NiftyLayoutNode) node, area);
     } else {
-      for (NiftyLayoutNode layoutNode : nodeTree.filteredChildNodes(NiftyLayoutNode.class, node)) {
+      for (NiftyLayoutNode layoutNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNode.class, node)) {
         layoutNode.arrange(layoutNode.getArrangedRect());
       }
     }

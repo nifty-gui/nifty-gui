@@ -24,41 +24,62 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api;
+package de.lessvoid.nifty.internal.node;
 
 import de.lessvoid.nifty.api.node.NiftyNode;
 
-public class NiftyNodeLong implements NiftyNode {
-  private final Long value;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-  public NiftyNodeLong(final Long value) {
-    this.value = value;
-  }
+/**
+ * Wrapper iterator to return only NiftyTreeNodes which value class matches a given class.
+ */
+public class NiftyTreeNodeNiftyNodeClassFilterIterator<T extends NiftyNode> implements Iterator<NiftyTreeNode> {
+  private final Iterator<NiftyTreeNode> it;
+  private final Class<T> clazz;
+  private NiftyTreeNode cached;
 
-  public long getValue() {
-    return value;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    NiftyNodeLong that = (NiftyNodeLong) o;
-    return !(value != null ? !value.equals(that.value) : that.value != null);
+  public NiftyTreeNodeNiftyNodeClassFilterIterator(final Iterator<NiftyTreeNode> it, final Class<T> clazz) {
+    this.it = it;
+    this.clazz = clazz;
   }
 
   @Override
-  public int hashCode() {
-    return value != null ? value.hashCode() : 0;
+  public boolean hasNext() {
+    if (cached != null) {
+      return true;
+    }
+    cached = findNext();
+    return cached != null;
   }
 
   @Override
-  public String toString() {
-    return String.valueOf(value);
+  public NiftyTreeNode next() {
+    if (cached != null) {
+      NiftyTreeNode result = cached;
+      cached = null;
+      return result;
+    }
+    NiftyTreeNode result = findNext();
+    if (result == null) {
+      throw new NoSuchElementException();
+    }
+    return result;
   }
 
-  public static NiftyNodeLong niftyNodeLong(final long value) {
-    return new NiftyNodeLong(value);
+  @Override
+  public void remove() {
+    throw new UnsupportedOperationException();
   }
 
+  private NiftyTreeNode findNext() {
+    while (it.hasNext()) {
+      NiftyTreeNode next = it.next();
+      NiftyNode value = next.getValue().getNiftyNode();
+      if (clazz.isAssignableFrom(value.getClass())) {
+        return next;
+      }
+    }
+    return null;
+  }
 }

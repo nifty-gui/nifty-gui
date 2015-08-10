@@ -33,7 +33,8 @@ import de.lessvoid.nifty.api.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.api.input.NiftyPointerEvent;
 import de.lessvoid.nifty.api.node.NiftyLayoutNode;
 import de.lessvoid.nifty.api.node.NiftyNode;
-import de.lessvoid.nifty.api.node.RootNode;
+import de.lessvoid.nifty.api.node.NiftyRootNode;
+import de.lessvoid.nifty.api.node.NiftyRootNodeImpl;
 import de.lessvoid.nifty.internal.InternalNiftyEventBus;
 import de.lessvoid.nifty.internal.InternalNiftyImage;
 import de.lessvoid.nifty.internal.InternalNiftyTree;
@@ -44,6 +45,7 @@ import de.lessvoid.nifty.internal.common.StatisticsRendererFPS;
 import de.lessvoid.nifty.internal.render.NiftyRenderer;
 import de.lessvoid.nifty.internal.render.font.FontRenderer;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
+import de.lessvoid.nifty.spi.NiftyNodeImpl;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
@@ -53,7 +55,10 @@ import org.jglfont.JGLFontFactory;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -105,6 +110,9 @@ public class Nifty {
   //The layout handler for Nifty.
   private final NiftyLayout layout;
 
+  // node impl class mapping
+  private Map<Class<?>, Class<?>> nodeImplMapping = new HashMap<>();
+
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
@@ -125,7 +133,7 @@ public class Nifty {
     stats = statistics.getImpl();
     renderer = new NiftyRenderer(statistics.getImpl(), newRenderDevice);
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
-    tree = new InternalNiftyTree(new RootNode());
+    tree = new InternalNiftyTree(makeRootNode());
     layout = new NiftyLayout(this, tree);
   }
 
@@ -244,17 +252,6 @@ public class Nifty {
     return frameChanged;
   }
 
-  /**
-   * Create a new root node with a given width, height and child layout. A root node is just a regular NiftyNode that
-   * forms the base node of a scene graph. You can add several root nodes!
-   *
-   * @param width the width of the root node
-   * @param height the height of the root node
-   * @param childLayout the childLayout for the root node (this determines the way any child nodes will be laid out
-   * in the new rootNode)
-   *
-   * @return a new NiftyNode acting as the root of a Nifty scene graph
-   */
   /* FIXME
   public NiftyNode createRootNode(
       final UnitValue width,
@@ -263,7 +260,6 @@ public class Nifty {
     return createRootNode(ChildLayout.Center, width, height, childLayout);
   }
   */
-
   /**
    * Create a new root node with a given width, height and child layout. A root node is just a regular NiftyNode that
    * forms the base node of a scene graph. You can add several root nodes!
@@ -276,6 +272,7 @@ public class Nifty {
    *
    * @return a new NiftyNode acting as the root of a Nifty scene graph
    */
+
   /* FIXME
   public NiftyNode createRootNode(
       final ChildLayout rootNodePlacementLayout,
@@ -289,7 +286,6 @@ public class Nifty {
     return rootNodeInternal;
   }
   */
-
   /**
    * @see #createRootNode(UnitValue, UnitValue, ChildLayout)
    *
@@ -297,12 +293,12 @@ public class Nifty {
    *
    * @return a new NiftyNode
    */
+
   /* FIXME
   public NiftyNode createRootNodeFullscreen() {
     return createRootNode(ChildLayout.Center, UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), ChildLayout.None);
   }
   */
-
   /**
    * @see #createRootNode(UnitValue, UnitValue, ChildLayout)
    *
@@ -312,12 +308,12 @@ public class Nifty {
    * in the new rootNode)
    * @return a new NiftyNode
    */
+
   /* FIXME
   public NiftyNode createRootNodeFullscreen(final ChildLayout childLayout) {
     return createRootNode(ChildLayout.Center, UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), childLayout);
   }
   */
-
   /**
    * Create a new NiftyImage.
    * @param filename the filename to load
@@ -420,8 +416,21 @@ public class Nifty {
   }
 
   /////////////////////////////////////////////////////////////////////////////
+
   // NiftyTree
   /////////////////////////////////////////////////////////////////////////////
+  /**
+   * Register a NiftyNode class with it's corresponding NiftyNodeImpl class.
+   *
+   * @param niftyNodeClass the NiftyNode class
+   * @param niftyNodeImplClass the NiftyNodeImpl class
+   * @param <T> a NiftyNode implementation
+   */
+  public <T extends NiftyNode, I extends NiftyNodeImpl> void registerNodeImpl(
+      @Nonnull final Class<T> niftyNodeClass,
+      @Nonnull final Class<I> niftyNodeImplClass) {
+    nodeImplMapping.put(niftyNodeClass, niftyNodeImplClass);
+  }
 
   /**
    * Add the given NiftyNode to the root node.
@@ -441,7 +450,7 @@ public class Nifty {
    * @return this
    */
   public NiftyNodeBuilder node(@Nonnull final NiftyNode parent, @Nonnull final NiftyNode child) {
-    tree.addChild(parent, child);
+    tree.addChild(parent, niftyNodeImpl(child));
     if (child instanceof NiftyLayoutNode) {
       ((NiftyLayoutNode) child).onAttach(layout);
     }
@@ -464,8 +473,8 @@ public class Nifty {
    * Return a depth first Iterator for all NiftyNodes in this tree.
    * @return the Iterator
    */
-  public Iterable<NiftyNode> childNodes() {
-    return tree.childNodes();
+  public Iterable<? extends NiftyNode> childNodes() {
+    return tree.niftyChildNodes();
   }
 
   /**
@@ -473,7 +482,7 @@ public class Nifty {
    * @return the Iterator
    */
   public Iterable<NiftyNode> childNodes(@Nonnull final NiftyNode startNode) {
-    return tree.childNodes(startNode);
+    return tree.filteredChildNodes(NiftyNode.class, startNode);
   }
 
   /**
@@ -494,6 +503,23 @@ public class Nifty {
   public <X extends NiftyNode> Iterable<X> filteredChildNodes(@Nonnull final Class<X> clazz,
                                                               @Nonnull final NiftyNode startNode) {
     return tree.filteredChildNodes(clazz, startNode);
+  }
+
+  private <T extends NiftyNode> NiftyNodeImpl<T> niftyNodeImpl(final T child) {
+    try {
+      NiftyNodeImpl niftyNodeImpl = (NiftyNodeImpl) nodeImplMapping.get(child.getClass()).newInstance();
+      niftyNodeImpl.initialize(child);
+      return niftyNodeImpl;
+    } catch (Exception e) {
+      logger.log(Level.WARNING, "failed to instantiate NiftyNodeImpl", e);
+      throw new NiftyRuntimeException(e);
+    }
+  }
+
+  private NiftyRootNodeImpl makeRootNode() {
+    NiftyRootNodeImpl rootNode = new NiftyRootNodeImpl();
+    rootNode.initialize(new NiftyRootNode());
+    return rootNode;
   }
 
   // Friend methods

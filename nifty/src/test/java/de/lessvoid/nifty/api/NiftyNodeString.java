@@ -27,17 +27,12 @@
 package de.lessvoid.nifty.api;
 
 import de.lessvoid.nifty.api.node.NiftyNode;
-import de.lessvoid.nifty.spi.NiftyNodeImpl;
 
 public class NiftyNodeString implements NiftyNode {
   private final String value;
 
   public NiftyNodeString(final String value) {
     this.value = value;
-  }
-
-  public NiftyNodeImpl getImpl() {
-    return null;
   }
 
   @Override

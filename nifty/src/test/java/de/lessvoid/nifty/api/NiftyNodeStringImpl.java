@@ -24,13 +24,48 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api.node;
+package de.lessvoid.nifty.api;
 
-/**
- * Created by void on 08.08.15.
- */
-public class RootNode implements NiftyNode {
+import de.lessvoid.nifty.spi.NiftyNodeImpl;
+
+import static de.lessvoid.nifty.api.NiftyNodeString.niftyNodeString;
+
+public class NiftyNodeStringImpl implements NiftyNodeImpl<NiftyNodeString> {
+  private NiftyNodeString niftyNode;
+
+  public static NiftyNodeStringImpl niftyNodeStringImpl(final String value) {
+    NiftyNodeStringImpl result = new NiftyNodeStringImpl();
+    result.initialize(niftyNodeString(value));
+    return result;
+  }
+
+  @Override
+  public void initialize(final NiftyNodeString niftyNode) {
+    this.niftyNode = niftyNode;
+  }
+
+  @Override
+  public NiftyNodeString getNiftyNode() {
+    return niftyNode;
+  }
+
+  @Override
   public String toString() {
-    return "root";
+    return niftyNode.toString();
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    NiftyNodeStringImpl that = (NiftyNodeStringImpl) o;
+
+    return !(niftyNode != null ? !niftyNode.equals(that.niftyNode) : that.niftyNode != null);
+  }
+
+  @Override
+  public int hashCode() {
+    return niftyNode != null ? niftyNode.hashCode() : 0;
   }
 }

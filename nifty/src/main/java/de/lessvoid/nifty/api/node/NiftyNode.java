@@ -27,7 +27,7 @@
 package de.lessvoid.nifty.api.node;
 
 /**
- * The public NiftyNode marker interface. Everything Nifty manages is required
+ * The public NiftyNode marker interface. Everything a Nifty scene graph stores is required
  * to implement NiftyNode.
  *
  * Created by void on 23.07.15.

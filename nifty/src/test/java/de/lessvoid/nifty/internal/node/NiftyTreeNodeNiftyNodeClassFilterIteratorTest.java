@@ -26,21 +26,25 @@
  */
 package de.lessvoid.nifty.internal.node;
 
+import de.lessvoid.nifty.api.NiftyNodeString;
+import de.lessvoid.nifty.api.node.NiftyNode;
 import org.junit.Test;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static de.lessvoid.nifty.api.NiftyNodeLongImpl.niftyNodeLongImpl;
+import static de.lessvoid.nifty.api.NiftyNodeStringImpl.niftyNodeStringImpl;
 import static org.junit.Assert.*;
 
 /**
  * Created by void on 23.07.15.
  */
-public class NiftyTreeNodeClassFilterIteratorTest {
+public class NiftyTreeNodeNiftyNodeClassFilterIteratorTest {
   @Test
   public void testIterateRoot() {
-    NiftyTreeNode<Object> root = new NiftyTreeNode<>((Object)new Long(26L));
-    Iterator<String> it = createIterator(root);
+    NiftyTreeNode root = new NiftyTreeNode(niftyNodeLongImpl(26L));
+    Iterator<NiftyNode> it = createIterator(root);
 
     assertFalse(it.hasNext());
     try {
@@ -52,13 +56,13 @@ public class NiftyTreeNodeClassFilterIteratorTest {
 
   @Test
   public void testIterateOneChild() {
-    NiftyTreeNode<Object> root = new NiftyTreeNode<>((Object)new Long(26L));
-    NiftyTreeNode<Object> child = new NiftyTreeNode<>((Object)"child");
+    NiftyTreeNode root = new NiftyTreeNode(niftyNodeLongImpl(26L));
+    NiftyTreeNode child = new NiftyTreeNode(niftyNodeStringImpl("child"));
     root.addChild(child);
 
-    Iterator<String> it = createIterator(root);
+    Iterator<NiftyNode> it = createIterator(root);
     assertTrue(it.hasNext());
-    assertEquals("child", it.next());
+    assertEquals("child", it.next().toString());
 
     assertFalse(it.hasNext());
     try {
@@ -68,10 +72,12 @@ public class NiftyTreeNodeClassFilterIteratorTest {
     }
   }
 
-  private Iterator<String> createIterator(final NiftyTreeNode<Object> root) {
-    NiftyTreeNodeDepthFirstIterator<Object> bla = new NiftyTreeNodeDepthFirstIterator<>(root);
-    NiftyTreeNodeClassFilterIterator<Object, String> bla2 = new NiftyTreeNodeClassFilterIterator<>(bla, String.class);
-    return new NiftyTreeNodeValueIterator<>(bla2);
+  private Iterator<NiftyNode> createIterator(final NiftyTreeNode root) {
+    return
+        new NiftyTreeNodeNiftyNodeIterator(
+          new NiftyTreeNodeNiftyNodeClassFilterIterator<>(
+              new NiftyTreeNodeDepthFirstIterator(root),
+              NiftyNodeString.class));
   }
 
 }

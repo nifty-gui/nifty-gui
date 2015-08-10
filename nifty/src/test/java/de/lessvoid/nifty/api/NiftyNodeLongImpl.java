@@ -24,57 +24,46 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.internal.node;
+package de.lessvoid.nifty.api;
 
-import org.junit.Test;
+import de.lessvoid.nifty.spi.NiftyNodeImpl;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+public class NiftyNodeLongImpl implements NiftyNodeImpl<NiftyNodeLong> {
+  private NiftyNodeLong niftyNode;
 
-import static org.junit.Assert.*;
-
-/**
- * Created by void on 23.07.15.
- */
-public class NiftyTreeNodeValueIteratorTest {
-
-  @Test
-  public void testIterateRoot() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    Iterator<String> it = createIterator(root);
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next());
-
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
-    }
+  public static NiftyNodeLongImpl niftyNodeLongImpl(final long value) {
+    NiftyNodeLongImpl result = new NiftyNodeLongImpl();
+    result.initialize(NiftyNodeLong.niftyNodeLong(value));
+    return result;
   }
 
-  @Test
-  public void testIterateOneChild() {
-    NiftyTreeNode<String> root = new NiftyTreeNode<>("root");
-    NiftyTreeNode<String> child = new NiftyTreeNode<>("child");
-    root.addChild(child);
-
-    Iterator<String> it = createIterator(root);
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next());
-
-    assertTrue(it.hasNext());
-    assertEquals("child", it.next());
-
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
-    }
+  @Override
+  public void initialize(final NiftyNodeLong niftyNode) {
+    this.niftyNode = niftyNode;
   }
 
-  private Iterator<String> createIterator(final NiftyTreeNode<String> root) {
-    return new NiftyTreeNodeValueIterator<>(new NiftyTreeNodeDepthFirstIterator<>(root));
+  @Override
+  public NiftyNodeLong getNiftyNode() {
+    return niftyNode;
+  }
+
+  @Override
+  public String toString() {
+    return niftyNode.toString();
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    NiftyNodeLongImpl that = (NiftyNodeLongImpl) o;
+
+    return !(niftyNode != null ? !niftyNode.equals(that.niftyNode) : that.niftyNode != null);
+  }
+
+  @Override
+  public int hashCode() {
+    return niftyNode != null ? niftyNode.hashCode() : 0;
   }
 }

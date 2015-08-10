@@ -26,39 +26,42 @@
  */
 package de.lessvoid.nifty.internal.node;
 
+import de.lessvoid.nifty.api.node.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNodeImpl;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * NiftyTreeNode is the base of a NiftyTree.
- *
+ * <p>
  * Heavily based on https://github.com/jkee/gtree
- *
+ * <p>
  * Created by void on 21.07.15.
  */
-public class NiftyTreeNode<T> {
-  private final T value;
-  private NiftyTreeNode<T> parent;
-  private List<NiftyTreeNode<T>> children;
+public class NiftyTreeNode {
+  private final NiftyNodeImpl<? extends NiftyNode> value;
+  private NiftyTreeNode parent;
+  private List<NiftyTreeNode> children;
 
-  public NiftyTreeNode(final T value) {
+  public NiftyTreeNode(final NiftyNodeImpl<? extends NiftyNode> value) {
     this.value = value;
   }
 
-  public List<NiftyTreeNode<T>> getChildren() {
+  public List<NiftyTreeNode> getChildren() {
     return children;
   }
 
-  public T getValue() {
+  public NiftyNodeImpl<? extends NiftyNode> getValue() {
     return value;
   }
 
-  public NiftyTreeNode<T> getParent() {
+  public NiftyTreeNode getParent() {
     return parent;
   }
 
-  public void addChild(final NiftyTreeNode<T> child) {
+  public void addChild(final NiftyTreeNode child) {
     if (children == null) {
       children = new ArrayList<>();
     }
@@ -66,20 +69,36 @@ public class NiftyTreeNode<T> {
     child.setParent(this);
   }
 
-  public void setParent(final NiftyTreeNode<T> parent) {
+  public void setParent(final NiftyTreeNode parent) {
     this.parent = parent;
   }
 
-  public Iterator<NiftyTreeNode<T>> treeIterator() {
-    return new NiftyTreeNodeDepthFirstIterator<>(this);
+  public Iterator<NiftyTreeNode> niftyTreeNodeIterator() {
+    return new NiftyTreeNodeDepthFirstIterator(this);
   }
 
-  public Iterator<T> valueIterator() {
-    return new NiftyTreeNodeValueIterator<>(new NiftyTreeNodeDepthFirstIterator<>(this));
+  public Iterator<NiftyNodeImpl> niftyNodeImplIterator() {
+    return new NiftyTreeNodeNiftyNodeImplIterator(new NiftyTreeNodeDepthFirstIterator(this));
   }
 
-  public <X> Iterator<X> filteredChildIterator(final Class<X> clazz) {
-    return new NiftyTreeNodeValueIterator<>(new NiftyTreeNodeClassFilterIterator<>(treeIterator(), clazz));
+  public <T extends NiftyNodeImpl> Iterator<T> filteredNiftyNodeImplIterator(final Class<T> clazz) {
+    return
+        new NiftyTreeNodeNiftyNodeImplIterator(
+          new NiftyTreeNodeNiftyNodeImplClassFilterIterator(
+            niftyTreeNodeIterator(), clazz));
+  }
+
+  public Iterator<? extends NiftyNode> niftyNodeIterator() {
+    return
+        new NiftyTreeNodeNiftyNodeIterator(
+            new NiftyTreeNodeDepthFirstIterator(this));
+  }
+
+  public <T extends NiftyNode> Iterator<T> filteredNiftyNodeIterator(final Class<T> clazz) {
+    return
+        new NiftyTreeNodeNiftyNodeIterator(
+            new NiftyTreeNodeNiftyNodeClassFilterIterator(
+                niftyTreeNodeIterator(), clazz));
   }
 
   public void remove() {
@@ -98,7 +117,7 @@ public class NiftyTreeNode<T> {
     parent = null;
   }
 
-  public void remove(final NiftyTreeNode<T> child) {
+  public void remove(final NiftyTreeNode child) {
     children.remove(child);
     if (children.isEmpty()) {
       children = null;
@@ -116,7 +135,7 @@ public class NiftyTreeNode<T> {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    NiftyTreeNode<?> that = (NiftyTreeNode<?>) o;
+    NiftyTreeNode that = (NiftyTreeNode) o;
 
     if (value != null ? !value.equals(that.value) : that.value != null) return false;
     return !(children != null ? !children.equals(that.children) : that.children != null);
@@ -142,11 +161,11 @@ public class NiftyTreeNode<T> {
     for (int i = 0; i < depth; i++) {
       stringBuilder.append("  ");
     }
-    stringBuilder.append(value);
+    stringBuilder.append(value.getNiftyNode());
     if (children == null) {
       return;
     }
-    for (NiftyTreeNode<T> child : children) {
+    for (NiftyTreeNode child : children) {
       child.append(stringBuilder, depth + 1);
     }
   }

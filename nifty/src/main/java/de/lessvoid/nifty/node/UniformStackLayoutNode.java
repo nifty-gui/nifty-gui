@@ -31,10 +31,10 @@ public final class UniformStackLayoutNode {
   }
 
   public void attachNode(@Nonnull final NiftyNodeBuilder builder) {
-    builder.childNode(implementation);
+    // FIXME builder.childNode(implementation);
   }
 
   public void attachNode(@Nonnull final Nifty nifty, @Nonnull NiftyNode parentNode) {
-    nifty.node(parentNode, implementation);
+    // FIXME nifty.node(parentNode, implementation);
   }
 }

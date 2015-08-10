@@ -26,58 +26,57 @@
  */
 package de.lessvoid.nifty.internal.node;
 
+import de.lessvoid.nifty.spi.NiftyNodeImpl;
+import org.junit.Test;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static de.lessvoid.nifty.api.NiftyNodeStringImpl.niftyNodeStringImpl;
+import static org.junit.Assert.*;
+
 /**
- * Wrapper iterator to return only NiftyTreeNodes which value class matches a given class.
+ * Created by void on 23.07.15.
  */
-public class NiftyTreeNodeClassFilterIterator<T, X> implements Iterator<NiftyTreeNode<X>> {
-  private final Iterator<NiftyTreeNode<T>> it;
-  private final Class<X> clazz;
-  private NiftyTreeNode<X> cached;
+public class NiftyTreeNodeNiftyNodeImplIteratorTest {
 
-  public NiftyTreeNodeClassFilterIterator(final Iterator<NiftyTreeNode<T>> it, final Class<X> clazz) {
-    this.it = it;
-    this.clazz = clazz;
+  @Test
+  public void testIterateRoot() {
+    NiftyTreeNode root = new NiftyTreeNode(niftyNodeStringImpl("root"));
+    Iterator<NiftyNodeImpl> it = createIterator(root);
+    assertTrue(it.hasNext());
+    assertEquals("root", it.next().getNiftyNode().toString());
+
+    assertFalse(it.hasNext());
+    try {
+      it.next();
+      fail("expected exception");
+    } catch (NoSuchElementException e) {
+    }
   }
 
-  @Override
-  public boolean hasNext() {
-    if (cached != null) {
-      return true;
+  @Test
+  public void testIterateOneChild() {
+    NiftyTreeNode root = new NiftyTreeNode(niftyNodeStringImpl("root"));
+    NiftyTreeNode child = new NiftyTreeNode(niftyNodeStringImpl("child"));
+    root.addChild(child);
+
+    Iterator<NiftyNodeImpl> it = createIterator(root);
+    assertTrue(it.hasNext());
+    assertEquals("root", it.next().getNiftyNode().toString());
+
+    assertTrue(it.hasNext());
+    assertEquals("child", it.next().getNiftyNode().toString());
+
+    assertFalse(it.hasNext());
+    try {
+      it.next();
+      fail("expected exception");
+    } catch (NoSuchElementException e) {
     }
-    cached = findNext();
-    return cached != null;
   }
 
-  @Override
-  public NiftyTreeNode<X> next() {
-    if (cached != null) {
-      NiftyTreeNode<X> result = cached;
-      cached = null;
-      return result;
-    }
-    NiftyTreeNode<X> result = findNext();
-    if (result == null) {
-      throw new NoSuchElementException();
-    }
-    return result;
-  }
-
-  @Override
-  public void remove() {
-    throw new UnsupportedOperationException();
-  }
-
-  private NiftyTreeNode<X> findNext() {
-    while (it.hasNext()) {
-      NiftyTreeNode<T> next = it.next();
-      T value = next.getValue();
-      if (clazz.isAssignableFrom(value.getClass())) {
-        return (NiftyTreeNode<X>) next;
-      }
-    }
-    return null;
+  private Iterator<NiftyNodeImpl> createIterator(final NiftyTreeNode root) {
+    return new NiftyTreeNodeNiftyNodeImplIterator(new NiftyTreeNodeDepthFirstIterator(root));
   }
 }

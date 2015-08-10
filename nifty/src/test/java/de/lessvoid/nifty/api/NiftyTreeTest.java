@@ -57,6 +57,8 @@ public class NiftyTreeTest {
     replay(b);
     replay(c);
     nifty = new Nifty(a, b, c);
+    nifty.registerNodeImpl(NiftyNodeString.class, NiftyNodeStringImpl.class);
+    nifty.registerNodeImpl(NiftyNodeLong.class, NiftyNodeLongImpl.class);
   }
 
   @Test
@@ -286,15 +288,15 @@ public class NiftyTreeTest {
     assertEqualList(makeList(nifty.childNodes(parent)), expected);
   }
 
-  private <X extends NiftyNode> void assertFilteredChildNodes(final Class<X> clazz, final X ... expected) {
+  private <X extends NiftyNode> void assertFilteredChildNodes(final Class<X> clazz, final NiftyNode ... expected) {
     assertEqualList(makeList(nifty.filteredChildNodes(clazz)), expected);
   }
 
-  private <X extends NiftyNode> void assertFilteredChildNodesFromParent(final Class<X> clazz, final NiftyNode parent, final X... expected) {
+  private <X extends NiftyNode> void assertFilteredChildNodesFromParent(final Class<X> clazz, final NiftyNode parent, final NiftyNode... expected) {
     assertEqualList(makeList(nifty.filteredChildNodes(clazz, parent)), expected);
   }
 
-  private <X> void assertEqualList(final List<X> actual, final X... expected) {
+  private <X> void assertEqualList(final List<X> actual, final NiftyNode... expected) {
     assertEquals(expected.length, actual.size());
     for (int i=0; i<expected.length; i++) {
       assertEquals(expected[i].toString(), actual.get(i).toString());

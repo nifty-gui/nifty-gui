@@ -30,9 +30,9 @@ package de.lessvoid.nifty.api.node;
 import de.lessvoid.nifty.api.NiftyLayout;
 import de.lessvoid.nifty.api.types.Rect;
 import de.lessvoid.nifty.api.types.Size;
+import de.lessvoid.nifty.spi.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This interface defines the simple layout node for Nifty. These nodes are the backbone of the layout system in Nifty.
@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public interface NiftyLayoutNode extends NiftyNode {
+public interface NiftyLayoutNode extends NiftyNodeImpl {
   /**
    * Called once the layout node is attached to the node tree. This function is required
    * to inform the layout system about this node correctly.

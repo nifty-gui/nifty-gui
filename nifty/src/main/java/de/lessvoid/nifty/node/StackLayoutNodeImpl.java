@@ -119,4 +119,14 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl {
       invalidateArrange();
     }
   }
+
+  @Override
+  public void initialize(final NiftyNode niftyNode) {
+
+  }
+
+  @Override
+  public NiftyNode getNiftyNode() {
+    return null;
+  }
 }

@@ -29,6 +29,7 @@ package de.lessvoid.nifty.api.node;
 import de.lessvoid.nifty.api.types.NiftyColor;
 
 /**
+ * The API for the NiftyBackgroundColor node.
  * Created by void on 09.08.15.
  */
 public class NiftyBackgroundColor implements NiftyNode {

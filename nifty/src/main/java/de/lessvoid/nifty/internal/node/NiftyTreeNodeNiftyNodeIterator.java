@@ -24,41 +24,34 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.api;
+package de.lessvoid.nifty.internal.node;
 
 import de.lessvoid.nifty.api.node.NiftyNode;
 
-public class NiftyNodeLong implements NiftyNode {
-  private final Long value;
+import java.util.Iterator;
 
-  public NiftyNodeLong(final Long value) {
-    this.value = value;
-  }
+/**
+ * Wrapper iterator to return the NiftyTreeNode values directly.
+ */
+public class NiftyTreeNodeNiftyNodeIterator<T extends NiftyNode> implements Iterator<T> {
+  private final Iterator<NiftyTreeNode> it;
 
-  public long getValue() {
-    return value;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    NiftyNodeLong that = (NiftyNodeLong) o;
-    return !(value != null ? !value.equals(that.value) : that.value != null);
+  public NiftyTreeNodeNiftyNodeIterator(final Iterator<NiftyTreeNode> it) {
+    this.it = it;
   }
 
   @Override
-  public int hashCode() {
-    return value != null ? value.hashCode() : 0;
+  public boolean hasNext() {
+    return it.hasNext();
   }
 
   @Override
-  public String toString() {
-    return String.valueOf(value);
+  public T next() {
+    return (T) it.next().getValue().getNiftyNode();
   }
 
-  public static NiftyNodeLong niftyNodeLong(final long value) {
-    return new NiftyNodeLong(value);
+  @Override
+  public void remove() {
+    throw new UnsupportedOperationException();
   }
-
 }
