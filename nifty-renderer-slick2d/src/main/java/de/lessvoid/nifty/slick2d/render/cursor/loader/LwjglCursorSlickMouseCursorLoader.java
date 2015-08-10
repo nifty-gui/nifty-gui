@@ -4,6 +4,7 @@ import de.lessvoid.nifty.slick2d.render.cursor.LwjglCursorSlickMouseCursor;
 import de.lessvoid.nifty.slick2d.render.cursor.SlickLoadCursorException;
 import de.lessvoid.nifty.slick2d.render.cursor.SlickMouseCursor;
 import org.lwjgl.LWJGLException;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.opengl.CursorLoader;
 import org.newdawn.slick.opengl.ImageDataFactory;
 import org.newdawn.slick.opengl.LoadableImageData;
@@ -18,15 +19,12 @@ import java.io.IOException;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class LwjglCursorSlickMouseCursorLoader implements SlickMouseCursorLoader {
-
   /**
    * Load a new mouse cursor.
    */
   @Nonnull
   @Override
-  public SlickMouseCursor loadCursor(
-      final String filename, final int hotspotX, final int hotspotY) throws SlickLoadCursorException {
-
+  public SlickMouseCursor loadCursor(String filename, int hotspotX, int hotspotY, @Nonnull GameContainer container) throws SlickLoadCursorException {
     final LoadableImageData data = ImageDataFactory.getImageDataFor(filename);
     try {
       data.loadImage(ResourceLoader.getResourceAsStream(filename), true, true, null);
@@ -34,12 +32,11 @@ public final class LwjglCursorSlickMouseCursorLoader implements SlickMouseCursor
       throw new SlickLoadCursorException("Failed loading cursor.", e);
     }
     try {
-      return new LwjglCursorSlickMouseCursor(CursorLoader.get().getCursor(data, hotspotX, hotspotY));
+      return new LwjglCursorSlickMouseCursor(CursorLoader.get().getCursor(data, hotspotX, hotspotY), container);
     } catch (@Nonnull final LWJGLException e) {
       throw new SlickLoadCursorException("Failed loading cursor.", e);
     } catch (@Nonnull final IOException e) {
       throw new SlickLoadCursorException("Failed loading cursor.", e);
     }
   }
-
 }

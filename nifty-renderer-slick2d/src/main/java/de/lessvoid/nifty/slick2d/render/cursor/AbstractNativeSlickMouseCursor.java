@@ -16,14 +16,4 @@ public abstract class AbstractNativeSlickMouseCursor implements SlickMouseCursor
   public final void render(final Graphics g, final int x, final int y) {
     // nothing
   }
-
-  @Override
-  public void enable() {
-    throw new UnsupportedOperationException("Use enableCursor(GameContainer container).");
-  }
-
-  @Override
-  public void disable() {
-    throw new UnsupportedOperationException("Use disableCursor(GameContainer container).");
-  }
 }

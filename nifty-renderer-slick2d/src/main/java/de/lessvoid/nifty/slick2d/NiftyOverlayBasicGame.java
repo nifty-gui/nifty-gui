@@ -214,7 +214,7 @@ public abstract class NiftyOverlayBasicGame extends BasicGame implements NiftyIn
    * @see SlickSoundDevice
    */
   protected final void initNifty(@Nonnull final GameContainer container, @Nonnull final SlickInputSystem inputSystem) {
-    initNifty(container, new BatchRenderDevice(SlickBatchRenderBackendFactory.create()), new SlickSoundDevice(), inputSystem);
+    initNifty(container, new BatchRenderDevice(SlickBatchRenderBackendFactory.create(container)), new SlickSoundDevice(), inputSystem);
   }
 
   /**
