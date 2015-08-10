@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  *
  * @deprecated Use {@link de.lessvoid.nifty.render.batch.BatchRenderDevice} with
- * {@link de.lessvoid.nifty.slick2d.render.batch.SlickBatchRenderBackendFactory#create()}.
+ * {@link de.lessvoid.nifty.slick2d.render.batch.SlickBatchRenderBackendFactory#create(GameContainer)}.
  */
 @Deprecated
 public final class SlickRenderDevice implements RenderDevice {
@@ -37,11 +37,12 @@ public final class SlickRenderDevice implements RenderDevice {
    * The mouse cursor that is currently active.
    */
   @Nullable
-  private SlickMouseCursor activeMouseCursor = null;
+  private MouseCursor activeMouseCursor = null;
 
   /**
    * The game container that hosts the render area the Nifty GUI is supposed to be rendered inside
    */
+  @Nonnull
   private final GameContainer gameContainer;
 
   /**
@@ -62,7 +63,7 @@ public final class SlickRenderDevice implements RenderDevice {
    *
    * @param container the game container
    */
-  public SlickRenderDevice(final GameContainer container) {
+  public SlickRenderDevice(@Nonnull final GameContainer container) {
     gameContainer = container;
     tempSlickColor = new org.newdawn.slick.Color(0.0f, 0.0f, 0.0f, 0.0f);
   }
@@ -102,7 +103,7 @@ public final class SlickRenderDevice implements RenderDevice {
    */
   @Override
   public MouseCursor createMouseCursor(@Nonnull final String filename, final int hotspotX, final int hotspotY) {
-    return SlickMouseCursorLoaders.getInstance().loadCursor(filename, hotspotX, hotspotY);
+    return SlickMouseCursorLoaders.getInstance().loadCursor(filename, hotspotX, hotspotY, gameContainer);
   }
 
   /**
@@ -119,7 +120,7 @@ public final class SlickRenderDevice implements RenderDevice {
   @Override
   public void disableMouseCursor() {
     if (activeMouseCursor != null) {
-      activeMouseCursor.disableCursor(gameContainer);
+      activeMouseCursor.disable();
       activeMouseCursor = null;
     }
   }
@@ -137,12 +138,8 @@ public final class SlickRenderDevice implements RenderDevice {
    */
   @Override
   public void enableMouseCursor(@Nonnull final MouseCursor mouseCursor) {
-    if (!(mouseCursor instanceof SlickMouseCursor)) {
-      throw new IllegalArgumentException("Invalid mouse cursor implementation.");
-    }
-
-    activeMouseCursor = (SlickMouseCursor) mouseCursor;
-    activeMouseCursor.enableCursor(gameContainer);
+    activeMouseCursor = mouseCursor;
+    activeMouseCursor.enable();
   }
 
   /**
@@ -150,9 +147,9 @@ public final class SlickRenderDevice implements RenderDevice {
    */
   @Override
   public void endFrame() {
-    if (activeMouseCursor != null) {
+    if (activeMouseCursor instanceof SlickMouseCursor) {
       final Input input = gameContainer.getInput();
-      activeMouseCursor.render(gameContainer.getGraphics(), input.getMouseX(), input.getMouseY());
+      ((SlickMouseCursor)activeMouseCursor).render(gameContainer.getGraphics(), input.getMouseX(), input.getMouseY());
     }
   }
 

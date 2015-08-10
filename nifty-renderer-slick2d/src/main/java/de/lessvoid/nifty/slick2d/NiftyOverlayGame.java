@@ -210,7 +210,7 @@ public abstract class NiftyOverlayGame implements Game, NiftyInputForwarding, Ni
    * @see SlickSoundDevice
    */
   protected final void initNifty(@Nonnull final GameContainer container, @Nonnull final SlickInputSystem inputSystem) {
-    initNifty(container, new BatchRenderDevice(SlickBatchRenderBackendFactory.create()), new SlickSoundDevice(), inputSystem);
+    initNifty(container, new BatchRenderDevice(SlickBatchRenderBackendFactory.create(container)), new SlickSoundDevice(), inputSystem);
   }
 
   /**

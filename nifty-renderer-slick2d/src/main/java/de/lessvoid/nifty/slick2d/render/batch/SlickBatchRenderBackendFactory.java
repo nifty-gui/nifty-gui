@@ -1,7 +1,7 @@
 package de.lessvoid.nifty.slick2d.render.batch;
 
-import de.lessvoid.nifty.render.batch.BatchRenderBackendInternal;
 import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
+import org.newdawn.slick.GameContainer;
 
 import javax.annotation.Nonnull;
 
@@ -10,11 +10,12 @@ import javax.annotation.Nonnull;
  */
 public class SlickBatchRenderBackendFactory {
   @Nonnull
-  public static BatchRenderBackend create() {
-    return new BatchRenderBackendInternal(
+  public static BatchRenderBackend create(@Nonnull final GameContainer container) {
+    return new SlickBatchRenderBackend(
             new SlickGL(),
             new SlickBufferFactory(),
             new SlickImageFactory(),
-            new SlickMouseCursorFactory());
+            new SlickMouseCursorFactory(container),
+            container);
   }
 }

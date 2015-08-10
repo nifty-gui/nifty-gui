@@ -307,7 +307,7 @@ public abstract class NiftyOverlayGameState implements GameState,
       @Nonnull final GameContainer container,
       @Nonnull final StateBasedGame game,
       @Nonnull final SlickInputSystem inputSystem) {
-    initNifty(container, game, new BatchRenderDevice(SlickBatchRenderBackendFactory.create()), new SlickSoundDevice(), inputSystem);
+    initNifty(container, game, new BatchRenderDevice(SlickBatchRenderBackendFactory.create(container)), new SlickSoundDevice(), inputSystem);
   }
 
   /**

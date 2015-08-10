@@ -4,6 +4,7 @@ import de.lessvoid.nifty.slick2d.render.cursor.SlickLoadCursorException;
 import de.lessvoid.nifty.slick2d.render.cursor.SlickMouseCursor;
 import de.lessvoid.nifty.slick2d.render.cursor.loader.LwjglCursorSlickMouseCursorLoader;
 import de.lessvoid.nifty.slick2d.render.cursor.loader.SlickMouseCursorLoader;
+import org.newdawn.slick.GameContainer;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
@@ -46,12 +47,15 @@ public final class SlickMouseCursorLoaders extends AbstractSlickLoaders<SlickMou
    */
   @Nonnull
   @SuppressWarnings("TypeMayBeWeakened")
-  public SlickMouseCursor loadCursor(final String filename, final int hotspotX, final int hotspotY) {
+  public SlickMouseCursor loadCursor(final String filename,
+                                     final int hotspotX,
+                                     final int hotspotY,
+                                     @Nonnull final GameContainer container) {
     final Iterator<SlickMouseCursorLoader> itr = getLoaderIterator();
 
     while (itr.hasNext()) {
       try {
-        return itr.next().loadCursor(filename, hotspotX, hotspotY);
+        return itr.next().loadCursor(filename, hotspotX, hotspotY, container);
       } catch (@Nonnull final SlickLoadCursorException ignored) {
         // this loader failed... does not matter
       }
