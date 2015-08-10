@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.loaderv2.types;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyDefaults;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.NiftyInputControl;
 import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
@@ -240,7 +241,7 @@ public class ElementType extends XmlBaseType {
       inputMapping = ClassHelper.getInstance(inputMappingClass, NiftyInputMapping.class);
     }
     if (inputMapping == null) {
-      inputMapping = new DefaultInputMapping();
+      inputMapping = NiftyDefaults.getDefaultInputMapping();
     }
 
     return new NiftyInputControl(controller, inputMapping);

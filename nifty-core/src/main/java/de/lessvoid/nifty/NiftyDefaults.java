@@ -1,10 +1,15 @@
 package de.lessvoid.nifty;
 
-import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
-
 import javax.annotation.Nonnull;
 
+import de.lessvoid.nifty.input.NiftyInputMapping;
+import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
+import de.lessvoid.nifty.loaderv2.types.RegisterEffectType;
+import de.lessvoid.xml.tools.ClassHelper;
+
 public class NiftyDefaults {
+  private static Class <? extends NiftyInputMapping> defaultNiftyInputMapping = DefaultInputMapping.class;
+
   private NiftyDefaults() {
   }
 
@@ -50,6 +55,20 @@ public class NiftyDefaults {
     nifty.registerEffect(new RegisterEffectType("textColorAnimated", "de.lessvoid.nifty.effects.impl.TextColorAnimated"));
     nifty.registerEffect(new RegisterEffectType("textSize", "de.lessvoid.nifty.effects.impl.TextSize"));
     nifty.registerEffect(new RegisterEffectType("textSizePulsate", "de.lessvoid.nifty.effects.impl.TextSizePulsate"));
-    nifty.registerEffect(new RegisterEffectType("updateScrollpanelPositionToDisplayElement", "de.lessvoid.nifty.controls.scrollbar.UpdateScrollpanelPositionToDisplayElement"));    
+    nifty.registerEffect(new RegisterEffectType("updateScrollpanelPositionToDisplayElement", "de.lessvoid.nifty.controls.scrollbar.UpdateScrollpanelPositionToDisplayElement"));
+  }
+
+  @Nonnull
+  public static NiftyInputMapping getDefaultInputMapping() {
+    return ClassHelper.getInstance(defaultNiftyInputMapping);
+  }
+
+  static void setDefaultInputMapping(final Class<? extends NiftyInputMapping> defaultInputMappingType)
+  {
+    if (defaultInputMappingType == null)
+    {
+      return;
+    }
+    defaultNiftyInputMapping = defaultInputMappingType;
   }
 }

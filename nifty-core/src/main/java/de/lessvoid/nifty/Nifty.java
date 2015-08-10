@@ -36,6 +36,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.ElementMoveAction;
 import de.lessvoid.nifty.elements.ElementRemoveAction;
 import de.lessvoid.nifty.elements.EndOfFrameElementAction;
+import de.lessvoid.nifty.input.NiftyInputMapping;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.input.mouse.MouseInputEventProcessor;
@@ -2099,5 +2100,14 @@ public class Nifty {
 
   public boolean isNiftyMethodInvokerDebugEnabled() {
     return niftyMethodInvokerDebugEnabled;
+  }
+
+  /**
+   * Sets the static default NiftyInputMapping used by all input event handlers.
+   * <b>Important note: this change will persist to all Nifty instances.</b>
+   */
+  public static void setDefaultInputMappingType (@Nonnull final Class<? extends NiftyInputMapping> defaultInputMappingType)
+  {
+    NiftyDefaults.setDefaultInputMapping(defaultInputMappingType);
   }
 }
