@@ -41,6 +41,8 @@ public final class MouseEventWheelMoved extends AbstractMouseEvent {
    */
   @Override
   public boolean sendToSlick(@Nonnull final InputListener listener) {
+    if(!listener.isAcceptingInput()) return false;
+    
     listener.mouseWheelMoved(wheelDelta);
     return true;
   }
