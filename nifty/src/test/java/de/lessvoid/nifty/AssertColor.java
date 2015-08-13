@@ -27,8 +27,8 @@
 package de.lessvoid.nifty;
 
 import static org.junit.Assert.assertEquals;
-import de.lessvoid.nifty.api.types.NiftyColor;
-import de.lessvoid.nifty.api.types.NiftyMutableColor;
+import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.types.NiftyMutableColor;
 
 public class AssertColor {
   private static final float DELTA = 1.f / 255.f;

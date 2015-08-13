@@ -26,11 +26,11 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import de.lessvoid.nifty.api.Nifty;
-import de.lessvoid.nifty.api.types.NiftyColor;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.types.NiftyColor;
 
-import static de.lessvoid.nifty.api.node.NiftyBackgroundColor.backgroundColorNode;
-import static de.lessvoid.nifty.api.node.NiftyContent.niftyContentNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundColor.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyContent.niftyContentNode;
 
 /**
  * Fill the whole screen with red using a background color and a content node.

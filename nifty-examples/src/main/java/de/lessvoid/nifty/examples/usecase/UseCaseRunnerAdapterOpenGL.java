@@ -32,7 +32,7 @@ import de.lessvoid.coregl.spi.CoreGL;
 import de.lessvoid.coregl.spi.CoreSetup;
 import de.lessvoid.coregl.spi.CoreSetup.RenderLoopCallback;
 import de.lessvoid.nifty.time.AccurateTimeProvider;
-import de.lessvoid.nifty.api.Nifty;
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.input.lwjgl.NiftyInputDeviceLWJGL;
 import de.lessvoid.nifty.renderer.opengl.NiftyRenderDeviceOpenGL;
 import de.lessvoid.nifty.spi.NiftyInputDevice;

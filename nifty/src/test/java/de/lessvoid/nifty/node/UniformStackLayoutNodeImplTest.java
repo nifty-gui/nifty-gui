@@ -1,10 +1,10 @@
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.api.NiftyLayout;
+import de.lessvoid.nifty.NiftyLayout;
 import de.lessvoid.nifty.spi.NiftyNode;
-import de.lessvoid.nifty.api.types.Point;
-import de.lessvoid.nifty.api.types.Rect;
-import de.lessvoid.nifty.api.types.Size;
+import de.lessvoid.nifty.types.Point;
+import de.lessvoid.nifty.types.Rect;
+import de.lessvoid.nifty.types.Size;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;

@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.lwjgl.input.Keyboard;
 
-import de.lessvoid.nifty.api.input.NiftyKeyboardEvent;
+import de.lessvoid.nifty.input.NiftyKeyboardEvent;
 
 
 /**

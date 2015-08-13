@@ -1,9 +1,9 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.spi.NiftyNode;
-import de.lessvoid.nifty.api.types.Point;
-import de.lessvoid.nifty.api.types.Rect;
-import de.lessvoid.nifty.api.types.Size;
+import de.lessvoid.nifty.types.Point;
+import de.lessvoid.nifty.types.Rect;
+import de.lessvoid.nifty.types.Size;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;

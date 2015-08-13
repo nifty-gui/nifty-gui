@@ -30,12 +30,12 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.List;
 
-import de.lessvoid.nifty.api.types.NiftyColor;
-import de.lessvoid.nifty.api.types.NiftyColorStop;
-import de.lessvoid.nifty.api.types.NiftyCompositeOperation;
-import de.lessvoid.nifty.api.types.NiftyLineCapType;
-import de.lessvoid.nifty.api.types.NiftyLineJoinType;
-import de.lessvoid.nifty.internal.NiftyResourceLoader;
+import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.types.NiftyColorStop;
+import de.lessvoid.nifty.types.NiftyCompositeOperation;
+import de.lessvoid.nifty.types.NiftyLineCapType;
+import de.lessvoid.nifty.types.NiftyLineJoinType;
+import de.lessvoid.niftyinternal.NiftyResourceLoader;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
