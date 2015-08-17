@@ -6,7 +6,7 @@ import de.lessvoid.nifty.spi.NiftyNodeImpl;
 /**
  * Created by void on 08.08.15.
  */
-public class NiftyRootNodeImpl implements NiftyNodeImpl<NiftyRootNode> {
+public class NiftyNodeImplRoot implements NiftyNodeImpl<NiftyRootNode> {
   private NiftyRootNode niftyRootNode;
 
   @Override

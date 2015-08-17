@@ -203,6 +203,15 @@ public class InternalNiftyTree {
   }
 
   /**
+   * Return a depth first Iterator for all NiftyNodes in this tree that are instances of the given class.
+   * @param clazz only return entries if they are instances of this clazz
+   * @return the Iterator
+   */
+  public <T> Iterable<T> filteredChildNodesGeneral(final Class<T> clazz) {
+    return makeIterable(filteredIterator(clazz, root));
+  }
+
+  /**
    * Get the parent NiftyNode of the niftyNode given.
    * @param current the NiftyNode in question
    * @return the parent NiftyNode or null
@@ -266,6 +275,10 @@ public class InternalNiftyTree {
 
   private <T extends NiftyNode> Iterator<T> filteredNiftyNodeIterator(final Class<T> clazz, final NiftyTreeNode startTreeNode) {
     return startTreeNode.filteredNiftyNodeIterator(clazz);
+  }
+
+  private <T> Iterator<T> filteredIterator(final Class<T> clazz, final NiftyTreeNode startTreeNode) {
+    return startTreeNode.filteredIterator(clazz);
   }
 
   private void registerNode(final NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl, final NiftyTreeNode niftyTreeNode) {

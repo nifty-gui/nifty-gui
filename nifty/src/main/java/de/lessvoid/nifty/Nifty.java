@@ -31,21 +31,21 @@ import de.lessvoid.nifty.canvas.NiftyCanvasPainterShader;
 import de.lessvoid.nifty.input.NiftyInputConsumer;
 import de.lessvoid.nifty.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.input.NiftyPointerEvent;
-import de.lessvoid.nifty.node.NiftyBackgroundColor;
-import de.lessvoid.nifty.node.NiftyContent;
+import de.lessvoid.nifty.node.NiftyBackgroundColorNode;
+import de.lessvoid.nifty.node.NiftyContentNode;
 import de.lessvoid.nifty.node.NiftyLayoutNode;
 import de.lessvoid.nifty.node.NiftyRootNode;
 import de.lessvoid.niftyinternal.InternalNiftyEventBus;
 import de.lessvoid.niftyinternal.InternalNiftyImage;
-import de.lessvoid.niftyinternal.node.NiftyBackgroundColorImpl;
-import de.lessvoid.niftyinternal.node.NiftyContentImpl;
-import de.lessvoid.niftyinternal.node.NiftyRootNodeImpl;
+import de.lessvoid.niftyinternal.node.NiftyNodeImplBackgroundColor;
+import de.lessvoid.niftyinternal.node.NiftyNodeImplContent;
+import de.lessvoid.niftyinternal.node.NiftyNodeImplRoot;
+import de.lessvoid.niftyinternal.render.InternalNiftyRenderer;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 import de.lessvoid.niftyinternal.NiftyResourceLoader;
 import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.common.StatisticsRendererFPS;
-import de.lessvoid.niftyinternal.render.NiftyRenderer;
 import de.lessvoid.niftyinternal.render.font.FontRenderer;
 import de.lessvoid.nifty.spi.*;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
@@ -85,7 +85,7 @@ public class Nifty {
   private final List<NiftyNode> nodesToReceiveEvents = new ArrayList<>();
 
   // the class performing the conversion from NiftyNode to RenderNode and takes care of all rendering.
-  private final NiftyRenderer renderer;
+  private final InternalNiftyRenderer renderer;
 
   // the class that interfaces us to input events (mouse, touch, keyboard)
   private NiftyInputDevice inputDevice;
@@ -134,7 +134,7 @@ public class Nifty {
 
     statistics = new NiftyStatistics(new Statistics(timeProvider));
     stats = statistics.getImpl();
-    renderer = new NiftyRenderer(statistics.getImpl(), newRenderDevice);
+    renderer = new InternalNiftyRenderer(statistics.getImpl(), newRenderDevice);
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
     tree = new InternalNiftyTree(niftyNodeImpl(new NiftyRootNode()));
     layout = new NiftyLayout(this, tree);
@@ -178,6 +178,20 @@ public class Nifty {
     */
     stats.stopUpdate();
   }
+
+  /**
+   * Render the Nifty scene.
+   *
+   * @return true if the frame changed and false if the content is still the same
+   */
+  public boolean render() {
+    stats.startRender();
+    boolean frameChanged = renderer.render(tree);
+    stats.stopRender();
+    stats.endFrame();
+    return frameChanged;
+  }
+
 
   private List<NiftyNode> collectInputReceivers() {
     /* FIXME
@@ -242,81 +256,6 @@ public class Nifty {
     });
   }
 
-  /**
-   * Render the Nifty scene.
-   *
-   * @return true if the frame changed and false if the content is still the same
-   */
-  public boolean render() {
-    stats.startRender();
-    boolean frameChanged = renderer.render(tree);
-    stats.stopRender();
-    stats.endFrame();
-    return frameChanged;
-  }
-
-  /* FIXME
-  public NiftyNode createRootNode(
-      final UnitValue width,
-      final UnitValue height,
-      final ChildLayout childLayout) {
-    return createRootNode(ChildLayout.Center, width, height, childLayout);
-  }
-  */
-  /**
-   * Create a new root node with a given width, height and child layout. A root node is just a regular NiftyNode that
-   * forms the base node of a scene graph. You can add several root nodes!
-   *
-   * @param rootNodePlacementLayout the child layout that defines how to place the new root node on the screen
-   * @param width the width of the root node
-   * @param height the height of the root node
-   * @param childLayout the childLayout for the root node (this determines the way any child nodes will be laid out
-   * in the new rootNode)
-   *
-   * @return a new NiftyNode acting as the root of a Nifty scene graph
-   */
-
-  /* FIXME
-  public NiftyNode createRootNode(
-      final ChildLayout rootNodePlacementLayout,
-      final UnitValue width,
-      final UnitValue height,
-      final ChildLayout childLayout) {
-    NiftyNode rootNodeInternal = createRootNode(rootNodePlacementLayout);
-    rootNodeInternal.setWidthConstraint(width);
-    rootNodeInternal.setHeightConstraint(height);
-    rootNodeInternal.setChildLayout(childLayout);
-    return rootNodeInternal;
-  }
-  */
-  /**
-   * @see #createRootNode(UnitValue, UnitValue, ChildLayout)
-   *
-   * Additionally this method will make the created root node the same size as the current screen.
-   *
-   * @return a new NiftyNode
-   */
-
-  /* FIXME
-  public NiftyNode createRootNodeFullscreen() {
-    return createRootNode(ChildLayout.Center, UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), ChildLayout.None);
-  }
-  */
-  /**
-   * @see #createRootNode(UnitValue, UnitValue, ChildLayout)
-   *
-   * Additionally this method will make the created root node the same size as the current screen.
-   *
-   * @param childLayout the childLayout for the root node (this determines the way any child nodes will be layed out
-   * in the new rootNode)
-   * @return a new NiftyNode
-   */
-
-  /* FIXME
-  public NiftyNode createRootNodeFullscreen(final ChildLayout childLayout) {
-    return createRootNode(ChildLayout.Center, UnitValue.px(getScreenWidth()), UnitValue.px(getScreenHeight()), childLayout);
-  }
-  */
   /**
    * Create a new NiftyImage.
    * @param filename the filename to load
@@ -507,9 +446,9 @@ public class Nifty {
   }
 
   private void registerStandardNodes() {
-    registerNodeImpl(NiftyRootNode.class, NiftyRootNodeImpl.class);
-    registerNodeImpl(NiftyContent.class, NiftyContentImpl.class);
-    registerNodeImpl(NiftyBackgroundColor.class, NiftyBackgroundColorImpl.class);
+    registerNodeImpl(NiftyRootNode.class, NiftyNodeImplRoot.class);
+    registerNodeImpl(NiftyContentNode.class, NiftyNodeImplContent.class);
+    registerNodeImpl(NiftyBackgroundColorNode.class, NiftyNodeImplBackgroundColor.class);
   }
 
   private <T extends NiftyNode> NiftyNodeImpl<T> niftyNodeImpl(final T child) {

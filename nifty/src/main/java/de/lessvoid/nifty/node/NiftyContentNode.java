@@ -31,8 +31,12 @@ import de.lessvoid.nifty.spi.NiftyNode;
 /**
  * Created by void on 09.08.15.
  */
-public class NiftyContent implements NiftyNode {
-  public static NiftyContent niftyContentNode() {
-    return new NiftyContent();
+public class NiftyContentNode implements NiftyNode {
+  public static NiftyContentNode niftyContentNode() {
+    return new NiftyContentNode();
+  }
+
+  public String toString() {
+    return "(" + this.getClass().getSimpleName() + ")";
   }
 }

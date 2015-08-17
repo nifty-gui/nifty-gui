@@ -101,6 +101,13 @@ public class NiftyTreeNode {
                 niftyTreeNodeIterator(), clazz));
   }
 
+  public <T> Iterator<T> filteredIterator(final Class<T> clazz) {
+    return
+        new NiftyTreeNodeNiftyNodeIterator(
+            new NiftyTreeNodeNiftyNodeClassFilterIterator(
+                niftyTreeNodeIterator(), clazz));
+  }
+
   public void remove() {
     if (parent == null) {
       return;

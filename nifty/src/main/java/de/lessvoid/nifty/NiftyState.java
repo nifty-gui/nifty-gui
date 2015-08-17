@@ -24,31 +24,33 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.node;
+package de.lessvoid.nifty;
 
-import de.lessvoid.nifty.types.NiftyColor;
-import de.lessvoid.nifty.spi.NiftyNode;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * The API for the NiftyBackgroundColor node.
- * Created by void on 09.08.15.
+ *
+ * Created by void on 16.08.15.
  */
-public class NiftyBackgroundColor implements NiftyNode {
-  private NiftyColor backgroundColor;
+public class NiftyState {
 
-  public static NiftyBackgroundColor backgroundColorNode(final NiftyColor backgroundColor) {
-    return new NiftyBackgroundColor(backgroundColor);
+  interface State {
+    String name();
   }
 
-  public NiftyBackgroundColor(final NiftyColor backgroundColor) {
-    this.backgroundColor = backgroundColor;
+  public enum NiftyStandardState implements State {
+    NiftyStateBackgroundColor;
   }
 
-  public void setBackgroundColor(final NiftyColor backgroundColor) {
-    this.backgroundColor = backgroundColor;
+  private final Map<State, Object> stateMap = new HashMap<>();
+
+  public <T> void setState(final State state, final T value) {
+    stateMap.put(state, value);
   }
 
-  public NiftyColor getBackgroundColor() {
-    return backgroundColor;
+  public <T> T getState(final State state) {
+    return (T) stateMap.get(state);
   }
 }

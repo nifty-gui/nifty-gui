@@ -24,24 +24,17 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.node;
+package de.lessvoid.nifty.spi;
 
-import de.lessvoid.nifty.node.NiftyContent;
-import de.lessvoid.nifty.spi.NiftyNodeImpl;
+import de.lessvoid.nifty.NiftyState;
 
 /**
- * Created by void on 09.08.15.
+ * NiftyNodeStateImpl is a state aware NiftyNode. Nifty will call this Node with a NiftyState instance which this node
+ * can modify any way it sees.
+ *
+ * Created by void on 08.08.15.
  */
-public class NiftyContentImpl implements NiftyNodeImpl<NiftyContent> {
-  private NiftyContent niftyNode;
+public interface NiftyNodeStateImpl {
 
-  @Override
-  public void initialize(final NiftyContent niftyNode) {
-    this.niftyNode = niftyNode;
-  }
-
-  @Override
-  public NiftyContent getNiftyNode() {
-    return niftyNode;
-  }
+  void update(NiftyState niftyState);
 }

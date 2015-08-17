@@ -255,6 +255,21 @@ public class NiftyTreeNodeTest {
     assertFalse(it.hasNext());
   }
 
+  @Test
+  public void testFilteredIterator() {
+    NiftyTreeNode root = niftyTreeNode("root");
+    NiftyTreeNode child1 = niftyTreeNode("hello-1");
+    root.addChild(child1);
+    NiftyTreeNode child11 = niftyTreeNode(42L);
+    child1.addChild(child11);
+    NiftyTreeNode child2 = niftyTreeNode("hello-2");
+    root.addChild(child2);
+
+    Iterator<NiftyNodeLong> it = root.filteredIterator(NiftyNodeLong.class);
+    assertEquals(42L, it.next().getValue());
+    assertFalse(it.hasNext());
+  }
+
   private NiftyTreeNode niftyTreeNode(final String value) {
     return new NiftyTreeNode(niftyNodeStringImpl(value));
   }

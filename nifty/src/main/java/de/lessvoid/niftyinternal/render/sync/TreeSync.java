@@ -31,10 +31,11 @@ import java.util.List;
 import java.util.Map;
 
 import de.lessvoid.nifty.spi.NiftyNode;
+import de.lessvoid.nifty.spi.NiftyNodeImpl;
 import de.lessvoid.niftyinternal.render.RenderNode;
 
 /**
- * This class will take a list of InternalNiftyNodes and convert them into the list of RenderNodes. This will
+ * This class will take a list of NiftyNodeImpl and convert them into the list of RenderNodes. This will
  * traverse the whole tree including children and children children.
  *
  * @author void
@@ -54,25 +55,24 @@ public class TreeSync {
   /**
    * Take the list of srcNodes and translate them into the list of RenderNodes.
    *
-   * @param srcNodes the source list of InternalNiftyNodes
+   * @param srcNodes the source list of NiftyNodeImpl
    * @param dstNodes the destination list of RenderNodes
    * @return
    */
-  public boolean synchronizeTree(final List<NiftyNode> srcNodes, final List<RenderNode> dstNodes) {
+  public boolean synchronizeTree(final List<NiftyNodeImpl<?>> srcNodes, final List<RenderNode> dstNodes) {
     Map<Integer, RenderNode> renderNodeLookup = buildRenderNodeLookup(dstNodes);
     return syncNodes(srcNodes, dstNodes, renderNodeLookup);
   }
 
   private boolean syncNodes(
-      final List<NiftyNode> srcNodes,
+      final List<NiftyNodeImpl<?>> srcNodes,
       final List<RenderNode> dstNodes,
       final Map<Integer, RenderNode> renderNodeLookup) {
     boolean result = false;
-    // FIXME
-    /*
+/*
     for (int i=0; i<srcNodes.size(); i++) {
-      NiftyNode niftyNode = srcNodes.get(i);
-      RenderNode renderNode = renderNodeLookup.get(niftyNode.getId().hashCode());
+      NiftyNodeImpl<?> niftyNode = srcNodes.get(i);
+      RenderNode renderNode = renderNodeLookup.get(niftyNode.hashCode());
 
       if (hasInvalidDimension(niftyNode)) {
         if (renderNode != null) {
@@ -108,7 +108,7 @@ public class TreeSync {
   */
 
   private Map<Integer, RenderNode> buildRenderNodeLookup(final List<RenderNode> dstNodes) {
-    Map<Integer, RenderNode> result = new HashMap<Integer, RenderNode>();
+    Map<Integer, RenderNode> result = new HashMap<>();
     buildRenderNodeLookupInternal(result, dstNodes);
     return result;
   }
