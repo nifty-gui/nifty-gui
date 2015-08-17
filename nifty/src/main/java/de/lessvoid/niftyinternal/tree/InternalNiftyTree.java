@@ -208,7 +208,7 @@ public class InternalNiftyTree {
    * @return the Iterator
    */
   public <T> Iterable<T> filteredChildNodesGeneral(final Class<T> clazz) {
-    return makeIterable(filteredIterator(clazz, root));
+    return makeIterable(filteredIteratorGeneral(clazz, root));
   }
 
   /**
@@ -277,8 +277,8 @@ public class InternalNiftyTree {
     return startTreeNode.filteredNiftyNodeIterator(clazz);
   }
 
-  private <T> Iterator<T> filteredIterator(final Class<T> clazz, final NiftyTreeNode startTreeNode) {
-    return startTreeNode.filteredIterator(clazz);
+  private <T> Iterator<T> filteredIteratorGeneral(final Class<T> clazz, final NiftyTreeNode startTreeNode) {
+    return startTreeNode.filteredIteratorGeneral(clazz);
   }
 
   private void registerNode(final NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl, final NiftyTreeNode niftyTreeNode) {

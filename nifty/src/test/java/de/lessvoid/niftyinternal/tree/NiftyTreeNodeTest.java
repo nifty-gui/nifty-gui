@@ -265,7 +265,7 @@ public class NiftyTreeNodeTest {
     NiftyTreeNode child2 = niftyTreeNode("hello-2");
     root.addChild(child2);
 
-    Iterator<NiftyNodeLong> it = root.filteredIterator(NiftyNodeLong.class);
+    Iterator<NiftyNodeLong> it = root.filteredIteratorGeneral(NiftyNodeLong.class);
     assertEquals(42L, it.next().getValue());
     assertFalse(it.hasNext());
   }

@@ -34,4 +34,9 @@ final class InternalNiftyCanvasAccessorImpl extends NiftyCanvasAccessor {
     public InternalNiftyCanvas getInternalNiftyCanvas(final NiftyCanvas niftyCanvas) {
       return niftyCanvas.getImpl();
     }
+
+  @Override
+  public NiftyCanvas newNiftyCanvas() {
+    return new NiftyCanvas(new InternalNiftyCanvas());
+  }
 }

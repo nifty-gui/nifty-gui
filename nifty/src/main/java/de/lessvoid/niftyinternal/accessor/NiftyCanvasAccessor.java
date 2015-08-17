@@ -49,4 +49,5 @@ public abstract class NiftyCanvasAccessor {
     }
 
     public abstract InternalNiftyCanvas getInternalNiftyCanvas(NiftyCanvas niftyCanvas);
+    public abstract NiftyCanvas newNiftyCanvas();
 }

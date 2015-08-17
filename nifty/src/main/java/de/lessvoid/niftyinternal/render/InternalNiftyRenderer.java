@@ -27,14 +27,16 @@
 package de.lessvoid.niftyinternal.render;
 
 import de.lessvoid.nifty.NiftyState;
+import de.lessvoid.nifty.spi.NiftyNodeRenderImpl;
 import de.lessvoid.nifty.spi.NiftyNodeStateImpl;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.niftyinternal.common.Statistics;
+import de.lessvoid.niftyinternal.math.Mat4;
+import de.lessvoid.niftyinternal.render.batch.BatchManager;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
-import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -57,28 +59,37 @@ public class InternalNiftyRenderer {
   }
 
   public boolean render(final InternalNiftyTree tree) {
-    niftyNodeStateImplPass(tree.filteredChildNodesGeneral(NiftyNodeStateImpl.class));
+    nodeStatePass(tree.filteredChildNodesGeneral(NiftyNodeStateImpl.class));
 
-    return false;
+    render(nodeRenderPass(tree.filteredChildNodesGeneral(NiftyNodeRenderImpl.class), new ArrayList<RenderNode>()));
+
+    return true;
   }
 
-  private void niftyNodeStateImplPass(final Iterable<NiftyNodeStateImpl> nodes) {
+  private void nodeStatePass(final Iterable<NiftyNodeStateImpl> nodes) {
     NiftyState niftyState = new NiftyState();
     for (NiftyNodeStateImpl child : nodes) {
       child.update(niftyState);
     }
   }
 
-  private void render() {
+  private List<RenderNode> nodeRenderPass(final Iterable<NiftyNodeRenderImpl> nodes, final List<RenderNode> renderNodes) {
+    for (NiftyNodeRenderImpl child : nodes) {
+      renderNodes.add(child.convert(null));
+    }
+    return renderNodes;
+  }
+
+  private void render(List<RenderNode> renderNodes) {
     renderDevice.beginRender();
-/*
+
     BatchManager batchManager = new BatchManager();
     batchManager.begin();
     for (int i=0; i<renderNodes.size(); i++) {
-      renderNodes.get(i).render(batchManager, renderDevice, new Mat4());
+      renderNodes.get(i).render(batchManager, renderDevice);
     }
     batchManager.end(renderDevice);
-*/
+
     renderDevice.endRender();
   }
 }

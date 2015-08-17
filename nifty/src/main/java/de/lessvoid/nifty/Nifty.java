@@ -455,6 +455,11 @@ public class Nifty {
     try {
       NiftyNodeImpl<T> niftyNodeImpl = (NiftyNodeImpl<T>) nodeImplMapping.get(child.getClass()).newInstance();
       niftyNodeImpl.initialize(child);
+
+      if (NiftyNodeRenderImpl.class.isAssignableFrom(niftyNodeImpl.getClass())) {
+        ((NiftyNodeRenderImpl) niftyNodeImpl).initialize(renderDevice);
+      }
+
       return niftyNodeImpl;
     } catch (Exception e) {
       logger.log(Level.WARNING, "failed to instantiate NiftyNodeImpl", e);

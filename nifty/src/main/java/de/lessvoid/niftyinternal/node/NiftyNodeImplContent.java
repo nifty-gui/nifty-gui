@@ -27,22 +27,37 @@
 package de.lessvoid.niftyinternal.node;
 
 import de.lessvoid.nifty.NiftyState;
+import de.lessvoid.nifty.canvas.NiftyCanvas;
 import de.lessvoid.nifty.node.NiftyContentNode;
 import de.lessvoid.nifty.spi.NiftyNodeImpl;
+import de.lessvoid.nifty.spi.NiftyNodeRenderImpl;
 import de.lessvoid.nifty.spi.NiftyNodeStateImpl;
+import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.types.NiftyCompositeOperation;
+import de.lessvoid.niftyinternal.accessor.NiftyCanvasAccessor;
+import de.lessvoid.niftyinternal.math.Mat4;
+import de.lessvoid.niftyinternal.render.RenderNode;
 
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundColor;
 
 /**
  * Created by void on 09.08.15.
  */
-public class NiftyNodeImplContent implements NiftyNodeStateImpl, NiftyNodeImpl<NiftyContentNode> {
+public class NiftyNodeImplContent implements NiftyNodeStateImpl, NiftyNodeRenderImpl, NiftyNodeImpl<NiftyContentNode> {
+  private NiftyRenderDevice niftyRenderDevice;
   private NiftyContentNode niftyNode;
+  private NiftyCanvas niftyCanvas;
 
   @Override
   public void initialize(final NiftyContentNode niftyNode) {
     this.niftyNode = niftyNode;
+    this.niftyCanvas = NiftyCanvasAccessor.getDefault().newNiftyCanvas();
+  }
+
+  @Override
+  public void initialize(final NiftyRenderDevice niftyRenderDevice) {
+    this.niftyRenderDevice = niftyRenderDevice;
   }
 
   @Override
@@ -53,6 +68,22 @@ public class NiftyNodeImplContent implements NiftyNodeStateImpl, NiftyNodeImpl<N
   @Override
   public void update(final NiftyState niftyState) {
     NiftyColor color = niftyState.getState(NiftyStateBackgroundColor);
-    // TODO
+
+    NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas).reset();
+    niftyCanvas.setFillStyle(color);
+    niftyCanvas.fillRect(0., 0., 1024, 768.);
+  }
+
+  @Override
+  public RenderNode convert(final RenderNode renderNode) {
+    return new RenderNode(
+        new Mat4(),
+        1024,
+        768,
+        NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas).getCommands(),
+        niftyRenderDevice.createTexture(1024, 768, NiftyRenderDevice.FilterMode.Linear),
+        niftyRenderDevice.createTexture(1024, 768, NiftyRenderDevice.FilterMode.Linear),
+        NiftyCompositeOperation.SourceOver,
+        0);
   }
 }

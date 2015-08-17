@@ -101,10 +101,10 @@ public class NiftyTreeNode {
                 niftyTreeNodeIterator(), clazz));
   }
 
-  public <T> Iterator<T> filteredIterator(final Class<T> clazz) {
+  public <T> Iterator<T> filteredIteratorGeneral(final Class<T> clazz) {
     return
-        new NiftyTreeNodeNiftyNodeIterator(
-            new NiftyTreeNodeNiftyNodeClassFilterIterator(
+        new NiftyTreeNodeNiftyNodeImplIterator(
+            new NiftyTreeNodeNiftyNodeImplClassFilterIterator(
                 niftyTreeNodeIterator(), clazz));
   }
 

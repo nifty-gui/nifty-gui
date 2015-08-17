@@ -26,22 +26,21 @@
  */
 package de.lessvoid.niftyinternal.render;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
+import de.lessvoid.nifty.spi.NiftyTexture;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.niftyinternal.canvas.Command;
 import de.lessvoid.niftyinternal.canvas.Context;
 import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
-import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyTexture;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class RenderNode {
-  private final int nodeId;
   private final List<Command> commands;
   private final List<RenderNode> children = new ArrayList<RenderNode>();
   private final Mat4 local;
@@ -56,9 +55,9 @@ public class RenderNode {
   private final NiftyCompositeOperation compositeOperation;
   private final int renderOrder;
   private int indexInParent;
+  private Integer nodeId;
 
   public RenderNode(
-      final int nodeId,
       final Mat4 local,
       final int w,
       final int h,
@@ -67,7 +66,6 @@ public class RenderNode {
       final NiftyTexture workingTexture,
       final NiftyCompositeOperation compositeOperation,
       final int renderOrder) {
-    this.nodeId = nodeId;
     this.local = new Mat4(local);
     this.commands = commands;
     this.width = this.oldWidth = w;
@@ -75,13 +73,14 @@ public class RenderNode {
     this.context = new Context(contentTexture, workingTexture);
     this.compositeOperation = compositeOperation;
     this.renderOrder = renderOrder;
+    this.nodeId = this.hashCode();
   }
 
   public void setIndexInParent(final int indexInParent) {
     this.indexInParent = indexInParent;
   }
 
-  public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice, final Mat4 parent) {
+  public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice) {
     if (contentResized) {
       // only actually allocate new data when the new size is greater than the old size
       // if they are the same size or lower then we can keep the current data
@@ -107,24 +106,13 @@ public class RenderNode {
       needsContentUpdate = false;
     }
 
-    Mat4 current = Mat4.mul(parent, local);
     batchManager.addChangeCompositeOperation(compositeOperation);
-    batchManager.addTextureQuad(context.getNiftyTexture(), current, NiftyColor.white());
+    batchManager.addTextureQuad(context.getNiftyTexture(), local, NiftyColor.white());
 
     for (int i=0; i<children.size(); i++) {
-      children.get(i).render(batchManager, renderDevice, current);
+      children.get(i).render(batchManager, renderDevice);
     }
     needsRender = false;
-  }
-
-  @Deprecated
-  public void addChildNode(final RenderNode childNode) {
-    children.add(childNode);
-    childNode.setIndexInParent(children.size() - 1);
-  }
-
-  public int getNodeId() {
-    return nodeId;
   }
 
   public int getWidth() {
@@ -137,10 +125,6 @@ public class RenderNode {
 
   public Mat4 getLocal() {
     return new Mat4(local);
-  }
-
-  public void setLocal(final Mat4 src) {
-    this.local.load(src);
   }
 
   public void setWidth(final int width) {
@@ -157,16 +141,6 @@ public class RenderNode {
     }
     this.oldHeight = this.height;
     this.height = height;
-  }
-
-  public RenderNode findChildWithId(final int id) {
-    for (int i=0; i<children.size(); i++) {
-      RenderNode node = children.get(i);
-      if (node.getNodeId() == id) {
-        return node;
-      }
-    }
-    return null;
   }
 
   public void needsRender() {
@@ -212,5 +186,9 @@ public class RenderNode {
 
   public List<RenderNode> getChildren() {
     return children;
+  }
+
+  public Integer getNodeId() {
+    return nodeId;
   }
 }

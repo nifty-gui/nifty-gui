@@ -40,7 +40,7 @@ public class UseCase_a01_FullScreenColorNode {
 
   public UseCase_a01_FullScreenColorNode(final Nifty nifty) {
     nifty
-        .node(backgroundColorNode(NiftyColor.red()))
+        .node(backgroundColorNode(NiftyColor.blue()))
           .childNode(niftyContentNode());
   }
 
