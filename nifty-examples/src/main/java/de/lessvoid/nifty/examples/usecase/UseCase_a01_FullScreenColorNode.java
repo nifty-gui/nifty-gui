@@ -40,8 +40,8 @@ public class UseCase_a01_FullScreenColorNode {
 
   public UseCase_a01_FullScreenColorNode(final Nifty nifty) {
     nifty
-        .node(backgroundColorNode(NiftyColor.blue()))
-          .childNode(niftyContentNode());
+        .addNode(backgroundColorNode(NiftyColor.blue()))
+          .addNode(niftyContentNode());
   }
 
   public static void main(final String[] args) throws Exception {

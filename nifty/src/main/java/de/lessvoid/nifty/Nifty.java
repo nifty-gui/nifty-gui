@@ -378,8 +378,8 @@ public class Nifty {
    * @param child the child to add as well
    * @return this
    */
-  public NiftyNodeBuilder node(final NiftyNode child) {
-    return node(tree.getRootNode(), child);
+  public NiftyNodeBuilder addNode(final NiftyNode child) {
+    return addNode(tree.getRootNode(), child);
   }
 
   /**
@@ -389,12 +389,12 @@ public class Nifty {
    * @param child the child NiftyNode to add to the parent
    * @return this
    */
-  public NiftyNodeBuilder node(@Nonnull final NiftyNode parent, @Nonnull final NiftyNode child) {
+  public NiftyNodeBuilder addNode(@Nonnull final NiftyNode parent, @Nonnull final NiftyNode child) {
     tree.addChild(parent, niftyNodeImpl(child));
     if (child instanceof NiftyLayoutNode) {
       ((NiftyLayoutNode) child).onAttach(layout);
     }
-    return new NiftyNodeBuilder(this, child);
+    return new NiftyNodeBuilder(this, parent, child);
   }
 
   /**

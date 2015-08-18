@@ -40,45 +40,63 @@ public class NiftyNodeBuilderTest {
   private Nifty nifty = createMock(Nifty.class);
   private NiftyNode child = createMock(NiftyNode.class);
   private NiftyNode parent = createMock(NiftyNode.class);
-  private NiftyNodeBuilder builder = new NiftyNodeBuilder(nifty, parent);
+  private NiftyNodeBuilder builder = new NiftyNodeBuilder(nifty, parent, child);
+
+  private NiftyNode newChild = createMock(NiftyNode.class);
 
   @After
   public void after() {
     verify(nifty);
     verify(child);
+    verify(newChild);
     verify(parent);
   }
 
   @Test
-  public void testAddNode() {
+  public void testAddTopLevelNode() {
     replay(parent);
     replay(child);
+    replay(newChild);
 
-    expect(nifty.node(child)).andReturn(builder);
+    expect(nifty.addNode(newChild)).andReturn(builder);
     replay(nifty);
 
-    assertEquals(builder, builder.node(child));
+    assertEquals(builder, builder.addTopLevelNode(newChild));
   }
 
   @Test
-  public void testAddNodeToChild() {
+  public void testAddNodeWithParent() {
     replay(parent);
     replay(child);
+    replay(newChild);
 
-    expect(nifty.node(parent, child)).andReturn(builder);
+    expect(nifty.addNode(parent, newChild)).andReturn(builder);
     replay(nifty);
 
-    assertEquals(builder, builder.node(parent, child));
+    assertEquals(builder, builder.addNode(parent, newChild));
   }
 
   @Test
   public void testAddChildNode() {
     replay(parent);
     replay(child);
+    replay(newChild);
 
-    expect(nifty.node(parent, child)).andReturn(builder);
+    expect(nifty.addNode(child, newChild)).andReturn(builder);
     replay(nifty);
 
-    assertEquals(builder, builder.childNode(child));
+    assertEquals(builder, builder.addNode(newChild));
+  }
+
+  @Test
+  public void testAddSibling() {
+    replay(parent);
+    replay(child);
+    replay(newChild);
+
+    expect(nifty.addNode(parent, newChild)).andReturn(builder);
+    replay(nifty);
+
+    assertEquals(builder, builder.addSibling(newChild));
   }
 }

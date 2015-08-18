@@ -62,7 +62,7 @@ public class NiftyTreeTest {
   @Test
   public void testAddSingleChildToRoot() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("child"));
+        .addNode(NiftyNodeString.niftyNodeString("child"));
     assertTree(
         "root",
         "  child");
@@ -71,11 +71,11 @@ public class NiftyTreeTest {
   @Test
   public void testAddMultipleChildsToRoot() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-        .node(NiftyNodeString.niftyNodeString("c2"))
-          .childNode(NiftyNodeString.niftyNodeString("c2-1"))
-        .node(NiftyNodeString.niftyNodeString("c3"))
-        .node(NiftyNodeString.niftyNodeString("c4"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c2"))
+          .addNode(NiftyNodeString.niftyNodeString("c2-1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c3"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     assertTree(
         "root",
         "  c1",
@@ -88,8 +88,8 @@ public class NiftyTreeTest {
   @Test
   public void testAddChildsToParent() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-          .childNode(NiftyNodeString.niftyNodeString("c2"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+          .addNode(NiftyNodeString.niftyNodeString("c2"));
     assertTree(
         "root",
         "  c1",
@@ -99,8 +99,8 @@ public class NiftyTreeTest {
   @Test
   public void testRemoveLastChild() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-          .childNode(NiftyNodeString.niftyNodeString("c2"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+          .addNode(NiftyNodeString.niftyNodeString("c2"));
     nifty.remove(NiftyNodeString.niftyNodeString("c2"));
     assertTree(
         "root",
@@ -110,8 +110,8 @@ public class NiftyTreeTest {
   @Test
   public void testRemoveMiddleChild() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-          .childNode(NiftyNodeString.niftyNodeString("c2"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+          .addNode(NiftyNodeString.niftyNodeString("c2"));
     nifty.remove(NiftyNodeString.niftyNodeString("c1"));
     assertTree(
         "root",
@@ -121,8 +121,8 @@ public class NiftyTreeTest {
   @Test(expected = NiftyRuntimeException.class)
   public void testRemoveNoneExistingChild() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-          .childNode(NiftyNodeString.niftyNodeString("c2"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+          .addNode(NiftyNodeString.niftyNodeString("c2"));
     nifty.remove(NiftyNodeString.niftyNodeString("c1"));
     nifty.remove(NiftyNodeString.niftyNodeString("c1"));
   }
@@ -135,7 +135,7 @@ public class NiftyTreeTest {
   @Test
   public void testChildNodesSingleChild() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("child"));
+        .addNode(NiftyNodeString.niftyNodeString("child"));
     assertChildNodes(
         NiftyNodeString.niftyNodeString("root"),
         NiftyNodeString.niftyNodeString("child"));
@@ -144,11 +144,11 @@ public class NiftyTreeTest {
   @Test
   public void testChildNodesMultipleChilds() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-        .node(NiftyNodeString.niftyNodeString("c2"))
-          .childNode(NiftyNodeString.niftyNodeString("c2-1"))
-        .node(NiftyNodeString.niftyNodeString("c3"))
-        .node(NiftyNodeString.niftyNodeString("c4"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c2"))
+          .addNode(NiftyNodeString.niftyNodeString("c2-1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c3"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     assertChildNodes(
         NiftyNodeString.niftyNodeString("root"),
         NiftyNodeString.niftyNodeString("c1"),
@@ -161,11 +161,11 @@ public class NiftyTreeTest {
   @Test
   public void testChildNodesMultipleChildsAfterRemove() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-        .node(NiftyNodeString.niftyNodeString("c2"))
-          .childNode(NiftyNodeString.niftyNodeString("c2-1"))
-        .node(NiftyNodeString.niftyNodeString("c3"))
-        .node(NiftyNodeString.niftyNodeString("c4"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c2"))
+          .addNode(NiftyNodeString.niftyNodeString("c2-1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c3"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     nifty.remove(NiftyNodeString.niftyNodeString("c1"));
     nifty.remove(NiftyNodeString.niftyNodeString("c2-1"));
     nifty.remove(NiftyNodeString.niftyNodeString("c3"));
@@ -178,11 +178,11 @@ public class NiftyTreeTest {
   @Test
   public void testChildNodesFromSpecificParent() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-        .node(NiftyNodeString.niftyNodeString("c2"))
-          .childNode(NiftyNodeString.niftyNodeString("c2-1"))
-        .node(NiftyNodeString.niftyNodeString("c3"))
-        .node(NiftyNodeString.niftyNodeString("c4"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c2"))
+          .addNode(NiftyNodeString.niftyNodeString("c2-1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c3"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     assertChildNodesFromParent(
         NiftyNodeString.niftyNodeString("c2"),
         NiftyNodeString.niftyNodeString("c2"),
@@ -192,11 +192,11 @@ public class NiftyTreeTest {
   @Test
   public void testDifferentChildNodeTypes() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-        .node(NiftyNodeString.niftyNodeString("c2"))
-          .childNode(NiftyNodeLong.niftyNodeLong(46L))
-        .node(NiftyNodeString.niftyNodeString("c3"))
-        .node(NiftyNodeString.niftyNodeString("c4"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c2"))
+          .addNode(NiftyNodeLong.niftyNodeLong(46L))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c3"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     assertTree(
         "root",
         "  c1",
@@ -209,11 +209,11 @@ public class NiftyTreeTest {
   @Test
   public void testDifferentChildNodeTypesFilteredTestLongNode() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-        .node(NiftyNodeString.niftyNodeString("c2"))
-          .childNode(NiftyNodeLong.niftyNodeLong(46L))
-        .node(NiftyNodeString.niftyNodeString("c3"))
-        .node(NiftyNodeString.niftyNodeString("c4"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c2"))
+          .addNode(NiftyNodeLong.niftyNodeLong(46L))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c3"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     assertFilteredChildNodes(
         NiftyNodeLong.class,
         NiftyNodeLong.niftyNodeLong(46L));
@@ -222,11 +222,11 @@ public class NiftyTreeTest {
   @Test
   public void testDifferentChildNodeTypesFilteredTestStringNode() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-        .node(NiftyNodeString.niftyNodeString("c2"))
-          .childNode(NiftyNodeLong.niftyNodeLong(46L))
-        .node(NiftyNodeString.niftyNodeString("c3"))
-        .node(NiftyNodeString.niftyNodeString("c4"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c2"))
+          .addNode(NiftyNodeLong.niftyNodeLong(46L))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c3"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     assertFilteredChildNodes(
         NiftyNodeString.class,
         NiftyNodeString.niftyNodeString("c1"),
@@ -238,11 +238,11 @@ public class NiftyTreeTest {
   @Test
   public void testDifferentChildNodeTypesFilteredTestLongNodeFromParent() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-        .node(NiftyNodeString.niftyNodeString("c2"))
-          .childNode(NiftyNodeLong.niftyNodeLong(46L))
-        .node(NiftyNodeString.niftyNodeString("c3"))
-        .node(NiftyNodeString.niftyNodeString("c4"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c2"))
+          .addNode(NiftyNodeLong.niftyNodeLong(46L))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c3"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     assertFilteredChildNodesFromParent(
         NiftyNodeLong.class,
         NiftyNodeString.niftyNodeString("c2"),
@@ -252,11 +252,11 @@ public class NiftyTreeTest {
   @Test
   public void testDifferentChildNodeTypesFilteredTestStringNodeFromParent() {
     nifty
-        .node(NiftyNodeString.niftyNodeString("c1"))
-        .node(NiftyNodeString.niftyNodeString("c2"))
-          .childNode(NiftyNodeLong.niftyNodeLong(46L))
-        .node(NiftyNodeString.niftyNodeString("c3"))
-        .node(NiftyNodeString.niftyNodeString("c4"));
+        .addNode(NiftyNodeString.niftyNodeString("c1"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c2"))
+          .addNode(NiftyNodeLong.niftyNodeLong(46L))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c3"))
+        .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     assertFilteredChildNodesFromParent(
         NiftyNodeString.class,
         NiftyNodeString.niftyNodeString("c2"),

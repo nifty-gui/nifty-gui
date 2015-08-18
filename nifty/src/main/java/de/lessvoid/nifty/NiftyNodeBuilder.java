@@ -35,16 +35,19 @@ import de.lessvoid.nifty.spi.NiftyNode;
  */
 public class NiftyNodeBuilder {
   private final Nifty nifty;
-  private final NiftyNode child;
+  private final NiftyNode parent;
+  private final NiftyNode node;
 
   /**
    * Nifty will return this instance for you. You're not supposed to construct it yourself.
    * @param nifty the Nifty instance
-   * @param child the child node just added
+   * @param parent
+   * @param node the node node just added
    */
-  NiftyNodeBuilder(final Nifty nifty, final NiftyNode child) {
+  NiftyNodeBuilder(final Nifty nifty, final NiftyNode parent, final NiftyNode node) {
     this.nifty = nifty;
-    this.child = child;
+    this.parent = parent;
+    this.node = node;
   }
 
   /**
@@ -52,8 +55,8 @@ public class NiftyNodeBuilder {
    * @param child the new child to add
    * @return this containing the new child node
    */
-  public NiftyNodeBuilder node(final NiftyNode child) {
-    return nifty.node(child);
+  public NiftyNodeBuilder addTopLevelNode(final NiftyNode child) {
+    return nifty.addNode(child);
   }
 
   /**
@@ -62,8 +65,8 @@ public class NiftyNodeBuilder {
    * @param child the child node to add
    * @return this containing the new child node
    */
-  public NiftyNodeBuilder node(final NiftyNode parent, final NiftyNode child) {
-    return nifty.node(parent, child);
+  public NiftyNodeBuilder addNode(final NiftyNode parent, final NiftyNode child) {
+    return nifty.addNode(parent, child);
   }
 
   /**
@@ -71,7 +74,16 @@ public class NiftyNodeBuilder {
    * @param child the new child node
    * @return this containing the new child node
    */
-  public NiftyNodeBuilder childNode(final NiftyNode child) {
-    return nifty.node(this.child, child);
+  public NiftyNodeBuilder addNode(final NiftyNode child) {
+    return nifty.addNode(this.node, child);
+  }
+
+  /**
+   * Add a new node to the parent node this NiftyNodeBuilder instance is linked to.
+   * @param sibling the new sibling to add
+   * @return this
+   */
+  public NiftyNodeBuilder addSibling(final NiftyNode sibling) {
+    return nifty.addNode(parent, sibling);
   }
 }
