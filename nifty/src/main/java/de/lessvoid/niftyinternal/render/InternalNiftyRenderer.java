@@ -36,7 +36,9 @@ import de.lessvoid.niftyinternal.render.batch.BatchManager;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -47,11 +49,9 @@ import java.util.logging.Logger;
 public class InternalNiftyRenderer {
   private final static Logger logger = Logger.getLogger(InternalNiftyRenderer.class.getName());
 
-  // the reference to the Statistics instance we'll update
   private final Statistics stats;
-
-  // since we need to render stuff we'll keep the NiftyRenderDevice instance around
   private final NiftyRenderDevice renderDevice;
+  private final Map<Integer, RenderNode> existingNodes = new LinkedHashMap<>();
 
   public InternalNiftyRenderer(final Statistics stats, final NiftyRenderDevice renderDevice) {
     this.stats = stats;
@@ -60,9 +60,8 @@ public class InternalNiftyRenderer {
 
   public boolean render(final InternalNiftyTree tree) {
     nodeStatePass(tree.filteredChildNodesGeneral(NiftyNodeStateImpl.class));
-
-    render(nodeRenderPass(tree.filteredChildNodesGeneral(NiftyNodeRenderImpl.class), new ArrayList<RenderNode>()));
-
+    nodeRenderPass(tree.filteredChildNodesGeneral(NiftyNodeRenderImpl.class));
+    render();
     return true;
   }
 
@@ -73,20 +72,19 @@ public class InternalNiftyRenderer {
     }
   }
 
-  private List<RenderNode> nodeRenderPass(final Iterable<NiftyNodeRenderImpl> nodes, final List<RenderNode> renderNodes) {
+  private void nodeRenderPass(final Iterable<NiftyNodeRenderImpl> nodes) {
     for (NiftyNodeRenderImpl child : nodes) {
-      renderNodes.add(child.convert(null));
+      existingNodes.put(child.hashCode(), child.convert(existingNodes.get(child.hashCode())));
     }
-    return renderNodes;
   }
 
-  private void render(List<RenderNode> renderNodes) {
+  private void render() {
     renderDevice.beginRender();
 
     BatchManager batchManager = new BatchManager();
     batchManager.begin();
-    for (int i=0; i<renderNodes.size(); i++) {
-      renderNodes.get(i).render(batchManager, renderDevice);
+    for (RenderNode renderNode : existingNodes.values()) {
+      renderNode.render(batchManager, renderDevice);
     }
     batchManager.end(renderDevice);
 

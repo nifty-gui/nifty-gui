@@ -42,7 +42,6 @@ import java.util.List;
 
 public class RenderNode {
   private final List<Command> commands;
-  private final List<RenderNode> children = new ArrayList<RenderNode>();
   private final Mat4 local;
   private int width;
   private int height;
@@ -76,10 +75,6 @@ public class RenderNode {
     this.nodeId = this.hashCode();
   }
 
-  public void setIndexInParent(final int indexInParent) {
-    this.indexInParent = indexInParent;
-  }
-
   public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice) {
     if (contentResized) {
       // only actually allocate new data when the new size is greater than the old size
@@ -109,9 +104,6 @@ public class RenderNode {
     batchManager.addChangeCompositeOperation(compositeOperation);
     batchManager.addTextureQuad(context.getNiftyTexture(), local, NiftyColor.white());
 
-    for (int i=0; i<children.size(); i++) {
-      children.get(i).render(batchManager, renderDevice);
-    }
     needsRender = false;
   }
 
@@ -164,9 +156,6 @@ public class RenderNode {
         needsRender,
         result,
         offset);
-    for (int i=0; i<children.size(); i++) {
-      children.get(i).outputStateInfo(result, offset + "  ");
-    }
   }
 
   public int getRenderOrder() {
@@ -175,17 +164,6 @@ public class RenderNode {
 
   public int getIndexInParent() {
     return indexInParent;
-  }
-
-  public void sortChildren() {
-    Collections.sort(children, new RenderNodeComparator());
-    for (int i=0; i<children.size(); i++) {
-      children.get(i).sortChildren();
-    }
-  }
-
-  public List<RenderNode> getChildren() {
-    return children;
   }
 
   public Integer getNodeId() {
