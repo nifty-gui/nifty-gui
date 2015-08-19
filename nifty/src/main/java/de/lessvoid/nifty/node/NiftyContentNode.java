@@ -32,8 +32,29 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
  * Created by void on 09.08.15.
  */
 public class NiftyContentNode implements NiftyNode {
-  public static NiftyContentNode niftyContentNode() {
-    return new NiftyContentNode();
+  private final int w;
+  private final int h;
+
+  public NiftyContentNode(int w, int h) {
+    this.w = w;
+    this.h = h;
+  }
+
+  public static NiftyContentNode contentNode() {
+    return new NiftyContentNode(1024, 768);
+  }
+
+  // FIXME this is a workaround til we have real layout in place
+  public static NiftyContentNode contentNode(int w, int h) {
+    return new NiftyContentNode(w, h);
+  }
+
+  public int getW() {
+    return w;
+  }
+
+  public int getH() {
+    return h;
   }
 
   public String toString() {

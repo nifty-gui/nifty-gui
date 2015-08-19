@@ -30,7 +30,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.types.NiftyColor;
 
 import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
-import static de.lessvoid.nifty.node.NiftyContentNode.niftyContentNode;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 
 /**
  * Fill the whole screen with red using a background color and a content node.
@@ -41,7 +41,7 @@ public class UseCase_a01_FullScreenColorNode {
   public UseCase_a01_FullScreenColorNode(final Nifty nifty) {
     nifty
         .addNode(backgroundColorNode(NiftyColor.blue()))
-          .addNode(niftyContentNode());
+          .addNode(contentNode());
   }
 
   public static void main(final String[] args) throws Exception {

@@ -26,34 +26,31 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCallback;
+import de.lessvoid.nifty.UnitValue;
+import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.types.NiftyColor;
+
+import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+
 /**
  * A single root node of a fixed size with a background color that is constantly rotating.
  * @author void
  */
 public class UseCase_a04_RotatingRootNode {
-/* FIXME
+
   public UseCase_a04_RotatingRootNode(final Nifty nifty) {
     nifty.clearScreenBeforeRender();
-
-    final NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Absolute);
-    niftyNode.setBackgroundColor(NiftyColor.green());
-    niftyNode.startAnimated(0, 15, new NiftyCallback<Float>() {
-      private float angle = 0;
-
-      @Override
-      public void execute(final Float time) {
-        niftyNode.setRotationZ(angle++);
-      }
-    });
-
-    NiftyNode childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
-    childNode.setBackgroundColor(NiftyColor.red());
-    childNode.setXConstraint(UnitValue.px(50));
-    childNode.setYConstraint(UnitValue.px(50));
+    nifty
+        .addNode(backgroundColorNode(NiftyColor.green()))
+          .addNode(contentNode(400, 400))
+            .addNode(backgroundColorNode(NiftyColor.red()))
+              .addNode(contentNode(100, 100));
   }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a04_RotatingRootNode.class, args);
   }
-  */
 }

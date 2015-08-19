@@ -60,17 +60,17 @@ public class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeConten
   @Override
   public void updateCanvas(final NiftyCanvas niftyCanvas) {
     niftyCanvas.setFillStyle(backgroundColor);
-    niftyCanvas.fillRect(0., 0., 1024, 768.);
+    niftyCanvas.fillRect(0., 0., getContentWidth(), getContentHeight());
   }
 
   @Override
   public int getContentWidth() {
-    return 1024;
+    return niftyNode.getW();
   }
 
   @Override
   public int getContentHeight() {
-    return 768;
+    return niftyNode.getH();
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
