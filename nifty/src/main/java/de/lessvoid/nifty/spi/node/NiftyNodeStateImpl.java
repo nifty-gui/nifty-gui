@@ -24,13 +24,17 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.spi;
+package de.lessvoid.nifty.spi.node;
+
+import de.lessvoid.nifty.NiftyState;
 
 /**
- * The public NiftyNode marker interface. Everything a Nifty scene graph stores is required
- * to implement NiftyNode.
+ * NiftyNodeStateImpl is a state aware NiftyNode. Nifty will call this Node with a NiftyState instance which this node
+ * can modify any way it sees.
  *
- * Created by void on 23.07.15.
+ * Created by void on 08.08.15.
  */
-public interface NiftyNode {
+public interface NiftyNodeStateImpl {
+
+  void update(NiftyState niftyState);
 }

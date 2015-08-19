@@ -24,23 +24,13 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.canvas;
+package de.lessvoid.nifty;
 
-import de.lessvoid.nifty.spi.NiftyNode;
+import de.lessvoid.niftyinternal.accessor.NiftyStateAccessor;
 
-/**
- * The NiftyCanvasPainter allows you to provide the content of a NiftyNode. When it is time to render the content the
- * paint method will be called by Nifty with a NiftyCanvas instance. You then use methods on the NiftyCanvas to render
- * whatever content you like.
- *
- * @author void
- */
-public interface NiftyCanvasPainter {
-
-  /**
-   * Paint into the given NiftyCanvas for the given NiftyNode.
-   * @param node the NiftyNode this NiftyCanvasPainter is now painting
-   * @param canvas the NiftyCanvas to paint into
-   */
-  void paint(NiftyNode node, NiftyCanvas canvas);
+final class InternalNiftyStateAccessorImpl extends NiftyStateAccessor {
+  @Override
+  public NiftyState newNiftyState() {
+    return new NiftyState();
+  }
 }

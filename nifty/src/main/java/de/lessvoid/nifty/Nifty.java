@@ -26,8 +26,6 @@
  */
 package de.lessvoid.nifty;
 
-import de.lessvoid.nifty.canvas.NiftyCanvasPainter;
-import de.lessvoid.nifty.canvas.NiftyCanvasPainterShader;
 import de.lessvoid.nifty.input.NiftyInputConsumer;
 import de.lessvoid.nifty.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.input.NiftyPointerEvent;
@@ -35,21 +33,25 @@ import de.lessvoid.nifty.node.NiftyBackgroundColorNode;
 import de.lessvoid.nifty.node.NiftyContentNode;
 import de.lessvoid.nifty.node.NiftyLayoutNode;
 import de.lessvoid.nifty.node.NiftyRootNode;
+import de.lessvoid.nifty.spi.NiftyInputDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
+import de.lessvoid.nifty.spi.TimeProvider;
+import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.niftyinternal.InternalNiftyEventBus;
 import de.lessvoid.niftyinternal.InternalNiftyImage;
-import de.lessvoid.niftyinternal.node.NiftyNodeImplBackgroundColor;
-import de.lessvoid.niftyinternal.node.NiftyNodeImplContent;
-import de.lessvoid.niftyinternal.node.NiftyNodeImplRoot;
-import de.lessvoid.niftyinternal.render.InternalNiftyRenderer;
-import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 import de.lessvoid.niftyinternal.NiftyResourceLoader;
 import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.common.StatisticsRendererFPS;
+import de.lessvoid.niftyinternal.node.NiftyBackgroundColorNodeImpl;
+import de.lessvoid.niftyinternal.node.NiftyContentNodeImpl;
+import de.lessvoid.niftyinternal.node.NiftyRootNodeImpl;
+import de.lessvoid.niftyinternal.render.InternalNiftyRenderer;
 import de.lessvoid.niftyinternal.render.font.FontRenderer;
-import de.lessvoid.nifty.spi.*;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
+import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 import org.jglfont.JGLFontFactory;
 
 import javax.annotation.Nonnull;
@@ -345,16 +347,6 @@ public class Nifty {
     return new NiftyFont(fontFactory.loadFont(resourceLoader.getResourceAsStream(name), name, 12), name);
   }
 
-  /**
-   * Create a NiftyCanvasPainter that uses a customer shader to render into the canvas.
-   *
-   * @param shaderName the fragment shader filename to load and use
-   * @return a NiftyCanvasPainter using the given shader
-   */
-  public NiftyCanvasPainter customShaderCanvasPainter(final String shaderName) {
-    return new NiftyCanvasPainterShader(renderDevice, shaderName);
-  }
-
   /////////////////////////////////////////////////////////////////////////////
   // NiftyTree
   /////////////////////////////////////////////////////////////////////////////
@@ -446,20 +438,15 @@ public class Nifty {
   }
 
   private void registerStandardNodes() {
-    registerNodeImpl(NiftyRootNode.class, NiftyNodeImplRoot.class);
-    registerNodeImpl(NiftyContentNode.class, NiftyNodeImplContent.class);
-    registerNodeImpl(NiftyBackgroundColorNode.class, NiftyNodeImplBackgroundColor.class);
+    registerNodeImpl(NiftyRootNode.class, NiftyRootNodeImpl.class);
+    registerNodeImpl(NiftyContentNode.class, NiftyContentNodeImpl.class);
+    registerNodeImpl(NiftyBackgroundColorNode.class, NiftyBackgroundColorNodeImpl.class);
   }
 
   private <T extends NiftyNode> NiftyNodeImpl<T> niftyNodeImpl(final T child) {
     try {
       NiftyNodeImpl<T> niftyNodeImpl = (NiftyNodeImpl<T>) nodeImplMapping.get(child.getClass()).newInstance();
       niftyNodeImpl.initialize(child);
-
-      if (NiftyNodeRenderImpl.class.isAssignableFrom(niftyNodeImpl.getClass())) {
-        ((NiftyNodeRenderImpl) niftyNodeImpl).initialize(renderDevice);
-      }
-
       return niftyNodeImpl;
     } catch (Exception e) {
       logger.log(Level.WARNING, "failed to instantiate NiftyNodeImpl", e);

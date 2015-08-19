@@ -30,7 +30,7 @@ package de.lessvoid.nifty.node;
 import de.lessvoid.nifty.NiftyLayout;
 import de.lessvoid.nifty.types.Rect;
 import de.lessvoid.nifty.types.Size;
-import de.lessvoid.nifty.spi.NiftyNodeImpl;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
 

@@ -24,28 +24,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.canvas;
+package de.lessvoid.niftyinternal.accessor;
 
-import de.lessvoid.nifty.spi.NiftyNode;
+import de.lessvoid.nifty.NiftyState;
 
-/**
- * The DefaultNiftyCanvasPainter will be used when you don't set a specific one for a NiftyNode. It is part of the
- * public API so that you can use it as well (f.i. when you want the default behavior in your own NiftyCanvasPainter.
- * 
- * @author void
- */
-public class NiftyCanvasPainterDefault implements NiftyCanvasPainter {
+public abstract class NiftyStateAccessor {
+    public static NiftyStateAccessor DEFAULT;
 
-  @Override
-  public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-    /* FIXME
-    canvas.setFillStyle(node.getBackgroundColor());
-    canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+    public static NiftyStateAccessor getDefault() {
+        if (DEFAULT != null) {
+            return DEFAULT;
+        }
 
-    if (node.getBackgroundGradient() != null) {
-      canvas.setFillStyle(node.getBackgroundGradient());
-      canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+        // invokes static initializer of Nifty.class that will assign value to the DEFAULT field above
+        Class<?> c = NiftyState.class;
+        try {
+            Class.forName(c.getName(), true, c.getClassLoader());
+        } catch (ClassNotFoundException ex) {
+            assert false : ex;
+        }
+        assert DEFAULT != null : "The DEFAULT field must be initialized";
+        return DEFAULT;
     }
-    */
-  }
+
+    public abstract NiftyState newNiftyState();
 }

@@ -26,7 +26,8 @@
  */
 package de.lessvoid.nifty;
 
-import java.awt.*;
+import de.lessvoid.niftyinternal.accessor.NiftyStateAccessor;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +39,9 @@ public class NiftyState {
 
   interface State {
     String name();
+  }
+
+  NiftyState() {
   }
 
   public enum NiftyStandardState implements State {
@@ -53,4 +57,11 @@ public class NiftyState {
   public <T> T getState(final State state) {
     return (T) stateMap.get(state);
   }
+
+  // Internal methods
+
+  static {
+    NiftyStateAccessor.DEFAULT = new InternalNiftyStateAccessorImpl();
+  }
+
 }

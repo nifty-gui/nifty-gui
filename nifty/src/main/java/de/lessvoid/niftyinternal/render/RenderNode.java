@@ -26,18 +26,19 @@
  */
 package de.lessvoid.niftyinternal.render;
 
+import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 import de.lessvoid.nifty.spi.NiftyTexture;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
+import de.lessvoid.niftyinternal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.niftyinternal.canvas.Command;
 import de.lessvoid.niftyinternal.canvas.Context;
+import de.lessvoid.niftyinternal.canvas.InternalNiftyCanvas;
 import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class RenderNode {
@@ -55,6 +56,7 @@ public class RenderNode {
   private final int renderOrder;
   private int indexInParent;
   private Integer nodeId;
+  private Mat4 transformation;
 
   public RenderNode(
       final Mat4 local,
@@ -139,14 +141,6 @@ public class RenderNode {
     needsRender = true;
   }
 
-  public void needsContentUpdate(final List<Command> list) {
-    commands.clear();
-    commands.addAll(list);
-
-    needsContentUpdate = true;
-    needsRender = true;
-  }
-
   public void outputStateInfo(final StringBuilder result, final String offset) {
     RenderNodeStateLogger.stateInfo(
         this,
@@ -168,5 +162,27 @@ public class RenderNode {
 
   public Integer getNodeId() {
     return nodeId;
+  }
+
+  public void updateContent(final NiftyCanvas niftyCanvas) {
+    if (getCanvas(niftyCanvas).isChanged()) {
+      updateContent(getCanvas(niftyCanvas).getCommands());
+    }
+  }
+
+  private InternalNiftyCanvas getCanvas(final NiftyCanvas niftyCanvas) {
+    return NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas);
+  }
+
+  public void setTransformation(Mat4 transformation) {
+    this.transformation = transformation;
+  }
+
+  private void updateContent(final List<Command> list) {
+    commands.clear();
+    commands.addAll(list);
+
+    needsContentUpdate = true;
+    needsRender = true;
   }
 }

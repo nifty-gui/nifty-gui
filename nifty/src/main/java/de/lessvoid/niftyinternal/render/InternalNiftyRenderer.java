@@ -26,10 +26,16 @@
  */
 package de.lessvoid.niftyinternal.render;
 
+import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.NiftyState;
-import de.lessvoid.nifty.spi.NiftyNodeRenderImpl;
-import de.lessvoid.nifty.spi.NiftyNodeStateImpl;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
+import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
+import de.lessvoid.nifty.types.NiftyCompositeOperation;
+import de.lessvoid.niftyinternal.accessor.NiftyCanvasAccessor;
+import de.lessvoid.niftyinternal.accessor.NiftyStateAccessor;
+import de.lessvoid.niftyinternal.canvas.Command;
+import de.lessvoid.niftyinternal.canvas.InternalNiftyCanvas;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
@@ -37,7 +43,6 @@ import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -51,7 +56,7 @@ public class InternalNiftyRenderer {
 
   private final Statistics stats;
   private final NiftyRenderDevice renderDevice;
-  private final Map<Integer, RenderNode> existingNodes = new LinkedHashMap<>();
+  private final Map<Integer, RenderNodeCanvas> existingNodes = new LinkedHashMap<>();
 
   public InternalNiftyRenderer(final Statistics stats, final NiftyRenderDevice renderDevice) {
     this.stats = stats;
@@ -60,22 +65,50 @@ public class InternalNiftyRenderer {
 
   public boolean render(final InternalNiftyTree tree) {
     nodeStatePass(tree.filteredChildNodesGeneral(NiftyNodeStateImpl.class));
-    nodeRenderPass(tree.filteredChildNodesGeneral(NiftyNodeRenderImpl.class));
+    nodeCanvasPass(tree.filteredChildNodesGeneral(NiftyNodeContentImpl.class));
     render();
     return true;
   }
 
   private void nodeStatePass(final Iterable<NiftyNodeStateImpl> nodes) {
-    NiftyState niftyState = new NiftyState();
+    NiftyState niftyState = NiftyStateAccessor.getDefault().newNiftyState();
     for (NiftyNodeStateImpl child : nodes) {
       child.update(niftyState);
     }
   }
 
-  private void nodeRenderPass(final Iterable<NiftyNodeRenderImpl> nodes) {
-    for (NiftyNodeRenderImpl child : nodes) {
-      existingNodes.put(child.hashCode(), child.convert(existingNodes.get(child.hashCode())));
+  private void nodeCanvasPass(final Iterable<NiftyNodeContentImpl> nodes) {
+    for (NiftyNodeContentImpl child : nodes) {
+      RenderNodeCanvas renderNodeCanvas = ensureRenderNode(child, existingNodes.get(child.hashCode()));
+      getCanvas(renderNodeCanvas).reset();
+      child.updateCanvas(renderNodeCanvas.canvas);
+      renderNodeCanvas.renderNode.updateContent(renderNodeCanvas.canvas);
     }
+  }
+
+  private InternalNiftyCanvas getCanvas(RenderNodeCanvas renderNodeCanvas) {
+    return NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(renderNodeCanvas.canvas);
+  }
+
+  private RenderNodeCanvas ensureRenderNode(final NiftyNodeContentImpl child, final RenderNodeCanvas renderNodeCanvas) {
+    if (renderNodeCanvas != null) {
+      return renderNodeCanvas;
+    }
+    int canvasWidth = child.getContentWidth();
+    int canvasHeight = child.getContentHeight();
+    RenderNodeCanvas result = new RenderNodeCanvas();
+    result.canvas = NiftyCanvasAccessor.getDefault().newNiftyCanvas();
+    result.renderNode = new RenderNode(
+        new Mat4(),
+        canvasWidth,
+        canvasHeight,
+        new ArrayList<Command>(),
+        renderDevice.createTexture(canvasWidth, canvasHeight, NiftyRenderDevice.FilterMode.Linear),
+        renderDevice.createTexture(canvasWidth, canvasHeight, NiftyRenderDevice.FilterMode.Linear),
+        NiftyCompositeOperation.SourceOver,
+        0);
+    existingNodes.put(child.hashCode(), result);
+    return result;
   }
 
   private void render() {
@@ -83,11 +116,16 @@ public class InternalNiftyRenderer {
 
     BatchManager batchManager = new BatchManager();
     batchManager.begin();
-    for (RenderNode renderNode : existingNodes.values()) {
-      renderNode.render(batchManager, renderDevice);
+    for (RenderNodeCanvas renderNodeCanvas : existingNodes.values()) {
+      renderNodeCanvas.renderNode.render(batchManager, renderDevice);
     }
     batchManager.end(renderDevice);
 
     renderDevice.endRender();
+  }
+
+  private static class RenderNodeCanvas {
+    RenderNode renderNode;
+    NiftyCanvas canvas;
   }
 }

@@ -26,7 +26,7 @@
  */
 package de.lessvoid.niftyinternal.render.sync;
 
-import de.lessvoid.nifty.spi.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.niftyinternal.render.RenderNode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 

@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.control;
 
-import de.lessvoid.nifty.spi.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNode;
 
 /**
  * Interface for all Nifty Controls.

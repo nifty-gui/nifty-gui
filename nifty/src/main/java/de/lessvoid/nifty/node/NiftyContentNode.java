@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.spi.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNode;
 
 /**
  * Created by void on 09.08.15.

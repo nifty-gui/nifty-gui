@@ -24,23 +24,37 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.spi;
+package de.lessvoid.niftyinternal.node;
+
+import de.lessvoid.nifty.NiftyState;
+import de.lessvoid.nifty.node.NiftyBackgroundColorNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
+import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
+
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundColor;
 
 /**
- * The NiftyNodeImpl is the base of the NiftyNode implementation hierachy.
- * Created by void on 08.08.15.
+ * Created by void on 09.08.15.
  */
-public interface NiftyNodeImpl<T extends NiftyNode> {
+public class NiftyBackgroundColorNodeImpl implements NiftyNodeStateImpl, NiftyNodeImpl<NiftyBackgroundColorNode> {
+  private NiftyBackgroundColorNode niftyNode;
 
-  /**
-   * Initialize this NiftyNodeImpl instance with the NiftyNode given.
-   * @param niftyNode the NiftyNode that this NiftyNodeImpl belongs to
-   */
-  void initialize(T niftyNode);
+  @Override
+  public void initialize(final NiftyBackgroundColorNode niftyNode) {
+    this.niftyNode = niftyNode;
+  }
 
-  /**
-   * Return the NiftyNode this NiftyNodeImpl belongs to.
-   * @return the NiftyNode
-   */
-  T getNiftyNode();
+  @Override
+  public NiftyBackgroundColorNode getNiftyNode() {
+    return niftyNode;
+  }
+
+  @Override
+  public void update(final NiftyState niftyState) {
+    niftyState.setState(NiftyStateBackgroundColor, niftyNode.getBackgroundColor());
+  }
+
+  public String toString() {
+    return niftyNode.toString();
+  }
 }

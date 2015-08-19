@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty;
 
-import de.lessvoid.nifty.spi.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNode;
 
 /**
  * A fluent API to help building the NiftyNode structure.

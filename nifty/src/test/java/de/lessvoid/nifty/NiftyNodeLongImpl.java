@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty;
 
-import de.lessvoid.nifty.spi.NiftyNodeImpl;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 public class NiftyNodeLongImpl implements NiftyNodeImpl<NiftyNodeLong> {
   private NiftyNodeLong niftyNode;

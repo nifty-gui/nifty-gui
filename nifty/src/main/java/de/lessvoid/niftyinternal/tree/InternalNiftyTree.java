@@ -27,8 +27,8 @@
 package de.lessvoid.niftyinternal.tree;
 
 import de.lessvoid.nifty.NiftyRuntimeException;
-import de.lessvoid.nifty.spi.NiftyNode;
-import de.lessvoid.nifty.spi.NiftyNodeImpl;
+import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

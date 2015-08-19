@@ -26,7 +26,7 @@
  */
 package de.lessvoid.niftyinternal.tree;
 
-import de.lessvoid.nifty.spi.NiftyNodeImpl;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import org.junit.Test;
 
 import java.util.Iterator;

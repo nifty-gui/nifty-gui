@@ -26,7 +26,7 @@
  */
 package de.lessvoid.nifty.event;
 
-import de.lessvoid.nifty.spi.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNode;
 
 public class NiftyPointerClickedEvent implements NiftyEvent {
   private final NiftyNode niftyNode;

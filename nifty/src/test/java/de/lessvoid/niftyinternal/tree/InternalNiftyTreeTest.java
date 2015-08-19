@@ -31,8 +31,8 @@ import de.lessvoid.nifty.NiftyNodeLongImpl;
 import de.lessvoid.nifty.NiftyNodeString;
 import de.lessvoid.nifty.NiftyNodeStringImpl;
 import de.lessvoid.nifty.NiftyRuntimeException;
-import de.lessvoid.nifty.spi.NiftyNode;
-import de.lessvoid.nifty.spi.NiftyNodeImpl;
+import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import org.junit.Test;
 
 import java.util.ArrayList;

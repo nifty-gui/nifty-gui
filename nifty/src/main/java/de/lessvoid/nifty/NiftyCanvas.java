@@ -24,10 +24,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.canvas;
+package de.lessvoid.nifty;
 
-import de.lessvoid.nifty.NiftyFont;
-import de.lessvoid.nifty.NiftyImage;
 import de.lessvoid.nifty.types.*;
 import de.lessvoid.niftyinternal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.niftyinternal.canvas.InternalNiftyCanvas;

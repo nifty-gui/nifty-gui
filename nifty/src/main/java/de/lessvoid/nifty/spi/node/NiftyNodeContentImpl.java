@@ -24,31 +24,33 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.spi;
+package de.lessvoid.nifty.spi.node;
 
-import de.lessvoid.niftyinternal.render.RenderNode;
+import de.lessvoid.nifty.NiftyCanvas;
 
 /**
- * NiftyNodeRenderImpl is a renderable NiftyNode. It's task is to create or update a RenderNode instance from its
- * internal state.
+ * NiftyNodeCanvasImpl is a renderable NiftyNode.
  *
  * Created by void on 08.08.15.
  */
-public interface NiftyNodeRenderImpl {
+public interface NiftyNodeContentImpl {
 
   /**
-   * Initialize this NiftyNodeRenderImpl with a NiftyRenderDevice.
-   * @param niftyRenderDevice the NiftyRenderDevice
-   */
-  void initialize(NiftyRenderDevice niftyRenderDevice);
-
-  /**
-   * Convert the state of the implementing class into a RenderNode. If at a previous time this Node has been associated
-   * with a RenderNode the existing RenderNode linked to this node will be given as a parameter. Otherwise the parameter
-   * will be null.
+   * Convert the state of the implementing class into the NiftyCanvas given.
    *
-   * @param renderNode the existing RenderNode for this NiftyNodeRenderImpl or null
-   * @return the updated or the new RenderNode for this
+   * @param niftyCanvas the niftyCanvas to draw to
    */
-  RenderNode convert(RenderNode renderNode);
+  void updateCanvas(NiftyCanvas niftyCanvas);
+
+  /**
+   * Should return the width of the content.
+   * @return width
+   */
+  int getContentWidth();
+
+  /**
+   * Should return the height of the content.
+   * @return
+   */
+  int getContentHeight();
 }

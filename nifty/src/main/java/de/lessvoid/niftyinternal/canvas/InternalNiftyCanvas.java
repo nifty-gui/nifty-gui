@@ -38,7 +38,7 @@ import de.lessvoid.nifty.types.NiftyLineJoinType;
 import de.lessvoid.nifty.types.NiftyLinearGradient;
 
 public class InternalNiftyCanvas {
-  private final List<Command> commands = new ArrayList<Command>();
+  private final List<Command> commands = new ArrayList<>();
   private boolean changed = true;
 
   public InternalNiftyCanvas() {
@@ -167,7 +167,7 @@ public class InternalNiftyCanvas {
 
   public List<Command> getCommands() {
     changed = false;
-    return new ArrayList<Command>(commands);
+    return new ArrayList<>(commands);
   }
 
   public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
