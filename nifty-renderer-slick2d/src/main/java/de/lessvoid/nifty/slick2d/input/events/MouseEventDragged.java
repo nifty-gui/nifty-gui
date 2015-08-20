@@ -49,6 +49,8 @@ public final class MouseEventDragged extends AbstractMouseEventButton {
    */
   @Override
   public boolean sendToSlick(@Nonnull final InputListener listener) {
+    if(!listener.isAcceptingInput()) return false;
+    
     listener.mouseDragged(getX(), getY(), targetX, targetY);
     return true;
   }
