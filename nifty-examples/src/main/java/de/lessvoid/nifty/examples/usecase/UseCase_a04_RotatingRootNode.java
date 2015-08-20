@@ -27,13 +27,11 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyCallback;
-import de.lessvoid.nifty.UnitValue;
-import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.types.NiftyColor;
 
 import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
 
 /**
  * A single root node of a fixed size with a background color that is constantly rotating.
@@ -44,10 +42,12 @@ public class UseCase_a04_RotatingRootNode {
   public UseCase_a04_RotatingRootNode(final Nifty nifty) {
     nifty.clearScreenBeforeRender();
     nifty
-        .addNode(backgroundColorNode(NiftyColor.green()))
-          .addNode(contentNode(400, 400))
-            .addNode(backgroundColorNode(NiftyColor.red()))
-              .addNode(contentNode(100, 100));
+        .addNode(transformationNode().setAngleZ(10))
+          .addNode(backgroundColorNode(NiftyColor.green()))
+            .addNode(contentNode(400, 400))
+              .addNode(transformationNode().setAngleZ(-25))
+                .addNode(backgroundColorNode(NiftyColor.red()))
+                  .addNode(contentNode(100, 100));
   }
 
   public static void main(final String[] args) throws Exception {

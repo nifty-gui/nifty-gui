@@ -26,6 +26,7 @@
  */
 package de.lessvoid.niftyinternal.node;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyState;
 import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.node.NiftyContentNode;
@@ -33,8 +34,10 @@ import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
 import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.niftyinternal.math.Mat4;
 
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundColor;
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformation;
 
 /**
  * Created by void on 09.08.15.
@@ -43,6 +46,7 @@ public class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeConten
   private NiftyContentNode niftyNode;
 
   private NiftyColor backgroundColor;
+  private Mat4 screenToLocal;
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // NiftyNodeStateImpl
@@ -51,10 +55,11 @@ public class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeConten
   @Override
   public void update(final NiftyState niftyState) {
     backgroundColor = niftyState.getState(NiftyStateBackgroundColor);
+    screenToLocal = niftyState.getState(NiftyStateTransformation);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // NiftyNodeRenderImpl
+  // NiftyNodeContentImpl
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Override
@@ -73,12 +78,17 @@ public class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeConten
     return niftyNode.getH();
   }
 
+  @Override
+  public Mat4 getScreenToLocal() {
+    return screenToLocal;
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // NiftyNodeImpl
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Override
-  public void initialize(final NiftyContentNode niftyNode) {
+  public void initialize(Nifty nifty, final NiftyContentNode niftyNode) {
     this.niftyNode = niftyNode;
   }
 

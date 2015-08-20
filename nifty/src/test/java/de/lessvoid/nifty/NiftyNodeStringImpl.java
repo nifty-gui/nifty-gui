@@ -35,12 +35,12 @@ public class NiftyNodeStringImpl implements NiftyNodeImpl<NiftyNodeString> {
 
   public static NiftyNodeStringImpl niftyNodeStringImpl(final String value) {
     NiftyNodeStringImpl result = new NiftyNodeStringImpl();
-    result.initialize(niftyNodeString(value));
+    result.initialize(null, niftyNodeString(value));
     return result;
   }
 
   @Override
-  public void initialize(final NiftyNodeString niftyNode) {
+  public void initialize(Nifty nifty, final NiftyNodeString niftyNode) {
     this.niftyNode = niftyNode;
   }
 

@@ -99,7 +99,7 @@ public class InternalNiftyRenderer {
     RenderNodeCanvas result = new RenderNodeCanvas();
     result.canvas = NiftyCanvasAccessor.getDefault().newNiftyCanvas();
     result.renderNode = new RenderNode(
-        new Mat4(),
+        child.getScreenToLocal(),
         canvasWidth,
         canvasHeight,
         new ArrayList<Command>(),

@@ -45,7 +45,8 @@ public class NiftyState {
   }
 
   public enum NiftyStandardState implements State {
-    NiftyStateBackgroundColor;
+    NiftyStateBackgroundColor,
+    NiftyStateTransformation;
   }
 
   private final Map<State, Object> stateMap = new HashMap<>();

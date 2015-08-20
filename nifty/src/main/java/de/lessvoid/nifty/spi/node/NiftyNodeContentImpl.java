@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.spi.node;
 
 import de.lessvoid.nifty.NiftyCanvas;
+import de.lessvoid.niftyinternal.math.Mat4;
 
 /**
  * NiftyNodeCanvasImpl is a renderable NiftyNode.
@@ -53,4 +54,6 @@ public interface NiftyNodeContentImpl {
    * @return
    */
   int getContentHeight();
+
+  Mat4 getScreenToLocal();
 }

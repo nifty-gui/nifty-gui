@@ -33,12 +33,12 @@ public class NiftyNodeLongImpl implements NiftyNodeImpl<NiftyNodeLong> {
 
   public static NiftyNodeLongImpl niftyNodeLongImpl(final long value) {
     NiftyNodeLongImpl result = new NiftyNodeLongImpl();
-    result.initialize(NiftyNodeLong.niftyNodeLong(value));
+    result.initialize(null, NiftyNodeLong.niftyNodeLong(value));
     return result;
   }
 
   @Override
-  public void initialize(final NiftyNodeLong niftyNode) {
+  public void initialize(Nifty nifty, final NiftyNodeLong niftyNode) {
     this.niftyNode = niftyNode;
   }
 

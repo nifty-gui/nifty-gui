@@ -29,10 +29,7 @@ package de.lessvoid.nifty;
 import de.lessvoid.nifty.input.NiftyInputConsumer;
 import de.lessvoid.nifty.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.input.NiftyPointerEvent;
-import de.lessvoid.nifty.node.NiftyBackgroundColorNode;
-import de.lessvoid.nifty.node.NiftyContentNode;
-import de.lessvoid.nifty.node.NiftyLayoutNode;
-import de.lessvoid.nifty.node.NiftyRootNode;
+import de.lessvoid.nifty.node.*;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
@@ -49,12 +46,15 @@ import de.lessvoid.niftyinternal.common.StatisticsRendererFPS;
 import de.lessvoid.niftyinternal.node.NiftyBackgroundColorNodeImpl;
 import de.lessvoid.niftyinternal.node.NiftyContentNodeImpl;
 import de.lessvoid.niftyinternal.node.NiftyRootNodeImpl;
+import de.lessvoid.niftyinternal.node.NiftyTransformationNodeImpl;
 import de.lessvoid.niftyinternal.render.InternalNiftyRenderer;
 import de.lessvoid.niftyinternal.render.font.FontRenderer;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
+import de.lessvoid.niftyinternal.tree.NiftyTreeNode;
 import org.jglfont.JGLFontFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -441,12 +441,13 @@ public class Nifty {
     registerNodeImpl(NiftyRootNode.class, NiftyRootNodeImpl.class);
     registerNodeImpl(NiftyContentNode.class, NiftyContentNodeImpl.class);
     registerNodeImpl(NiftyBackgroundColorNode.class, NiftyBackgroundColorNodeImpl.class);
+    registerNodeImpl(NiftyTransformationNode.class, NiftyTransformationNodeImpl.class);
   }
 
   private <T extends NiftyNode> NiftyNodeImpl<T> niftyNodeImpl(final T child) {
     try {
       NiftyNodeImpl<T> niftyNodeImpl = (NiftyNodeImpl<T>) nodeImplMapping.get(child.getClass()).newInstance();
-      niftyNodeImpl.initialize(child);
+      niftyNodeImpl.initialize(this, child);
       return niftyNodeImpl;
     } catch (Exception e) {
       logger.log(Level.WARNING, "failed to instantiate NiftyNodeImpl", e);
@@ -455,6 +456,7 @@ public class Nifty {
   }
 
   // Friend methods
+
   @Nonnull
   NiftyRenderDevice getRenderDevice() {
     return renderDevice;
@@ -463,6 +465,11 @@ public class Nifty {
   @Nonnull
   InternalNiftyEventBus getEventBus() {
     return eventBus;
+  }
+
+  @Nonnull
+  InternalNiftyTree getInternalNiftyTree() {
+    return tree;
   }
 
   // Internal methods

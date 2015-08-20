@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.node;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.types.Point;
 import de.lessvoid.nifty.types.Rect;
@@ -121,7 +122,7 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl {
   }
 
   @Override
-  public void initialize(final NiftyNode niftyNode) {
+  public void initialize(Nifty nifty, final NiftyNode niftyNode) {
 
   }
 

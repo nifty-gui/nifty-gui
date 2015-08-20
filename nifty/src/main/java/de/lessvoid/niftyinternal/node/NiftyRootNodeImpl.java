@@ -1,5 +1,6 @@
 package de.lessvoid.niftyinternal.node;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.node.NiftyRootNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
@@ -10,7 +11,7 @@ public class NiftyRootNodeImpl implements NiftyNodeImpl<NiftyRootNode> {
   private NiftyRootNode niftyRootNode;
 
   @Override
-  public void initialize(final NiftyRootNode niftyRootNode) {
+  public void initialize(Nifty nifty, final NiftyRootNode niftyRootNode) {
     this.niftyRootNode = niftyRootNode;
   }
 

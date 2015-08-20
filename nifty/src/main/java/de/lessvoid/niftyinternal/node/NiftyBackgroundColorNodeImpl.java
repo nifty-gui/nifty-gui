@@ -26,6 +26,7 @@
  */
 package de.lessvoid.niftyinternal.node;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyState;
 import de.lessvoid.nifty.node.NiftyBackgroundColorNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
@@ -40,7 +41,7 @@ public class NiftyBackgroundColorNodeImpl implements NiftyNodeStateImpl, NiftyNo
   private NiftyBackgroundColorNode niftyNode;
 
   @Override
-  public void initialize(final NiftyBackgroundColorNode niftyNode) {
+  public void initialize(Nifty nifty, final NiftyBackgroundColorNode niftyNode) {
     this.niftyNode = niftyNode;
   }
 

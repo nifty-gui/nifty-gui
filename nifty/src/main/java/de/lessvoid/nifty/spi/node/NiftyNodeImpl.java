@@ -26,6 +26,8 @@
  */
 package de.lessvoid.nifty.spi.node;
 
+import de.lessvoid.nifty.Nifty;
+
 /**
  * The NiftyNodeImpl is the base of the NiftyNode implementation hierachy.
  * Created by void on 08.08.15.
@@ -34,9 +36,10 @@ public interface NiftyNodeImpl<T extends NiftyNode> {
 
   /**
    * Initialize this NiftyNodeImpl instance with the NiftyNode given.
+   * @param nifty the Nifty instance
    * @param niftyNode the NiftyNode that this NiftyNodeImpl belongs to
    */
-  void initialize(T niftyNode);
+  void initialize(Nifty nifty, T niftyNode);
 
   /**
    * Return the NiftyNode this NiftyNodeImpl belongs to.

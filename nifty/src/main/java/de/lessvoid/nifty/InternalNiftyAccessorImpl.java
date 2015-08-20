@@ -29,6 +29,7 @@ package de.lessvoid.nifty;
 import de.lessvoid.niftyinternal.InternalNiftyEventBus;
 import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 
 final class InternalNiftyAccessorImpl extends NiftyAccessor {
     @Override
@@ -40,4 +41,9 @@ final class InternalNiftyAccessorImpl extends NiftyAccessor {
     public InternalNiftyEventBus getEventBus(final Nifty nifty) {
       return nifty.getEventBus();
     }
+
+  @Override
+  public InternalNiftyTree getInternalNiftyTree(final Nifty nifty) {
+    return nifty.getInternalNiftyTree();
+  }
 }

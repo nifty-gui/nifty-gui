@@ -29,6 +29,7 @@ package de.lessvoid.niftyinternal.accessor;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.niftyinternal.InternalNiftyEventBus;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 
 public abstract class NiftyAccessor {
     public static NiftyAccessor DEFAULT;
@@ -51,4 +52,5 @@ public abstract class NiftyAccessor {
 
     public abstract NiftyRenderDevice getRenderDevice(Nifty nifty);
     public abstract InternalNiftyEventBus getEventBus(Nifty nifty);
+    public abstract InternalNiftyTree getInternalNiftyTree(Nifty nifty);
 }
