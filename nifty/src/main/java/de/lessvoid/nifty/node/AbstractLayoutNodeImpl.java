@@ -27,7 +27,6 @@
 
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyLayout;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.types.Rect;
@@ -41,7 +40,7 @@ import java.lang.ref.SoftReference;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-abstract class AbstractLayoutNodeImpl implements NiftyLayoutNode {
+abstract class AbstractLayoutNodeImpl implements NiftyLayoutNodeImpl {
   @Nullable
   private NiftyLayout layout;
   private boolean measureValid;
@@ -119,6 +118,10 @@ abstract class AbstractLayoutNodeImpl implements NiftyLayoutNode {
   @Nonnull
   @Override
   public final Size measure(@Nonnull final Size availableSize) {
+    if (availableSize.isInvalid()) {
+      throw new IllegalArgumentException("Supplied size value for measure must not be invalid.");
+    }
+
     Size size = measureInternal(availableSize);
     if (!size.equals(desiredSize)) {
       invalidateArrange();

@@ -50,11 +50,9 @@ import de.lessvoid.niftyinternal.node.NiftyTransformationNodeImpl;
 import de.lessvoid.niftyinternal.render.InternalNiftyRenderer;
 import de.lessvoid.niftyinternal.render.font.FontRenderer;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
-import de.lessvoid.niftyinternal.tree.NiftyTreeNode;
 import org.jglfont.JGLFontFactory;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -383,8 +381,8 @@ public class Nifty {
    */
   public NiftyNodeBuilder addNode(@Nonnull final NiftyNode parent, @Nonnull final NiftyNode child) {
     tree.addChild(parent, niftyNodeImpl(child));
-    if (child instanceof NiftyLayoutNode) {
-      ((NiftyLayoutNode) child).onAttach(layout);
+    if (child instanceof NiftyLayoutNodeImpl) {
+      ((NiftyLayoutNodeImpl) child).onAttach(layout);
     }
     return new NiftyNodeBuilder(this, parent, child);
   }
@@ -395,8 +393,8 @@ public class Nifty {
    * @param niftyNode the NiftyNode to remove
    */
   public void remove(@Nonnull final NiftyNode niftyNode) {
-    if (niftyNode instanceof NiftyLayoutNode) {
-      ((NiftyLayoutNode) niftyNode).onDetach(layout);
+    if (niftyNode instanceof NiftyLayoutNodeImpl) {
+      ((NiftyLayoutNodeImpl) niftyNode).onDetach(layout);
     }
     tree.remove(niftyNode);
   }

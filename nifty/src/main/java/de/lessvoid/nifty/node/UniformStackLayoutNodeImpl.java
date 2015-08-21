@@ -55,10 +55,6 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl {
   @Override
   @Nonnull
   protected Size measureInternal(@Nonnull final Size availableSize) {
-    if (availableSize.isInvalid()) {
-      throw new IllegalArgumentException("Supplied size value for measure must not be invalid.");
-    }
-
     Collection<NiftyNode> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements, means that we do not require any size. */

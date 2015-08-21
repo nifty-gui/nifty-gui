@@ -40,7 +40,7 @@ import javax.annotation.Nonnull;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public interface NiftyLayoutNode extends NiftyNodeImpl {
+public interface NiftyLayoutNodeImpl extends NiftyNodeImpl {
   /**
    * Called once the layout node is attached to the node tree. This function is required
    * to inform the layout system about this node correctly.
