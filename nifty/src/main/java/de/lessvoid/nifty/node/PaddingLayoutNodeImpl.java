@@ -35,6 +35,11 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl {
   private float top;
 
   PaddingLayoutNodeImpl(final float top, final float right, final float bottom, final float left) {
+    if (!(Math.abs(top) <= Float.MAX_VALUE)) throw new IllegalArgumentException("top is expected to be a finite value.");
+    if (!(Math.abs(right) <= Float.MAX_VALUE)) throw new IllegalArgumentException("right is expected to be a finite value.");
+    if (!(Math.abs(bottom) <= Float.MAX_VALUE)) throw new IllegalArgumentException("bottom is expected to be a finite value.");
+    if (!(Math.abs(left) <= Float.MAX_VALUE)) throw new IllegalArgumentException("left is expected to be a finite value.");
+
     this.top = top;
     this.right = right;
     this.bottom = bottom;
@@ -46,7 +51,13 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl {
   }
 
   void setBottom(float bottom) {
-    this.bottom = bottom;
+    if (!(Math.abs(bottom) <= Float.MAX_VALUE)) throw new IllegalArgumentException("bottom is expected to be a finite value.");
+
+    if (this.bottom != bottom){
+      this.bottom = bottom;
+
+      invalidateMeasure();
+    }
   }
 
   float getLeft() {
@@ -54,7 +65,13 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl {
   }
 
   void setLeft(float left) {
-    this.left = left;
+    if (!(Math.abs(left) <= Float.MAX_VALUE)) throw new IllegalArgumentException("left is expected to be a finite value.");
+
+    if (this.left != left) {
+      this.left = left;
+
+      invalidateMeasure();
+    }
   }
 
   float getRight() {
@@ -62,7 +79,13 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl {
   }
 
   void setRight(float right) {
-    this.right = right;
+    if (!(Math.abs(right) <= Float.MAX_VALUE)) throw new IllegalArgumentException("right is expected to be a finite value.");
+
+    if (this.right != right) {
+      this.right = right;
+
+      invalidateMeasure();
+    }
   }
 
   float getTop() {
@@ -70,7 +93,13 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl {
   }
 
   void setTop(float top) {
-    this.top = top;
+    if (!(Math.abs(top) <= Float.MAX_VALUE)) throw new IllegalArgumentException("top is expected to be a finite value.");
+
+    if (this.top != top) {
+      this.top = top;
+
+      invalidateMeasure();
+    }
   }
 
   @Nonnull
