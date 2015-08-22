@@ -26,58 +26,62 @@
  */
 package de.lessvoid.niftyinternal.tree;
 
-import de.lessvoid.nifty.NiftyNodeString;
-import de.lessvoid.nifty.spi.node.NiftyNode;
-import org.junit.Test;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static de.lessvoid.nifty.NiftyNodeLongImpl.niftyNodeLongImpl;
-import static de.lessvoid.nifty.NiftyNodeStringImpl.niftyNodeStringImpl;
-import static org.junit.Assert.*;
-
 /**
- * Created by void on 23.07.15.
+ * Wrapper iterator to return only NiftyTreeNodes which value class matches a given class.
  */
-public class NiftyTreeNodeNiftyNodeClassFilterIteratorTest {
-  @Test
-  public void testIterateRoot() {
-    NiftyTreeNode root = new NiftyTreeNode(niftyNodeLongImpl(26L));
-    Iterator<NiftyNode> it = createIterator(root);
+public class NiftyTreeNodeIterator<T> implements Iterator<T> {
+  private final Iterator<NiftyTreeNode> it;
+  private final NiftyTreeNodePredicate niftyTreeNodePredicate;
+  private final NiftyTreeNodeConverter<T> niftyTreeNodeConverter;
+  private NiftyTreeNode cached;
 
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
+  public NiftyTreeNodeIterator(
+      final Iterator<NiftyTreeNode> it,
+      final NiftyTreeNodePredicate niftyTreeNodePredicate,
+      final NiftyTreeNodeConverter<T> niftyTreeNodeConverter) {
+    this.it = it;
+    this.niftyTreeNodePredicate = niftyTreeNodePredicate;
+    this.niftyTreeNodeConverter = niftyTreeNodeConverter;
+  }
+
+  @Override
+  public boolean hasNext() {
+    if (cached != null) {
+      return true;
     }
+    cached = findNext();
+    return cached != null;
   }
 
-  @Test
-  public void testIterateOneChild() {
-    NiftyTreeNode root = new NiftyTreeNode(niftyNodeLongImpl(26L));
-    NiftyTreeNode child = new NiftyTreeNode(niftyNodeStringImpl("child"));
-    root.addChild(child);
-
-    Iterator<NiftyNode> it = createIterator(root);
-    assertTrue(it.hasNext());
-    assertEquals("child", it.next().toString());
-
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
+  @Override
+  public T next() {
+    if (cached != null) {
+      NiftyTreeNode result = cached;
+      cached = null;
+      return niftyTreeNodeConverter.convert(result.getValue());
     }
+    NiftyTreeNode result = findNext();
+    if (result == null) {
+      throw new NoSuchElementException();
+    }
+    return niftyTreeNodeConverter.convert(result.getValue());
   }
 
-  private Iterator<NiftyNode> createIterator(final NiftyTreeNode root) {
-    return
-        new NiftyTreeNodeNiftyNodeIterator(
-          new NiftyTreeNodeNiftyNodeClassFilterIterator<>(
-              new NiftyTreeNodeDepthFirstIterator(root),
-              NiftyNodeString.class));
+  @Override
+  public void remove() {
+    throw new UnsupportedOperationException();
   }
 
+  private NiftyTreeNode findNext() {
+    while (it.hasNext()) {
+      NiftyTreeNode next = it.next();
+      if (niftyTreeNodePredicate.accept(next.getValue())) {
+        return next;
+      }
+    }
+    return null;
+  }
 }

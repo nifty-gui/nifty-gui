@@ -29,6 +29,7 @@ package de.lessvoid.nifty;
 
 import de.lessvoid.nifty.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.Rect;
 import de.lessvoid.nifty.types.Size;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
@@ -37,6 +38,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.logging.Logger;
+
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNodeImplClass;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplClass;
 
 /**
  * This is the class that supports the layout nodes to do their work. It is the primary entry point to trigger the
@@ -157,48 +161,34 @@ public class NiftyLayout {
    * @return size returned by the {@link NiftyLayoutNodeImpl#measure(Size)} function that is called for the node(s)
    */
   @Nonnull
-  public Size measure(@Nonnull final NiftyNode node, @Nonnull final Size availableSize) {
-    if (node instanceof NiftyLayoutNodeImpl) {
-      return measure((NiftyLayoutNodeImpl) node, availableSize);
-    } else {
-      Size currentSize = Size.ZERO;
-      for (NiftyLayoutNodeImpl childNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNodeImpl.class, node)) {
-        Size nodeSize = measure(childNode, availableSize);
-        currentSize = Size.max(nodeSize, currentSize);
+  public Size measure(@Nonnull final NiftyNodeImpl<?> node, @Nonnull final Size availableSize) {
+    if (node instanceof NiftyLayoutNodeImpl<?>) {
+      Size desiredSize =  ((NiftyLayoutNodeImpl<?>) node).measure(availableSize);
+      if (desiredSize.isInfinite() || desiredSize.isInvalid()) {
+        logger.severe("Measuring node " + node.toString() + " gave a illegal result. Size must be finite.");
+        desiredSize = Size.ZERO;
       }
-      return currentSize;
+      return desiredSize;
     }
-  }
 
-  /**
-   * Measure a specific node.
-   * <p />
-   * This function performs some additional runtime checks to verify the return value of the
-   * {@link NiftyLayoutNodeImpl#measure(Size) function.
-   *
-   * @param node the node that is measured
-   * @param availableSize the available size that is forwarded to {@link NiftyLayoutNodeImpl#measure(Size)}
-   * @return the result of the measure operation.
-   */
-  @Nonnull
-  public Size measure(@Nonnull final NiftyLayoutNodeImpl node, @Nonnull final Size availableSize) {
-    Size desiredSize = node.measure(availableSize);
-
-    if (desiredSize.isInfinite() || desiredSize.isInvalid()) {
-      logger.severe("Measuring node " + node.toString() + " gave a illegal result. Size must be finite.");
-      desiredSize = Size.ZERO;
+    Size currentSize = Size.ZERO;
+    for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
+        nodeImplClass(NiftyLayoutNodeImpl.class), toNodeImplClass(NiftyLayoutNodeImpl.class))) {
+      Size nodeSize = measure(layoutNode, availableSize);
+      currentSize = Size.max(nodeSize, currentSize);
     }
-    return desiredSize;
+    return currentSize;
   }
 
   @Nonnull
-  public Size getDesiredSize(@Nonnull final NiftyNode node) {
+  public Size getDesiredSize(@Nonnull final NiftyNodeImpl<?> node) {
     if (node instanceof NiftyLayoutNodeImpl) {
       return ((NiftyLayoutNodeImpl) node).getDesiredSize();
     } else {
       Size currentSize = Size.ZERO;
-      for (NiftyLayoutNodeImpl childNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNodeImpl.class, node)) {
-        Size nodeSize = childNode.getDesiredSize();
+      for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
+          nodeImplClass(NiftyLayoutNodeImpl.class), toNodeImplClass(NiftyLayoutNodeImpl.class))) {
+        Size nodeSize = layoutNode.getDesiredSize();
         currentSize = Size.max(nodeSize, currentSize);
       }
       return currentSize;
@@ -210,7 +200,8 @@ public class NiftyLayout {
       return; // There are no dirty arrange entries reported. So we are done here.
     }
 
-    for (NiftyLayoutNodeImpl layoutNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNodeImpl.class)) {
+    for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
+        nodeImplClass(NiftyLayoutNodeImpl.class), toNodeImplClass(NiftyLayoutNodeImpl.class))) {
       if (layoutNode.isArrangeValid()) {
         layoutNode.arrange(layoutNode.getArrangedRect());
         removeArranged();
@@ -221,18 +212,15 @@ public class NiftyLayout {
     }
   }
 
-  public void arrange(@Nonnull final NiftyNode node, @Nonnull final Rect area) {
+  public void arrange(@Nonnull final NiftyNodeImpl<?> node, @Nonnull final Rect area) {
     if (node instanceof NiftyLayoutNodeImpl) {
-      arrange((NiftyLayoutNodeImpl) node, area);
+      ((NiftyLayoutNodeImpl) node).arrange(area);
     } else {
-      for (NiftyLayoutNodeImpl layoutNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNodeImpl.class, node)) {
+      for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
+          nodeImplClass(NiftyLayoutNodeImpl.class), toNodeImplClass(NiftyLayoutNodeImpl.class))) {
         layoutNode.arrange(layoutNode.getArrangedRect());
       }
     }
-  }
-
-  public void arrange(@Nonnull final NiftyLayoutNodeImpl node, @Nonnull final Rect area) {
-    node.arrange(area);
   }
 
   private void removeArranged() {
@@ -245,7 +233,7 @@ public class NiftyLayout {
   }
 
   @Nonnull
-  public List<NiftyNode> getDirectChildren(@Nonnull final NiftyLayoutNodeImpl node) {
+  public List<NiftyNodeImpl<? extends NiftyNode>> getDirectChildren(@Nonnull final NiftyLayoutNodeImpl node) {
     /* TODO: The actual implementation. */
     return Collections.emptyList();
   }

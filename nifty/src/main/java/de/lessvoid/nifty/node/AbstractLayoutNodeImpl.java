@@ -40,7 +40,7 @@ import java.lang.ref.SoftReference;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-abstract class AbstractLayoutNodeImpl implements NiftyLayoutNodeImpl {
+abstract class AbstractLayoutNodeImpl<T extends NiftyNode> implements NiftyLayoutNodeImpl<T> {
   @Nullable
   private NiftyLayout layout;
   private boolean measureValid;
@@ -50,7 +50,7 @@ abstract class AbstractLayoutNodeImpl implements NiftyLayoutNodeImpl {
   @Nullable
   private Rect arrangeRect;
   @Nullable
-  private Reference<NiftyNode> niftyNodeRef;
+  private Reference<T> niftyNodeRef;
 
   protected AbstractLayoutNodeImpl() {}
 
@@ -152,9 +152,9 @@ abstract class AbstractLayoutNodeImpl implements NiftyLayoutNodeImpl {
   }
 
   @Override
-  public final NiftyNode getNiftyNode() {
-    Reference<NiftyNode> ref = niftyNodeRef;
-    NiftyNode node = (ref == null) ? null : ref.get();
+  public final T getNiftyNode() {
+    Reference<T> ref = niftyNodeRef;
+    T node = (ref == null) ? null : ref.get();
     if (node == null) {
       node = createNode();
       niftyNodeRef = new SoftReference<>(node);
@@ -162,5 +162,5 @@ abstract class AbstractLayoutNodeImpl implements NiftyLayoutNodeImpl {
     return node;
   }
 
-  protected abstract NiftyNode createNode();
+  protected abstract T createNode();
 }

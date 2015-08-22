@@ -32,32 +32,54 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
  * Created by void on 09.08.15.
  */
 public class NiftyContentNode implements NiftyNode {
-  private final int w;
-  private final int h;
-
-  public NiftyContentNode(int w, int h) {
-    this.w = w;
-    this.h = h;
-  }
+  private final NiftyContentNodeImpl impl;
 
   public static NiftyContentNode contentNode() {
     return new NiftyContentNode(1024, 768);
   }
 
   // FIXME this is a workaround til we have real layout in place
-  public static NiftyContentNode contentNode(int w, int h) {
+  public static NiftyContentNode contentNode(final int w, final int h) {
     return new NiftyContentNode(w, h);
   }
 
+  private NiftyContentNode(final int w, final int h) {
+    this.impl = new NiftyContentNodeImpl(w, h);
+  }
+
+  NiftyContentNode(final NiftyContentNodeImpl impl) {
+    this.impl = impl;
+  }
+
   public int getW() {
-    return w;
+    return impl.getContentWidth();
   }
 
   public int getH() {
-    return h;
+    return impl.getContentHeight();
   }
 
   public String toString() {
-    return "(" + this.getClass().getSimpleName() + ")";
+    return "(" + this.getClass().getSimpleName() + ") FIXME";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    NiftyContentNode that = (NiftyContentNode) o;
+    return !(impl != null ? !impl.equals(that.impl) : that.impl != null);
+  }
+
+  @Override
+  public int hashCode() {
+    return impl != null ? impl.hashCode() : 0;
+  }
+
+  // friend access
+
+  NiftyContentNodeImpl getImpl() {
+    return impl;
   }
 }

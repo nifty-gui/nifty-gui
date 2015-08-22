@@ -24,33 +24,15 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.examples.usecase;
+package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
+import de.lessvoid.niftyinternal.accessor.NiftyNodeAccessorRegistryAccessor;
 
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
-import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
-import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
-
-/**
- * A single root node of a fixed size with a background color that is constantly rotating.
- * @author void
- */
-public class UseCase_a04_RotatingRootNode {
-
-  public UseCase_a04_RotatingRootNode(final Nifty nifty) {
-    nifty.clearScreenBeforeRender();
-    nifty
-        .addNode(transformationNode(nifty).setAngleZ(10))
-          .addNode(backgroundColorNode(NiftyColor.green()))
-            .addNode(contentNode(400, 400))
-              .addNode(transformationNode(nifty).setAngleZ(-25))
-                .addNode(backgroundColorNode(NiftyColor.red()))
-                  .addNode(contentNode(100, 100));
-  }
-
-  public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_a04_RotatingRootNode.class, args);
+final class NiftyAccessorRegistryAccessorImpl extends NiftyNodeAccessorRegistryAccessor {
+  @Override
+  public NiftyNodeImpl getImpl(final NiftyNodeAccessorRegistry registry, final NiftyNode niftyNode) {
+    return registry.getImpl(niftyNode);
   }
 }

@@ -42,6 +42,10 @@ import static de.lessvoid.nifty.NiftyNodeLong.niftyNodeLong;
 import static de.lessvoid.nifty.NiftyNodeLongImpl.niftyNodeLongImpl;
 import static de.lessvoid.nifty.NiftyNodeString.niftyNodeString;
 import static de.lessvoid.nifty.NiftyNodeStringImpl.niftyNodeStringImpl;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.*;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplAny;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplClass;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -59,7 +63,7 @@ public class InternalNiftyTreeTest {
   @Test
   public void testGetRootNode() {
     createTree(niftyNodeStringImpl("root"));
-    assertEquals(niftyNodeString("root"), tree.getRootNode());
+    assertEquals(niftyNodeStringImpl("root"), tree.getRootNode());
   }
 
   @Test
@@ -188,7 +192,7 @@ public class InternalNiftyTreeTest {
     tree = createTree(niftyNodeStringImpl("root"))
         .addChild(niftyNodeStringImpl("root"), niftyNodeStringImpl("c1"), niftyNodeStringImpl("c2"), niftyNodeStringImpl("c3"), niftyNodeStringImpl("c4"))
         .addChild(niftyNodeStringImpl("c2"), niftyNodeStringImpl("c2-1"));
-    assertChildNodesFromParent(niftyNodeString("c2"), niftyNodeStringImpl("c2"), niftyNodeStringImpl("c2-1"));
+    assertChildNodesFromParent(niftyNodeStringImpl("c2"), niftyNodeStringImpl("c2"), niftyNodeStringImpl("c2-1"));
   }
 
   @Test
@@ -293,7 +297,7 @@ public class InternalNiftyTreeTest {
         .addChild(niftyNodeStringImpl("root"), niftyNodeLongImpl(46L))
         .addChild(niftyNodeLongImpl(46L), niftyNodeStringImpl("c2"))
         .addChild(niftyNodeStringImpl("c2"), niftyNodeStringImpl("46"));
-    assertEquals(niftyNodeLong(46L), tree.getParentImpl(NiftyNodeLongImpl.class, niftyNodeStringImpl("46")).getNiftyNode());
+    assertEquals(niftyNodeLong(46L), tree.getParent(NiftyNodeLongImpl.class, niftyNodeStringImpl("46")).getNiftyNode());
   }
 
   private InternalNiftyTree createTree(final NiftyNodeImpl<? extends NiftyNode> root) {
@@ -317,35 +321,27 @@ public class InternalNiftyTreeTest {
   }
 
   private void assertChildNodes(final NiftyNodeImpl... expected) {
-    assertEqualList(makeList(tree.childNodes()), expected);
+    assertEqualList(makeList(tree.childNodes(nodeImplAny(), toNodeImpl())), expected);
   }
 
   private void assertChildNodesFromParent(final NiftyNodeImpl parent, final NiftyNodeImpl... expected) {
-    assertEqualList(makeList(tree.childNodes(parent)), expected);
-  }
-
-  private void assertChildNodesFromParent(final NiftyNode parent, final NiftyNodeImpl... expected) {
-    assertEqualList(makeList(tree.childNodes(parent)), expected);
+    assertEqualList(makeList(tree.childNodes(nodeImplAny(), toNodeImpl(), parent)), expected);
   }
 
   private <Y extends NiftyNodeImpl> void assertFilteredChildNodes(final Class<Y> clazz, final Y ... expected) {
-    assertEqualList(makeList(tree.filteredChildNodesImpl(clazz)), expected);
+    assertEqualList(makeList(tree.childNodes(nodeImplClass(clazz), toNodeImplClass(clazz))), expected);
   }
 
   private <X extends NiftyNodeImpl> void assertFilteredChildNodesImpl(final Class<X> clazz, final X ... expected) {
-    assertEqualList(makeList(tree.filteredChildNodesImpl(clazz)), expected);
+    assertEqualList(makeList(tree.childNodes(nodeImplClass(clazz), toNodeImplClass(clazz))), expected);
   }
 
   private <Y extends NiftyNode> void assertFilteredChildNodesFromParent(final Class<Y> clazz, final NiftyNodeImpl<?> parent, final Y... expected) {
-    assertEqualList(makeList(tree.filteredChildNodes(clazz, parent)), expected);
-  }
-
-  private <Y extends NiftyNode> void assertFilteredChildNodesFromParent(final Class<Y> clazz, final NiftyNode parent, final Y... expected) {
-    assertEqualList(makeList(tree.filteredChildNodes(clazz, parent)), expected);
+    assertEqualList(makeList(tree.childNodes(nodeClass(clazz), toNiftyNodeClass(clazz), parent)), expected);
   }
 
   private <X extends NiftyNodeImpl<? extends NiftyNode>> void assertFilteredChildNodesFromParentImpl(final Class<X> clazz, final NiftyNodeImpl<? extends NiftyNode> parent, final X... expected) {
-    assertEqualList(makeList(tree.filteredChildNodesImpl(clazz, parent)), expected);
+    assertEqualList(makeList(tree.childNodes(nodeImplClass(clazz), toNodeImplClass(clazz), parent)), expected);
   }
 
   private <X> void assertEqualList(final List<X> actual, final NiftyNodeImpl ... expected) {

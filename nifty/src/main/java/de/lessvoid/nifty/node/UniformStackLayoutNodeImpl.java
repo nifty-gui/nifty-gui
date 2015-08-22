@@ -29,6 +29,7 @@ package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.Point;
 import de.lessvoid.nifty.types.Rect;
 import de.lessvoid.nifty.types.Size;
@@ -44,7 +45,7 @@ import java.util.Collection;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl {
+final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl<UniformStackLayoutNode> {
   @Nonnull
   private Orientation orientation;
 
@@ -55,7 +56,7 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl {
   @Override
   @Nonnull
   protected Size measureInternal(@Nonnull final Size availableSize) {
-    Collection<NiftyNode> children = getLayout().getDirectChildren(this);
+    Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements, means that we do not require any size. */
       return Size.ZERO;
@@ -64,7 +65,7 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl {
     Size sizePerChild = getSizePerChild(availableSize, children.size());
 
     Size largestSizeRequested = Size.ZERO;
-    for (NiftyNode node : children) {
+    for (NiftyNodeImpl<?> node : children) {
       Size nodeSize = getLayout().measure(node, sizePerChild);
       largestSizeRequested = Size.max(nodeSize, largestSizeRequested);
     }
@@ -78,7 +79,7 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl {
 
   @Override
   protected void arrangeInternal(@Nonnull final Rect area) {
-    Collection<NiftyNode> children = getLayout().getDirectChildren(this);
+    Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements -> We are all done. */
       return;
@@ -86,7 +87,7 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl {
 
     Size sizePerChild = getSizePerChild(area.getSize(), children.size());
     Point currentOrigin = area.getOrigin();
-    for (NiftyNode child : children) {
+    for (NiftyNodeImpl<?> child : children) {
       getLayout().arrange(child, new Rect(currentOrigin, sizePerChild));
 
       /* Move the origin along the orientation */
@@ -99,7 +100,7 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl {
   }
 
   @Override
-  protected NiftyNode createNode() {
+  protected UniformStackLayoutNode createNode() {
     return new UniformStackLayoutNode(this);
   }
 
@@ -135,10 +136,5 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl {
       invalidateMeasure();
       invalidateArrange();
     }
-  }
-
-  @Override
-  public void initialize(final Nifty nifty, final NiftyNode niftyNode) {
-
   }
 }

@@ -2,6 +2,7 @@ package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.Point;
 import de.lessvoid.nifty.types.Rect;
 import de.lessvoid.nifty.types.Size;
@@ -16,7 +17,7 @@ import java.util.List;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl {
+class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNode> {
   /**
    * The padding applied to the bottom.
    */
@@ -105,14 +106,14 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl {
   @Nonnull
   @Override
   protected Size measureInternal(@Nonnull Size availableSize) {
-    Collection<NiftyNode> children = getLayout().getDirectChildren(this);
+    Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements, means that we do not require any size. */
       return new Size(left + right, top + bottom);
     }
 
     Size childSize = Size.ZERO;
-    for (NiftyNode child : children) {
+    for (NiftyNodeImpl<?> child : children) {
       childSize = Size.max(getLayout().measure(child, availableSize), childSize);
     }
 
@@ -121,7 +122,7 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl {
 
   @Override
   protected void arrangeInternal(@Nonnull Rect area) {
-    Collection<NiftyNode> children = getLayout().getDirectChildren(this);
+    Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements -> We are all done. */
       return;
@@ -131,18 +132,13 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl {
     Size newSize = new Size(area.getSize().getWidth() - left - right, area.getSize().getHeight() - top - bottom);
     Rect newArea = new Rect(newOrigin, newSize);
 
-    for (NiftyNode child : children) {
+    for (NiftyNodeImpl<?> child : children) {
       getLayout().arrange(child, newArea);
     }
   }
 
   @Override
-  protected NiftyNode createNode() {
+  protected PaddingLayoutNode createNode() {
     return new PaddingLayoutNode(this);
-  }
-
-  @Override
-  public void initialize(Nifty nifty, NiftyNode niftyNode) {
-
   }
 }

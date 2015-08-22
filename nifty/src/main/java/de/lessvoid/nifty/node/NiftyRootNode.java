@@ -32,7 +32,38 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
  * Created by void on 08.08.15.
  */
 public class NiftyRootNode implements NiftyNode {
+  private final NiftyRootNodeImpl impl;
+
+  public NiftyRootNode() {
+    impl = new NiftyRootNodeImpl();
+  }
+
+  NiftyRootNode(final NiftyRootNodeImpl impl) {
+    this.impl = impl;
+  }
+
+  @Override
   public String toString() {
     return "root";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    NiftyRootNode that = (NiftyRootNode) o;
+    return !(impl != null ? !impl.equals(that.impl) : that.impl != null);
+  }
+
+  @Override
+  public int hashCode() {
+    return impl != null ? impl.hashCode() : 0;
+  }
+
+  // friend access
+
+  NiftyRootNodeImpl getImpl() {
+    return impl;
   }
 }

@@ -41,12 +41,9 @@ import de.lessvoid.niftyinternal.InternalNiftyEventBus;
 import de.lessvoid.niftyinternal.InternalNiftyImage;
 import de.lessvoid.niftyinternal.NiftyResourceLoader;
 import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
+import de.lessvoid.niftyinternal.accessor.NiftyNodeAccessorRegistryAccessor;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.common.StatisticsRendererFPS;
-import de.lessvoid.niftyinternal.node.NiftyBackgroundColorNodeImpl;
-import de.lessvoid.niftyinternal.node.NiftyContentNodeImpl;
-import de.lessvoid.niftyinternal.node.NiftyRootNodeImpl;
-import de.lessvoid.niftyinternal.node.NiftyTransformationNodeImpl;
 import de.lessvoid.niftyinternal.render.InternalNiftyRenderer;
 import de.lessvoid.niftyinternal.render.font.FontRenderer;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
@@ -55,11 +52,13 @@ import org.jglfont.JGLFontFactory;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNiftyNode;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNiftyNodeClass;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplAny;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeClass;
 
 /**
  * The main control class of all things Nifty.
@@ -111,17 +110,21 @@ public class Nifty {
   private final NiftyLayout layout;
 
   // node impl class mapping
-  private Map<Class<? extends NiftyNode>, Class<? extends NiftyNodeImpl<? extends NiftyNode>>> nodeImplMapping = new HashMap<>();
+  private final NiftyNodeAccessorRegistry nodeAccessorRegistry;
 
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
    * @param newTimeProvider the TimeProvider implementation to use
+   * @param nodeAccessorRegistry
    */
   public Nifty(
       final NiftyRenderDevice newRenderDevice,
       final NiftyInputDevice newInputDevice,
-      final TimeProvider newTimeProvider) {
+      final TimeProvider newTimeProvider,
+      final NiftyNodeAccessorRegistry nodeAccessorRegistry) {
+    this.nodeAccessorRegistry = nodeAccessorRegistry;
+
     renderDevice = newRenderDevice;
     renderDevice.setResourceLoader(resourceLoader);
 
@@ -129,8 +132,6 @@ public class Nifty {
     inputDevice.setResourceLoader(resourceLoader);
 
     timeProvider = newTimeProvider;
-
-    registerStandardNodes();
 
     statistics = new NiftyStatistics(new Statistics(timeProvider));
     stats = statistics.getImpl();
@@ -350,26 +351,13 @@ public class Nifty {
   /////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Register a NiftyNode class with it's corresponding NiftyNodeImpl class.
-   *
-   * @param niftyNodeClass the NiftyNode class
-   * @param niftyNodeImplClass the NiftyNodeImpl class
-   * @param <T> a NiftyNode implementation
-   */
-  public <T extends NiftyNode, I extends NiftyNodeImpl<T>> void registerNodeImpl(
-      @Nonnull final Class<T> niftyNodeClass,
-      @Nonnull final Class<I> niftyNodeImplClass) {
-    nodeImplMapping.put(niftyNodeClass, niftyNodeImplClass);
-  }
-
-  /**
    * Add the given NiftyNode to the root node.
    *
    * @param child the child to add as well
    * @return this
    */
   public NiftyNodeBuilder addNode(final NiftyNode child) {
-    return addNode(tree.getRootNode(), child);
+    return addNode(tree.getRootNode().getNiftyNode(), child);
   }
 
   /**
@@ -379,10 +367,13 @@ public class Nifty {
    * @param child the child NiftyNode to add to the parent
    * @return this
    */
-  public NiftyNodeBuilder addNode(@Nonnull final NiftyNode parent, @Nonnull final NiftyNode child) {
-    tree.addChild(parent, niftyNodeImpl(child));
-    if (child instanceof NiftyLayoutNodeImpl) {
-      ((NiftyLayoutNodeImpl) child).onAttach(layout);
+  public NiftyNodeBuilder addNode(
+      @Nonnull final NiftyNode parent,
+      @Nonnull final NiftyNode child) {
+    NiftyNodeImpl<? extends NiftyNode> childImpl = niftyNodeImpl(child);
+    tree.addChild(niftyNodeImpl(parent), childImpl);
+    if (childImpl instanceof NiftyLayoutNodeImpl) {
+      ((NiftyLayoutNodeImpl) childImpl).onAttach(layout);
     }
     return new NiftyNodeBuilder(this, parent, child);
   }
@@ -393,10 +384,11 @@ public class Nifty {
    * @param niftyNode the NiftyNode to remove
    */
   public void remove(@Nonnull final NiftyNode niftyNode) {
-    if (niftyNode instanceof NiftyLayoutNodeImpl) {
-      ((NiftyLayoutNodeImpl) niftyNode).onDetach(layout);
+    NiftyNodeImpl<? extends NiftyNode> nodeImpl = niftyNodeImpl(niftyNode);
+    if (nodeImpl instanceof NiftyLayoutNodeImpl) {
+      ((NiftyLayoutNodeImpl) nodeImpl).onDetach(layout);
     }
-    tree.remove(niftyNode);
+    tree.remove(nodeImpl);
   }
 
   /**
@@ -404,7 +396,7 @@ public class Nifty {
    * @return the Iterator
    */
   public Iterable<? extends NiftyNode> childNodes() {
-    return tree.niftyChildNodes();
+    return tree.childNodes(nodeImplAny(), toNiftyNode());
   }
 
   /**
@@ -412,7 +404,7 @@ public class Nifty {
    * @return the Iterator
    */
   public Iterable<NiftyNode> childNodes(@Nonnull final NiftyNode startNode) {
-    return tree.filteredChildNodes(NiftyNode.class, startNode);
+    return tree.childNodes(nodeImplAny(), toNiftyNode(), niftyNodeImpl(startNode));
   }
 
   /**
@@ -421,7 +413,7 @@ public class Nifty {
    * @return the Iterator
    */
   public <X extends NiftyNode> Iterable<X> filteredChildNodes(@Nonnull final Class<X> clazz) {
-    return tree.filteredChildNodes(clazz);
+    return tree.childNodes(nodeClass(clazz), toNiftyNodeClass(clazz));
   }
 
   /**
@@ -432,25 +424,11 @@ public class Nifty {
    */
   public <X extends NiftyNode> Iterable<X> filteredChildNodes(@Nonnull final Class<X> clazz,
                                                               @Nonnull final NiftyNode startNode) {
-    return tree.filteredChildNodes(clazz, startNode);
-  }
-
-  private void registerStandardNodes() {
-    registerNodeImpl(NiftyRootNode.class, NiftyRootNodeImpl.class);
-    registerNodeImpl(NiftyContentNode.class, NiftyContentNodeImpl.class);
-    registerNodeImpl(NiftyBackgroundColorNode.class, NiftyBackgroundColorNodeImpl.class);
-    registerNodeImpl(NiftyTransformationNode.class, NiftyTransformationNodeImpl.class);
+    return tree.childNodes(nodeClass(clazz), toNiftyNodeClass(clazz), niftyNodeImpl(startNode));
   }
 
   private <T extends NiftyNode> NiftyNodeImpl<T> niftyNodeImpl(final T child) {
-    try {
-      NiftyNodeImpl<T> niftyNodeImpl = (NiftyNodeImpl<T>) nodeImplMapping.get(child.getClass()).newInstance();
-      niftyNodeImpl.initialize(this, child);
-      return niftyNodeImpl;
-    } catch (Exception e) {
-      logger.log(Level.WARNING, "failed to instantiate NiftyNodeImpl", e);
-      throw new NiftyRuntimeException(e);
-    }
+    return NiftyNodeAccessorRegistryAccessor.getDefault().getImpl(nodeAccessorRegistry, child);
   }
 
   // Friend methods

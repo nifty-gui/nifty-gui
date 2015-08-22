@@ -37,7 +37,6 @@ import de.lessvoid.niftyinternal.accessor.NiftyStateAccessor;
 import de.lessvoid.niftyinternal.canvas.Command;
 import de.lessvoid.niftyinternal.canvas.InternalNiftyCanvas;
 import de.lessvoid.niftyinternal.common.Statistics;
-import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 
@@ -45,6 +44,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNodeImplClass;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplClass;
 
 /**
  * Take a list of NiftyNodeImpl and render them.
@@ -64,8 +66,8 @@ public class InternalNiftyRenderer {
   }
 
   public boolean render(final InternalNiftyTree tree) {
-    nodeStatePass(tree.filteredChildNodesGeneral(NiftyNodeStateImpl.class));
-    nodeCanvasPass(tree.filteredChildNodesGeneral(NiftyNodeContentImpl.class));
+    nodeStatePass(tree.childNodes(nodeImplClass(NiftyNodeStateImpl.class), toNodeImplClass(NiftyNodeStateImpl.class)));
+    nodeCanvasPass(tree.childNodes(nodeImplClass(NiftyNodeContentImpl.class), toNodeImplClass(NiftyNodeContentImpl.class)));
     render();
     return true;
   }

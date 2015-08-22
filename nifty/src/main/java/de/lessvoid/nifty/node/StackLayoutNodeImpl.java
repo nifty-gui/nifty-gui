@@ -27,8 +27,8 @@
 
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.Point;
 import de.lessvoid.nifty.types.Rect;
 import de.lessvoid.nifty.types.Size;
@@ -44,7 +44,7 @@ import java.util.List;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl {
+final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl<StackLayoutNode> {
   @Nonnull
   private Orientation orientation;
   private boolean stretchLast;
@@ -57,7 +57,7 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl {
   @Nonnull
   @Override
   protected Size measureInternal(@Nonnull final Size availableSize) {
-    Collection<NiftyNode> children = getLayout().getDirectChildren(this);
+    Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements, means that we do not require any size. */
       return Size.ZERO;
@@ -65,7 +65,7 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl {
 
     Size remainingSize = availableSize;
     Size requiredSize = Size.ZERO;
-    for (NiftyNode child : children) {
+    for (NiftyNodeImpl<?> child : children) {
       Size childSize = getLayout().measure(child, remainingSize);
       if (orientation == Orientation.Horizontal) {
         requiredSize = new Size(requiredSize.getWidth() + childSize.getWidth(),
@@ -87,7 +87,7 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl {
 
   @Override
   protected void arrangeInternal(@Nonnull final Rect area) {
-    List<NiftyNode> children = getLayout().getDirectChildren(this);
+    List<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements -> We are all done. */
       return;
@@ -98,7 +98,7 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl {
 
     int childrenCount = children.size();
     for (int i = 0; i < childrenCount; i++) {
-      NiftyNode child = children.get(i);
+      NiftyNodeImpl<?> child = children.get(i);
       Size childSize = getLayout().getDesiredSize(child);
       Size arrangedSize;
       Point nextOrigin;
@@ -145,12 +145,7 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl {
   }
 
   @Override
-  public void initialize(final Nifty nifty, final NiftyNode niftyNode) {
-
-  }
-
-  @Override
-  protected NiftyNode createNode() {
+  protected StackLayoutNode createNode() {
     return new StackLayoutNode(this);
   }
 }

@@ -24,62 +24,42 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.tree;
+package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.NiftyState;
+import de.lessvoid.nifty.node.NiftyBackgroundColorNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
+import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
+import de.lessvoid.nifty.types.NiftyColor;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundColor;
+import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
 
 /**
- * Wrapper iterator to return only NiftyTreeNodes which value class matches a given class.
+ * Created by void on 09.08.15.
  */
-public class NiftyTreeNodeNiftyNodeClassFilterIterator<T extends NiftyNode> implements Iterator<NiftyTreeNode> {
-  private final Iterator<NiftyTreeNode> it;
-  private final Class<T> clazz;
-  private NiftyTreeNode cached;
+class NiftyBackgroundColorNodeImpl implements NiftyNodeStateImpl, NiftyNodeImpl<NiftyBackgroundColorNode> {
+  private NiftyColor backgroundColor;
 
-  public NiftyTreeNodeNiftyNodeClassFilterIterator(final Iterator<NiftyTreeNode> it, final Class<T> clazz) {
-    this.it = it;
-    this.clazz = clazz;
+  public NiftyBackgroundColorNodeImpl(final NiftyColor backgroundColor) {
+    this.backgroundColor = backgroundColor;
   }
 
   @Override
-  public boolean hasNext() {
-    if (cached != null) {
-      return true;
-    }
-    cached = findNext();
-    return cached != null;
+  public NiftyBackgroundColorNode getNiftyNode() {
+    return new NiftyBackgroundColorNode(this);
   }
 
   @Override
-  public NiftyTreeNode next() {
-    if (cached != null) {
-      NiftyTreeNode result = cached;
-      cached = null;
-      return result;
-    }
-    NiftyTreeNode result = findNext();
-    if (result == null) {
-      throw new NoSuchElementException();
-    }
-    return result;
+  public void update(final NiftyState niftyState) {
+    niftyState.setState(NiftyStateBackgroundColor, backgroundColor);
   }
 
-  @Override
-  public void remove() {
-    throw new UnsupportedOperationException();
+  public void setBackgroundColor(NiftyColor backgroundColor) {
+    this.backgroundColor = backgroundColor;
   }
 
-  private NiftyTreeNode findNext() {
-    while (it.hasNext()) {
-      NiftyTreeNode next = it.next();
-      NiftyNode value = next.getValue().getNiftyNode();
-      if (clazz.isAssignableFrom(value.getClass())) {
-        return next;
-      }
-    }
-    return null;
+  public NiftyColor getBackgroundColor() {
+    return backgroundColor;
   }
 }

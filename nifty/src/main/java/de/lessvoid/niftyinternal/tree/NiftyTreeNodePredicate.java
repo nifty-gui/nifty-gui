@@ -27,56 +27,18 @@
 package de.lessvoid.niftyinternal.tree;
 
 import de.lessvoid.nifty.spi.node.NiftyNode;
-import org.junit.Test;
-
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-import static de.lessvoid.nifty.NiftyNodeStringImpl.niftyNodeStringImpl;
-import static org.junit.Assert.*;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 /**
- * Created by void on 23.07.15.
+ * The NiftyTreeNodePredicate decides if a NiftyNodeImpl is acceptable.
  */
-public class NiftyTreeNodeNiftyNodeIteratorTest {
+public interface NiftyTreeNodePredicate {
 
-  @Test
-  public void testIterateRoot() {
-    NiftyTreeNode root = new NiftyTreeNode(niftyNodeStringImpl("root"));
-    Iterator<NiftyNode> it = createIterator(root);
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next().toString());
-
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
-    }
-  }
-
-  @Test
-  public void testIterateOneChild() {
-    NiftyTreeNode root = new NiftyTreeNode(niftyNodeStringImpl("root"));
-    NiftyTreeNode child = new NiftyTreeNode(niftyNodeStringImpl("child"));
-    root.addChild(child);
-
-    Iterator<NiftyNode> it = createIterator(root);
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next().toString());
-
-    assertTrue(it.hasNext());
-    assertEquals("child", it.next().toString());
-
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
-    }
-  }
-
-  private Iterator<NiftyNode> createIterator(final NiftyTreeNode root) {
-    return new NiftyTreeNodeNiftyNodeIterator(new NiftyTreeNodeDepthFirstIterator(root));
-  }
+  /**
+   * Check if the given NiftyNodeImpl is acceptable.
+   *
+   * @param niftyNodeImpl The NiftyNodeImpl to check
+   * @return true if the NiftyNodeImpl is acceptable and false if not
+   */
+  boolean accept(final NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl);
 }
