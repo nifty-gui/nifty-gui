@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import de.lessvoid.coregl.spi.CoreGL;
 import de.lessvoid.coregl.spi.CoreSetup;
 import de.lessvoid.coregl.spi.CoreSetup.RenderLoopCallback;
+import de.lessvoid.nifty.node.NiftyNodeAccessorRegistry;
 import de.lessvoid.nifty.time.AccurateTimeProvider;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.input.lwjgl.NiftyInputDeviceLWJGL;
@@ -91,7 +92,7 @@ public class UseCaseRunnerAdapterOpenGL implements UseCaseRunnerAdapter {
   }
 
   private Nifty createNifty() throws Exception {
-    return new Nifty(createRenderDevice(), createInputDevice(), new AccurateTimeProvider());
+    return new Nifty(createRenderDevice(), createInputDevice(), new AccurateTimeProvider(), new NiftyNodeAccessorRegistry());
   }
 
   private NiftyRenderDeviceOpenGL createRenderDevice() throws Exception {

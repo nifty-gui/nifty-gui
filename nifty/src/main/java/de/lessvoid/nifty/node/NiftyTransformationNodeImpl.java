@@ -24,12 +24,13 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.node;
+package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyState;
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.*;
-import de.lessvoid.nifty.node.NiftyTransformationNode;
+import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
+
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
 import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
@@ -38,9 +39,8 @@ import de.lessvoid.niftyinternal.math.Mat4;
 /**
  * Created by void on 09.08.15.
  */
-public class NiftyTransformationNodeImpl implements NiftyNodeStateImpl, NiftyNodeImpl<NiftyTransformationNode> {
-  private Nifty nifty;
-  private NiftyTransformationNode niftyNode;
+class NiftyTransformationNodeImpl implements NiftyNodeStateImpl, NiftyNodeImpl<NiftyTransformationNode> {
+  private final Nifty nifty;
 
   private boolean transformationChanged = true;
   private double pivotX = 0.5;
@@ -57,33 +57,18 @@ public class NiftyTransformationNodeImpl implements NiftyNodeStateImpl, NiftyNod
   private Mat4 screenToLocalTransformation;
   private Mat4 screenToLocalTransformationInverse;
 
-  @Override
-  public void initialize(final Nifty nifty, final NiftyTransformationNode niftyNode) {
+  public NiftyTransformationNodeImpl(final Nifty nifty) {
     this.nifty = nifty;
-    this.niftyNode = niftyNode;
   }
 
   @Override
   public NiftyTransformationNode getNiftyNode() {
-    return niftyNode;
+    return new NiftyTransformationNode(this);
   }
 
   @Override
   public void update(final NiftyState niftyState) {
-    if (updateTransformationChanged(pivotX, niftyNode.getPivotX())) pivotX = niftyNode.getPivotX();
-    if (updateTransformationChanged(pivotY, niftyNode.getPivotY())) pivotY = niftyNode.getPivotY();
-    if (updateTransformationChanged(angleX, niftyNode.getAngleX())) angleX = niftyNode.getAngleX();
-    if (updateTransformationChanged(angleY, niftyNode.getAngleY())) angleY = niftyNode.getAngleY();
-    if (updateTransformationChanged(angleZ, niftyNode.getAngleZ())) angleZ = niftyNode.getAngleZ();
-    if (updateTransformationChanged(scaleX, niftyNode.getScaleX())) scaleX = niftyNode.getScaleX();
-    if (updateTransformationChanged(scaleY, niftyNode.getScaleY())) scaleY = niftyNode.getScaleY();
-    if (updateTransformationChanged(scaleZ, niftyNode.getScaleZ())) scaleZ = niftyNode.getScaleZ();
-
     niftyState.setState(NiftyStateTransformation, updateTransformation());
-  }
-
-  public String toString() {
-    return niftyNode.toString();
   }
 
   private Mat4 updateTransformation() {
@@ -101,12 +86,10 @@ public class NiftyTransformationNodeImpl implements NiftyNodeStateImpl, NiftyNod
     return screenToLocalTransformation;
   }
 
-  private boolean updateTransformationChanged(final double oldValue, final double newValue) {
+  private void updateTransformationChanged(final double oldValue, final double newValue) {
     if (newValue != oldValue) {
       transformationChanged = true;
-      return true;
     }
-    return false;
   }
 
   private Mat4 buildLocalTransformation() {
@@ -132,5 +115,77 @@ public class NiftyTransformationNodeImpl implements NiftyNodeStateImpl, NiftyNod
       return Mat4.createIdentity();
     }
     return parent.screenToLocalTransformation;
+  }
+
+  public double getPivotX() {
+    return pivotX;
+  }
+
+  public void setPivotX(final double pivotX) {
+    updateTransformationChanged(this.pivotX, pivotX);
+    this.pivotX = pivotX;
+  }
+
+  public void setPivotY(final double pivotY) {
+    updateTransformationChanged(this.pivotY, pivotY);
+    this.pivotY = pivotY;
+  }
+
+  public double getPivotY() {
+    return pivotY;
+  }
+
+  public double getAngleX() {
+    return angleX;
+  }
+
+  public void setAngleX(final double angleX) {
+    updateTransformationChanged(this.angleX, angleX);
+    this.angleX = angleX;
+  }
+
+  public double getAngleY() {
+    return angleY;
+  }
+
+  public void setAngleY(final double angleY) {
+    updateTransformationChanged(this.angleY, angleY);
+    this.angleY = angleY;
+  }
+
+  public double getAngleZ() {
+    return angleZ;
+  }
+
+  public void setAngleZ(final double angleZ) {
+    updateTransformationChanged(this.angleZ, angleZ);
+    this.angleZ = angleZ;
+  }
+
+  public double getScaleX() {
+    updateTransformationChanged(this.scaleX, scaleX);
+    return scaleX;
+  }
+
+  public void setScaleX(final double scaleX) {
+    this.scaleX = scaleX;
+  }
+
+  public double getScaleY() {
+    return scaleY;
+  }
+
+  public void setScaleY(final double scaleY) {
+    updateTransformationChanged(this.scaleY, scaleY);
+    this.scaleY = scaleY;
+  }
+
+  public double getScaleZ() {
+    return scaleZ;
+  }
+
+  public void setScaleZ(final double scaleZ) {
+    updateTransformationChanged(this.scaleZ, scaleZ);
+    this.scaleZ = scaleZ;
   }
 }

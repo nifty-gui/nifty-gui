@@ -24,38 +24,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.node;
+package de.lessvoid.nifty.spi.node;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyState;
-import de.lessvoid.nifty.node.NiftyBackgroundColorNode;
-import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
-
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundColor;
-
-/**
- * Created by void on 09.08.15.
- */
-public class NiftyBackgroundColorNodeImpl implements NiftyNodeStateImpl, NiftyNodeImpl<NiftyBackgroundColorNode> {
-  private NiftyBackgroundColorNode niftyNode;
-
-  @Override
-  public void initialize(Nifty nifty, final NiftyBackgroundColorNode niftyNode) {
-    this.niftyNode = niftyNode;
-  }
-
-  @Override
-  public NiftyBackgroundColorNode getNiftyNode() {
-    return niftyNode;
-  }
-
-  @Override
-  public void update(final NiftyState niftyState) {
-    niftyState.setState(NiftyStateBackgroundColor, niftyNode.getBackgroundColor());
-  }
-
-  public String toString() {
-    return niftyNode.toString();
-  }
+public interface NiftyNodeAccessor<T extends NiftyNode> {
+  Class<T> getNodeClass();
+  NiftyNodeImpl<T> getImplementation(final T niftyNode);
 }

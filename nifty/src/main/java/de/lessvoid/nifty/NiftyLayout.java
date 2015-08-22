@@ -38,6 +38,9 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.logging.Logger;
 
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNodeImplClass;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplClass;
+
 /**
  * This is the class that supports the layout nodes to do their work. It is the primary entry point to trigger the
  * layout process.
@@ -146,7 +149,7 @@ public class NiftyLayout {
     }
 
     Size size = new Size(nifty.getScreenWidth(), nifty.getScreenHeight());
-    measure(nodeTree.getRootNode(), size);
+    measure(nodeTree.getRootNode().getNiftyNode(), size);
   }
 
   /**
@@ -162,10 +165,13 @@ public class NiftyLayout {
       return measure((NiftyLayoutNode) node, availableSize);
     } else {
       Size currentSize = Size.ZERO;
+      // FIXME @Martin: wir haben hier nur NiftyNode. Wollen wir nicht lieber NiftyNodeImpl hier haben?
+      /*
       for (NiftyLayoutNode childNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNode.class, node)) {
         Size nodeSize = measure(childNode, availableSize);
         currentSize = Size.max(nodeSize, currentSize);
       }
+      */
       return currentSize;
     }
   }
@@ -197,10 +203,13 @@ public class NiftyLayout {
       return ((NiftyLayoutNode) node).getDesiredSize();
     } else {
       Size currentSize = Size.ZERO;
+      // FIXME @Martin: wir haben hier nur NiftyNode. Wollen wir nicht lieber NiftyNodeImpl hier haben?
+      /*
       for (NiftyLayoutNode childNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNode.class, node)) {
         Size nodeSize = childNode.getDesiredSize();
         currentSize = Size.max(nodeSize, currentSize);
       }
+      */
       return currentSize;
     }
   }
@@ -210,7 +219,7 @@ public class NiftyLayout {
       return; // There are no dirty arrange entries reported. So we are done here.
     }
 
-    for (NiftyLayoutNode layoutNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNode.class)) {
+    for (NiftyLayoutNode layoutNode : nodeTree.childNodes(nodeImplClass(NiftyLayoutNode.class), toNodeImplClass(NiftyLayoutNode.class))) {
       if (layoutNode.isArrangeValid()) {
         layoutNode.arrange(layoutNode.getArrangedRect());
         removeArranged();
@@ -225,9 +234,12 @@ public class NiftyLayout {
     if (node instanceof NiftyLayoutNode) {
       arrange((NiftyLayoutNode) node, area);
     } else {
+      // FIXME @Martin: wir haben hier nur NiftyNode. Wollen wir nicht lieber NiftyNodeImpl hier haben?
+      /*
       for (NiftyLayoutNode layoutNode : nodeTree.filteredChildNodesImpl(NiftyLayoutNode.class, node)) {
         layoutNode.arrange(layoutNode.getArrangedRect());
       }
+      */
     }
   }
 

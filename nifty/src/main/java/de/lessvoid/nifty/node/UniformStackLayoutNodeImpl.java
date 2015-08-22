@@ -110,11 +110,6 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl {
   }
 
   @Override
-  public void initialize(Nifty nifty, final NiftyNode niftyNode) {
-
-  }
-
-  @Override
   public NiftyNode getNiftyNode() {
     return null;
   }

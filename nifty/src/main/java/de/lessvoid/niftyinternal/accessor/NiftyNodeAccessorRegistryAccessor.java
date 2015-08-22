@@ -24,33 +24,30 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.examples.usecase;
+package de.lessvoid.niftyinternal.accessor;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.node.NiftyNodeAccessorRegistry;
+import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
-import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
-import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
+public abstract class NiftyNodeAccessorRegistryAccessor {
+    public static NiftyNodeAccessorRegistryAccessor DEFAULT;
 
-/**
- * A single root node of a fixed size with a background color that is constantly rotating.
- * @author void
- */
-public class UseCase_a04_RotatingRootNode {
+    public static NiftyNodeAccessorRegistryAccessor getDefault() {
+        if (DEFAULT != null) {
+            return DEFAULT;
+        }
 
-  public UseCase_a04_RotatingRootNode(final Nifty nifty) {
-    nifty.clearScreenBeforeRender();
-    nifty
-        .addNode(transformationNode(nifty).setAngleZ(10))
-          .addNode(backgroundColorNode(NiftyColor.green()))
-            .addNode(contentNode(400, 400))
-              .addNode(transformationNode(nifty).setAngleZ(-25))
-                .addNode(backgroundColorNode(NiftyColor.red()))
-                  .addNode(contentNode(100, 100));
-  }
+        // invokes static initializer of Nifty.class that will assign value to the DEFAULT field above
+        Class<?> c = NiftyNodeAccessorRegistry.class;
+        try {
+            Class.forName(c.getName(), true, c.getClassLoader());
+        } catch (ClassNotFoundException ex) {
+            assert false : ex;
+        }
+        assert DEFAULT != null : "The DEFAULT field must be initialized";
+        return DEFAULT;
+    }
 
-  public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_a04_RotatingRootNode.class, args);
-  }
+    public abstract NiftyNodeImpl getImpl(NiftyNodeAccessorRegistry registry, NiftyNode niftyNode);
 }

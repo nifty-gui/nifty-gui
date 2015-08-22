@@ -24,46 +24,45 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty;
+package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeAccessor;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
+import de.lessvoid.niftyinternal.accessor.NiftyNodeAccessorRegistryAccessor;
 
-public class NiftyNodeLong implements NiftyNode {
-  private NiftyNodeLongImpl impl;
+import java.util.HashMap;
+import java.util.Map;
 
-  public NiftyNodeLong(final Long value) {
-    this.impl = new NiftyNodeLongImpl(value);
+/**
+ * Created by void on 22.08.15.
+ */
+public class NiftyNodeAccessorRegistry {
+  private Map<Class<? extends NiftyNode>, NiftyNodeAccessor> nodeAccessors = new HashMap<>();
+
+  public NiftyNodeAccessorRegistry() {
+    registerStandardNodes();
   }
 
-  public long getValue() {
-    return impl.getValue();
+  public void registerNiftyNodeAccessor(final NiftyNodeAccessor<? extends NiftyNode> niftyNodeAccessor) {
+    nodeAccessors.put(niftyNodeAccessor.getNodeClass(), niftyNodeAccessor);
   }
 
-  @Override
-  public String toString() {
-    return String.valueOf(impl.getValue());
+  private void registerStandardNodes() {
+    registerNiftyNodeAccessor(new NiftyRootNodeAccessor());
+    registerNiftyNodeAccessor(new NiftyContentNodeAccessor());
+    registerNiftyNodeAccessor(new NiftyBackgroundColorNodeAccessor());
+    registerNiftyNodeAccessor(new NiftyTransformationNodeAccessor());
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+  // friend access
 
-    NiftyNodeLong that = (NiftyNodeLong) o;
-    return !(impl != null ? !impl.equals(that.impl) : that.impl != null);
+  NiftyNodeImpl getImpl(final NiftyNode niftyNode) {
+    NiftyNodeAccessor niftyNodeAccessor = nodeAccessors.get(niftyNode.getClass());
+    return niftyNodeAccessor.getImplementation(niftyNode);
   }
 
-  @Override
-  public int hashCode() {
-    return impl != null ? impl.hashCode() : 0;
-  }
-
-  public static NiftyNodeLong niftyNodeLong(final long value) {
-    return new NiftyNodeLong(value);
-  }
-
-  public NiftyNodeImpl<NiftyNodeLong> getImpl() {
-    return impl;
+  static {
+    NiftyNodeAccessorRegistryAccessor.DEFAULT = new NiftyAccessorRegistryAccessorImpl();
   }
 }

@@ -35,13 +35,6 @@ import de.lessvoid.nifty.Nifty;
 public interface NiftyNodeImpl<T extends NiftyNode> {
 
   /**
-   * Initialize this NiftyNodeImpl instance with the NiftyNode given.
-   * @param nifty the Nifty instance
-   * @param niftyNode the NiftyNode that this NiftyNodeImpl belongs to
-   */
-  void initialize(Nifty nifty, T niftyNode);
-
-  /**
    * Return the NiftyNode this NiftyNodeImpl belongs to.
    * @return the NiftyNode
    */

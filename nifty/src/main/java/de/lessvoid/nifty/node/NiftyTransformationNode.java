@@ -26,100 +26,121 @@
  */
 package de.lessvoid.nifty.node;
 
+import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.spi.node.NiftyNode;
-import de.lessvoid.nifty.types.NiftyColor;
 
 /**
  * The API for the NiftyTransformationNode node.
  * Created by void on 09.08.15.
  */
 public class NiftyTransformationNode implements NiftyNode {
-  private double pivotX = 0.5;
-  private double pivotY = 0.5;
-  private double angleX = 0.0;
-  private double angleY = 0.0;
-  private double angleZ = 0.0;
-  private double scaleX = 1.0;
-  private double scaleY = 1.0;
-  private double scaleZ = 1.0;
+  private final NiftyTransformationNodeImpl impl;
 
-  public static NiftyTransformationNode transformationNode() {
-    return new NiftyTransformationNode();
+  public static NiftyTransformationNode transformationNode(final Nifty nifty) {
+    return new NiftyTransformationNode(nifty);
+  }
+
+  private NiftyTransformationNode(final Nifty nifty) {
+    impl = new NiftyTransformationNodeImpl(nifty);
+  }
+
+  NiftyTransformationNode(final NiftyTransformationNodeImpl impl) {
+    this.impl = impl;
   }
 
   public double getPivotX() {
-    return pivotX;
+    return impl.getPivotX();
   }
 
   public NiftyTransformationNode setPivotX(final double pivotX) {
-    this.pivotX = pivotX;
+    impl.setPivotX(pivotX);
     return this;
   }
 
   public double getPivotY() {
-    return pivotY;
+    return impl.getPivotY();
   }
 
   public NiftyTransformationNode setPivotY(final double pivotY) {
-    this.pivotY = pivotY;
+    impl.setPivotY(pivotY);
     return this;
   }
 
   public double getAngleX() {
-    return angleX;
+    return impl.getAngleX();
   }
 
   public NiftyTransformationNode setAngleX(final double angleX) {
-    this.angleX = angleX;
+    impl.setAngleX(angleX);
     return this;
   }
 
   public double getAngleY() {
-    return angleY;
+    return impl.getAngleY();
   }
 
   public NiftyTransformationNode setAngleY(final double angleY) {
-    this.angleY = angleY;
+    impl.setAngleY(angleY);
     return this;
   }
 
   public double getAngleZ() {
-    return angleZ;
+    return impl.getAngleZ();
   }
 
   public NiftyTransformationNode setAngleZ(final double angleZ) {
-    this.angleZ = angleZ;
+    impl.setAngleZ(angleZ);
     return this;
   }
 
   public double getScaleX() {
-    return scaleX;
+    return impl.getScaleX();
   }
 
   public NiftyTransformationNode setScaleX(final double scaleX) {
-    this.scaleX = scaleX;
+    impl.setScaleX(scaleX);
     return this;
   }
 
   public double getScaleY() {
-    return scaleY;
+    return impl.getScaleY();
   }
 
   public NiftyTransformationNode setScaleY(final double scaleY) {
-    this.scaleY = scaleY;
+    impl.setScaleY(scaleY);
     return this;
   }
 
   public double getScaleZ() {
-    return scaleZ;
+    return impl.getScaleZ();
   }
 
   public NiftyTransformationNode setScaleZ(final double scaleZ) {
-    this.scaleZ = scaleZ;
+    impl.setScaleZ(scaleZ);
     return this;
   }
 
   public String toString() {
     return "(" + this.getClass().getSimpleName() + ") FIXME";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    NiftyTransformationNode that = (NiftyTransformationNode) o;
+    return !(impl != null ? !impl.equals(that.impl) : that.impl != null);
+  }
+
+  @Override
+  public int hashCode() {
+    return impl != null ? impl.hashCode() : 0;
+  }
+
+  // friend access
+
+  NiftyTransformationNodeImpl getImpl() {
+    return impl;
   }
 }

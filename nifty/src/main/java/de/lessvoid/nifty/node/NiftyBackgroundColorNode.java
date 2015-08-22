@@ -30,29 +30,53 @@ import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 
 /**
- * The API for the NiftyBackgroundColorNode node.
+ * The API for the NiftyBackgroundColorNode.
  * Created by void on 09.08.15.
  */
 public class NiftyBackgroundColorNode implements NiftyNode {
-  private NiftyColor backgroundColor;
+  private NiftyBackgroundColorNodeImpl impl;
 
   public static NiftyBackgroundColorNode backgroundColorNode(final NiftyColor backgroundColor) {
     return new NiftyBackgroundColorNode(backgroundColor);
   }
 
-  public NiftyBackgroundColorNode(final NiftyColor backgroundColor) {
-    this.backgroundColor = backgroundColor;
+  private NiftyBackgroundColorNode(final NiftyColor backgroundColor) {
+    impl = new NiftyBackgroundColorNodeImpl(backgroundColor);
+  }
+
+  NiftyBackgroundColorNode(final NiftyBackgroundColorNodeImpl impl) {
+    this.impl = impl;
   }
 
   public void setBackgroundColor(final NiftyColor backgroundColor) {
-    this.backgroundColor = backgroundColor;
+    impl.setBackgroundColor(backgroundColor);
   }
 
   public NiftyColor getBackgroundColor() {
-    return backgroundColor;
+    return impl.getBackgroundColor();
   }
 
   public String toString() {
-    return "(" + this.getClass().getSimpleName() + ") backgroundColor [" + backgroundColor + "]";
+    return "(" + this.getClass().getSimpleName() + ") backgroundColor [" + impl.getBackgroundColor() + "]";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    NiftyBackgroundColorNode that = (NiftyBackgroundColorNode) o;
+    return !(impl != null ? !impl.equals(that.impl) : that.impl != null);
+  }
+
+  @Override
+  public int hashCode() {
+    return impl != null ? impl.hashCode() : 0;
+  }
+
+  // friend access
+
+  NiftyBackgroundColorNodeImpl getImpl() {
+    return impl;
   }
 }

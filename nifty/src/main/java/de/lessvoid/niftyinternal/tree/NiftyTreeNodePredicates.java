@@ -26,57 +26,37 @@
  */
 package de.lessvoid.niftyinternal.tree;
 
+import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import org.junit.Test;
-
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-import static de.lessvoid.nifty.NiftyNodeStringImpl.niftyNodeStringImpl;
-import static org.junit.Assert.*;
 
 /**
- * Created by void on 23.07.15.
+ * Created by void on 21.08.15.
  */
-public class NiftyTreeNodeNiftyNodeImplIteratorTest {
-
-  @Test
-  public void testIterateRoot() {
-    NiftyTreeNode root = new NiftyTreeNode(niftyNodeStringImpl("root"));
-    Iterator<NiftyNodeImpl> it = createIterator(root);
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next().getNiftyNode().toString());
-
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
-    }
+public class NiftyTreeNodePredicates {
+  public static NiftyTreeNodePredicate nodeImplAny() {
+    return new NiftyTreeNodePredicate() {
+      @Override
+      public boolean accept(final NiftyNodeImpl niftyNodeImpl) {
+        return true;
+      }
+    };
   }
 
-  @Test
-  public void testIterateOneChild() {
-    NiftyTreeNode root = new NiftyTreeNode(niftyNodeStringImpl("root"));
-    NiftyTreeNode child = new NiftyTreeNode(niftyNodeStringImpl("child"));
-    root.addChild(child);
-
-    Iterator<NiftyNodeImpl> it = createIterator(root);
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next().getNiftyNode().toString());
-
-    assertTrue(it.hasNext());
-    assertEquals("child", it.next().getNiftyNode().toString());
-
-    assertFalse(it.hasNext());
-    try {
-      it.next();
-      fail("expected exception");
-    } catch (NoSuchElementException e) {
-    }
+  public static <T> NiftyTreeNodePredicate nodeImplClass(final Class<T> clazz) {
+    return new NiftyTreeNodePredicate() {
+      @Override
+      public boolean accept(final NiftyNodeImpl niftyNodeImpl) {
+        return clazz.isAssignableFrom(niftyNodeImpl.getClass());
+      }
+    };
   }
 
-  private Iterator<NiftyNodeImpl> createIterator(final NiftyTreeNode root) {
-    return new NiftyTreeNodeNiftyNodeImplIterator(new NiftyTreeNodeDepthFirstIterator(root));
+  public static <T extends NiftyNode> NiftyTreeNodePredicate nodeClass(final Class<T> clazz) {
+    return new NiftyTreeNodePredicate() {
+      @Override
+      public boolean accept(final NiftyNodeImpl niftyNodeImpl) {
+        return clazz.isAssignableFrom(niftyNodeImpl.getNiftyNode().getClass());
+      }
+    };
   }
 }

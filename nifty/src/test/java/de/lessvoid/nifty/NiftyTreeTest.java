@@ -26,10 +26,13 @@
  */
 package de.lessvoid.nifty;
 
+import de.lessvoid.nifty.node.NiftyNodeAccessorRegistry;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.TimeProvider;
+import de.lessvoid.nifty.spi.node.NiftyNodeAccessor;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,9 +57,16 @@ public class NiftyTreeTest {
     replay(a);
     replay(b);
     replay(c);
-    nifty = new Nifty(a, b, c);
-    nifty.registerNodeImpl(NiftyNodeString.class, NiftyNodeStringImpl.class);
-    nifty.registerNodeImpl(NiftyNodeLong.class, NiftyNodeLongImpl.class);
+    NiftyNodeAccessorRegistry nodeAccessorRegistry = new NiftyNodeAccessorRegistry();
+    nodeAccessorRegistry.registerNiftyNodeAccessor(new NiftyNodeAccessor<NiftyNodeLong>() {
+      @Override public Class<NiftyNodeLong> getNodeClass() { return NiftyNodeLong.class; }
+      @Override public NiftyNodeImpl<NiftyNodeLong> getImplementation(final NiftyNodeLong niftyNode) { return niftyNode.getImpl(); }
+    });
+    nodeAccessorRegistry.registerNiftyNodeAccessor(new NiftyNodeAccessor<NiftyNodeString>() {
+      @Override public Class<NiftyNodeString> getNodeClass() { return NiftyNodeString.class; }
+      @Override public NiftyNodeImpl<NiftyNodeString> getImplementation(final NiftyNodeString niftyNode) { return niftyNode.getImpl(); }
+    });
+    nifty = new Nifty(a, b, c, nodeAccessorRegistry);
   }
 
   @Test

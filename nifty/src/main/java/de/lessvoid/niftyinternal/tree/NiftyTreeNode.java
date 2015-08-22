@@ -73,39 +73,12 @@ public class NiftyTreeNode {
     this.parent = parent;
   }
 
-  public Iterator<NiftyTreeNode> niftyTreeNodeIterator() {
-    return new NiftyTreeNodeDepthFirstIterator(this);
-  }
-
-  public Iterator<NiftyNodeImpl> niftyNodeImplIterator() {
-    return new NiftyTreeNodeNiftyNodeImplIterator(new NiftyTreeNodeDepthFirstIterator(this));
-  }
-
-  public <T extends NiftyNodeImpl> Iterator<T> filteredNiftyNodeImplIterator(final Class<T> clazz) {
+  public <T> Iterator<T> iterator(final NiftyTreeNodePredicate predicate, final NiftyTreeNodeConverter<T> converter) {
     return
-        new NiftyTreeNodeNiftyNodeImplIterator(
-          new NiftyTreeNodeNiftyNodeImplClassFilterIterator(
-            niftyTreeNodeIterator(), clazz));
-  }
-
-  public Iterator<? extends NiftyNode> niftyNodeIterator() {
-    return
-        new NiftyTreeNodeNiftyNodeIterator(
-            new NiftyTreeNodeDepthFirstIterator(this));
-  }
-
-  public <T extends NiftyNode> Iterator<T> filteredNiftyNodeIterator(final Class<T> clazz) {
-    return
-        new NiftyTreeNodeNiftyNodeIterator(
-            new NiftyTreeNodeNiftyNodeClassFilterIterator(
-                niftyTreeNodeIterator(), clazz));
-  }
-
-  public <T> Iterator<T> filteredIteratorGeneral(final Class<T> clazz) {
-    return
-        new NiftyTreeNodeNiftyNodeImplIterator(
-            new NiftyTreeNodeNiftyNodeImplClassFilterIterator(
-                niftyTreeNodeIterator(), clazz));
+        new NiftyTreeNodeIterator<>(
+            new NiftyTreeNodeDepthFirstIterator(this),
+            predicate,
+            converter);
   }
 
   public void remove() {

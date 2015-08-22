@@ -38,6 +38,10 @@ import java.util.List;
 
 import static de.lessvoid.nifty.NiftyNodeLongImpl.niftyNodeLongImpl;
 import static de.lessvoid.nifty.NiftyNodeStringImpl.niftyNodeStringImpl;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.*;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplAny;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplClass;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeClass;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertFalse;
@@ -172,24 +176,6 @@ public class NiftyTreeNodeTest {
   }
 
   @Test
-  public void testNiftyTreeNodeIterator() {
-    NiftyTreeNode root = niftyTreeNode("root");
-    NiftyTreeNode child1 = niftyTreeNode("hello-1");
-    root.addChild(child1);
-    NiftyTreeNode child11 = niftyTreeNode("hello-1-1");
-    child1.addChild(child11);
-    NiftyTreeNode child2 = niftyTreeNode("hello-2");
-    root.addChild(child2);
-
-    Iterator<NiftyTreeNode> it = root.niftyTreeNodeIterator();
-    assertEquals("root", it.next().getValue().toString());
-    assertEquals("hello-1", it.next().getValue().toString());
-    assertEquals("hello-1-1", it.next().getValue().toString());
-    assertEquals("hello-2", it.next().getValue().toString());
-    assertFalse(it.hasNext());
-  }
-
-  @Test
   public void testNiftyNodeImplIterator() {
     NiftyTreeNode root = niftyTreeNode("root");
     NiftyTreeNode child1 = niftyTreeNode("hello-1");
@@ -199,7 +185,7 @@ public class NiftyTreeNodeTest {
     NiftyTreeNode child2 = niftyTreeNode("hello-2");
     root.addChild(child2);
 
-    Iterator<NiftyNodeImpl> it = root.niftyNodeImplIterator();
+    Iterator<NiftyNodeImpl> it = root.iterator(nodeImplAny(), toNodeImpl());
     assertEquals("root", it.next().toString());
     assertEquals("hello-1", it.next().toString());
     assertEquals("hello-1-1", it.next().toString());
@@ -217,7 +203,7 @@ public class NiftyTreeNodeTest {
     NiftyTreeNode child2 = niftyTreeNode("hello-2");
     root.addChild(child2);
 
-    Iterator<NiftyNodeLongImpl> it = root.filteredNiftyNodeImplIterator(NiftyNodeLongImpl.class);
+    Iterator<NiftyNodeLongImpl> it = root.iterator(nodeImplClass(NiftyNodeLongImpl.class), toNodeImplClass(NiftyNodeLongImpl.class));
     assertEquals(42L, it.next().getNiftyNode().getValue());
     assertFalse(it.hasNext());
   }
@@ -232,7 +218,7 @@ public class NiftyTreeNodeTest {
     NiftyTreeNode child2 = niftyTreeNode("hello-2");
     root.addChild(child2);
 
-    Iterator<? extends NiftyNode> it = root.niftyNodeIterator();
+    Iterator<? extends NiftyNode> it = root.iterator(nodeImplAny(), toNiftyNode());
     assertEquals("root", it.next().toString());
     assertEquals("hello-1", it.next().toString());
     assertEquals("hello-1-1", it.next().toString());
@@ -250,7 +236,7 @@ public class NiftyTreeNodeTest {
     NiftyTreeNode child2 = niftyTreeNode("hello-2");
     root.addChild(child2);
 
-    Iterator<NiftyNodeLong> it = root.filteredNiftyNodeIterator(NiftyNodeLong.class);
+    Iterator<NiftyNodeLong> it = root.iterator(nodeClass(NiftyNodeLong.class), toNiftyNodeClass(NiftyNodeLong.class));
     assertEquals(42L, it.next().getValue());
     assertFalse(it.hasNext());
   }
@@ -265,7 +251,7 @@ public class NiftyTreeNodeTest {
     NiftyTreeNode child2 = niftyTreeNode("hello-2");
     root.addChild(child2);
 
-    Iterator<NiftyNodeLongImpl> it = root.filteredIteratorGeneral(NiftyNodeLongImpl.class);
+    Iterator<NiftyNodeLongImpl> it = root.iterator(nodeImplClass(NiftyNodeLongImpl.class), toNodeImplClass(NiftyNodeLongImpl.class));
     assertEquals(42L, it.next().getNiftyNode().getValue());
     assertFalse(it.hasNext());
   }

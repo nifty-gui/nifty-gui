@@ -29,41 +29,41 @@ package de.lessvoid.nifty;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 public class NiftyNodeLongImpl implements NiftyNodeImpl<NiftyNodeLong> {
-  private NiftyNodeLong niftyNode;
+  private final Long value;
 
-  public static NiftyNodeLongImpl niftyNodeLongImpl(final long value) {
-    NiftyNodeLongImpl result = new NiftyNodeLongImpl();
-    result.initialize(null, NiftyNodeLong.niftyNodeLong(value));
-    return result;
+  public NiftyNodeLongImpl(Long value) {
+    this.value = value;
   }
 
-  @Override
-  public void initialize(Nifty nifty, final NiftyNodeLong niftyNode) {
-    this.niftyNode = niftyNode;
+  public static NiftyNodeLongImpl niftyNodeLongImpl(final long value) {
+    return new NiftyNodeLongImpl(value);
   }
 
   @Override
   public NiftyNodeLong getNiftyNode() {
-    return niftyNode;
+    return new NiftyNodeLong(value);
   }
 
   @Override
   public String toString() {
-    return niftyNode.toString();
+    return String.valueOf(value);
   }
 
   @Override
-  public boolean equals(final Object o) {
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
     NiftyNodeLongImpl that = (NiftyNodeLongImpl) o;
-
-    return !(niftyNode != null ? !niftyNode.equals(that.niftyNode) : that.niftyNode != null);
+    return !(value != null ? !value.equals(that.value) : that.value != null);
   }
 
   @Override
   public int hashCode() {
-    return niftyNode != null ? niftyNode.hashCode() : 0;
+    return value != null ? value.hashCode() : 0;
+  }
+
+  public Long getValue() {
+    return value;
   }
 }

@@ -27,33 +27,39 @@
 package de.lessvoid.nifty;
 
 import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 public class NiftyNodeString implements NiftyNode {
-  private final String value;
+  private NiftyNodeStringImpl impl;
 
   public NiftyNodeString(final String value) {
-    this.value = value;
+    this.impl = new NiftyNodeStringImpl(value);
+  }
+
+  @Override
+  public String toString() {
+    return impl.getValue();
   }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    NiftyNodeString niftyNodeString = (NiftyNodeString) o;
-    return !(value != null ? !value.equals(niftyNodeString.value) : niftyNodeString.value != null);
+
+    NiftyNodeString that = (NiftyNodeString) o;
+    return !(impl != null ? !impl.equals(that.impl) : that.impl != null);
   }
 
   @Override
   public int hashCode() {
-    return value != null ? value.hashCode() : 0;
-  }
-
-  @Override
-  public String toString() {
-    return value;
+    return impl != null ? impl.hashCode() : 0;
   }
 
   public static NiftyNodeString niftyNodeString(final String value) {
     return new NiftyNodeString(value);
+  }
+
+  public NiftyNodeImpl<NiftyNodeString> getImpl() {
+    return impl;
   }
 }

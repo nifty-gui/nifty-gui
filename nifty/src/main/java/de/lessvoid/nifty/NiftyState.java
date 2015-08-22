@@ -46,7 +46,7 @@ public class NiftyState {
 
   public enum NiftyStandardState implements State {
     NiftyStateBackgroundColor,
-    NiftyStateTransformation;
+    NiftyStateTransformation
   }
 
   private final Map<State, Object> stateMap = new HashMap<>();
@@ -57,6 +57,14 @@ public class NiftyState {
 
   public <T> T getState(final State state) {
     return (T) stateMap.get(state);
+  }
+
+  public <T> T getState(final State state, final T defaultValue) {
+    T value = (T) stateMap.get(state);
+    if (value != null) {
+      return value;
+    }
+    return defaultValue;
   }
 
   // Internal methods

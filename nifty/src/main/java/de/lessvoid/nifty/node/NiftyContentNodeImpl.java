@@ -24,7 +24,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.node;
+package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyState;
@@ -42,11 +42,17 @@ import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransfor
 /**
  * Created by void on 09.08.15.
  */
-public class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeContentImpl, NiftyNodeImpl<NiftyContentNode> {
-  private NiftyContentNode niftyNode;
+class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeContentImpl, NiftyNodeImpl<NiftyContentNode> {
+  private final int w;
+  private final int h;
 
   private NiftyColor backgroundColor;
   private Mat4 screenToLocal;
+
+  public NiftyContentNodeImpl(final int w, final int h) {
+    this.w = w;
+    this.h = h;
+  }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // NiftyNodeStateImpl
@@ -54,8 +60,8 @@ public class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeConten
 
   @Override
   public void update(final NiftyState niftyState) {
-    backgroundColor = niftyState.getState(NiftyStateBackgroundColor);
-    screenToLocal = niftyState.getState(NiftyStateTransformation);
+    backgroundColor = niftyState.getState(NiftyStateBackgroundColor, NiftyColor.purple());
+    screenToLocal = niftyState.getState(NiftyStateTransformation, Mat4.createIdentity());
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,12 +76,12 @@ public class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeConten
 
   @Override
   public int getContentWidth() {
-    return niftyNode.getW();
+    return w;
   }
 
   @Override
   public int getContentHeight() {
-    return niftyNode.getH();
+    return h;
   }
 
   @Override
@@ -88,12 +94,7 @@ public class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeConten
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Override
-  public void initialize(Nifty nifty, final NiftyContentNode niftyNode) {
-    this.niftyNode = niftyNode;
-  }
-
-  @Override
   public NiftyContentNode getNiftyNode() {
-    return niftyNode;
+    return new NiftyContentNode(this);
   }
 }

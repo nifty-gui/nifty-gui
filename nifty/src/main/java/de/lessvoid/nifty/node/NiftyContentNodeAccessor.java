@@ -24,34 +24,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.tree;
+package de.lessvoid.nifty.node;
 
+import de.lessvoid.nifty.spi.node.NiftyNodeAccessor;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
-import java.util.Iterator;
-
 /**
- * Wrapper iterator to return the NiftyTreeNode values directly.
+ * Created by void on 22.08.15.
  */
-public class NiftyTreeNodeNiftyNodeImplIterator<T extends NiftyNodeImpl> implements Iterator<T> {
-  private final Iterator<NiftyTreeNode> it;
-
-  public NiftyTreeNodeNiftyNodeImplIterator(final Iterator<NiftyTreeNode> it) {
-    this.it = it;
+class NiftyContentNodeAccessor implements NiftyNodeAccessor<NiftyContentNode> {
+  @Override
+  public Class<NiftyContentNode> getNodeClass() {
+    return NiftyContentNode.class;
   }
 
   @Override
-  public boolean hasNext() {
-    return it.hasNext();
-  }
-
-  @Override
-  public T next() {
-    return (T) it.next().getValue();
-  }
-
-  @Override
-  public void remove() {
-    throw new UnsupportedOperationException();
+  public NiftyNodeImpl<NiftyContentNode> getImplementation(final NiftyContentNode niftyNode) {
+    return niftyNode.getImpl();
   }
 }
