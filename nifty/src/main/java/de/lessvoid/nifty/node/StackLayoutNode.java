@@ -28,6 +28,7 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
 
@@ -69,5 +70,10 @@ public final class StackLayoutNode implements NiftyNode {
 
   public void setStretchLast(final boolean stretchLast) {
     implementation.setStretchLast(stretchLast);
+  }
+
+  @Nonnull
+  NiftyNodeImpl<StackLayoutNode> getImpl() {
+    return implementation;
   }
 }

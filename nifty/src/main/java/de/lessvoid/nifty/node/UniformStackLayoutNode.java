@@ -28,6 +28,7 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -72,5 +73,10 @@ public final class UniformStackLayoutNode implements NiftyNode {
   @Override
   public int hashCode() {
     return implementation.hashCode();
+  }
+
+  @Nonnull
+  NiftyNodeImpl<UniformStackLayoutNode> getImpl() {
+    return implementation;
   }
 }

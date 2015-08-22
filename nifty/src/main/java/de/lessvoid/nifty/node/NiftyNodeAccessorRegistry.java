@@ -53,6 +53,12 @@ public class NiftyNodeAccessorRegistry {
     registerNiftyNodeAccessor(new NiftyContentNodeAccessor());
     registerNiftyNodeAccessor(new NiftyBackgroundColorNodeAccessor());
     registerNiftyNodeAccessor(new NiftyTransformationNodeAccessor());
+
+    // layout nodes
+    registerNiftyNodeAccessor(new FixedSizeLayoutNodeAccessor());
+    registerNiftyNodeAccessor(new PaddingLayoutNodeAccessor());
+    registerNiftyNodeAccessor(new StackLayoutNodeAccessor());
+    registerNiftyNodeAccessor(new UniformStackLayoutNodeAccessor());
   }
 
   // friend access

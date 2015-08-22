@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
 
@@ -61,5 +62,10 @@ public class PaddingLayoutNode implements NiftyNode {
 
   public void setBottom(float bottom) {
     implementation.setBottom(bottom);
+  }
+
+  @Nonnull
+  NiftyNodeImpl<PaddingLayoutNode> getImpl() {
+    return implementation;
   }
 }

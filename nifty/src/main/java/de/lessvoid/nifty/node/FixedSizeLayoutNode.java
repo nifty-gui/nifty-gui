@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
 
@@ -33,5 +34,10 @@ public class FixedSizeLayoutNode implements NiftyNode {
 
   void setHeight(float height) {
     implementation.setHeight(height);
+  }
+
+  @Nonnull
+  NiftyNodeImpl<FixedSizeLayoutNode> getImpl() {
+    return implementation;
   }
 }
