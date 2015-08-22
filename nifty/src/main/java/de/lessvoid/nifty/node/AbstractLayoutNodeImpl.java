@@ -28,6 +28,7 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.NiftyLayout;
+import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.types.Rect;
 import de.lessvoid.nifty.types.Size;
