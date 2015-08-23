@@ -22,20 +22,14 @@ public final class NiftyServiceLoader<S> implements Iterable<S> {
   @Nonnull
   private static final String PREFIX = "META-INF/services/";
   @Nonnull
-  private final Class<S> service;
-  @Nonnull
-  private final ClassLoader loader;
-  @Nonnull
   private final Map<String, S> providers;
 
-  private NiftyServiceLoader(@Nonnull Class<S> svc, @Nullable ClassLoader cl) {
-    service = svc;
-    loader = (cl == null) ? ClassLoader.getSystemClassLoader() : cl;
-    providers = new HashMap<>();
-    performLoading();
+  private NiftyServiceLoader(@Nonnull Class<S> service, @Nullable ClassLoader cl) {
+    providers= performLoading(service, ((cl == null) ? ClassLoader.getSystemClassLoader() : cl));
   }
 
-  private void performLoading() {
+  private static <S> Map<String, S> performLoading(@Nonnull final Class<S> service,
+                                                   @Nonnull final ClassLoader loader) {
     String fullName = PREFIX + service.getName();
     Enumeration<URL> configs = null;
     try {
@@ -44,16 +38,18 @@ public final class NiftyServiceLoader<S> implements Iterable<S> {
       fail(service, "Loading service files failed.");
     }
 
+    Map<String, S> providers = new HashMap<>();
     while (configs.hasMoreElements()) {
       URL nextURL = configs.nextElement();
 
       for (String configLine : parse(service, nextURL)) {
         if (!providers.containsKey(configLine)) {
-          S newService = createService(configLine);
+          S newService = createService(service, loader, configLine);
           providers.put(configLine, newService);
         }
       }
     }
+    return providers;
   }
 
   private static int parseLine(@Nonnull final Class<?> service,
@@ -102,6 +98,7 @@ public final class NiftyServiceLoader<S> implements Iterable<S> {
       in = u.openStream();
       r = new BufferedReader(new InputStreamReader(in, "utf-8"));
       int lc = 1;
+      //noinspection StatementWithEmptyBody
       while ((lc = parseLine(service, u, r, lc, names)) >= 0);
     } catch (IOException x) {
       fail(service, "Error reading configuration file", x);
@@ -120,7 +117,9 @@ public final class NiftyServiceLoader<S> implements Iterable<S> {
     return names;
   }
 
-  private S createService(@Nonnull final String serviceName) {
+  private static <S> S createService(@Nonnull final Class<S> service,
+                                     @Nonnull final ClassLoader loader,
+                                     @Nonnull final String serviceName) {
     Class<?> c = null;
     try {
       c = Class.forName(serviceName, false, loader);
@@ -135,8 +134,7 @@ public final class NiftyServiceLoader<S> implements Iterable<S> {
       if (!constructor.isAccessible()) {
         constructor.setAccessible(true);
       }
-      S p = service.cast(constructor.newInstance());
-      return p;
+      return service.cast(constructor.newInstance());
     } catch (Throwable x) {
       fail(service, "Provider " + serviceName + " could not be instantiated", x);
     }
