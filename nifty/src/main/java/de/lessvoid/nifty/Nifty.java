@@ -35,13 +35,14 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
 import de.lessvoid.nifty.spi.TimeProvider;
+import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.niftyinternal.InternalNiftyEventBus;
 import de.lessvoid.niftyinternal.InternalNiftyImage;
+import de.lessvoid.niftyinternal.InternalNiftyNodeAccessorRegistry;
 import de.lessvoid.niftyinternal.NiftyResourceLoader;
 import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
-import de.lessvoid.niftyinternal.accessor.NiftyNodeAccessorRegistryAccessor;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.common.StatisticsRendererFPS;
 import de.lessvoid.niftyinternal.render.InternalNiftyRenderer;
@@ -110,20 +111,18 @@ public class Nifty {
   private final NiftyLayout layout;
 
   // node impl class mapping
-  private final NiftyNodeAccessorRegistry nodeAccessorRegistry;
+  private final InternalNiftyNodeAccessorRegistry nodeAccessorRegistry;
 
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
    * @param newTimeProvider the TimeProvider implementation to use
-   * @param nodeAccessorRegistry
    */
   public Nifty(
       final NiftyRenderDevice newRenderDevice,
       final NiftyInputDevice newInputDevice,
-      final TimeProvider newTimeProvider,
-      final NiftyNodeAccessorRegistry nodeAccessorRegistry) {
-    this.nodeAccessorRegistry = nodeAccessorRegistry;
+      final TimeProvider newTimeProvider) {
+    nodeAccessorRegistry = new InternalNiftyNodeAccessorRegistry();
 
     renderDevice = newRenderDevice;
     renderDevice.setResourceLoader(resourceLoader);
@@ -428,7 +427,7 @@ public class Nifty {
   }
 
   private <T extends NiftyNode> NiftyNodeImpl<T> niftyNodeImpl(final T child) {
-    return NiftyNodeAccessorRegistryAccessor.getDefault().getImpl(nodeAccessorRegistry, child);
+    return nodeAccessorRegistry.getImpl(child);
   }
 
   // Friend methods

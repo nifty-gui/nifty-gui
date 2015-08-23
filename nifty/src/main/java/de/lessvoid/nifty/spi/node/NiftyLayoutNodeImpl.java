@@ -25,7 +25,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package de.lessvoid.nifty.node;
+package de.lessvoid.nifty.spi.node;
 
 import de.lessvoid.nifty.NiftyLayout;
 import de.lessvoid.nifty.spi.node.NiftyNode;
