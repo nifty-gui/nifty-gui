@@ -36,6 +36,7 @@ import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,12 +60,16 @@ public class NiftyTreeTest {
     replay(c);
     NiftyNodeAccessorRegistry nodeAccessorRegistry = new NiftyNodeAccessorRegistry();
     nodeAccessorRegistry.registerNiftyNodeAccessor(new NiftyNodeAccessor<NiftyNodeLong>() {
+      @Nonnull
       @Override public Class<NiftyNodeLong> getNodeClass() { return NiftyNodeLong.class; }
-      @Override public NiftyNodeImpl<NiftyNodeLong> getImplementation(final NiftyNodeLong niftyNode) { return niftyNode.getImpl(); }
+      @Nonnull
+      @Override public NiftyNodeImpl<NiftyNodeLong> getImplementation(@Nonnull final NiftyNodeLong niftyNode) { return niftyNode.getImpl(); }
     });
     nodeAccessorRegistry.registerNiftyNodeAccessor(new NiftyNodeAccessor<NiftyNodeString>() {
+      @Nonnull
       @Override public Class<NiftyNodeString> getNodeClass() { return NiftyNodeString.class; }
-      @Override public NiftyNodeImpl<NiftyNodeString> getImplementation(final NiftyNodeString niftyNode) { return niftyNode.getImpl(); }
+      @Nonnull
+      @Override public NiftyNodeImpl<NiftyNodeString> getImplementation(@Nonnull final NiftyNodeString niftyNode) { return niftyNode.getImpl(); }
     });
     nifty = new Nifty(a, b, c, nodeAccessorRegistry);
   }

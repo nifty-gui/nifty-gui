@@ -29,9 +29,7 @@ package de.lessvoid.nifty;
 import de.lessvoid.nifty.input.NiftyInputConsumer;
 import de.lessvoid.nifty.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.input.NiftyPointerEvent;
-import de.lessvoid.nifty.node.NiftyLayoutNode;
-import de.lessvoid.nifty.node.NiftyNodeAccessorRegistry;
-import de.lessvoid.nifty.node.NiftyRootNode;
+import de.lessvoid.nifty.node.*;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
@@ -372,9 +370,10 @@ public class Nifty {
   public NiftyNodeBuilder addNode(
       @Nonnull final NiftyNode parent,
       @Nonnull final NiftyNode child) {
-    tree.addChild(niftyNodeImpl(parent), niftyNodeImpl(child));
-    if (child instanceof NiftyLayoutNode) {
-      ((NiftyLayoutNode) child).onAttach(layout);
+    NiftyNodeImpl<? extends NiftyNode> childImpl = niftyNodeImpl(child);
+    tree.addChild(niftyNodeImpl(parent), childImpl);
+    if (childImpl instanceof NiftyLayoutNodeImpl) {
+      ((NiftyLayoutNodeImpl) childImpl).onAttach(layout);
     }
     return new NiftyNodeBuilder(this, parent, child);
   }
@@ -385,10 +384,11 @@ public class Nifty {
    * @param niftyNode the NiftyNode to remove
    */
   public void remove(@Nonnull final NiftyNode niftyNode) {
-    if (niftyNode instanceof NiftyLayoutNode) {
-      ((NiftyLayoutNode) niftyNode).onDetach(layout);
+    NiftyNodeImpl<? extends NiftyNode> nodeImpl = niftyNodeImpl(niftyNode);
+    if (nodeImpl instanceof NiftyLayoutNodeImpl) {
+      ((NiftyLayoutNodeImpl) nodeImpl).onDetach(layout);
     }
-    tree.remove(niftyNodeImpl(niftyNode));
+    tree.remove(nodeImpl);
   }
 
   /**

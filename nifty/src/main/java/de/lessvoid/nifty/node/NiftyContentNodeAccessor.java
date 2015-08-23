@@ -29,17 +29,21 @@ package de.lessvoid.nifty.node;
 import de.lessvoid.nifty.spi.node.NiftyNodeAccessor;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by void on 22.08.15.
  */
 class NiftyContentNodeAccessor implements NiftyNodeAccessor<NiftyContentNode> {
+  @Nonnull
   @Override
   public Class<NiftyContentNode> getNodeClass() {
     return NiftyContentNode.class;
   }
 
+  @Nonnull
   @Override
-  public NiftyNodeImpl<NiftyContentNode> getImplementation(final NiftyContentNode niftyNode) {
+  public NiftyNodeImpl<NiftyContentNode> getImplementation(@Nonnull final NiftyContentNode niftyNode) {
     return niftyNode.getImpl();
   }
 }

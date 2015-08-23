@@ -26,7 +26,12 @@
  */
 package de.lessvoid.nifty.spi.node;
 
+import javax.annotation.Nonnull;
+
 public interface NiftyNodeAccessor<T extends NiftyNode> {
+  @Nonnull
   Class<T> getNodeClass();
-  NiftyNodeImpl<T> getImplementation(final T niftyNode);
+
+  @Nonnull
+  NiftyNodeImpl<T> getImplementation(@Nonnull T niftyNode);
 }

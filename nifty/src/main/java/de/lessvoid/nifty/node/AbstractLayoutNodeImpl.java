@@ -1,16 +1,46 @@
+/*
+ * Copyright (c) 2015, Nifty GUI Community
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *  * Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  * Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.NiftyLayout;
+import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.types.Rect;
 import de.lessvoid.nifty.types.Size;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
 
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-abstract class AbstractLayoutNodeImpl implements NiftyLayoutNode {
+abstract class AbstractLayoutNodeImpl<T extends NiftyNode> implements NiftyLayoutNodeImpl<T> {
   @Nullable
   private NiftyLayout layout;
   private boolean measureValid;
@@ -19,6 +49,8 @@ abstract class AbstractLayoutNodeImpl implements NiftyLayoutNode {
   private Size desiredSize;
   @Nullable
   private Rect arrangeRect;
+  @Nullable
+  private Reference<T> niftyNodeRef;
 
   protected AbstractLayoutNodeImpl() {}
 
@@ -32,6 +64,7 @@ abstract class AbstractLayoutNodeImpl implements NiftyLayoutNode {
     invalidateArrange();
   }
 
+  @Override
   public void onDetach(@Nonnull final NiftyLayout layout) {
     if (this.layout == null) {
       throw new IllegalStateException("This node was never attached.");
@@ -85,6 +118,10 @@ abstract class AbstractLayoutNodeImpl implements NiftyLayoutNode {
   @Nonnull
   @Override
   public final Size measure(@Nonnull final Size availableSize) {
+    if (availableSize.isInvalid()) {
+      throw new IllegalArgumentException("Supplied size value for measure must not be invalid.");
+    }
+
     Size size = measureInternal(availableSize);
     if (!size.equals(desiredSize)) {
       invalidateArrange();
@@ -113,4 +150,17 @@ abstract class AbstractLayoutNodeImpl implements NiftyLayoutNode {
     }
     return layout;
   }
+
+  @Override
+  public final T getNiftyNode() {
+    Reference<T> ref = niftyNodeRef;
+    T node = (ref == null) ? null : ref.get();
+    if (node == null) {
+      node = createNode();
+      niftyNodeRef = new SoftReference<>(node);
+    }
+    return node;
+  }
+
+  protected abstract T createNode();
 }

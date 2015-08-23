@@ -50,7 +50,7 @@ public class InternalNiftyTree {
   }
 
   @Nonnull
-  public NiftyNodeImpl getRootNode() {
+  public NiftyNodeImpl<? extends NiftyNode> getRootNode() {
     return root.getValue();
   }
 

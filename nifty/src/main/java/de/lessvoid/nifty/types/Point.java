@@ -42,12 +42,22 @@ public final class Point {
   private final float y;
 
   /**
+   * @throws IllegalArgumentException Thrown in case {@code offsetX} or {@code offsetY} aren't finite values.
+   */
+  public Point(@Nonnull final Point original, final float offsetX, final float offsetY) {
+    if (!(Math.abs(offsetX) <= Float.MAX_VALUE)) throw new IllegalArgumentException("x is expected to be a finite value.");
+    if (!(Math.abs(offsetY) <= Float.MAX_VALUE)) throw new IllegalArgumentException("x is expected to be a finite value.");
+
+    x = original.getX() + offsetX;
+    y = original.getY() + offsetY;
+  }
+
+  /**
    * @throws IllegalArgumentException Thrown in case {@code x} or {@code y} aren't finite values.
    */
   public Point(final float x, final float y) {
-    // @mkaring: Float.isFinite is Java 8 which, unfortunately we can't support yet - how to replace that?
-    //if (!Float.isFinite(x)) throw new IllegalArgumentException("x is expected to be a finite value.");
-    //if (!Float.isFinite(y)) throw new IllegalArgumentException("y is expected to be a finite value.");
+    if (!(Math.abs(x) <= Float.MAX_VALUE)) throw new IllegalArgumentException("x is expected to be a finite value.");
+    if (!(Math.abs(y) <= Float.MAX_VALUE)) throw new IllegalArgumentException("x is expected to be a finite value.");
 
     this.x = x;
     this.y = y;

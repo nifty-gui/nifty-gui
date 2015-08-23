@@ -2,6 +2,7 @@ package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.NiftyLayout;
 import de.lessvoid.nifty.spi.node.NiftyNode;
+import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.Point;
 import de.lessvoid.nifty.types.Rect;
 import de.lessvoid.nifty.types.Size;
@@ -48,8 +49,8 @@ public class UniformStackLayoutNodeImplTest {
   @Test
   public void testHorizontal() throws Exception {
     Size availableSize = new Size(100, 100);
-    NiftyNode firstChildMock = EasyMock.createMock(NiftyNode.class);
-    NiftyNode secondChildMock = EasyMock.createMock(NiftyNode.class);
+    NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
+    NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
 
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
@@ -86,8 +87,8 @@ public class UniformStackLayoutNodeImplTest {
   @Test
   public void testHorizontalInfiniteWidth() throws Exception {
     Size availableSize = new Size(Float.POSITIVE_INFINITY, 100);
-    NiftyNode firstChildMock = EasyMock.createMock(NiftyNode.class);
-    NiftyNode secondChildMock = EasyMock.createMock(NiftyNode.class);
+    NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
+    NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
 
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
@@ -124,8 +125,8 @@ public class UniformStackLayoutNodeImplTest {
   @Test
   public void testVertical() throws Exception {
     Size availableSize = new Size(100, 100);
-    NiftyNode firstChildMock = EasyMock.createMock(NiftyNode.class);
-    NiftyNode secondChildMock = EasyMock.createMock(NiftyNode.class);
+    NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
+    NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
 
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
@@ -162,8 +163,8 @@ public class UniformStackLayoutNodeImplTest {
   @Test
   public void testVerticalInfiniteHeight() throws Exception {
     Size availableSize = new Size(100, Float.POSITIVE_INFINITY);
-    NiftyNode firstChildMock = EasyMock.createMock(NiftyNode.class);
-    NiftyNode secondChildMock = EasyMock.createMock(NiftyNode.class);
+    NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
+    NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
 
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
@@ -200,7 +201,7 @@ public class UniformStackLayoutNodeImplTest {
   @Test
   public void testMeasureNoChildren() throws Exception {
     expect(layout.getDirectChildren(testInstance))
-        .andReturn(Collections.<NiftyNode>emptyList())
+        .andReturn(Collections.<NiftyNodeImpl<?>>emptyList())
         .anyTimes();
     replay(layout);
     testInstance.onAttach(layout);
@@ -218,7 +219,7 @@ public class UniformStackLayoutNodeImplTest {
   @Test
   public void testArrangeNoChildren() throws Exception {
     expect(layout.getDirectChildren(testInstance))
-        .andReturn(Collections.<NiftyNode>emptyList())
+        .andReturn(Collections.<NiftyNodeImpl<?>>emptyList())
         .anyTimes();
     replay(layout);
     testInstance.onAttach(layout);

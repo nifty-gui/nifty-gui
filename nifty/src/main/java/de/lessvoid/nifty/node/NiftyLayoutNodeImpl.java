@@ -28,6 +28,7 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.NiftyLayout;
+import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.types.Rect;
 import de.lessvoid.nifty.types.Size;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
@@ -40,7 +41,7 @@ import javax.annotation.Nonnull;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public interface NiftyLayoutNode extends NiftyNodeImpl {
+public interface NiftyLayoutNodeImpl<T extends NiftyNode> extends NiftyNodeImpl<T> {
   /**
    * Called once the layout node is attached to the node tree. This function is required
    * to inform the layout system about this node correctly.
