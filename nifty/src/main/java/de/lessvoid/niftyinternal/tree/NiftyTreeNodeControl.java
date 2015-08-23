@@ -24,21 +24,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package de.lessvoid.niftyinternal.tree;
 
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
-/**
- * The NiftyTreeNodePredicate decides if a NiftyNodeImpl is acceptable.
- */
-public interface NiftyTreeNodePredicate {
+import javax.annotation.Nonnull;
 
-  /**
-   * Check if the given NiftyNodeImpl is acceptable.
-   *
-   * @param niftyNodeImpl The NiftyNodeImpl to check
-   * @return true if the NiftyNodeImpl is acceptable and false if not
-   */
-  boolean accept(NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl);
+/**
+ * This interface is used to influence the iterator movement in the tree.
+ *
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
+ */
+public interface NiftyTreeNodeControl {
+  NiftyTreeNodeVisitResult visitNode(
+      @Nonnull NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl,
+      int depth,
+      int index);
 }

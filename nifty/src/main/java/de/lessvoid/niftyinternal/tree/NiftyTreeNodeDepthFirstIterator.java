@@ -26,10 +26,9 @@
  */
 package de.lessvoid.niftyinternal.tree;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Stack;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Depth-first, on tree elements
@@ -37,11 +36,18 @@ import java.util.Stack;
  * @author jkee
  */
 public class NiftyTreeNodeDepthFirstIterator implements Iterator<NiftyTreeNode> {
-  private final Stack<Integer> stack = new Stack<>();
+  @Nonnull
+  private final Stack<Integer> stack;
+  @Nullable
   private NiftyTreeNode current;
+  @Nonnull
+  private final NiftyTreeNodeControl control;
 
-  public NiftyTreeNodeDepthFirstIterator(final NiftyTreeNode tree) {
+  public NiftyTreeNodeDepthFirstIterator(@Nullable final NiftyTreeNode tree,
+                                         @Nonnull final NiftyTreeNodeControl control) {
     current = tree;
+    this.control = control;
+    stack = new Stack<>();
   }
 
   @Override
@@ -53,7 +59,32 @@ public class NiftyTreeNodeDepthFirstIterator implements Iterator<NiftyTreeNode> 
   public NiftyTreeNode next() {
     if (current == null) throw new NoSuchElementException();
     NiftyTreeNode toReturn = current;
-    List<NiftyTreeNode> children = current.getChildren();
+
+    List<NiftyTreeNode> children = null;
+    int currentDepth = stack.size();
+    int currentIndex = (currentDepth == 0 ? 0 : stack.peek());
+
+    switch (control.visitNode(toReturn.getValue(), currentDepth, currentIndex)) {
+      case Terminate: // Terminate the iteration
+        current = null;
+        stack.clear();
+        break;
+      case Continue: // continue normal
+        children = current.getChildren();
+        break;
+      case SkipSubtree: // skip the entire tree below that node if there is any.
+        children = null;
+        break;
+      case SkipSiblings: // continue the sub tree, but skip the remaining sub tree
+        if (!stack.empty()) {
+          // maximal value in the stack will ensure that any following sibling will leave.
+          stack.pop();
+          stack.push(Integer.MAX_VALUE);
+        }
+        children = current.getChildren();
+        break;
+    }
+
     if (children != null && !children.isEmpty()) {
       //starting next level
       NiftyTreeNode firstChild = children.get(0);
