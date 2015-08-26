@@ -26,7 +26,6 @@
  */
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 
 /**
@@ -36,12 +35,12 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
 public class NiftyTransformationNode implements NiftyNode {
   private final NiftyTransformationNodeImpl impl;
 
-  public static NiftyTransformationNode transformationNode(final Nifty nifty) {
-    return new NiftyTransformationNode(nifty);
+  public static NiftyTransformationNode transformationNode() {
+    return new NiftyTransformationNode();
   }
 
-  private NiftyTransformationNode(final Nifty nifty) {
-    impl = new NiftyTransformationNodeImpl(nifty);
+  private NiftyTransformationNode() {
+    impl = new NiftyTransformationNodeImpl();
   }
 
   NiftyTransformationNode(final NiftyTransformationNodeImpl impl) {
@@ -117,6 +116,33 @@ public class NiftyTransformationNode implements NiftyNode {
 
   public NiftyTransformationNode setScaleZ(final double scaleZ) {
     impl.setScaleZ(scaleZ);
+    return this;
+  }
+
+  public double getPosX() {
+    return impl.getPosX();
+  }
+
+  public NiftyTransformationNode setPosX(final double posX) {
+    impl.setPosX(posX);
+    return this;
+  }
+
+  public double getPosY() {
+    return impl.getPosY();
+  }
+
+  public NiftyTransformationNode setPosY(final double posY) {
+    impl.setPosY(posY);
+    return this;
+  }
+
+  public double getPosZ() {
+    return impl.getPosZ();
+  }
+
+  public NiftyTransformationNode setPosZ(final double posZ) {
+    impl.setPosZ(posZ);
     return this;
   }
 

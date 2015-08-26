@@ -84,6 +84,7 @@ public class InternalNiftyRenderer {
       RenderNodeCanvas renderNodeCanvas = ensureRenderNode(child, existingNodes.get(child.hashCode()));
       getCanvas(renderNodeCanvas).reset();
       child.updateCanvas(renderNodeCanvas.canvas);
+      renderNodeCanvas.renderNode.setLocal(child.getScreenToLocal());
       renderNodeCanvas.renderNode.updateContent(renderNodeCanvas.canvas);
     }
   }

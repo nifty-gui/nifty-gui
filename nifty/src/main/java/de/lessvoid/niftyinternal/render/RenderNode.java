@@ -43,7 +43,7 @@ import java.util.List;
 
 public class RenderNode {
   private final List<Command> commands;
-  private final Mat4 local;
+  private Mat4 local;
   private int width;
   private int height;
   private int oldWidth;
@@ -56,7 +56,6 @@ public class RenderNode {
   private final int renderOrder;
   private int indexInParent;
   private Integer nodeId;
-  private Mat4 transformation;
 
   public RenderNode(
       final Mat4 local,
@@ -174,8 +173,8 @@ public class RenderNode {
     return NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas);
   }
 
-  public void setTransformation(Mat4 transformation) {
-    this.transformation = transformation;
+  public void setLocal(final Mat4 transformation) {
+    this.local = transformation;
   }
 
   private void updateContent(final List<Command> list) {

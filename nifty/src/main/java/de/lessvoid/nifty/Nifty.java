@@ -43,6 +43,7 @@ import de.lessvoid.niftyinternal.InternalNiftyImage;
 import de.lessvoid.niftyinternal.InternalNiftyNodeAccessorRegistry;
 import de.lessvoid.niftyinternal.NiftyResourceLoader;
 import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
+import de.lessvoid.niftyinternal.animate.IntervalAnimator;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.common.StatisticsRendererFPS;
 import de.lessvoid.niftyinternal.render.InternalNiftyRenderer;
@@ -113,6 +114,9 @@ public class Nifty {
   // node impl class mapping
   private final InternalNiftyNodeAccessorRegistry nodeAccessorRegistry;
 
+  // IntervalAnimator will execute given NiftyCallbacks at given intervals
+  private List<IntervalAnimator> animators = new ArrayList<>();
+
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
@@ -170,6 +174,10 @@ public class Nifty {
     processInputEvents(collectInputReceivers());
     stats.stopInputProcessing();
 
+    for (int i=0; i<animators.size(); i++) {
+      animators.get(i).update();
+    }
+
     stats.startUpdate();
     /* FIXME
     for (int i=0; i<rootNodes.size(); i++) {
@@ -192,66 +200,15 @@ public class Nifty {
     return frameChanged;
   }
 
-
-  private List<NiftyNode> collectInputReceivers() {
-    /* FIXME
-    nodesToReceiveEvents.clear();
-    for (int i=0; i<rootNodes.size(); i++) {
-      InternalNiftyNode impl = rootNodes.get(i).getImpl();
-      if (!impl.isNiftyPrivateNode()) {
-        impl.addInputNodes(nodesToReceiveEvents);
-      }
-    }
-    */
-    return sortInputReceivers(nodesToReceiveEvents);
+  public void startAnimated(final long delay, final long interval, final NiftyCallback<Float> callback) {
+    animators.add(new IntervalAnimator(getTimeProvider(), delay, interval, callback));
   }
 
-  // sorts in place (the source list) and returns the sorted source list
-  private List<NiftyNode> sortInputReceivers(final List<NiftyNode> source) {
-// FIXME    Collections.sort(source, Collections.reverseOrder(inputEventReceiversComparator));
-    return source;
-  }
-
-  private void logInputReceivers(final List<NiftyNode> source) {
-    str.setLength(0);
-    str.append("inputReceivers: ");
-    for (int j=0; j<source.size(); j++) {
-      str.append("[");
-      // FIXME str.append(source.get(j).getImpl().getId());
-      str.append("]");
-      str.append(" ");
-    }
-    logger.fine(str.toString());
-  }
-
-  private void processInputEvents(final List<NiftyNode> inputReceivers) {
-    inputDevice.forwardEvents(new NiftyInputConsumer() {
+  public <N extends NiftyNode> void startAnimated(final long delay, final long interval, final N node, final NiftyNodeCallback<Float, N> callback) {
+    startAnimated(delay, interval, new NiftyCallback<Float>() {
       @Override
-      public boolean processPointerEvent(final NiftyPointerEvent... pointerEvents) {
-        logInputReceivers(inputReceivers);
-/*  FIXME
-        for (int i=0; i<pointerEvents.length; i++) {
-          if (nodeThatCapturedPointerEvents != null) {
-            if (nodeThatCapturedPointerEvents.getImpl().capturedPointerEvent(pointerEvents[i])) {
-              nodeThatCapturedPointerEvents = null;
-            }
-          } else {
-            for (int j=0; j<inputReceivers.size(); j++) {
-              InternalNiftyNode impl = inputReceivers.get(j).getImpl();
-              if (impl.pointerEvent(pointerEvents[i])) {
-                nodeThatCapturedPointerEvents = inputReceivers.get(j);
-                break;
-              }
-            }
-          }
-        }
-        */
-        return false;
-      }
-
-      @Override
-      public boolean processKeyboardEvent(final NiftyKeyboardEvent keyEvent) {
-        return false;
+      public void execute(final Float aFloat) {
+        callback.execute(aFloat, node);
       }
     });
   }
@@ -428,6 +385,71 @@ public class Nifty {
 
   private <T extends NiftyNode> NiftyNodeImpl<T> niftyNodeImpl(final T child) {
     return nodeAccessorRegistry.getImpl(child);
+  }
+
+  // Private methods
+
+  private List<NiftyNode> collectInputReceivers() {
+    /* FIXME
+    nodesToReceiveEvents.clear();
+    for (int i=0; i<rootNodes.size(); i++) {
+      InternalNiftyNode impl = rootNodes.get(i).getImpl();
+      if (!impl.isNiftyPrivateNode()) {
+        impl.addInputNodes(nodesToReceiveEvents);
+      }
+    }
+    */
+    return sortInputReceivers(nodesToReceiveEvents);
+  }
+
+  // sorts in place (the source list) and returns the sorted source list
+  private List<NiftyNode> sortInputReceivers(final List<NiftyNode> source) {
+// FIXME    Collections.sort(source, Collections.reverseOrder(inputEventReceiversComparator));
+    return source;
+  }
+
+  private void logInputReceivers(final List<NiftyNode> source) {
+    str.setLength(0);
+    str.append("inputReceivers: ");
+    for (int j=0; j<source.size(); j++) {
+      str.append("[");
+      // FIXME str.append(source.get(j).getImpl().getId());
+      str.append("]");
+      str.append(" ");
+    }
+    logger.fine(str.toString());
+  }
+
+  private void processInputEvents(final List<NiftyNode> inputReceivers) {
+    inputDevice.forwardEvents(new NiftyInputConsumer() {
+      @Override
+      public boolean processPointerEvent(final NiftyPointerEvent... pointerEvents) {
+        logInputReceivers(inputReceivers);
+/*  FIXME
+        for (int i=0; i<pointerEvents.length; i++) {
+          if (nodeThatCapturedPointerEvents != null) {
+            if (nodeThatCapturedPointerEvents.getImpl().capturedPointerEvent(pointerEvents[i])) {
+              nodeThatCapturedPointerEvents = null;
+            }
+          } else {
+            for (int j=0; j<inputReceivers.size(); j++) {
+              InternalNiftyNode impl = inputReceivers.get(j).getImpl();
+              if (impl.pointerEvent(pointerEvents[i])) {
+                nodeThatCapturedPointerEvents = inputReceivers.get(j);
+                break;
+              }
+            }
+          }
+        }
+        */
+        return false;
+      }
+
+      @Override
+      public boolean processKeyboardEvent(final NiftyKeyboardEvent keyEvent) {
+        return false;
+      }
+    });
   }
 
   // Friend methods

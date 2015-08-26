@@ -27,6 +27,8 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyNodeCallback;
+import de.lessvoid.nifty.node.NiftyTransformationNode;
 import de.lessvoid.nifty.types.NiftyColor;
 
 import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
@@ -41,13 +43,23 @@ public class UseCase_a04_RotatingRootNode {
 
   public UseCase_a04_RotatingRootNode(final Nifty nifty) {
     nifty.clearScreenBeforeRender();
+    NiftyTransformationNode rootTransformation = transformationNode().setPosX(150).setPosY(150);
     nifty
-        .addNode(transformationNode(nifty).setAngleZ(10))
+        .addNode(rootTransformation)
           .addNode(backgroundColorNode(NiftyColor.green()))
             .addNode(contentNode(400, 400))
-              .addNode(transformationNode(nifty).setAngleZ(-25))
+              .addNode(transformationNode().setPosX(50).setPosY(50))
                 .addNode(backgroundColorNode(NiftyColor.red()))
                   .addNode(contentNode(100, 100));
+
+    nifty.startAnimated(0, 15, rootTransformation, new NiftyNodeCallback<Float, NiftyTransformationNode>() {
+      private float angle = 0;
+
+      @Override
+      public void execute(final Float time, final NiftyTransformationNode niftyTransformationNode) {
+        niftyTransformationNode.setAngleZ(angle++);
+      }
+    });
   }
 
   public static void main(final String[] args) throws Exception {
