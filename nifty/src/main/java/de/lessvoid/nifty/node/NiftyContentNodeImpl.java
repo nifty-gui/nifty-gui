@@ -26,10 +26,9 @@
  */
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyState;
 import de.lessvoid.nifty.NiftyCanvas;
-import de.lessvoid.nifty.node.NiftyContentNode;
+import de.lessvoid.nifty.NiftyCanvasPainter;
+import de.lessvoid.nifty.NiftyState;
 import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
@@ -48,10 +47,15 @@ class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeContentImpl, 
 
   private NiftyColor backgroundColor;
   private Mat4 screenToLocal;
+  private NiftyCanvasPainter canvasPainter = defaultNiftyCanvasPainter();
 
   public NiftyContentNodeImpl(final int w, final int h) {
     this.w = w;
     this.h = h;
+  }
+
+  public void setCanvasPainter(final NiftyCanvasPainter canvasPainter) {
+    this.canvasPainter = canvasPainter;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,8 +74,7 @@ class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeContentImpl, 
 
   @Override
   public void updateCanvas(final NiftyCanvas niftyCanvas) {
-    niftyCanvas.setFillStyle(backgroundColor);
-    niftyCanvas.fillRect(0., 0., getContentWidth(), getContentHeight());
+    canvasPainter.paint(getNiftyNode(), niftyCanvas);
   }
 
   @Override
@@ -96,5 +99,15 @@ class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeContentImpl, 
   @Override
   public NiftyContentNode getNiftyNode() {
     return new NiftyContentNode(this);
+  }
+
+  private NiftyCanvasPainter defaultNiftyCanvasPainter() {
+    return new NiftyCanvasPainter() {
+      @Override
+      public void paint(final NiftyContentNode node, final NiftyCanvas niftyCanvas) {
+        niftyCanvas.setFillStyle(backgroundColor);
+        niftyCanvas.fillRect(0., 0., getContentWidth(), getContentHeight());
+      }
+    };
   }
 }

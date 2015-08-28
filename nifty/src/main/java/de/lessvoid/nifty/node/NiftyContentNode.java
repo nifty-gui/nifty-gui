@@ -26,6 +26,7 @@
  */
 package de.lessvoid.nifty.node;
 
+import de.lessvoid.nifty.NiftyCanvasPainter;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 
 /**
@@ -57,6 +58,11 @@ public class NiftyContentNode implements NiftyNode {
 
   public int getH() {
     return impl.getContentHeight();
+  }
+
+  public NiftyContentNode setCanvasPainter(final NiftyCanvasPainter niftyCanvasPainter) {
+    impl.setCanvasPainter(niftyCanvasPainter);
+    return this;
   }
 
   public String toString() {
