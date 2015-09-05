@@ -62,6 +62,11 @@ public class StackLayoutNodeImplTest {
     NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
     NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
 
+    layout.reportMeasureInvalid(testInstance);
+    expectLastCall();
+    layout.reportArrangeInvalid(testInstance);
+    expectLastCall();
+
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
         .anyTimes();
@@ -102,6 +107,11 @@ public class StackLayoutNodeImplTest {
     NiftySize availableSize = new NiftySize(100, 100);
     NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
     NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
+
+    layout.reportMeasureInvalid(testInstance);
+    expectLastCall();
+    layout.reportArrangeInvalid(testInstance);
+    expectLastCall();
 
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
@@ -145,6 +155,11 @@ public class StackLayoutNodeImplTest {
     NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
     NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
 
+    layout.reportMeasureInvalid(testInstance);
+    expectLastCall();
+    layout.reportArrangeInvalid(testInstance);
+    expectLastCall();
+
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
         .anyTimes();
@@ -186,6 +201,11 @@ public class StackLayoutNodeImplTest {
     NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
     NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
 
+    layout.reportMeasureInvalid(testInstance);
+    expectLastCall();
+    layout.reportArrangeInvalid(testInstance);
+    expectLastCall();
+
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
         .anyTimes();
@@ -224,6 +244,11 @@ public class StackLayoutNodeImplTest {
 
   @Test
   public void testMeasureNoChildren() throws Exception {
+    layout.reportMeasureInvalid(testInstance);
+    expectLastCall();
+    layout.reportArrangeInvalid(testInstance);
+    expectLastCall();
+
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Collections.<NiftyNodeImpl<?>>emptyList())
         .anyTimes();
@@ -242,6 +267,11 @@ public class StackLayoutNodeImplTest {
 
   @Test
   public void testArrangeNoChildren() throws Exception {
+    layout.reportMeasureInvalid(testInstance);
+    expectLastCall();
+    layout.reportArrangeInvalid(testInstance);
+    expectLastCall();
+
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Collections.<NiftyNodeImpl<?>>emptyList())
         .anyTimes();
