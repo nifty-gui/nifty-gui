@@ -61,8 +61,11 @@ abstract class AbstractLayoutNodeImpl<T extends NiftyNode> implements NiftyLayou
       throw new IllegalStateException("This node was already activated.");
     }
     this.layout = layout;
-    invalidateMeasure();
-    invalidateArrange();
+    measureValid = false;
+    arrangeValid = false;
+
+    layout.reportMeasureInvalid(this);
+    layout.reportArrangeInvalid(this);
   }
 
   @Override
