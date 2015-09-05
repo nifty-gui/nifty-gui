@@ -29,11 +29,15 @@ package de.lessvoid.nifty.node;
 import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.NiftyCanvasPainter;
 import de.lessvoid.nifty.NiftyState;
+import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
 import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.niftyinternal.math.Mat4;
+
+import javax.annotation.Nonnull;
 
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundColor;
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformation;
@@ -41,7 +45,11 @@ import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransfor
 /**
  * Created by void on 09.08.15.
  */
-class NiftyContentNodeImpl implements NiftyNodeStateImpl<NiftyContentNode>, NiftyNodeContentImpl<NiftyContentNode> {
+class NiftyContentNodeImpl
+    implements
+      NiftyNodeStateImpl<NiftyContentNode>,
+      NiftyNodeContentImpl<NiftyContentNode>,
+      NiftyLayoutReceiver<NiftyContentNode> {
   private final int w;
   private final int h;
 
@@ -109,5 +117,14 @@ class NiftyContentNodeImpl implements NiftyNodeStateImpl<NiftyContentNode>, Nift
         niftyCanvas.fillRect(0., 0., getContentWidth(), getContentHeight());
       }
     };
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // NiftyLayoutReceiver
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  @Override
+  public void setLayoutResult(@Nonnull NiftyRect rect) {
+    System.out.println(rect);
   }
 }

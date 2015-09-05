@@ -26,20 +26,27 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.node.FixedSizeLayoutNode;
+import de.lessvoid.nifty.types.NiftyColor;
+
+import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+
 /**
  * A single root node with a fixed size and a blue background color.
  * @author void
  */
 public class UseCase_a03_FixedSizedRootNode {
-/* FIXME
+
   public UseCase_a03_FixedSizedRootNode(final Nifty nifty) {
-    // Create a new root node that is exactly 100x100px and is centered.
-    NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.None);
-    niftyNode.setBackgroundColor(NiftyColor.blue());
+    nifty
+        .addNode(backgroundColorNode(NiftyColor.blue()))
+          .addNode(new FixedSizeLayoutNode(100.f, 100.f))
+            .addNode(contentNode());
   }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a03_FixedSizedRootNode.class, args);
   }
-  */
 }
