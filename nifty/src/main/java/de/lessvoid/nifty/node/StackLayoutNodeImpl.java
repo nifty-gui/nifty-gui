@@ -27,11 +27,10 @@
 
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import de.lessvoid.nifty.types.Point;
-import de.lessvoid.nifty.types.Rect;
-import de.lessvoid.nifty.types.Size;
+import de.lessvoid.nifty.types.NiftyPoint;
+import de.lessvoid.nifty.types.NiftyRect;
+import de.lessvoid.nifty.types.NiftySize;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -56,28 +55,28 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl<StackLayoutNode> 
 
   @Nonnull
   @Override
-  protected Size measureInternal(@Nonnull final Size availableSize) {
+  protected NiftySize measureInternal(@Nonnull final NiftySize availableSize) {
     Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements, means that we do not require any size. */
-      return Size.ZERO;
+      return NiftySize.ZERO;
     }
 
-    Size remainingSize = availableSize;
-    Size requiredSize = Size.ZERO;
+    NiftySize remainingSize = availableSize;
+    NiftySize requiredSize = NiftySize.ZERO;
     for (NiftyNodeImpl<?> child : children) {
-      Size childSize = getLayout().measure(child, remainingSize);
+      NiftySize childSize = getLayout().measure(child, remainingSize);
       if (orientation == Orientation.Horizontal) {
-        requiredSize = new Size(requiredSize.getWidth() + childSize.getWidth(),
+        requiredSize = new NiftySize(requiredSize.getWidth() + childSize.getWidth(),
             Math.max(requiredSize.getHeight(), childSize.getHeight()));
         if (!Float.isInfinite(remainingSize.getWidth())) {
-          remainingSize = new Size(remainingSize.getWidth() - childSize.getWidth(), remainingSize.getHeight());
+          remainingSize = new NiftySize(remainingSize.getWidth() - childSize.getWidth(), remainingSize.getHeight());
         }
       } else {
-        requiredSize = new Size(Math.max(requiredSize.getWidth(), childSize.getWidth()),
+        requiredSize = new NiftySize(Math.max(requiredSize.getWidth(), childSize.getWidth()),
             requiredSize.getHeight() + childSize.getHeight());
         if (!Float.isInfinite(remainingSize.getHeight())) {
-          remainingSize = new Size(remainingSize.getWidth(), remainingSize.getHeight() - childSize.getHeight());
+          remainingSize = new NiftySize(remainingSize.getWidth(), remainingSize.getHeight() - childSize.getHeight());
         }
       }
     }
@@ -86,36 +85,36 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl<StackLayoutNode> 
   }
 
   @Override
-  protected void arrangeInternal(@Nonnull final Rect area) {
+  protected void arrangeInternal(@Nonnull final NiftyRect area) {
     List<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements -> We are all done. */
       return;
     }
 
-    Point currentOrigin = area.getOrigin();
-    Size remainingSize = area.getSize();
+    NiftyPoint currentOrigin = area.getOrigin();
+    NiftySize remainingSize = area.getSize();
 
     int childrenCount = children.size();
     for (int i = 0; i < childrenCount; i++) {
       NiftyNodeImpl<?> child = children.get(i);
-      Size childSize = getLayout().getDesiredSize(child);
-      Size arrangedSize;
-      Point nextOrigin;
+      NiftySize childSize = getLayout().getDesiredSize(child);
+      NiftySize arrangedSize;
+      NiftyPoint nextOrigin;
       if ((i == (childrenCount - 1)) && stretchLast) {
         arrangedSize = remainingSize;
         nextOrigin = currentOrigin; // never used
       } else if (orientation == Orientation.Horizontal) {
-        arrangedSize = new Size(Math.min(remainingSize.getWidth(), childSize.getWidth()), remainingSize.getHeight());
-        remainingSize = new Size(remainingSize.getWidth() - arrangedSize.getWidth(), remainingSize.getHeight());
-        nextOrigin = new Point(currentOrigin.getX() + arrangedSize.getWidth(), currentOrigin.getY());
+        arrangedSize = new NiftySize(Math.min(remainingSize.getWidth(), childSize.getWidth()), remainingSize.getHeight());
+        remainingSize = new NiftySize(remainingSize.getWidth() - arrangedSize.getWidth(), remainingSize.getHeight());
+        nextOrigin = new NiftyPoint(currentOrigin.getX() + arrangedSize.getWidth(), currentOrigin.getY());
       } else {
-        arrangedSize = new Size(remainingSize.getWidth(), Math.min(remainingSize.getHeight(), childSize.getHeight()));
-        remainingSize = new Size(remainingSize.getWidth(), remainingSize.getHeight() - arrangedSize.getHeight());
-        nextOrigin = new Point(currentOrigin.getX(), currentOrigin.getY() + arrangedSize.getHeight());
+        arrangedSize = new NiftySize(remainingSize.getWidth(), Math.min(remainingSize.getHeight(), childSize.getHeight()));
+        remainingSize = new NiftySize(remainingSize.getWidth(), remainingSize.getHeight() - arrangedSize.getHeight());
+        nextOrigin = new NiftyPoint(currentOrigin.getX(), currentOrigin.getY() + arrangedSize.getHeight());
       }
 
-      getLayout().arrange(child, new Rect(currentOrigin, arrangedSize));
+      getLayout().arrange(child, new NiftyRect(currentOrigin, arrangedSize));
       currentOrigin = nextOrigin;
     }
   }

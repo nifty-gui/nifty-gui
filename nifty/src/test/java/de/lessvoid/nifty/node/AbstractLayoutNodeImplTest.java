@@ -1,9 +1,9 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.NiftyLayout;
-import de.lessvoid.nifty.types.Point;
-import de.lessvoid.nifty.types.Rect;
-import de.lessvoid.nifty.types.Size;
+import de.lessvoid.nifty.types.NiftyPoint;
+import de.lessvoid.nifty.types.NiftyRect;
+import de.lessvoid.nifty.types.NiftySize;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -127,6 +127,7 @@ public class AbstractLayoutNodeImplTest {
   @Test
   public void testInvalidateMeasure() throws Exception {
     /* Setup Test */
+    EasyMock.expect(testInstance.measureInternal(NiftySize.INFINITE)).andReturn(NiftySize.ZERO);
     layout.reportMeasureInvalid(testInstance);
     expectLastCall();
     layout.reportArrangeInvalid(testInstance);
@@ -139,7 +140,7 @@ public class AbstractLayoutNodeImplTest {
 
     /* Execute Test */
     testInstance.onAttach(layout);
-    testInstance.measure(Size.INFINITE);
+    testInstance.measure(NiftySize.INFINITE);
 
     assertTrue(testInstance.isMeasureValid());
     testInstance.invalidateMeasure();
@@ -150,6 +151,9 @@ public class AbstractLayoutNodeImplTest {
   @Test
   public void testInvalidateArrange() throws Exception {
     /* Setup Test */
+    NiftySize tempSize = new NiftySize(10, 10);
+    NiftyRect tempRect = new NiftyRect(new NiftyPoint(0, 0), tempSize);
+    EasyMock.expect(testInstance.measureInternal(tempSize)).andReturn(tempSize);
     layout.reportMeasureInvalid(testInstance);
     expectLastCall();
     layout.reportArrangeInvalid(testInstance);
@@ -181,6 +185,9 @@ public class AbstractLayoutNodeImplTest {
   @Test
   public void testGetDesiredSize() throws Exception {
     /* Setup Test */
+    NiftySize tempSize = new NiftySize(10, 10);
+    EasyMock.expect(testInstance.measureInternal(NiftySize.INFINITE)).andReturn(tempSize);
+    EasyMock.replay(layout, testInstance);
     layout.reportMeasureInvalid(testInstance);
     expectLastCall();
     layout.reportArrangeInvalid(testInstance);
@@ -192,7 +199,7 @@ public class AbstractLayoutNodeImplTest {
 
     /* Execute Test */
     testInstance.onAttach(layout);
-    testInstance.measure(Size.INFINITE);
+    testInstance.measure(NiftySize.INFINITE);
 
     assertTrue(testInstance.isMeasureValid());
     assertEquals(tempSize, testInstance.getDesiredSize());
@@ -202,13 +209,14 @@ public class AbstractLayoutNodeImplTest {
   @Test
   public void testGetArrangedRect() throws Exception {
     /* Setup Test */
+    NiftySize tempSize = new NiftySize(10, 10);
+    NiftyRect tempRect = new NiftyRect(new NiftyPoint(0, 0), tempSize);
+    EasyMock.expect(testInstance.measureInternal(tempSize)).andReturn(tempSize);
     layout.reportMeasureInvalid(testInstance);
     expectLastCall();
     layout.reportArrangeInvalid(testInstance);
     expectLastCall();
-
-    Size tempSize = new Size(10, 10);
-    Rect tempRect = new Rect(new Point(0, 0), tempSize);
+    
     expect(testInstance.measureInternal(tempSize)).andReturn(tempSize);
     testInstance.arrangeInternal(tempRect);
     EasyMock.expectLastCall().once();

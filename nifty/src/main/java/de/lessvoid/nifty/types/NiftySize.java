@@ -36,27 +36,27 @@ import javax.annotation.concurrent.Immutable;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 @Immutable
-public final class Size {
-  public static final Size INVALID = new Size(Float.NaN, Float.NaN);
-  public static final Size INFINITE = new Size(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
-  public static final Size ZERO = new Size(0, 0);
+public final class NiftySize {
+  public static final NiftySize INVALID = new NiftySize(Float.NaN, Float.NaN);
+  public static final NiftySize INFINITE = new NiftySize(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
+  public static final NiftySize ZERO = new NiftySize(0, 0);
 
   private final float width;
   private final float height;
 
-  public Size(final float width, final float height) {
+  public NiftySize(final float width, final float height) {
     this.width = width;
     this.height = height;
   }
 
   @Nonnull
-  public static Size max(@Nonnull final Size size1, @Nonnull final Size size2) {
+  public static NiftySize max(@Nonnull final NiftySize size1, @Nonnull final NiftySize size2) {
     if ((size1.width >= size2.width) && (size1.height >= size2.height)) {
       return size1;
     } else if ((size1.width <= size2.width) && (size1.height <= size2.height)) {
       return size2;
     } else {
-      return new Size(Math.max(size1.width, size2.width), Math.max(size1.height, size2.height));
+      return new NiftySize(Math.max(size1.width, size2.width), Math.max(size1.height, size2.height));
     }
   }
 
@@ -78,16 +78,16 @@ public final class Size {
 
   @Override
   public boolean equals(@Nullable final Object other) {
-    return (other instanceof Size) && equals((Size) other);
+    return (other instanceof NiftySize) && equals((NiftySize) other);
   }
 
-  public boolean equals(@Nullable final Size other) {
+  public boolean equals(@Nullable final NiftySize other) {
     return (other != null) &&
         (Float.floatToIntBits(width) == Float.floatToIntBits(other.width)) &&
         (Float.floatToIntBits(height) == Float.floatToIntBits(other.height));
   }
 
-  public boolean equals(@Nullable final Size other, final float tolerance) {
+  public boolean equals(@Nullable final NiftySize other, final float tolerance) {
     return (other != null) &&
         (Math.abs(width - other.width) <= tolerance) &&
         (Math.abs(height - other.height) <= tolerance);

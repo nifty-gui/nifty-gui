@@ -1,15 +1,12 @@
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import de.lessvoid.nifty.types.Point;
-import de.lessvoid.nifty.types.Rect;
-import de.lessvoid.nifty.types.Size;
+import de.lessvoid.nifty.types.NiftyPoint;
+import de.lessvoid.nifty.types.NiftyRect;
+import de.lessvoid.nifty.types.NiftySize;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * This is the implementation of a layout node that support padding. It will apply some padding to any child layout
@@ -105,32 +102,32 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNode> {
 
   @Nonnull
   @Override
-  protected Size measureInternal(@Nonnull Size availableSize) {
+  protected NiftySize measureInternal(@Nonnull NiftySize availableSize) {
     Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements, means that we do not require any size. */
-      return new Size(left + right, top + bottom);
+      return new NiftySize(left + right, top + bottom);
     }
 
-    Size childSize = Size.ZERO;
+    NiftySize childSize = NiftySize.ZERO;
     for (NiftyNodeImpl<?> child : children) {
-      childSize = Size.max(getLayout().measure(child, availableSize), childSize);
+      childSize = NiftySize.max(getLayout().measure(child, availableSize), childSize);
     }
 
-    return new Size(left + right + childSize.getWidth(), top + bottom + childSize.getHeight());
+    return new NiftySize(left + right + childSize.getWidth(), top + bottom + childSize.getHeight());
   }
 
   @Override
-  protected void arrangeInternal(@Nonnull Rect area) {
+  protected void arrangeInternal(@Nonnull NiftyRect area) {
     Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements -> We are all done. */
       return;
     }
 
-    Point newOrigin = new Point(area.getOrigin(), left, top);
-    Size newSize = new Size(area.getSize().getWidth() - left - right, area.getSize().getHeight() - top - bottom);
-    Rect newArea = new Rect(newOrigin, newSize);
+    NiftyPoint newOrigin = new NiftyPoint(area.getOrigin(), left, top);
+    NiftySize newSize = new NiftySize(area.getSize().getWidth() - left - right, area.getSize().getHeight() - top - bottom);
+    NiftyRect newArea = new NiftyRect(newOrigin, newSize);
 
     for (NiftyNodeImpl<?> child : children) {
       getLayout().arrange(child, newArea);

@@ -1,10 +1,8 @@
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import de.lessvoid.nifty.types.Rect;
-import de.lessvoid.nifty.types.Size;
+import de.lessvoid.nifty.types.NiftyRect;
+import de.lessvoid.nifty.types.NiftySize;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -54,12 +52,12 @@ class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayoutNode
 
   @Nonnull
   @Override
-  protected Size measureInternal(@Nonnull Size availableSize) {
-    return new Size(width, height);
+  protected NiftySize measureInternal(@Nonnull NiftySize availableSize) {
+    return new NiftySize(width, height);
   }
 
   @Override
-  protected void arrangeInternal(@Nonnull Rect area) {
+  protected void arrangeInternal(@Nonnull NiftyRect area) {
     Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements -> We are all done. */

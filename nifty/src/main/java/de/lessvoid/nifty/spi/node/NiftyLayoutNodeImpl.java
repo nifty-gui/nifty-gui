@@ -28,10 +28,8 @@
 package de.lessvoid.nifty.spi.node;
 
 import de.lessvoid.nifty.NiftyLayout;
-import de.lessvoid.nifty.spi.node.NiftyNode;
-import de.lessvoid.nifty.types.Rect;
-import de.lessvoid.nifty.types.Size;
-import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
+import de.lessvoid.nifty.types.NiftyRect;
+import de.lessvoid.nifty.types.NiftySize;
 
 import javax.annotation.Nonnull;
 
@@ -107,7 +105,7 @@ public interface NiftyLayoutNodeImpl<T extends NiftyNode> extends NiftyNodeImpl<
    * @return the size that is desired to be covered by this element
    */
   @Nonnull
-  Size getDesiredSize();
+  NiftySize getDesiredSize();
 
   /**
    * The this element was arranged in last. This value is valid as long as the parent of this node has a valid
@@ -116,7 +114,7 @@ public interface NiftyLayoutNodeImpl<T extends NiftyNode> extends NiftyNodeImpl<
    * @return the arrangement rectangle
    */
   @Nonnull
-  Rect getArrangedRect();
+  NiftyRect getArrangedRect();
 
   /**
    * Perform the measuring operation for this node. This has to measure the size of all children to this node and
@@ -128,7 +126,7 @@ public interface NiftyLayoutNodeImpl<T extends NiftyNode> extends NiftyNodeImpl<
    * @throws IllegalStateException in case the layout node is not yet activated.
    */
   @Nonnull
-  Size measure(@Nonnull Size availableSize);
+  NiftySize measure(@Nonnull NiftySize availableSize);
 
   /**
    * Arrange this component and it's children inside specified area.
@@ -136,5 +134,5 @@ public interface NiftyLayoutNodeImpl<T extends NiftyNode> extends NiftyNodeImpl<
    * @param area this component and it's children should fill
    * @throws IllegalStateException in case the layout node is not yet activated.
    */
-  void arrange(@Nonnull Rect area);
+  void arrange(@Nonnull NiftyRect area);
 }
