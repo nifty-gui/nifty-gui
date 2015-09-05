@@ -37,41 +37,41 @@ import javax.annotation.concurrent.Immutable;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 @Immutable
-public final class Rect {
+public final class NiftyRect {
   @Nonnull
-  public static final Rect INVALID = new Rect(new Point(0, 0), Size.INVALID);
+  public static final NiftyRect INVALID = new NiftyRect(new NiftyPoint(0, 0), NiftySize.INVALID);
 
   @Nonnull
-  private final Point origin;
+  private final NiftyPoint origin;
 
   @Nonnull
-  private final Size size;
+  private final NiftySize size;
 
-  public Rect(@Nonnull final Point origin, @Nonnull final Size size) {
+  public NiftyRect(@Nonnull final NiftyPoint origin, @Nonnull final NiftySize size) {
     this.origin = origin;
     this.size = size;
   }
 
   @Nonnull
-  public Point getOrigin() {
+  public NiftyPoint getOrigin() {
     return origin;
   }
 
   @Nonnull
-  public Size getSize() {
+  public NiftySize getSize() {
     return size;
   }
 
   @Override
   public boolean equals(@Nullable final Object other) {
-    return (other instanceof Rect) && equals((Rect) other);
+    return (other instanceof NiftyRect) && equals((NiftyRect) other);
   }
 
-  public boolean equals(@Nullable final Rect other) {
+  public boolean equals(@Nullable final NiftyRect other) {
     return (other != null) && size.equals(other.size) && origin.equals(other.origin);
   }
 
-  public boolean equals(@Nullable final Rect other, final float tolerance) {
+  public boolean equals(@Nullable final NiftyRect other, final float tolerance) {
     return (other != null) && size.equals(other.size, tolerance) && origin.equals(other.origin, tolerance);
   }
 

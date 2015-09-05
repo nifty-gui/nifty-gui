@@ -30,8 +30,8 @@ package de.lessvoid.nifty.node;
 import de.lessvoid.nifty.NiftyLayout;
 import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNode;
-import de.lessvoid.nifty.types.Rect;
-import de.lessvoid.nifty.types.Size;
+import de.lessvoid.nifty.types.NiftyRect;
+import de.lessvoid.nifty.types.NiftySize;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,9 +47,9 @@ abstract class AbstractLayoutNodeImpl<T extends NiftyNode> implements NiftyLayou
   private boolean measureValid;
   private boolean arrangeValid;
   @Nullable
-  private Size desiredSize;
+  private NiftySize desiredSize;
   @Nullable
-  private Rect arrangeRect;
+  private NiftyRect arrangeRect;
   @Nullable
   private Reference<T> niftyNodeRef;
 
@@ -106,24 +106,24 @@ abstract class AbstractLayoutNodeImpl<T extends NiftyNode> implements NiftyLayou
 
   @Nonnull
   @Override
-  public Size getDesiredSize() {
-    return (desiredSize != null) && isMeasureValid() ? desiredSize : Size.INVALID;
+  public NiftySize getDesiredSize() {
+    return (desiredSize != null) && isMeasureValid() ? desiredSize : NiftySize.INVALID;
   }
 
   @Nonnull
   @Override
-  public Rect getArrangedRect() {
-    return (arrangeRect == null) ? Rect.INVALID : arrangeRect;
+  public NiftyRect getArrangedRect() {
+    return (arrangeRect == null) ? NiftyRect.INVALID : arrangeRect;
   }
 
   @Nonnull
   @Override
-  public final Size measure(@Nonnull final Size availableSize) {
+  public final NiftySize measure(@Nonnull final NiftySize availableSize) {
     if (availableSize.isInvalid()) {
       throw new IllegalArgumentException("Supplied size value for measure must not be invalid.");
     }
 
-    Size size = measureInternal(availableSize);
+    NiftySize size = measureInternal(availableSize);
     if (!size.equals(desiredSize)) {
       invalidateArrange();
     }
@@ -133,10 +133,10 @@ abstract class AbstractLayoutNodeImpl<T extends NiftyNode> implements NiftyLayou
   }
 
   @Nonnull
-  protected abstract Size measureInternal(@Nonnull Size availableSize);
+  protected abstract NiftySize measureInternal(@Nonnull NiftySize availableSize);
 
   @Override
-  public final void arrange(@Nonnull final Rect area) {
+  public final void arrange(@Nonnull final NiftyRect area) {
     arrangeInternal(area);
     arrangeValid = true;
 
@@ -146,7 +146,7 @@ abstract class AbstractLayoutNodeImpl<T extends NiftyNode> implements NiftyLayou
     }
   }
 
-  protected abstract void arrangeInternal(@Nonnull Rect area);
+  protected abstract void arrangeInternal(@Nonnull NiftyRect area);
 
   @Nonnull
   protected final NiftyLayout getLayout() {

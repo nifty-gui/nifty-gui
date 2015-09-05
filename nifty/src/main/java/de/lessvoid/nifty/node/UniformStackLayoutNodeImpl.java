@@ -27,12 +27,10 @@
 
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import de.lessvoid.nifty.types.Point;
-import de.lessvoid.nifty.types.Rect;
-import de.lessvoid.nifty.types.Size;
+import de.lessvoid.nifty.types.NiftyPoint;
+import de.lessvoid.nifty.types.NiftyRect;
+import de.lessvoid.nifty.types.NiftySize;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -55,46 +53,46 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl<UniformSta
 
   @Override
   @Nonnull
-  protected Size measureInternal(@Nonnull final Size availableSize) {
+  protected NiftySize measureInternal(@Nonnull final NiftySize availableSize) {
     Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements, means that we do not require any size. */
-      return Size.ZERO;
+      return NiftySize.ZERO;
     }
 
-    Size sizePerChild = getSizePerChild(availableSize, children.size());
+    NiftySize sizePerChild = getSizePerChild(availableSize, children.size());
 
-    Size largestSizeRequested = Size.ZERO;
+    NiftySize largestSizeRequested = NiftySize.ZERO;
     for (NiftyNodeImpl<?> node : children) {
-      Size nodeSize = getLayout().measure(node, sizePerChild);
-      largestSizeRequested = Size.max(nodeSize, largestSizeRequested);
+      NiftySize nodeSize = getLayout().measure(node, sizePerChild);
+      largestSizeRequested = NiftySize.max(nodeSize, largestSizeRequested);
     }
 
     if (orientation == Orientation.Horizontal) {
-      return new Size(largestSizeRequested.getWidth() * children.size(), largestSizeRequested.getHeight());
+      return new NiftySize(largestSizeRequested.getWidth() * children.size(), largestSizeRequested.getHeight());
     } else {
-      return new Size(largestSizeRequested.getWidth(), largestSizeRequested.getHeight() * children.size());
+      return new NiftySize(largestSizeRequested.getWidth(), largestSizeRequested.getHeight() * children.size());
     }
   }
 
   @Override
-  protected void arrangeInternal(@Nonnull final Rect area) {
+  protected void arrangeInternal(@Nonnull final NiftyRect area) {
     Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements -> We are all done. */
       return;
     }
 
-    Size sizePerChild = getSizePerChild(area.getSize(), children.size());
-    Point currentOrigin = area.getOrigin();
+    NiftySize sizePerChild = getSizePerChild(area.getSize(), children.size());
+    NiftyPoint currentOrigin = area.getOrigin();
     for (NiftyNodeImpl<?> child : children) {
-      getLayout().arrange(child, new Rect(currentOrigin, sizePerChild));
+      getLayout().arrange(child, new NiftyRect(currentOrigin, sizePerChild));
 
       /* Move the origin along the orientation */
       if (orientation == Orientation.Horizontal) {
-        currentOrigin = new Point(currentOrigin.getX() + sizePerChild.getWidth(), currentOrigin.getY());
+        currentOrigin = new NiftyPoint(currentOrigin.getX() + sizePerChild.getWidth(), currentOrigin.getY());
       } else {
-        currentOrigin = new Point(currentOrigin.getX(), currentOrigin.getY() + sizePerChild.getHeight());
+        currentOrigin = new NiftyPoint(currentOrigin.getX(), currentOrigin.getY() + sizePerChild.getHeight());
       }
     }
   }
@@ -105,21 +103,21 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl<UniformSta
   }
 
   @Nonnull
-  private Size getSizePerChild(@Nonnull final Size outerSize, final int childCount) {
-    Size sizePerChild;
+  private NiftySize getSizePerChild(@Nonnull final NiftySize outerSize, final int childCount) {
+    NiftySize sizePerChild;
     if (orientation == Orientation.Horizontal) {
       /* Uniform Horizontal Stacking. Each element is assigned a equal share of the total width */
       if (Float.isInfinite(outerSize.getWidth())) {
         sizePerChild = outerSize;
       } else {
-        sizePerChild = new Size(outerSize.getWidth() / childCount, outerSize.getHeight());
+        sizePerChild = new NiftySize(outerSize.getWidth() / childCount, outerSize.getHeight());
       }
     } else {
       /* Uniform Vertical Stacking. Each element is assigned a equal share of the total height */
       if (Float.isInfinite(outerSize.getHeight())) {
         sizePerChild = outerSize;
       } else {
-        sizePerChild = new Size(outerSize.getWidth(), outerSize.getHeight() / childCount);
+        sizePerChild = new NiftySize(outerSize.getWidth(), outerSize.getHeight() / childCount);
       }
     }
     return sizePerChild;

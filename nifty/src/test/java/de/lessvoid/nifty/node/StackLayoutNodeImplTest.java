@@ -1,11 +1,10 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.NiftyLayout;
-import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import de.lessvoid.nifty.types.Point;
-import de.lessvoid.nifty.types.Rect;
-import de.lessvoid.nifty.types.Size;
+import de.lessvoid.nifty.types.NiftyPoint;
+import de.lessvoid.nifty.types.NiftyRect;
+import de.lessvoid.nifty.types.NiftySize;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -59,7 +58,7 @@ public class StackLayoutNodeImplTest {
 
   @Test
   public void testHorizontalNoStretch() throws Exception {
-    Size availableSize = new Size(100, 100);
+    NiftySize availableSize = new NiftySize(100, 100);
     NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
     NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
 
@@ -67,21 +66,21 @@ public class StackLayoutNodeImplTest {
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
         .anyTimes();
     expect(layout.measure(firstChildMock, availableSize))
-        .andReturn(new Size(10, 5))
+        .andReturn(new NiftySize(10, 5))
         .anyTimes();
-    expect(layout.measure(secondChildMock, new Size(availableSize.getWidth() - 10, availableSize.getHeight())))
-        .andReturn(new Size(20, 15))
+    expect(layout.measure(secondChildMock, new NiftySize(availableSize.getWidth() - 10, availableSize.getHeight())))
+        .andReturn(new NiftySize(20, 15))
         .anyTimes();
     expect(layout.getDesiredSize(firstChildMock))
-        .andReturn(new Size(10, 5))
+        .andReturn(new NiftySize(10, 5))
         .anyTimes();
     expect(layout.getDesiredSize(secondChildMock))
-        .andReturn(new Size(20, 15))
+        .andReturn(new NiftySize(20, 15))
         .anyTimes();
 
-    layout.arrange(firstChildMock, new Rect(new Point(0, 0), new Size(10, availableSize.getHeight())));
+    layout.arrange(firstChildMock, new NiftyRect(new NiftyPoint(0, 0), new NiftySize(10, availableSize.getHeight())));
     EasyMock.expectLastCall().once();
-    layout.arrange(secondChildMock, new Rect(new Point(10, 0), new Size(20, availableSize.getHeight())));
+    layout.arrange(secondChildMock, new NiftyRect(new NiftyPoint(10, 0), new NiftySize(20, availableSize.getHeight())));
     EasyMock.expectLastCall().once();
     layout.reportChangedArrangement(testInstance);
     expectLastCall();
@@ -91,16 +90,16 @@ public class StackLayoutNodeImplTest {
     testInstance.setOrientation(Orientation.Horizontal);
     testInstance.setStretchLast(false);
     testInstance.onAttach(layout);
-    assertEquals(new Size(30, 15), testInstance.measure(availableSize));
+    assertEquals(new NiftySize(30, 15), testInstance.measure(availableSize));
 
-    testInstance.arrange(new Rect(new Point(0, 0), availableSize));
+    testInstance.arrange(new NiftyRect(new NiftyPoint(0, 0), availableSize));
 
     verify(layout, firstChildMock, secondChildMock);
   }
 
   @Test
   public void testHorizontalStretch() throws Exception {
-    Size availableSize = new Size(100, 100);
+    NiftySize availableSize = new NiftySize(100, 100);
     NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
     NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
 
@@ -108,22 +107,22 @@ public class StackLayoutNodeImplTest {
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
         .anyTimes();
     expect(layout.measure(firstChildMock, availableSize))
-        .andReturn(new Size(10, 5))
+        .andReturn(new NiftySize(10, 5))
         .anyTimes();
-    expect(layout.measure(secondChildMock, new Size(availableSize.getWidth() - 10, availableSize.getHeight())))
-        .andReturn(new Size(20, 15))
+    expect(layout.measure(secondChildMock, new NiftySize(availableSize.getWidth() - 10, availableSize.getHeight())))
+        .andReturn(new NiftySize(20, 15))
         .anyTimes();
     expect(layout.getDesiredSize(firstChildMock))
-        .andReturn(new Size(10, 5))
+        .andReturn(new NiftySize(10, 5))
         .anyTimes();
     expect(layout.getDesiredSize(secondChildMock))
-        .andReturn(new Size(20, 15))
+        .andReturn(new NiftySize(20, 15))
         .anyTimes();
 
-    layout.arrange(firstChildMock, new Rect(new Point(0, 0), new Size(10, availableSize.getHeight())));
+    layout.arrange(firstChildMock, new NiftyRect(new NiftyPoint(0, 0), new NiftySize(10, availableSize.getHeight())));
     EasyMock.expectLastCall().once();
-    layout.arrange(secondChildMock, new Rect(new Point(10, 0),
-        new Size(availableSize.getWidth() - 10, availableSize.getHeight())));
+    layout.arrange(secondChildMock, new NiftyRect(new NiftyPoint(10, 0),
+        new NiftySize(availableSize.getWidth() - 10, availableSize.getHeight())));
     EasyMock.expectLastCall().once();
     layout.reportChangedArrangement(testInstance);
     expectLastCall();
@@ -133,16 +132,16 @@ public class StackLayoutNodeImplTest {
     testInstance.setOrientation(Orientation.Horizontal);
     testInstance.setStretchLast(true);
     testInstance.onAttach(layout);
-    assertEquals(new Size(30, 15), testInstance.measure(availableSize));
+    assertEquals(new NiftySize(30, 15), testInstance.measure(availableSize));
 
-    testInstance.arrange(new Rect(new Point(0, 0), availableSize));
+    testInstance.arrange(new NiftyRect(new NiftyPoint(0, 0), availableSize));
 
     verify(layout, firstChildMock, secondChildMock);
   }
 
   @Test
   public void testVerticalNoStretch() throws Exception {
-    Size availableSize = new Size(100, 100);
+    NiftySize availableSize = new NiftySize(100, 100);
     NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
     NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
 
@@ -150,21 +149,21 @@ public class StackLayoutNodeImplTest {
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
         .anyTimes();
     expect(layout.measure(firstChildMock, availableSize))
-        .andReturn(new Size(10, 5))
+        .andReturn(new NiftySize(10, 5))
         .anyTimes();
-    expect(layout.measure(secondChildMock, new Size(availableSize.getWidth(), availableSize.getHeight() - 5)))
-        .andReturn(new Size(20, 15))
+    expect(layout.measure(secondChildMock, new NiftySize(availableSize.getWidth(), availableSize.getHeight() - 5)))
+        .andReturn(new NiftySize(20, 15))
         .anyTimes();
     expect(layout.getDesiredSize(firstChildMock))
-        .andReturn(new Size(10, 5))
+        .andReturn(new NiftySize(10, 5))
         .anyTimes();
     expect(layout.getDesiredSize(secondChildMock))
-        .andReturn(new Size(20, 15))
+        .andReturn(new NiftySize(20, 15))
         .anyTimes();
 
-    layout.arrange(firstChildMock, new Rect(new Point(0, 0), new Size(availableSize.getWidth(), 5)));
+    layout.arrange(firstChildMock, new NiftyRect(new NiftyPoint(0, 0), new NiftySize(availableSize.getWidth(), 5)));
     EasyMock.expectLastCall().once();
-    layout.arrange(secondChildMock, new Rect(new Point(0, 5), new Size(availableSize.getWidth(), 15)));
+    layout.arrange(secondChildMock, new NiftyRect(new NiftyPoint(0, 5), new NiftySize(availableSize.getWidth(), 15)));
     EasyMock.expectLastCall().once();
     layout.reportChangedArrangement(testInstance);
     expectLastCall();
@@ -174,16 +173,16 @@ public class StackLayoutNodeImplTest {
     testInstance.setOrientation(Orientation.Vertical);
     testInstance.setStretchLast(false);
     testInstance.onAttach(layout);
-    assertEquals(new Size(20, 20), testInstance.measure(availableSize));
+    assertEquals(new NiftySize(20, 20), testInstance.measure(availableSize));
 
-    testInstance.arrange(new Rect(new Point(0, 0), availableSize));
+    testInstance.arrange(new NiftyRect(new NiftyPoint(0, 0), availableSize));
 
     verify(layout, firstChildMock, secondChildMock);
   }
 
   @Test
   public void testVerticalStretch() throws Exception {
-    Size availableSize = new Size(100, 100);
+    NiftySize availableSize = new NiftySize(100, 100);
     NiftyNodeImpl<?> firstChildMock = EasyMock.createMock(NiftyNodeImpl.class);
     NiftyNodeImpl<?> secondChildMock = EasyMock.createMock(NiftyNodeImpl.class);
 
@@ -191,24 +190,24 @@ public class StackLayoutNodeImplTest {
         .andReturn(Arrays.asList(firstChildMock, secondChildMock))
         .anyTimes();
     expect(layout.measure(firstChildMock, availableSize))
-        .andReturn(new Size(10, 5))
+        .andReturn(new NiftySize(10, 5))
         .anyTimes();
-    expect(layout.measure(secondChildMock, new Size(availableSize.getWidth(), availableSize.getHeight() - 5)))
-        .andReturn(new Size(20, 15))
+    expect(layout.measure(secondChildMock, new NiftySize(availableSize.getWidth(), availableSize.getHeight() - 5)))
+        .andReturn(new NiftySize(20, 15))
         .anyTimes();
     expect(layout.getDesiredSize(firstChildMock))
-        .andReturn(new Size(10, 5))
+        .andReturn(new NiftySize(10, 5))
         .anyTimes();
     expect(layout.getDesiredSize(secondChildMock))
-        .andReturn(new Size(20, 15))
+        .andReturn(new NiftySize(20, 15))
         .anyTimes();
     layout.reportChangedArrangement(testInstance);
     expectLastCall();
 
-    layout.arrange(firstChildMock, new Rect(new Point(0, 0), new Size(availableSize.getWidth(), 5)));
+    layout.arrange(firstChildMock, new NiftyRect(new NiftyPoint(0, 0), new NiftySize(availableSize.getWidth(), 5)));
     EasyMock.expectLastCall().once();
-    layout.arrange(secondChildMock, new Rect(new Point(0, 5),
-        new Size(availableSize.getWidth(), availableSize.getHeight() - 5)));
+    layout.arrange(secondChildMock, new NiftyRect(new NiftyPoint(0, 5),
+        new NiftySize(availableSize.getWidth(), availableSize.getHeight() - 5)));
     EasyMock.expectLastCall().once();
 
     replay(layout, firstChildMock, secondChildMock);
@@ -216,9 +215,9 @@ public class StackLayoutNodeImplTest {
     testInstance.setOrientation(Orientation.Vertical);
     testInstance.setStretchLast(true);
     testInstance.onAttach(layout);
-    assertEquals(new Size(20, 20), testInstance.measure(availableSize));
+    assertEquals(new NiftySize(20, 20), testInstance.measure(availableSize));
 
-    testInstance.arrange(new Rect(new Point(0, 0), availableSize));
+    testInstance.arrange(new NiftyRect(new NiftyPoint(0, 0), availableSize));
 
     verify(layout, firstChildMock, secondChildMock);
   }
@@ -230,14 +229,14 @@ public class StackLayoutNodeImplTest {
         .anyTimes();
     replay(layout);
     testInstance.onAttach(layout);
-    assertEquals(Size.ZERO, testInstance.measure(Size.INFINITE));
+    assertEquals(NiftySize.ZERO, testInstance.measure(NiftySize.INFINITE));
     verify(layout);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testMeasureInvalidSize() throws Exception {
     replay(layout);
-    testInstance.measure(Size.INVALID);
+    testInstance.measure(NiftySize.INVALID);
     verify(layout);
   }
 
@@ -250,7 +249,7 @@ public class StackLayoutNodeImplTest {
     expectLastCall();
     replay(layout);
     testInstance.onAttach(layout);
-    testInstance.arrange(new Rect(new Point(0, 0), new Size(10, 20)));
+    testInstance.arrange(new NiftyRect(new NiftyPoint(0, 0), new NiftySize(10, 20)));
     verify(layout);
   }
 }

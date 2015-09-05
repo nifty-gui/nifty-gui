@@ -37,14 +37,14 @@ import javax.annotation.concurrent.Immutable;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 @Immutable
-public final class Point {
+public final class NiftyPoint {
   private final float x;
   private final float y;
 
   /**
    * @throws IllegalArgumentException Thrown in case {@code offsetX} or {@code offsetY} aren't finite values.
    */
-  public Point(@Nonnull final Point original, final float offsetX, final float offsetY) {
+  public NiftyPoint(@Nonnull final NiftyPoint original, final float offsetX, final float offsetY) {
     if (!(Math.abs(offsetX) <= Float.MAX_VALUE)) throw new IllegalArgumentException("x is expected to be a finite value.");
     if (!(Math.abs(offsetY) <= Float.MAX_VALUE)) throw new IllegalArgumentException("x is expected to be a finite value.");
 
@@ -55,7 +55,7 @@ public final class Point {
   /**
    * @throws IllegalArgumentException Thrown in case {@code x} or {@code y} aren't finite values.
    */
-  public Point(final float x, final float y) {
+  public NiftyPoint(final float x, final float y) {
     if (!(Math.abs(x) <= Float.MAX_VALUE)) throw new IllegalArgumentException("x is expected to be a finite value.");
     if (!(Math.abs(y) <= Float.MAX_VALUE)) throw new IllegalArgumentException("x is expected to be a finite value.");
 
@@ -73,16 +73,16 @@ public final class Point {
 
   @Override
   public boolean equals(@Nullable final Object other) {
-    return (other instanceof Point) && equals((Point) other);
+    return (other instanceof NiftyPoint) && equals((NiftyPoint) other);
   }
 
-  public boolean equals(@Nullable final Point other) {
+  public boolean equals(@Nullable final NiftyPoint other) {
     return (other != null) &&
         (Float.floatToIntBits(x) == Float.floatToIntBits(other.x)) &&
         (Float.floatToIntBits(y) == Float.floatToIntBits(other.y));
   }
 
-  public boolean equals(@Nullable final Point other, final float tolerance) {
+  public boolean equals(@Nullable final NiftyPoint other, final float tolerance) {
     return (other != null) &&
         (Math.abs(x - other.x) <= tolerance) &&
         (Math.abs(y - other.y) <= tolerance);
