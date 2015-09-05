@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static de.lessvoid.nifty.NiftyNodeStringImpl.niftyNodeStringImpl;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeControls.entireTree;
 import static org.junit.Assert.*;
 
 /**
@@ -42,7 +43,7 @@ public class NiftyTreeNodeDepthFirstIteratorTest {
   @Test
   public void testIterateRoot() {
     NiftyTreeNode root = new NiftyTreeNode(niftyNodeStringImpl("root"));
-    Iterator<NiftyTreeNode> it = createIterator(root);
+    Iterator<NiftyTreeNode> it = createIterator(root, entireTree());
     assertTrue(it.hasNext());
     assertEquals("root", it.next().getValue().getNiftyNode().toString());
 
@@ -60,7 +61,7 @@ public class NiftyTreeNodeDepthFirstIteratorTest {
     NiftyTreeNode child = new NiftyTreeNode(niftyNodeStringImpl("child"));
     root.addChild(child);
 
-    Iterator<NiftyTreeNode> it = createIterator(root);
+    Iterator<NiftyTreeNode> it = createIterator(root, entireTree());
     assertTrue(it.hasNext());
     assertEquals("root", it.next().getValue().getNiftyNode().toString());
 
@@ -75,8 +76,8 @@ public class NiftyTreeNodeDepthFirstIteratorTest {
     }
   }
 
-  private Iterator<NiftyTreeNode> createIterator(final NiftyTreeNode root) {
-    return new NiftyTreeNodeDepthFirstIterator(root);
+  private Iterator<NiftyTreeNode> createIterator(final NiftyTreeNode root, final NiftyTreeNodeControl control) {
+    return new NiftyTreeNodeDepthFirstIterator(root, control);
   }
 
 }

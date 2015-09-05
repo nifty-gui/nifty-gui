@@ -33,13 +33,20 @@ import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.Rect;
 import de.lessvoid.nifty.types.Size;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
+import de.lessvoid.niftyinternal.tree.NiftyTreeNodeControls;
+import de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters;
+import de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.logging.Logger;
 
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeControls.downToFirstInstance;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeControls.onlyOneLevel;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNodeImpl;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNodeImplClass;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplAny;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplClass;
 
 /**
@@ -173,7 +180,9 @@ public class NiftyLayout {
 
     Size currentSize = Size.ZERO;
     for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
-        nodeImplClass(NiftyLayoutNodeImpl.class), toNodeImplClass(NiftyLayoutNodeImpl.class))) {
+        nodeImplClass(NiftyLayoutNodeImpl.class),
+        toNodeImplClass(NiftyLayoutNodeImpl.class),
+        downToFirstInstance(NiftyLayoutNodeImpl.class))) {
       Size nodeSize = measure(layoutNode, availableSize);
       currentSize = Size.max(nodeSize, currentSize);
     }
@@ -187,7 +196,9 @@ public class NiftyLayout {
     } else {
       Size currentSize = Size.ZERO;
       for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
-          nodeImplClass(NiftyLayoutNodeImpl.class), toNodeImplClass(NiftyLayoutNodeImpl.class))) {
+          nodeImplClass(NiftyLayoutNodeImpl.class),
+          toNodeImplClass(NiftyLayoutNodeImpl.class),
+          downToFirstInstance(NiftyLayoutNodeImpl.class))) {
         Size nodeSize = layoutNode.getDesiredSize();
         currentSize = Size.max(nodeSize, currentSize);
       }
@@ -201,7 +212,9 @@ public class NiftyLayout {
     }
 
     for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
-        nodeImplClass(NiftyLayoutNodeImpl.class), toNodeImplClass(NiftyLayoutNodeImpl.class))) {
+        nodeImplClass(NiftyLayoutNodeImpl.class),
+        toNodeImplClass(NiftyLayoutNodeImpl.class),
+        downToFirstInstance(NiftyLayoutNodeImpl.class))) {
       if (layoutNode.isArrangeValid()) {
         layoutNode.arrange(layoutNode.getArrangedRect());
         removeArranged();
@@ -233,8 +246,12 @@ public class NiftyLayout {
   }
 
   @Nonnull
-  public List<NiftyNodeImpl<? extends NiftyNode>> getDirectChildren(@Nonnull final NiftyLayoutNodeImpl node) {
-    /* TODO: The actual implementation. */
-    return Collections.emptyList();
+  public List<NiftyNodeImpl> getDirectChildren(@Nonnull final NiftyLayoutNodeImpl node) {
+    Iterable<NiftyNodeImpl> itr = nodeTree.childNodes(nodeImplAny(), toNodeImpl(), onlyOneLevel(), node);
+    List<NiftyNodeImpl> list = new LinkedList<>();
+    for (NiftyNodeImpl impl : itr) {
+      list.add(impl);
+    }
+    return list;
   }
 }

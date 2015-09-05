@@ -24,21 +24,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package de.lessvoid.niftyinternal.tree;
 
-import de.lessvoid.nifty.spi.node.NiftyNode;
-import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-
 /**
- * The NiftyTreeNodePredicate decides if a NiftyNodeImpl is acceptable.
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public interface NiftyTreeNodePredicate {
-
-  /**
-   * Check if the given NiftyNodeImpl is acceptable.
-   *
-   * @param niftyNodeImpl The NiftyNodeImpl to check
-   * @return true if the NiftyNodeImpl is acceptable and false if not
-   */
-  boolean accept(NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl);
+public enum NiftyTreeNodeVisitResult {
+  Continue, SkipSiblings, SkipSubtree, Terminate
 }
