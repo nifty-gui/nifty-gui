@@ -129,13 +129,9 @@ public class AbstractLayoutNodeImplTest {
     /* Setup Test */
     EasyMock.expect(testInstance.measureInternal(NiftySize.INFINITE)).andReturn(NiftySize.ZERO);
     layout.reportMeasureInvalid(testInstance);
-    expectLastCall();
+    expectLastCall().times(2);
     layout.reportArrangeInvalid(testInstance);
-    expectLastCall();
-
-    expect(testInstance.measureInternal(Size.INFINITE)).andReturn(Size.ZERO);
-    layout.reportMeasureInvalid(testInstance);
-    EasyMock.expectLastCall().once();
+    expectLastCall().once();
     replay(layout, testInstance);
 
     /* Execute Test */
@@ -153,21 +149,13 @@ public class AbstractLayoutNodeImplTest {
     /* Setup Test */
     NiftySize tempSize = new NiftySize(10, 10);
     NiftyRect tempRect = new NiftyRect(new NiftyPoint(0, 0), tempSize);
-    EasyMock.expect(testInstance.measureInternal(tempSize)).andReturn(tempSize);
-    layout.reportMeasureInvalid(testInstance);
-    expectLastCall();
-    layout.reportArrangeInvalid(testInstance);
-    expectLastCall();
 
-    Size tempSize = new Size(10, 10);
-    Rect tempRect = new Rect(new Point(0, 0), tempSize);
     expect(testInstance.measureInternal(tempSize)).andReturn(tempSize);
-    testInstance.arrangeInternal(tempRect);
-    EasyMock.expectLastCall().once();
+    layout.reportMeasureInvalid(testInstance);
     layout.reportArrangeInvalid(testInstance);
-    EasyMock.expectLastCall().once();
+    layout.reportArrangeInvalid(testInstance);
     layout.reportChangedArrangement(testInstance);
-    expectLastCall();
+    testInstance.arrangeInternal(tempRect);
     replay(layout, testInstance);
 
     /* Execute Test */
@@ -186,15 +174,9 @@ public class AbstractLayoutNodeImplTest {
   public void testGetDesiredSize() throws Exception {
     /* Setup Test */
     NiftySize tempSize = new NiftySize(10, 10);
-    EasyMock.expect(testInstance.measureInternal(NiftySize.INFINITE)).andReturn(tempSize);
-    EasyMock.replay(layout, testInstance);
     layout.reportMeasureInvalid(testInstance);
-    expectLastCall();
     layout.reportArrangeInvalid(testInstance);
-    expectLastCall();
-
-    Size tempSize = new Size(10, 10);
-    expect(testInstance.measureInternal(Size.INFINITE)).andReturn(tempSize);
+    expect(testInstance.measureInternal(NiftySize.INFINITE)).andReturn(tempSize);
     replay(layout, testInstance);
 
     /* Execute Test */
@@ -211,7 +193,7 @@ public class AbstractLayoutNodeImplTest {
     /* Setup Test */
     NiftySize tempSize = new NiftySize(10, 10);
     NiftyRect tempRect = new NiftyRect(new NiftyPoint(0, 0), tempSize);
-    EasyMock.expect(testInstance.measureInternal(tempSize)).andReturn(tempSize);
+
     layout.reportMeasureInvalid(testInstance);
     expectLastCall();
     layout.reportArrangeInvalid(testInstance);
