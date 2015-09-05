@@ -19,10 +19,10 @@ public class NiftyTreeNodeConverters {
     };
   }
 
-  public static <T> NiftyTreeNodeConverter<T> toNodeImplClass(final Class<T> clazz) {
+  public static <T extends NiftyNodeImpl<?>> NiftyTreeNodeConverter<T> toNodeImplClass(final Class<T> clazz) {
     return new NiftyTreeNodeConverter<T>() {
       @Override
-      public T convert(final NiftyNodeImpl niftyNodeImpl) {
+      public T convert(final NiftyNodeImpl<?> niftyNodeImpl) {
         return clazz.cast(niftyNodeImpl);
       }
     };
@@ -31,7 +31,7 @@ public class NiftyTreeNodeConverters {
   public static NiftyTreeNodeConverter<NiftyNode> toNiftyNode() {
     return new NiftyTreeNodeConverter<NiftyNode>() {
       @Override
-      public NiftyNode convert(final NiftyNodeImpl niftyNodeImpl) {
+      public NiftyNode convert(final NiftyNodeImpl<?> niftyNodeImpl) {
         return niftyNodeImpl.getNiftyNode();
       }
     };
@@ -40,7 +40,7 @@ public class NiftyTreeNodeConverters {
   public static <T extends NiftyNode> NiftyTreeNodeConverter<T> toNiftyNodeClass(final Class<T> clazz) {
     return new NiftyTreeNodeConverter<T>() {
       @Override
-      public T convert(final NiftyNodeImpl niftyNodeImpl) {
+      public T convert(final NiftyNodeImpl<?> niftyNodeImpl) {
         return clazz.cast(niftyNodeImpl.getNiftyNode());
       }
     };

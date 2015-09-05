@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -121,6 +122,8 @@ public class AbstractLayoutNodeImplTest {
     EasyMock.expectLastCall().once();
     layout.reportArrangeInvalid(testInstance);
     EasyMock.expectLastCall().once();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
     EasyMock.replay(layout, testInstance);
 
     /* Execute Test */
@@ -159,6 +162,9 @@ public class AbstractLayoutNodeImplTest {
     EasyMock.expect(testInstance.measureInternal(tempSize)).andReturn(tempSize);
     testInstance.arrangeInternal(tempRect);
     EasyMock.expectLastCall().once();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
+
     EasyMock.replay(layout, testInstance);
 
     /* Execute Test */

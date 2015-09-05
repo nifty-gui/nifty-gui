@@ -38,7 +38,7 @@ import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNod
 /**
  * Created by void on 09.08.15.
  */
-class NiftyBackgroundColorNodeImpl implements NiftyNodeStateImpl, NiftyNodeImpl<NiftyBackgroundColorNode> {
+class NiftyBackgroundColorNodeImpl implements NiftyNodeStateImpl<NiftyBackgroundColorNode> {
   private NiftyColor backgroundColor;
 
   public NiftyBackgroundColorNodeImpl(final NiftyColor backgroundColor) {

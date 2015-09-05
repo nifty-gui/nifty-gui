@@ -41,7 +41,7 @@ import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransfor
 /**
  * Created by void on 09.08.15.
  */
-class NiftyContentNodeImpl implements NiftyNodeStateImpl, NiftyNodeContentImpl, NiftyNodeImpl<NiftyContentNode> {
+class NiftyContentNodeImpl implements NiftyNodeStateImpl<NiftyContentNode>, NiftyNodeContentImpl<NiftyContentNode> {
   private final int w;
   private final int h;
 

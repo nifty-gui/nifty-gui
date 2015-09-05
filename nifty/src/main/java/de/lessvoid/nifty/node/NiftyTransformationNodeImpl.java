@@ -38,7 +38,7 @@ import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransfor
 /**
  * Created by void on 09.08.15.
  */
-class NiftyTransformationNodeImpl implements NiftyNodeStateImpl, NiftyNodeImpl<NiftyTransformationNode> {
+class NiftyTransformationNodeImpl implements NiftyNodeStateImpl<NiftyTransformationNode> {
   private boolean transformationChanged = true;
   private double pivotX = 0.5;
   private double pivotY = 0.5;

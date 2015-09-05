@@ -34,7 +34,7 @@ import de.lessvoid.niftyinternal.math.Mat4;
  *
  * Created by void on 08.08.15.
  */
-public interface NiftyNodeContentImpl {
+public interface NiftyNodeContentImpl<T extends NiftyNode> extends NiftyNodeImpl<T> {
 
   /**
    * Convert the state of the implementing class into the NiftyCanvas given.

@@ -34,7 +34,7 @@ import de.lessvoid.nifty.NiftyState;
  *
  * Created by void on 08.08.15.
  */
-public interface NiftyNodeStateImpl {
+public interface NiftyNodeStateImpl<T extends NiftyNode> extends NiftyNodeImpl<T> {
 
   void update(NiftyState niftyState);
 }

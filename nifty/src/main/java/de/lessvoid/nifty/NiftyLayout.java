@@ -28,6 +28,7 @@
 package de.lessvoid.nifty;
 
 import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
+import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.Rect;
@@ -69,6 +70,12 @@ public class NiftyLayout {
   private final List<NiftyLayoutNodeImpl<? extends NiftyNode>> invalidArrangeReports;
 
   /**
+   * This list stores the changed arrangements that were not published yet.
+   */
+  @Nonnull
+  private final Queue<NiftyLayoutNodeImpl<? extends NiftyNode>> unpublishedArrangements;
+
+  /**
    * The node tree that is used to locate parent and children nodes.
    * <p />
    * TODO: Verify if the internal implementation for the public implementation should be used
@@ -85,6 +92,7 @@ public class NiftyLayout {
   NiftyLayout(@Nonnull final Nifty nifty, @Nonnull final InternalNiftyTree tree) {
     invalidMeasureReports = new LinkedList<>();
     invalidArrangeReports = new LinkedList<>();
+    unpublishedArrangements = new LinkedList<>();
     this.nifty = nifty;
     nodeTree = tree;
   }
@@ -127,11 +135,21 @@ public class NiftyLayout {
   }
 
   /**
+   * Report that the arrangement of the node was changed and needs to be published to the receivers.
+   *
+   * @param node the node with the new arrangement
+   */
+  public void reportChangedArrangement(@Nonnull final NiftyLayoutNodeImpl<? extends NiftyNode> node) {
+    unpublishedArrangements.add(node);
+  }
+
+  /**
    * This function triggers the entire layout process.
    */
   void update() {
     measure();
     arrange();
+    publishArrangements();
   }
 
   /**
@@ -238,6 +256,23 @@ public class NiftyLayout {
     while (itr.hasNext()) {
       if (itr.next().isArrangeValid()) {
         itr.remove();
+      }
+    }
+  }
+
+  private void publishArrangements() {
+    if (unpublishedArrangements.isEmpty()) {
+      return;
+    }
+
+    NiftyLayoutNodeImpl<?> unpublishedNode;
+    while ((unpublishedNode = unpublishedArrangements.poll()) != null) {
+      Rect arrangementRect = unpublishedNode.getArrangedRect();
+
+      for (NiftyLayoutReceiver<?> layoutReceiver : nodeTree.childNodes(nodeImplClass(NiftyLayoutReceiver.class),
+          toNodeImplClass(NiftyLayoutReceiver.class), downToFirstInstance(NiftyLayoutNodeImpl.class),
+          unpublishedNode)) {
+        layoutReceiver.setLayoutResult(arrangementRect);
       }
     }
   }
