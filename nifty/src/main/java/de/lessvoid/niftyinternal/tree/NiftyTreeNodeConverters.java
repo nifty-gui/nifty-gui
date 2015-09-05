@@ -10,10 +10,10 @@ import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
  */
 public class NiftyTreeNodeConverters {
 
-  public static NiftyTreeNodeConverter<NiftyNodeImpl> toNodeImpl() {
-    return new NiftyTreeNodeConverter<NiftyNodeImpl>() {
+  public static NiftyTreeNodeConverter<NiftyNodeImpl<?>> toNodeImpl() {
+    return new NiftyTreeNodeConverter<NiftyNodeImpl<?>>() {
       @Override
-      public NiftyNodeImpl convert(final NiftyNodeImpl niftyNodeImpl) {
+      public NiftyNodeImpl<?> convert(final NiftyNodeImpl<?> niftyNodeImpl) {
         return niftyNodeImpl;
       }
     };

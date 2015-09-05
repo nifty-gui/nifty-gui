@@ -186,7 +186,7 @@ public class NiftyTreeNodeTest {
     NiftyTreeNode child2 = niftyTreeNode("hello-2");
     root.addChild(child2);
 
-    Iterator<NiftyNodeImpl> it = root.iterator(nodeImplAny(), toNodeImpl(), entireTree());
+    Iterator<NiftyNodeImpl<?>> it = root.iterator(nodeImplAny(), toNodeImpl(), entireTree());
     assertEquals("root", it.next().toString());
     assertEquals("hello-1", it.next().toString());
     assertEquals("hello-1-1", it.next().toString());

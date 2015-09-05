@@ -59,12 +59,13 @@ public class InternalNiftyTree {
     return root.getValue();
   }
 
+  @SafeVarargs
   @Nonnull
-  public InternalNiftyTree addChild(
+  public final InternalNiftyTree addChild(
       final NiftyNodeImpl<? extends NiftyNode> parent,
       final NiftyNodeImpl<? extends NiftyNode> child,
-      final NiftyNodeImpl<? extends NiftyNode>... additionalChilds) {
-    addNodes(treeNodeFromImpl(parent), child, additionalChilds);
+      final NiftyNodeImpl<? extends NiftyNode>... additionalChildren) {
+    addNodes(treeNodeFromImpl(parent), child, additionalChildren);
     return this;
   }
 
@@ -83,7 +84,7 @@ public class InternalNiftyTree {
    * @return the Iterable
    */
   @Nonnull
-  public Iterable<NiftyNodeImpl> childNodes() {
+  public Iterable<NiftyNodeImpl<?>> childNodes() {
     return childNodes(nodeImplAny(), toNodeImpl(), entireTree());
   }
 
@@ -94,7 +95,7 @@ public class InternalNiftyTree {
    * @return the Iterable
    */
   @Nonnull
-  public Iterable<NiftyNodeImpl> childNodes(
+  public Iterable<NiftyNodeImpl<?>> childNodes(
       @Nonnull final NiftyTreeNodePredicate predicate) {
     return childNodes(predicate, toNodeImpl(), entireTree());
   }
@@ -138,7 +139,7 @@ public class InternalNiftyTree {
    * @return the Iterable
    */
   @Nonnull
-  public Iterable<NiftyNodeImpl> childNodes(
+  public Iterable<NiftyNodeImpl<?>> childNodes(
       @Nonnull final NiftyNodeImpl<? extends NiftyNode> startNode) {
     return childNodes(nodeImplAny(), toNodeImpl(), entireTree(), startNode);
   }
@@ -151,7 +152,7 @@ public class InternalNiftyTree {
    * @return the Iterable
    */
   @Nonnull
-  public Iterable<NiftyNodeImpl> childNodes(
+  public Iterable<NiftyNodeImpl<?>> childNodes(
       @Nonnull final NiftyTreeNodePredicate predicate,
       @Nonnull final NiftyNodeImpl<? extends NiftyNode> startNode) {
     return childNodes(predicate, toNodeImpl(), entireTree(), startNode);
@@ -209,9 +210,9 @@ public class InternalNiftyTree {
   }
 
   @Nullable
-  public <X extends NiftyNodeImpl<? extends NiftyNode>> X getParent(
+  public <X extends NiftyNodeImpl<?>> X getParent(
       @Nonnull final Class<X> clazz,
-      @Nonnull final NiftyNodeImpl<? extends NiftyNode> startNode) {
+      @Nonnull final NiftyNodeImpl<?> startNode) {
     NiftyTreeNode currentTreeNode = treeNodeFromImpl(startNode).getParent();
     while (currentTreeNode != null) {
       NiftyNodeImpl candidate = currentTreeNode.getValue();
@@ -230,13 +231,14 @@ public class InternalNiftyTree {
 
   // Internals /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  private void addNodes(
+  @SafeVarargs
+  private final void addNodes(
       final NiftyTreeNode parentTreeNode,
       final NiftyNodeImpl<? extends NiftyNode> child,
-      final NiftyNodeImpl<? extends NiftyNode> ... additionalChilds) {
+      final NiftyNodeImpl<? extends NiftyNode>... additionalChildren) {
     addChild(parentTreeNode, child);
-    for (int i=0; i<additionalChilds.length; i++) {
-      addChild(parentTreeNode, additionalChilds[i]);
+    for (int i=0; i<additionalChildren.length; i++) {
+      addChild(parentTreeNode, additionalChildren[i]);
     }
   }
 

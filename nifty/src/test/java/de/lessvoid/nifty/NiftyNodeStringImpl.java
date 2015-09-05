@@ -28,6 +28,8 @@ package de.lessvoid.nifty;
 
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
+import javax.annotation.Nonnull;
+
 import static de.lessvoid.nifty.NiftyNodeString.niftyNodeString;
 
 public class NiftyNodeStringImpl implements NiftyNodeImpl<NiftyNodeString> {
@@ -37,6 +39,7 @@ public class NiftyNodeStringImpl implements NiftyNodeImpl<NiftyNodeString> {
     this.value = value;
   }
 
+  @Nonnull
   public static NiftyNodeStringImpl niftyNodeStringImpl(final String value) {
     return new NiftyNodeStringImpl(value);
   }
@@ -47,6 +50,7 @@ public class NiftyNodeStringImpl implements NiftyNodeImpl<NiftyNodeString> {
   }
 
   @Override
+  @Nonnull
   public NiftyNodeString getNiftyNode() {
     return new NiftyNodeString(value);
   }

@@ -33,9 +33,6 @@ import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.Rect;
 import de.lessvoid.nifty.types.Size;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
-import de.lessvoid.niftyinternal.tree.NiftyTreeNodeControls;
-import de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters;
-import de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -63,13 +60,13 @@ public class NiftyLayout {
    * The nodes that where reported to have a invalid measure.
    */
   @Nonnull
-  private final Queue<NiftyLayoutNodeImpl> invalidMeasureReports;
+  private final Queue<NiftyLayoutNodeImpl<? extends NiftyNode>> invalidMeasureReports;
 
   /**
    * The nodes that were reported to have a invalid arrangement.
    */
   @Nonnull
-  private final List<NiftyLayoutNodeImpl> invalidArrangeReports;
+  private final List<NiftyLayoutNodeImpl<? extends NiftyNode>> invalidArrangeReports;
 
   /**
    * The node tree that is used to locate parent and children nodes.
@@ -97,8 +94,8 @@ public class NiftyLayout {
    *
    * @param node the node that was removed
    */
-  public void reportRemoval(@Nonnull final NiftyLayoutNodeImpl node) {
-    NiftyLayoutNodeImpl parentNode = nodeTree.getParent(NiftyLayoutNodeImpl.class, node);
+  public void reportRemoval(@Nonnull final NiftyLayoutNodeImpl<? extends NiftyNode> node) {
+    NiftyLayoutNodeImpl<?> parentNode = nodeTree.getParent(NiftyLayoutNodeImpl.class, node);
     if (parentNode != null) {
       if (parentNode.isMeasureValid()) {
         reportMeasureInvalid(parentNode);
@@ -115,7 +112,7 @@ public class NiftyLayout {
    *
    * @param node the node that got a invalid measure
    */
-  public void reportMeasureInvalid(@Nonnull final NiftyLayoutNodeImpl node) {
+  public void reportMeasureInvalid(@Nonnull final NiftyLayoutNodeImpl<? extends NiftyNode> node) {
     invalidMeasureReports.add(node);
   }
 
@@ -125,7 +122,7 @@ public class NiftyLayout {
    *
    * @param node the node that got a invalid child arrangement
    */
-  public void reportArrangeInvalid(@Nonnull final NiftyLayoutNodeImpl node) {
+  public void reportArrangeInvalid(@Nonnull final NiftyLayoutNodeImpl<? extends NiftyNode> node) {
     invalidArrangeReports.add(node);
   }
 
@@ -148,7 +145,7 @@ public class NiftyLayout {
       return;
     }
 
-    @Nullable NiftyLayoutNodeImpl currentLayoutNode;
+    @Nullable NiftyLayoutNodeImpl<?> currentLayoutNode;
     while ((currentLayoutNode = invalidMeasureReports.poll()) != null) {
       NiftyLayoutNodeImpl parentNode = nodeTree.getParent(NiftyLayoutNodeImpl.class, currentLayoutNode);
       if (parentNode != null && parentNode.isMeasureValid()) {
@@ -168,7 +165,7 @@ public class NiftyLayout {
    * @return size returned by the {@link NiftyLayoutNodeImpl#measure(Size)} function that is called for the node(s)
    */
   @Nonnull
-  public Size measure(@Nonnull final NiftyNodeImpl<?> node, @Nonnull final Size availableSize) {
+  public Size measure(@Nonnull final NiftyNodeImpl<? extends NiftyNode> node, @Nonnull final Size availableSize) {
     if (node instanceof NiftyLayoutNodeImpl<?>) {
       Size desiredSize =  ((NiftyLayoutNodeImpl<?>) node).measure(availableSize);
       if (desiredSize.isInfinite() || desiredSize.isInvalid()) {
@@ -190,7 +187,7 @@ public class NiftyLayout {
   }
 
   @Nonnull
-  public Size getDesiredSize(@Nonnull final NiftyNodeImpl<?> node) {
+  public Size getDesiredSize(@Nonnull final NiftyNodeImpl<? extends NiftyNode> node) {
     if (node instanceof NiftyLayoutNodeImpl) {
       return ((NiftyLayoutNodeImpl) node).getDesiredSize();
     } else {
@@ -225,7 +222,7 @@ public class NiftyLayout {
     }
   }
 
-  public void arrange(@Nonnull final NiftyNodeImpl<?> node, @Nonnull final Rect area) {
+  public void arrange(@Nonnull final NiftyNodeImpl<? extends NiftyNode> node, @Nonnull final Rect area) {
     if (node instanceof NiftyLayoutNodeImpl) {
       ((NiftyLayoutNodeImpl) node).arrange(area);
     } else {
@@ -237,7 +234,7 @@ public class NiftyLayout {
   }
 
   private void removeArranged() {
-    Iterator<NiftyLayoutNodeImpl> itr = invalidArrangeReports.iterator();
+    Iterator<NiftyLayoutNodeImpl<?>> itr = invalidArrangeReports.iterator();
     while (itr.hasNext()) {
       if (itr.next().isArrangeValid()) {
         itr.remove();
@@ -246,10 +243,11 @@ public class NiftyLayout {
   }
 
   @Nonnull
-  public List<NiftyNodeImpl> getDirectChildren(@Nonnull final NiftyLayoutNodeImpl node) {
-    Iterable<NiftyNodeImpl> itr = nodeTree.childNodes(nodeImplAny(), toNodeImpl(), onlyOneLevel(), node);
-    List<NiftyNodeImpl> list = new LinkedList<>();
-    for (NiftyNodeImpl impl : itr) {
+  public List<NiftyNodeImpl<? extends NiftyNode>> getDirectChildren(
+      @Nonnull final NiftyLayoutNodeImpl<? extends NiftyNode> node) {
+    Iterable<NiftyNodeImpl<?>> itr = nodeTree.childNodes(nodeImplAny(), toNodeImpl(), onlyOneLevel(), node);
+    List<NiftyNodeImpl<?>> list = new LinkedList<>();
+    for (NiftyNodeImpl<?> impl : itr) {
       list.add(impl);
     }
     return list;
