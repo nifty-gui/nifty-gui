@@ -40,5 +40,5 @@ public interface NiftyTreeNodePredicate {
    * @param niftyNodeImpl The NiftyNodeImpl to check
    * @return true if the NiftyNodeImpl is acceptable and false if not
    */
-  boolean accept(final NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl);
+  boolean accept(NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl);
 }

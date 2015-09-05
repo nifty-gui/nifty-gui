@@ -138,8 +138,12 @@ abstract class AbstractLayoutNodeImpl<T extends NiftyNode> implements NiftyLayou
   @Override
   public final void arrange(@Nonnull final Rect area) {
     arrangeInternal(area);
-    arrangeRect = area;
     arrangeValid = true;
+
+    if (!getArrangedRect().equals(area)) {
+      arrangeRect = area;
+      getLayout().reportChangedArrangement(this);
+    }
   }
 
   protected abstract void arrangeInternal(@Nonnull Rect area);

@@ -1,7 +1,6 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.NiftyLayout;
-import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.Point;
 import de.lessvoid.nifty.types.Rect;
@@ -67,11 +66,13 @@ public class UniformStackLayoutNodeImplTest {
     expect(layout.getDesiredSize(secondChildMock))
         .andReturn(new Size(20, 15))
         .anyTimes();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
 
     layout.arrange(firstChildMock, new Rect(new Point(0, 0), new Size(50, availableSize.getHeight())));
-    EasyMock.expectLastCall().once();
+    expectLastCall().once();
     layout.arrange(secondChildMock, new Rect(new Point(50, 0), new Size(50, availableSize.getHeight())));
-    EasyMock.expectLastCall().once();
+    expectLastCall().once();
 
     replay(layout, firstChildMock, secondChildMock);
 
@@ -105,11 +106,13 @@ public class UniformStackLayoutNodeImplTest {
     expect(layout.getDesiredSize(secondChildMock))
         .andReturn(new Size(20, 15))
         .anyTimes();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
 
     layout.arrange(firstChildMock, new Rect(new Point(0, 0), new Size(50, availableSize.getHeight())));
-    EasyMock.expectLastCall().once();
+    expectLastCall().once();
     layout.arrange(secondChildMock, new Rect(new Point(50, 0), new Size(50, availableSize.getHeight())));
-    EasyMock.expectLastCall().once();
+    expectLastCall().once();
 
     replay(layout, firstChildMock, secondChildMock);
 
@@ -145,9 +148,11 @@ public class UniformStackLayoutNodeImplTest {
         .anyTimes();
 
     layout.arrange(firstChildMock, new Rect(new Point(0, 0), new Size(availableSize.getWidth(), 50)));
-    EasyMock.expectLastCall().once();
+    expectLastCall().once();
     layout.arrange(secondChildMock, new Rect(new Point(0, 50), new Size(availableSize.getWidth(), 50)));
-    EasyMock.expectLastCall().once();
+    expectLastCall().once();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
 
     replay(layout, firstChildMock, secondChildMock);
 
@@ -181,11 +186,13 @@ public class UniformStackLayoutNodeImplTest {
     expect(layout.getDesiredSize(secondChildMock))
         .andReturn(new Size(20, 15))
         .anyTimes();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
 
     layout.arrange(firstChildMock, new Rect(new Point(0, 0), new Size(availableSize.getWidth(), 50)));
-    EasyMock.expectLastCall().once();
+    expectLastCall().once();
     layout.arrange(secondChildMock, new Rect(new Point(0, 50), new Size(availableSize.getWidth(), 50)));
-    EasyMock.expectLastCall().once();
+    expectLastCall().once();
 
     replay(layout, firstChildMock, secondChildMock);
 
@@ -221,6 +228,8 @@ public class UniformStackLayoutNodeImplTest {
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Collections.<NiftyNodeImpl<?>>emptyList())
         .anyTimes();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
     replay(layout);
     testInstance.onAttach(layout);
     testInstance.arrange(new Rect(new Point(0, 0), new Size(10, 20)));

@@ -26,6 +26,8 @@
  */
 package de.lessvoid.niftyinternal.tree;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -33,15 +35,19 @@ import java.util.NoSuchElementException;
  * Wrapper iterator to return only NiftyTreeNodes which value class matches a given class.
  */
 public class NiftyTreeNodeIterator<T> implements Iterator<T> {
+  @Nonnull
   private final Iterator<NiftyTreeNode> it;
+  @Nonnull
   private final NiftyTreeNodePredicate niftyTreeNodePredicate;
+  @Nonnull
   private final NiftyTreeNodeConverter<T> niftyTreeNodeConverter;
+  @Nullable
   private NiftyTreeNode cached;
 
   public NiftyTreeNodeIterator(
-      final Iterator<NiftyTreeNode> it,
-      final NiftyTreeNodePredicate niftyTreeNodePredicate,
-      final NiftyTreeNodeConverter<T> niftyTreeNodeConverter) {
+      @Nonnull final Iterator<NiftyTreeNode> it,
+      @Nonnull final NiftyTreeNodePredicate niftyTreeNodePredicate,
+      @Nonnull final NiftyTreeNodeConverter<T> niftyTreeNodeConverter) {
     this.it = it;
     this.niftyTreeNodePredicate = niftyTreeNodePredicate;
     this.niftyTreeNodeConverter = niftyTreeNodeConverter;

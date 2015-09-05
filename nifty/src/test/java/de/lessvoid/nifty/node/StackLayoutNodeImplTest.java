@@ -16,9 +16,7 @@ import org.junit.runner.RunWith;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 /**
@@ -85,6 +83,8 @@ public class StackLayoutNodeImplTest {
     EasyMock.expectLastCall().once();
     layout.arrange(secondChildMock, new Rect(new Point(10, 0), new Size(20, availableSize.getHeight())));
     EasyMock.expectLastCall().once();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
 
     replay(layout, firstChildMock, secondChildMock);
 
@@ -125,6 +125,8 @@ public class StackLayoutNodeImplTest {
     layout.arrange(secondChildMock, new Rect(new Point(10, 0),
         new Size(availableSize.getWidth() - 10, availableSize.getHeight())));
     EasyMock.expectLastCall().once();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
 
     replay(layout, firstChildMock, secondChildMock);
 
@@ -164,6 +166,8 @@ public class StackLayoutNodeImplTest {
     EasyMock.expectLastCall().once();
     layout.arrange(secondChildMock, new Rect(new Point(0, 5), new Size(availableSize.getWidth(), 15)));
     EasyMock.expectLastCall().once();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
 
     replay(layout, firstChildMock, secondChildMock);
 
@@ -198,6 +202,8 @@ public class StackLayoutNodeImplTest {
     expect(layout.getDesiredSize(secondChildMock))
         .andReturn(new Size(20, 15))
         .anyTimes();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
 
     layout.arrange(firstChildMock, new Rect(new Point(0, 0), new Size(availableSize.getWidth(), 5)));
     EasyMock.expectLastCall().once();
@@ -240,6 +246,8 @@ public class StackLayoutNodeImplTest {
     expect(layout.getDirectChildren(testInstance))
         .andReturn(Collections.<NiftyNodeImpl<?>>emptyList())
         .anyTimes();
+    layout.reportChangedArrangement(testInstance);
+    expectLastCall();
     replay(layout);
     testInstance.onAttach(layout);
     testInstance.arrange(new Rect(new Point(0, 0), new Size(10, 20)));

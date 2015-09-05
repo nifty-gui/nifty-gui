@@ -36,6 +36,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeControls.entireTree;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNiftyNode;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNodeImpl;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplAny;
+
 /**
  * Created by void on 23.07.15.
  */
@@ -54,12 +59,13 @@ public class InternalNiftyTree {
     return root.getValue();
   }
 
+  @SafeVarargs
   @Nonnull
-  public InternalNiftyTree addChild(
+  public final InternalNiftyTree addChild(
       final NiftyNodeImpl<? extends NiftyNode> parent,
       final NiftyNodeImpl<? extends NiftyNode> child,
-      final NiftyNodeImpl<? extends NiftyNode>... additionalChilds) {
-    addNodes(treeNodeFromImpl(parent), child, additionalChilds);
+      final NiftyNodeImpl<? extends NiftyNode>... additionalChildren) {
+    addNodes(treeNodeFromImpl(parent), child, additionalChildren);
     return this;
   }
 
@@ -73,7 +79,29 @@ public class InternalNiftyTree {
   }
 
   /**
-   * Returns child nodes in a depth first manner.
+   * Returns child nodes in a depth first manner starting from the root node.
+   *
+   * @return the Iterable
+   */
+  @Nonnull
+  public Iterable<NiftyNodeImpl<?>> childNodes() {
+    return childNodes(nodeImplAny(), toNodeImpl(), entireTree());
+  }
+
+  /**
+   * Returns child nodes in a depth first manner starting from the root node.
+   *
+   * @param predicate the NiftyTreeNodePredicate the nodes must comply too
+   * @return the Iterable
+   */
+  @Nonnull
+  public Iterable<NiftyNodeImpl<?>> childNodes(
+      @Nonnull final NiftyTreeNodePredicate predicate) {
+    return childNodes(predicate, toNodeImpl(), entireTree());
+  }
+
+  /**
+   * Returns child nodes in a depth first manner starting from the root node.
    *
    * @param predicate the NiftyTreeNodePredicate the nodes must comply too
    * @param converter the NiftyTreeNodeConverter
@@ -82,9 +110,52 @@ public class InternalNiftyTree {
    */
   @Nonnull
   public <T> Iterable<T> childNodes(
-      final NiftyTreeNodePredicate predicate,
-      final NiftyTreeNodeConverter<T> converter) {
-    return makeIterable(root.iterator(predicate, converter));
+      @Nonnull final NiftyTreeNodePredicate predicate,
+      @Nonnull final NiftyTreeNodeConverter<T> converter) {
+    return childNodes(predicate, converter, entireTree());
+  }
+
+  /**
+   * Returns child nodes in a depth first manner starting from the root node.
+   *
+   * @param predicate the NiftyTreeNodePredicate the nodes must comply too
+   * @param converter the NiftyTreeNodeConverter
+   * @param control the controller that steers the iterator in the tree
+   * @param <T> the actual type of the entries the Iterator returns
+   * @return the Iterable
+   */
+  @Nonnull
+  public <T> Iterable<T> childNodes(
+      @Nonnull final NiftyTreeNodePredicate predicate,
+      @Nonnull final NiftyTreeNodeConverter<T> converter,
+      @Nonnull final NiftyTreeNodeControl control) {
+    return childNodes(predicate, converter, control, root);
+  }
+
+  /**
+   * Returns child nodes in a depth first manner starting from startNode.
+   *
+   * @param startNode the startNode
+   * @return the Iterable
+   */
+  @Nonnull
+  public Iterable<NiftyNodeImpl<?>> childNodes(
+      @Nonnull final NiftyNodeImpl<? extends NiftyNode> startNode) {
+    return childNodes(nodeImplAny(), toNodeImpl(), entireTree(), startNode);
+  }
+
+  /**
+   * Returns child nodes in a depth first manner starting from startNode.
+   *
+   * @param predicate the NiftyTreeNodePredicate the nodes must comply too
+   * @param startNode the startNode
+   * @return the Iterable
+   */
+  @Nonnull
+  public Iterable<NiftyNodeImpl<?>> childNodes(
+      @Nonnull final NiftyTreeNodePredicate predicate,
+      @Nonnull final NiftyNodeImpl<? extends NiftyNode> startNode) {
+    return childNodes(predicate, toNodeImpl(), entireTree(), startNode);
   }
 
   /**
@@ -98,22 +169,50 @@ public class InternalNiftyTree {
    */
   @Nonnull
   public <T> Iterable<T> childNodes(
-      final NiftyTreeNodePredicate predicate,
-      final NiftyTreeNodeConverter<T> converter,
-      final NiftyNodeImpl<? extends NiftyNode> startNode) {
-    return makeIterable(treeNodeFromImpl(startNode).iterator(predicate, converter));
+      @Nonnull final NiftyTreeNodePredicate predicate,
+      @Nonnull final NiftyTreeNodeConverter<T> converter,
+      @Nonnull final NiftyNodeImpl<? extends NiftyNode> startNode) {
+    return childNodes(predicate, converter, entireTree(), startNode);
+  }
+
+  /**
+   * Returns child nodes in a depth first manner starting from startNode.
+   *
+   * @param predicate the NiftyTreeNodePredicate the nodes must comply too
+   * @param converter the NiftyTreeNodeConverter
+   * @param control the controller that steers the iterator in the tree
+   * @param startNode the startNode
+   * @param <T> the actual type of the entries the Iterator returns
+   * @return the Iterable
+   */
+  @Nonnull
+  public <T> Iterable<T> childNodes(
+      @Nonnull final NiftyTreeNodePredicate predicate,
+      @Nonnull final NiftyTreeNodeConverter<T> converter,
+      @Nonnull final NiftyTreeNodeControl control,
+      @Nonnull final NiftyNodeImpl<? extends NiftyNode> startNode) {
+    return childNodes(predicate, converter, control, treeNodeFromImpl(startNode));
+  }
+
+  @Nonnull
+  private <T> Iterable<T> childNodes(
+      @Nonnull final NiftyTreeNodePredicate predicate,
+      @Nonnull final NiftyTreeNodeConverter<T> converter,
+      @Nonnull final NiftyTreeNodeControl control,
+      @Nonnull final NiftyTreeNode startTreeNode) {
+    return makeIterable(startTreeNode.iterator(predicate, converter, control));
   }
 
   @Nullable
-  public NiftyNodeImpl<? extends NiftyNode> getParent(
+  public NiftyNodeImpl getParent(
       @Nonnull final NiftyNodeImpl<? extends NiftyNode> current) {
     return getParent(NiftyNodeImpl.class, current);
   }
 
   @Nullable
-  public <X extends NiftyNodeImpl<? extends NiftyNode>> X getParent(
+  public <X extends NiftyNodeImpl<?>> X getParent(
       @Nonnull final Class<X> clazz,
-      @Nonnull final NiftyNodeImpl<? extends NiftyNode> startNode) {
+      @Nonnull final NiftyNodeImpl<?> startNode) {
     NiftyTreeNode currentTreeNode = treeNodeFromImpl(startNode).getParent();
     while (currentTreeNode != null) {
       NiftyNodeImpl candidate = currentTreeNode.getValue();
@@ -132,13 +231,14 @@ public class InternalNiftyTree {
 
   // Internals /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  private void addNodes(
+  @SafeVarargs
+  private final void addNodes(
       final NiftyTreeNode parentTreeNode,
       final NiftyNodeImpl<? extends NiftyNode> child,
-      final NiftyNodeImpl<? extends NiftyNode> ... additionalChilds) {
+      final NiftyNodeImpl<? extends NiftyNode>... additionalChildren) {
     addChild(parentTreeNode, child);
-    for (int i=0; i<additionalChilds.length; i++) {
-      addChild(parentTreeNode, additionalChilds[i]);
+    for (int i=0; i<additionalChildren.length; i++) {
+      addChild(parentTreeNode, additionalChildren[i]);
     }
   }
 

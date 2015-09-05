@@ -29,6 +29,7 @@ package de.lessvoid.niftyinternal.tree;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -73,10 +74,12 @@ public class NiftyTreeNode {
     this.parent = parent;
   }
 
-  public <T> Iterator<T> iterator(final NiftyTreeNodePredicate predicate, final NiftyTreeNodeConverter<T> converter) {
+  public <T> Iterator<T> iterator(@Nonnull final NiftyTreeNodePredicate predicate,
+                                  @Nonnull final NiftyTreeNodeConverter<T> converter,
+                                  @Nonnull final NiftyTreeNodeControl control) {
     return
         new NiftyTreeNodeIterator<>(
-            new NiftyTreeNodeDepthFirstIterator(this),
+            new NiftyTreeNodeDepthFirstIterator(this, control),
             predicate,
             converter);
   }

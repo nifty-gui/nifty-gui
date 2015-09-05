@@ -24,42 +24,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.NiftyState;
-import de.lessvoid.nifty.node.NiftyBackgroundColorNode;
-import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
-import de.lessvoid.nifty.types.NiftyColor;
-
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundColor;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+package de.lessvoid.niftyinternal.tree;
 
 /**
- * Created by void on 09.08.15.
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class NiftyBackgroundColorNodeImpl implements NiftyNodeStateImpl<NiftyBackgroundColorNode> {
-  private NiftyColor backgroundColor;
-
-  public NiftyBackgroundColorNodeImpl(final NiftyColor backgroundColor) {
-    this.backgroundColor = backgroundColor;
-  }
-
-  @Override
-  public NiftyBackgroundColorNode getNiftyNode() {
-    return new NiftyBackgroundColorNode(this);
-  }
-
-  @Override
-  public void update(final NiftyState niftyState) {
-    niftyState.setState(NiftyStateBackgroundColor, backgroundColor);
-  }
-
-  public void setBackgroundColor(NiftyColor backgroundColor) {
-    this.backgroundColor = backgroundColor;
-  }
-
-  public NiftyColor getBackgroundColor() {
-    return backgroundColor;
-  }
+public enum NiftyTreeNodeVisitResult {
+  Continue, SkipSiblings, SkipSubtree, Terminate
 }
