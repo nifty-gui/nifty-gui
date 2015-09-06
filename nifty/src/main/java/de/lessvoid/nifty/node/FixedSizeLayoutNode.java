@@ -40,4 +40,10 @@ public class FixedSizeLayoutNode implements NiftyNode {
   NiftyNodeImpl<FixedSizeLayoutNode> getImpl() {
     return implementation;
   }
+
+  @Nonnull
+  @Override
+  public String toString() {
+    return "(FixedSizeLayoutNode) width [" + getWidth() + "px] height [" + getHeight() + "px]";
+  }
 }

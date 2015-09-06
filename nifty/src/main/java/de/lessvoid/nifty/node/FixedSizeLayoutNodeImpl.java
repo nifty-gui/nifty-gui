@@ -71,6 +71,6 @@ class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayoutNode
 
   @Override
   protected FixedSizeLayoutNode createNode() {
-    return null;
+    return new FixedSizeLayoutNode(this);
   }
 }
