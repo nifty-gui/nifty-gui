@@ -36,27 +36,22 @@ public class NiftyContentNode implements NiftyNode {
   private final NiftyContentNodeImpl impl;
 
   public static NiftyContentNode contentNode() {
-    return new NiftyContentNode(1024, 768);
+    return new NiftyContentNode();
   }
 
-  // FIXME this is a workaround til we have real layout in place
-  public static NiftyContentNode contentNode(final int w, final int h) {
-    return new NiftyContentNode(w, h);
-  }
-
-  private NiftyContentNode(final int w, final int h) {
-    this.impl = new NiftyContentNodeImpl(w, h);
+  private NiftyContentNode() {
+    this.impl = new NiftyContentNodeImpl();
   }
 
   NiftyContentNode(final NiftyContentNodeImpl impl) {
     this.impl = impl;
   }
 
-  public int getW() {
+  public int getWidth() {
     return impl.getContentWidth();
   }
 
-  public int getH() {
+  public int getHeight() {
     return impl.getContentHeight();
   }
 

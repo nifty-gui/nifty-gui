@@ -31,7 +31,6 @@ import de.lessvoid.nifty.NiftyCanvasPainter;
 import de.lessvoid.nifty.NiftyState;
 import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
-import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyRect;
@@ -50,17 +49,13 @@ class NiftyContentNodeImpl
       NiftyNodeStateImpl<NiftyContentNode>,
       NiftyNodeContentImpl<NiftyContentNode>,
       NiftyLayoutReceiver<NiftyContentNode> {
-  private final int w;
-  private final int h;
+  private int width;
+  private int height;
 
   private NiftyColor backgroundColor;
-  private Mat4 screenToLocal;
+  private Mat4 screenToLocal = Mat4.createIdentity();
+  private Mat4 layoutTranslate = Mat4.createIdentity();
   private NiftyCanvasPainter canvasPainter = defaultNiftyCanvasPainter();
-
-  public NiftyContentNodeImpl(final int w, final int h) {
-    this.w = w;
-    this.h = h;
-  }
 
   public void setCanvasPainter(final NiftyCanvasPainter canvasPainter) {
     this.canvasPainter = canvasPainter;
@@ -87,17 +82,17 @@ class NiftyContentNodeImpl
 
   @Override
   public int getContentWidth() {
-    return w;
+    return width;
   }
 
   @Override
   public int getContentHeight() {
-    return h;
+    return height;
   }
 
   @Override
   public Mat4 getScreenToLocal() {
-    return screenToLocal;
+    return Mat4.mul(screenToLocal, layoutTranslate);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,5 +121,8 @@ class NiftyContentNodeImpl
   @Override
   public void setLayoutResult(@Nonnull NiftyRect rect) {
     System.out.println(rect);
+    width = Math.round(rect.getSize().getWidth());
+    height = Math.round(rect.getSize().getHeight());
+    layoutTranslate = Mat4.createTranslate(rect.getOrigin().getX(), rect.getOrigin().getY(), 0.f);
   }
 }

@@ -47,10 +47,10 @@ public class UseCase_a04_RotatingRootNode {
     nifty
         .addNode(rootTransformation)
           .addNode(backgroundColorNode(NiftyColor.green()))
-            .addNode(contentNode(400, 400))
+            .addNode(contentNode())
               .addNode(transformationNode().setPosX(50).setPosY(50))
                 .addNode(backgroundColorNode(NiftyColor.red()))
-                  .addNode(contentNode(100, 100));
+                  .addNode(contentNode());
 
     nifty.startAnimated(0, 15, rootTransformation, new NiftyNodeCallback<Float, NiftyTransformationNode>() {
       private float angle = 0;

@@ -45,21 +45,21 @@ public class UseCase_b01_Canvas {
   public UseCase_b01_Canvas(final Nifty nifty) {
     nifty
         .addNode(backgroundColorNode(NiftyColor.green()))
-          .addNode(contentNode(400, 400))
-            .addNode(contentNode(200, 200).setCanvasPainter(new NiftyCanvasPainter() {
+          .addNode(contentNode())
+            .addNode(contentNode().setCanvasPainter(new NiftyCanvasPainter() {
               @Override
               public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
                 // fill the whole node content with a plain white color
                 canvas.setFillStyle(NiftyColor.white());
-                canvas.fillRect(0, 0, node.getW(), node.getH());
+                canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
                 // create a funky black rectangle inside the white
                 canvas.setFillStyle(NiftyColor.black());
                 canvas.fillRect(
-                    node.getW() / 2 - Math.random() * node.getW() / 2,
-                    node.getH() / 2 - Math.random() * node.getH() / 2,
-                    node.getW() - node.getW() / 2 + Math.random() * node.getW() / 2,
-                    node.getH() - node.getH() / 2 + Math.random() * node.getH() / 2);
+                    node.getWidth() / 2 - Math.random() * node.getWidth() / 2,
+                    node.getHeight() / 2 - Math.random() * node.getHeight() / 2,
+                    node.getWidth() - node.getWidth() / 2 + Math.random() * node.getWidth() / 2,
+                    node.getHeight() - node.getHeight() / 2 + Math.random() * node.getHeight() / 2);
               }
             }));
   }
