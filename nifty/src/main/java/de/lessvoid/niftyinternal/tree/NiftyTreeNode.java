@@ -31,6 +31,7 @@ import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -51,6 +52,7 @@ public class NiftyTreeNode {
   }
 
   public List<NiftyTreeNode> getChildren() {
+    if (children == null) return Collections.emptyList();
     return children;
   }
 

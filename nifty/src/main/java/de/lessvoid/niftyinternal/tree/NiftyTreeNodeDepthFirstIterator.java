@@ -45,9 +45,18 @@ public class NiftyTreeNodeDepthFirstIterator implements Iterator<NiftyTreeNode> 
 
   public NiftyTreeNodeDepthFirstIterator(@Nullable final NiftyTreeNode tree,
                                          @Nonnull final NiftyTreeNodeControl control) {
-    current = tree;
-    this.control = control;
     stack = new Stack<>();
+    this.control = control;
+
+    /* Select the first element of the first child node. So the root node is not returned. */
+    current = null;
+    if (tree != null) {
+      List<NiftyTreeNode> children = tree.getChildren();
+      if (!children.isEmpty()) {
+        stack.push(0);
+        current = children.get(0);
+      }
+    }
   }
 
   @Override
@@ -61,8 +70,8 @@ public class NiftyTreeNodeDepthFirstIterator implements Iterator<NiftyTreeNode> 
     NiftyTreeNode toReturn = current;
 
     List<NiftyTreeNode> children = null;
-    int currentDepth = stack.size();
-    int currentIndex = (currentDepth == 0 ? 0 : stack.peek());
+    int currentDepth = stack.size() - 1;
+    int currentIndex = (currentDepth == -1 ? 0 : stack.peek());
 
     switch (control.visitNode(toReturn.getValue(), currentDepth, currentIndex)) {
       case Terminate: // Terminate the iteration

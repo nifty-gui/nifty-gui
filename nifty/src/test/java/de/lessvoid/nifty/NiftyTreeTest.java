@@ -127,7 +127,7 @@ public class NiftyTreeTest {
 
   @Test
   public void testChildNodes() {
-    assertChildNodes(NiftyNodeString.niftyNodeString("root"));
+    assertChildNodes();
   }
 
   @Test
@@ -135,7 +135,6 @@ public class NiftyTreeTest {
     nifty
         .addNode(NiftyNodeString.niftyNodeString("child"));
     assertChildNodes(
-        NiftyNodeString.niftyNodeString("root"),
         NiftyNodeString.niftyNodeString("child"));
   }
 
@@ -148,7 +147,6 @@ public class NiftyTreeTest {
         .addTopLevelNode(NiftyNodeString.niftyNodeString("c3"))
         .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     assertChildNodes(
-        NiftyNodeString.niftyNodeString("root"),
         NiftyNodeString.niftyNodeString("c1"),
         NiftyNodeString.niftyNodeString("c2"),
         NiftyNodeString.niftyNodeString("c2-1"),
@@ -157,7 +155,7 @@ public class NiftyTreeTest {
   }
 
   @Test
-  public void testChildNodesMultipleChildsAfterRemove() {
+  public void testChildNodesMultipleChildrenAfterRemove() {
     nifty
         .addNode(NiftyNodeString.niftyNodeString("c1"))
         .addTopLevelNode(NiftyNodeString.niftyNodeString("c2"))
@@ -168,7 +166,6 @@ public class NiftyTreeTest {
     nifty.remove(NiftyNodeString.niftyNodeString("c2-1"));
     nifty.remove(NiftyNodeString.niftyNodeString("c3"));
     assertChildNodes(
-        NiftyNodeString.niftyNodeString("root"),
         NiftyNodeString.niftyNodeString("c2"),
         NiftyNodeString.niftyNodeString("c4"));
   }
@@ -182,7 +179,6 @@ public class NiftyTreeTest {
         .addTopLevelNode(NiftyNodeString.niftyNodeString("c3"))
         .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     assertChildNodesFromParent(
-        NiftyNodeString.niftyNodeString("c2"),
         NiftyNodeString.niftyNodeString("c2"),
         NiftyNodeString.niftyNodeString("c2-1"));
   }
@@ -257,7 +253,6 @@ public class NiftyTreeTest {
         .addTopLevelNode(NiftyNodeString.niftyNodeString("c4"));
     assertFilteredChildNodesFromParent(
         NiftyNodeString.class,
-        NiftyNodeString.niftyNodeString("c2"),
         NiftyNodeString.niftyNodeString("c2"));
   }
 
