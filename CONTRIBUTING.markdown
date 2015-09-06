@@ -30,8 +30,7 @@ Must be one of the following:
   semi-colons, etc)
 * **refactor**: A code change that neither fixes a bug or adds a feature
 * **test**: Adding missing tests
-* **chore**: Changes to the build process or auxiliary tools and libraries such as documentation
-  generation
+* **chore**: maintenance work that doesn't fit the other types or changes to the build process or auxiliary tools and libraries such as documentation generation
 
 ### Subject
 The subject contains succinct description of the change:
