@@ -108,7 +108,7 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNode> {
     Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements, means that we do not require any size. */
-      return new NiftySize(left + right, top + bottom);
+      return NiftySize.newNiftySize(left + right, top + bottom);
     }
 
     NiftySize childSize = NiftySize.ZERO;
@@ -116,7 +116,7 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNode> {
       childSize = NiftySize.max(getLayout().measure(child, availableSize), childSize);
     }
 
-    return new NiftySize(left + right + childSize.getWidth(), top + bottom + childSize.getHeight());
+    return NiftySize.newNiftySize(left + right + childSize.getWidth(), top + bottom + childSize.getHeight());
   }
 
   @Override
@@ -128,7 +128,7 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNode> {
     }
 
     NiftyPoint newOrigin = newNiftyPointWithOffset(area.getOrigin(), left, top);
-    NiftySize newSize = new NiftySize(area.getSize().getWidth() - left - right, area.getSize().getHeight() - top - bottom);
+    NiftySize newSize = NiftySize.newNiftySize(area.getSize().getWidth() - left - right, area.getSize().getHeight() - top - bottom);
     NiftyRect newArea = NiftyRect.newNiftyRect(newOrigin, newSize);
 
     for (NiftyNodeImpl<?> child : children) {

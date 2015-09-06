@@ -37,16 +37,15 @@ import javax.annotation.concurrent.Immutable;
  */
 @Immutable
 public final class NiftySize {
-  public static final NiftySize INVALID = new NiftySize(Float.NaN, Float.NaN);
-  public static final NiftySize INFINITE = new NiftySize(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
-  public static final NiftySize ZERO = new NiftySize(0, 0);
+  public static final NiftySize INVALID = newNiftySize(Float.NaN, Float.NaN);
+  public static final NiftySize INFINITE = newNiftySize(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
+  public static final NiftySize ZERO = newNiftySize(0, 0);
 
   private final float width;
   private final float height;
 
-  public NiftySize(final float width, final float height) {
-    this.width = width;
-    this.height = height;
+  public static NiftySize newNiftySize(final float width, final float height) {
+    return new NiftySize(width, height);
   }
 
   @Nonnull
@@ -56,8 +55,13 @@ public final class NiftySize {
     } else if ((size1.width <= size2.width) && (size1.height <= size2.height)) {
       return size2;
     } else {
-      return new NiftySize(Math.max(size1.width, size2.width), Math.max(size1.height, size2.height));
+      return newNiftySize(Math.max(size1.width, size2.width), Math.max(size1.height, size2.height));
     }
+  }
+
+  private NiftySize(final float width, final float height) {
+    this.width = width;
+    this.height = height;
   }
 
   public float getWidth() {

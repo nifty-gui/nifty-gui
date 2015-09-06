@@ -53,7 +53,7 @@ class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayoutNode
   @Nonnull
   @Override
   protected NiftySize measureInternal(@Nonnull NiftySize availableSize) {
-    return new NiftySize(width, height);
+    return NiftySize.newNiftySize(width, height);
   }
 
   @Override

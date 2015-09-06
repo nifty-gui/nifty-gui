@@ -147,7 +147,7 @@ public class AbstractLayoutNodeImplTest {
   @Test
   public void testInvalidateArrange() throws Exception {
     /* Setup Test */
-    NiftySize tempSize = new NiftySize(10, 10);
+    NiftySize tempSize = NiftySize.newNiftySize(10, 10);
     NiftyRect tempRect = NiftyRect.newNiftyRect(newNiftyPoint(0, 0), tempSize);
 
     expect(testInstance.measureInternal(tempSize)).andReturn(tempSize);
@@ -173,7 +173,7 @@ public class AbstractLayoutNodeImplTest {
   @Test
   public void testGetDesiredSize() throws Exception {
     /* Setup Test */
-    NiftySize tempSize = new NiftySize(10, 10);
+    NiftySize tempSize = NiftySize.newNiftySize(10, 10);
     layout.reportMeasureInvalid(testInstance);
     layout.reportArrangeInvalid(testInstance);
     expect(testInstance.measureInternal(NiftySize.INFINITE)).andReturn(tempSize);
@@ -191,7 +191,7 @@ public class AbstractLayoutNodeImplTest {
   @Test
   public void testGetArrangedRect() throws Exception {
     /* Setup Test */
-    NiftySize tempSize = new NiftySize(10, 10);
+    NiftySize tempSize = NiftySize.newNiftySize(10, 10);
     NiftyRect tempRect = NiftyRect.newNiftyRect(newNiftyPoint(0, 0), tempSize);
 
     layout.reportMeasureInvalid(testInstance);

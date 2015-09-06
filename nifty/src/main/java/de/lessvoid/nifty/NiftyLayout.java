@@ -172,7 +172,7 @@ public class NiftyLayout {
       }
     }
 
-    NiftySize size = new NiftySize(nifty.getScreenWidth(), nifty.getScreenHeight());
+    NiftySize size = NiftySize.newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight());
     measure(nodeTree.getRootNode(), size);
   }
 
@@ -235,7 +235,7 @@ public class NiftyLayout {
         layoutNode.arrange(layoutNode.getArrangedRect());
       } else {
         layoutNode.arrange(NiftyRect.newNiftyRect(newNiftyPoint(0, 0),
-            new NiftySize(nifty.getScreenWidth(), nifty.getScreenHeight())));
+            NiftySize.newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight())));
       }
       removeArranged();
       if (invalidArrangeReports.isEmpty()) {

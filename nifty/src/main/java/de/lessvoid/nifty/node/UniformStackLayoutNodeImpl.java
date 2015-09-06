@@ -71,9 +71,9 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl<UniformSta
     }
 
     if (orientation == Orientation.Horizontal) {
-      return new NiftySize(largestSizeRequested.getWidth() * children.size(), largestSizeRequested.getHeight());
+      return NiftySize.newNiftySize(largestSizeRequested.getWidth() * children.size(), largestSizeRequested.getHeight());
     } else {
-      return new NiftySize(largestSizeRequested.getWidth(), largestSizeRequested.getHeight() * children.size());
+      return NiftySize.newNiftySize(largestSizeRequested.getWidth(), largestSizeRequested.getHeight() * children.size());
     }
   }
 
@@ -112,14 +112,14 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl<UniformSta
       if (Float.isInfinite(outerSize.getWidth())) {
         sizePerChild = outerSize;
       } else {
-        sizePerChild = new NiftySize(outerSize.getWidth() / childCount, outerSize.getHeight());
+        sizePerChild = NiftySize.newNiftySize(outerSize.getWidth() / childCount, outerSize.getHeight());
       }
     } else {
       /* Uniform Vertical Stacking. Each element is assigned a equal share of the total height */
       if (Float.isInfinite(outerSize.getHeight())) {
         sizePerChild = outerSize;
       } else {
-        sizePerChild = new NiftySize(outerSize.getWidth(), outerSize.getHeight() / childCount);
+        sizePerChild = NiftySize.newNiftySize(outerSize.getWidth(), outerSize.getHeight() / childCount);
       }
     }
     return sizePerChild;

@@ -39,28 +39,28 @@ public class NiftyRectTest {
 
   @Test
   public void testRegular() {
-    NiftyRect rect = newNiftyRect(newNiftyPoint(20.f, 21.f), new NiftySize(10.f, 11.f));
+    NiftyRect rect = newNiftyRect(newNiftyPoint(20.f, 21.f), NiftySize.newNiftySize(10.f, 11.f));
     assertEquals(newNiftyPoint(20.f, 21.f), rect.getOrigin());
-    assertEquals(new NiftySize(10.f, 11.f), rect.getSize());
+    assertEquals(NiftySize.newNiftySize(10.f, 11.f), rect.getSize());
   }
 
   @Test
   public void testToString() {
-    NiftyRect rect = newNiftyRect(newNiftyPoint(20.f, 21.f), new NiftySize(10.f, 11.f));
+    NiftyRect rect = newNiftyRect(newNiftyPoint(20.f, 21.f), NiftySize.newNiftySize(10.f, 11.f));
     assertEquals("10.0 x 11.0 at 20.0, 21.0", rect.toString());
   }
 
   @Test
   public void testEquals() {
-    NiftyRect rect1 = newNiftyRect(newNiftyPoint(20.f, 21.f), new NiftySize(10.f, 11.f));
-    NiftyRect rect2 = newNiftyRect(newNiftyPoint(20.f, 21.f), new NiftySize(10.f, 11.f));
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(20.f, 21.f), NiftySize.newNiftySize(10.f, 11.f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint(20.f, 21.f), NiftySize.newNiftySize(10.f, 11.f));
     assertEquals(rect1, rect2);
   }
 
   @Test
   public void testEqualsWithTolerance() {
-    NiftyRect rect1 = newNiftyRect(newNiftyPoint(20.00f, 21.00f), new NiftySize(10.01f, 11.00f));
-    NiftyRect rect2 = newNiftyRect(newNiftyPoint(20.00f, 21.00f), new NiftySize(10.02f, 11.00f));
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(20.00f, 21.00f), NiftySize.newNiftySize(10.01f, 11.00f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint(20.00f, 21.00f), NiftySize.newNiftySize(10.02f, 11.00f));
     assertTrue(rect1.equals(rect2, 0.1f));
   }
 }

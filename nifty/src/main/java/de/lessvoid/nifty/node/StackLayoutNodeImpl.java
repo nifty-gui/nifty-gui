@@ -69,16 +69,16 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl<StackLayoutNode> 
     for (NiftyNodeImpl<?> child : children) {
       NiftySize childSize = getLayout().measure(child, remainingSize);
       if (orientation == Orientation.Horizontal) {
-        requiredSize = new NiftySize(requiredSize.getWidth() + childSize.getWidth(),
+        requiredSize = NiftySize.newNiftySize(requiredSize.getWidth() + childSize.getWidth(),
             Math.max(requiredSize.getHeight(), childSize.getHeight()));
         if (!Float.isInfinite(remainingSize.getWidth())) {
-          remainingSize = new NiftySize(remainingSize.getWidth() - childSize.getWidth(), remainingSize.getHeight());
+          remainingSize = NiftySize.newNiftySize(remainingSize.getWidth() - childSize.getWidth(), remainingSize.getHeight());
         }
       } else {
-        requiredSize = new NiftySize(Math.max(requiredSize.getWidth(), childSize.getWidth()),
+        requiredSize = NiftySize.newNiftySize(Math.max(requiredSize.getWidth(), childSize.getWidth()),
             requiredSize.getHeight() + childSize.getHeight());
         if (!Float.isInfinite(remainingSize.getHeight())) {
-          remainingSize = new NiftySize(remainingSize.getWidth(), remainingSize.getHeight() - childSize.getHeight());
+          remainingSize = NiftySize.newNiftySize(remainingSize.getWidth(), remainingSize.getHeight() - childSize.getHeight());
         }
       }
     }
@@ -107,12 +107,12 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl<StackLayoutNode> 
         arrangedSize = remainingSize;
         nextOrigin = currentOrigin; // never used
       } else if (orientation == Orientation.Horizontal) {
-        arrangedSize = new NiftySize(Math.min(remainingSize.getWidth(), childSize.getWidth()), remainingSize.getHeight());
-        remainingSize = new NiftySize(remainingSize.getWidth() - arrangedSize.getWidth(), remainingSize.getHeight());
+        arrangedSize = NiftySize.newNiftySize(Math.min(remainingSize.getWidth(), childSize.getWidth()), remainingSize.getHeight());
+        remainingSize = NiftySize.newNiftySize(remainingSize.getWidth() - arrangedSize.getWidth(), remainingSize.getHeight());
         nextOrigin = newNiftyPoint(currentOrigin.getX() + arrangedSize.getWidth(), currentOrigin.getY());
       } else {
-        arrangedSize = new NiftySize(remainingSize.getWidth(), Math.min(remainingSize.getHeight(), childSize.getHeight()));
-        remainingSize = new NiftySize(remainingSize.getWidth(), remainingSize.getHeight() - arrangedSize.getHeight());
+        arrangedSize = NiftySize.newNiftySize(remainingSize.getWidth(), Math.min(remainingSize.getHeight(), childSize.getHeight()));
+        remainingSize = NiftySize.newNiftySize(remainingSize.getWidth(), remainingSize.getHeight() - arrangedSize.getHeight());
         nextOrigin = newNiftyPoint(currentOrigin.getX(), currentOrigin.getY() + arrangedSize.getHeight());
       }
 
