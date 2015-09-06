@@ -244,7 +244,7 @@ public class NiftyLayout {
       ((NiftyLayoutNodeImpl) node).arrange(area);
     } else {
       for (NiftyLayoutNodeImpl<?> layoutNode : getChildLayoutNodes(node)) {
-        layoutNode.arrange(layoutNode.getArrangedRect());
+        layoutNode.arrange(area);
       }
     }
   }

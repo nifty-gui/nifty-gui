@@ -70,8 +70,8 @@ public class NiftyTreeNodeDepthFirstIterator implements Iterator<NiftyTreeNode> 
     NiftyTreeNode toReturn = current;
 
     List<NiftyTreeNode> children = null;
-    int currentDepth = stack.size() - 1;
-    int currentIndex = (currentDepth == -1 ? 0 : stack.peek());
+    int currentDepth = stack.size();
+    int currentIndex = (currentDepth == 0 ? 0 : stack.peek());
 
     switch (control.visitNode(toReturn.getValue(), currentDepth, currentIndex)) {
       case Terminate: // Terminate the iteration

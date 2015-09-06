@@ -76,7 +76,7 @@ public final class NiftyTreeNodeControls {
           @Nonnull final NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl,
           final int depth,
           final int index) {
-        if (level < depth) {
+        if (level <= depth) {
           return NiftyTreeNodeVisitResult.SkipSubtree;
         } else {
           return NiftyTreeNodeVisitResult.Continue;
