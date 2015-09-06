@@ -40,7 +40,9 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.logging.Logger;
 
-import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
+import static de.lessvoid.nifty.types.NiftyPoint.ZERO;
+import static de.lessvoid.nifty.types.NiftyRect.newNiftyRect;
+import static de.lessvoid.nifty.types.NiftySize.newNiftySize;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeControls.downToFirstInstance;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeControls.onlyOneLevel;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNodeImpl;
@@ -172,7 +174,7 @@ public class NiftyLayout {
       }
     }
 
-    NiftySize size = NiftySize.newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight());
+    NiftySize size = newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight());
     measure(nodeTree.getRootNode(), size);
   }
 
@@ -195,10 +197,7 @@ public class NiftyLayout {
     }
 
     NiftySize currentSize = NiftySize.ZERO;
-    for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
-        nodeImplClass(NiftyLayoutNodeImpl.class),
-        toNodeImplClass(NiftyLayoutNodeImpl.class),
-        downToFirstInstance(NiftyLayoutNodeImpl.class))) {
+    for (NiftyLayoutNodeImpl<?> layoutNode : getChildLayoutNodes(node)) {
       NiftySize nodeSize = measure(layoutNode, availableSize);
       currentSize = NiftySize.max(nodeSize, currentSize);
     }
@@ -211,10 +210,7 @@ public class NiftyLayout {
       return ((NiftyLayoutNodeImpl) node).getDesiredSize();
     } else {
       NiftySize currentSize = NiftySize.ZERO;
-      for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
-          nodeImplClass(NiftyLayoutNodeImpl.class),
-          toNodeImplClass(NiftyLayoutNodeImpl.class),
-          downToFirstInstance(NiftyLayoutNodeImpl.class))) {
+      for (NiftyLayoutNodeImpl<?> layoutNode : getChildLayoutNodes(node)) {
         NiftySize nodeSize = layoutNode.getDesiredSize();
         currentSize = NiftySize.max(nodeSize, currentSize);
       }
@@ -227,16 +223,9 @@ public class NiftyLayout {
       return; // There are no dirty arrange entries reported. So we are done here.
     }
 
-    for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
-        nodeImplClass(NiftyLayoutNodeImpl.class),
-        toNodeImplClass(NiftyLayoutNodeImpl.class),
-        downToFirstInstance(NiftyLayoutNodeImpl.class))) {
-      if (layoutNode.isArrangeValid()) {
-        layoutNode.arrange(layoutNode.getArrangedRect());
-      } else {
-        layoutNode.arrange(NiftyRect.newNiftyRect(newNiftyPoint(0, 0),
-            NiftySize.newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight())));
-      }
+    for (NiftyLayoutNodeImpl<?> layoutNode : getChildLayoutNodes()) {
+
+      layoutNode.arrange(newNiftyRect(ZERO, newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight())));
       removeArranged();
       if (invalidArrangeReports.isEmpty()) {
         return; // Early exit in case we are done.
@@ -248,11 +237,7 @@ public class NiftyLayout {
     if (node instanceof NiftyLayoutNodeImpl) {
       ((NiftyLayoutNodeImpl) node).arrange(area);
     } else {
-      for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
-          nodeImplClass(NiftyLayoutNodeImpl.class),
-          toNodeImplClass(NiftyLayoutNodeImpl.class),
-          downToFirstInstance(NiftyLayoutNodeImpl.class),
-          node)) {
+      for (NiftyLayoutNodeImpl<?> layoutNode : getChildLayoutNodes(node)) {
         layoutNode.arrange(layoutNode.getArrangedRect());
       }
     }
@@ -293,5 +278,20 @@ public class NiftyLayout {
       list.add(impl);
     }
     return list;
+  }
+
+  public Iterable<NiftyLayoutNodeImpl> getChildLayoutNodes() {
+    return nodeTree.childNodes(
+        nodeImplClass(NiftyLayoutNodeImpl.class),
+        toNodeImplClass(NiftyLayoutNodeImpl.class),
+        downToFirstInstance(NiftyLayoutNodeImpl.class));
+  }
+
+  public Iterable<NiftyLayoutNodeImpl> getChildLayoutNodes(@Nonnull final NiftyNodeImpl<? extends NiftyNode> node) {
+    return nodeTree.childNodes(
+        nodeImplClass(NiftyLayoutNodeImpl.class),
+        toNodeImplClass(NiftyLayoutNodeImpl.class),
+        downToFirstInstance(NiftyLayoutNodeImpl.class),
+        node);
   }
 }

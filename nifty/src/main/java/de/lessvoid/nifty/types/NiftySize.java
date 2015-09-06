@@ -80,6 +80,19 @@ public final class NiftySize {
     return Float.isInfinite(width) || Float.isInfinite(height);
   }
 
+  public NiftySize add(final float width, final float height) {
+    if (isInvalid() || isInfinite()) {
+      return this;
+    }
+    float newWidth = this.width + width;
+    float newHeight = this.height + height;
+
+    if ((Float.compare(newWidth, this.width) == 0) && (Float.compare(newHeight, this.height) == 0)) {
+      return this;
+    }
+    return new NiftySize(newWidth, newHeight);
+  }
+
   @Override
   public boolean equals(@Nullable final Object other) {
     return (other instanceof NiftySize) && equals((NiftySize) other);

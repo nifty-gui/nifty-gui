@@ -4,6 +4,8 @@ de.lessvoid.nifty.node.NiftyRootNodeAccessor
 de.lessvoid.nifty.node.NiftyTransformationNodeAccessor
 
 # Layout Nodes
+de.lessvoid.nifty.node.AbsoluteLayoutChildNodeAccessor
+de.lessvoid.nifty.node.AbsoluteLayoutNodeAccessor
 de.lessvoid.nifty.node.FixedSizeLayoutNodeAccessor
 de.lessvoid.nifty.node.PaddingLayoutNodeAccessor
 de.lessvoid.nifty.node.StackLayoutNodeAccessor

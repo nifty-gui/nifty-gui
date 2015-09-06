@@ -27,6 +27,8 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.node.AbsoluteLayoutChildNode;
+import de.lessvoid.nifty.node.AbsoluteLayoutNode;
 import de.lessvoid.nifty.node.FixedSizeLayoutNode;
 import de.lessvoid.nifty.types.NiftyColor;
 
@@ -42,8 +44,10 @@ public class UseCase_a03_FixedSizedRootNode {
   public UseCase_a03_FixedSizedRootNode(final Nifty nifty) {
     nifty
         .addNode(backgroundColorNode(NiftyColor.blue()))
-          .addNode(new FixedSizeLayoutNode(100.f, 100.f))
-            .addNode(contentNode());
+          .addNode(new AbsoluteLayoutNode())
+            .addNode(new AbsoluteLayoutChildNode(10, 10))
+              .addNode(new FixedSizeLayoutNode(100.f, 100.f))
+                .addNode(contentNode());
   }
 
   public static void main(final String[] args) throws Exception {

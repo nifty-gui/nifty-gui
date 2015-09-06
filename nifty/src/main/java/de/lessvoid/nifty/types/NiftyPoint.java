@@ -38,6 +38,8 @@ import javax.annotation.concurrent.Immutable;
  */
 @Immutable
 public final class NiftyPoint {
+  public static final NiftyPoint ZERO = new NiftyPoint(0, 0);
+
   private final float x;
   private final float y;
 
@@ -55,15 +57,7 @@ public final class NiftyPoint {
       @Nonnull final NiftyPoint original,
       final float offsetX,
       final float offsetY) {
-    return new NiftyPoint(original, offsetX, offsetY);
-  }
-
-  private NiftyPoint(@Nonnull final NiftyPoint original, final float offsetX, final float offsetY) {
-    if (!(Math.abs(offsetX) <= Float.MAX_VALUE)) throw new IllegalArgumentException("x is expected to be a finite value.");
-    if (!(Math.abs(offsetY) <= Float.MAX_VALUE)) throw new IllegalArgumentException("y is expected to be a finite value.");
-
-    x = original.getX() + offsetX;
-    y = original.getY() + offsetY;
+    return original.add(offsetX, offsetY);
   }
 
   private NiftyPoint(final float x, final float y) {
@@ -80,6 +74,16 @@ public final class NiftyPoint {
 
   public float getY() {
     return y;
+  }
+
+  public NiftyPoint add(final float x, final float y) {
+    float newX = this.x + x;
+    float newY = this.y + y;
+
+    if ((Float.compare(newX, this.x) == 0) && (Float.compare(newY, this.y) == 0)) {
+      return this;
+    }
+    return new NiftyPoint(newX, newY);
   }
 
   @Override
