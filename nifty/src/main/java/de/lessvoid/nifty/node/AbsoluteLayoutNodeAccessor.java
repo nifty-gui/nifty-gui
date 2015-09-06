@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class AbsoluteLayoutNodeAccessor implements NiftyNodeAccessor<AbsoluteLayoutNode> {
+final class AbsoluteLayoutNodeAccessor implements NiftyNodeAccessor<AbsoluteLayoutNode> {
   @Nonnull
   @Override
   public Class<AbsoluteLayoutNode> getNodeClass() {

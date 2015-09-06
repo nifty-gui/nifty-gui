@@ -15,7 +15,7 @@ import static de.lessvoid.nifty.types.NiftyRect.newNiftyRect;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class AbsoluteLayoutNodeImpl extends AbstractLayoutNodeImpl<AbsoluteLayoutNode> {
+final class AbsoluteLayoutNodeImpl extends AbstractLayoutNodeImpl<AbsoluteLayoutNode> {
   @Nonnull
   @Override
   protected NiftySize measureInternal(@Nonnull NiftySize availableSize) {

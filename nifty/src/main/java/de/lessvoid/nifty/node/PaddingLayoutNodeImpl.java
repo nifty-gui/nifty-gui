@@ -16,7 +16,7 @@ import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPointWithOffset;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNode> {
+final class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNode> {
   /**
    * The padding applied to the bottom.
    */

@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class StackLayoutNodeAccessor implements NiftyNodeAccessor<StackLayoutNode> {
+final class StackLayoutNodeAccessor implements NiftyNodeAccessor<StackLayoutNode> {
   @Nonnull
   @Override
   public Class<StackLayoutNode> getNodeClass() {

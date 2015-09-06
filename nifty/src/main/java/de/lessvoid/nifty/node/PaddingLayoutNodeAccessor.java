@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class PaddingLayoutNodeAccessor implements NiftyNodeAccessor<PaddingLayoutNode> {
+final class PaddingLayoutNodeAccessor implements NiftyNodeAccessor<PaddingLayoutNode> {
   @Nonnull
   @Override
   public Class<PaddingLayoutNode> getNodeClass() {

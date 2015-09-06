@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.NiftyPoint;
 import de.lessvoid.nifty.types.NiftyRect;
@@ -12,7 +11,7 @@ import java.util.Collection;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class AbsoluteLayoutChildNodeImpl extends AbstractLayoutNodeImpl<AbsoluteLayoutChildNode> {
+final class AbsoluteLayoutChildNodeImpl extends AbstractLayoutNodeImpl<AbsoluteLayoutChildNode> {
   @Nonnull
   private NiftyPoint point;
 

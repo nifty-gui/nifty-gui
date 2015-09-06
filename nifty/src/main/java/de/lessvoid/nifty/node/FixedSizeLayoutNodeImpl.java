@@ -10,42 +10,26 @@ import java.util.Collection;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayoutNode> {
-  private float height;
-  private float width;
+final class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayoutNode> {
+  @Nonnull
+  private NiftySize size;
 
-  public FixedSizeLayoutNodeImpl(float width, float height) {
-    if (!(Math.abs(height) <= Float.MAX_VALUE)) throw new IllegalArgumentException("height is expected to be a finite value.");
-    if (!(Math.abs(width) <= Float.MAX_VALUE)) throw new IllegalArgumentException("width is expected to be a finite value.");
+  public FixedSizeLayoutNodeImpl(@Nonnull final NiftySize size) {
+    if (size.isInfinite() || size.isInvalid()) throw new IllegalArgumentException("The size has to be a finite value.");
 
-    this.height = height;
-    this.width = width;
+    this.size = size;
   }
 
-  float getWidth() {
-    return width;
+  @Nonnull
+  public NiftySize getSize() {
+    return size;
   }
 
-  void setWidth(float width) {
-    if (!(Math.abs(width) <= Float.MAX_VALUE)) throw new IllegalArgumentException("width is expected to be a finite value.");
+  public void setSize(@Nonnull NiftySize size) {
+    if (size.isInfinite() || size.isInvalid()) throw new IllegalArgumentException("The size has to be a finite value.");
 
-    if (this.width != width) {
-      this.width = width;
-
-      invalidateMeasure();
-    }
-  }
-
-  float getHeight() {
-    return height;
-  }
-
-  void setHeight(float height) {
-    if (!(Math.abs(height) <= Float.MAX_VALUE)) throw new IllegalArgumentException("height is expected to be a finite value.");
-
-    if (this.height != height) {
-      this.height = height;
-
+    if (!this.size.equals(size)) {
+      this.size = size;
       invalidateMeasure();
     }
   }
@@ -53,7 +37,7 @@ class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayoutNode
   @Nonnull
   @Override
   protected NiftySize measureInternal(@Nonnull NiftySize availableSize) {
-    return NiftySize.newNiftySize(width, height);
+    return size;
   }
 
   @Override

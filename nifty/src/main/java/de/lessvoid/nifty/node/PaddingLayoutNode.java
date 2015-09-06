@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public class PaddingLayoutNode implements NiftyNode {
+public final class PaddingLayoutNode implements NiftyNode {
   @Nonnull
   private final PaddingLayoutNodeImpl implementation;
 

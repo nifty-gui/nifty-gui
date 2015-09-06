@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class FixedSizeLayoutNodeAccessor implements NiftyNodeAccessor<FixedSizeLayoutNode> {
+final class FixedSizeLayoutNodeAccessor implements NiftyNodeAccessor<FixedSizeLayoutNode> {
   @Nonnull
   @Override
   public Class<FixedSizeLayoutNode> getNodeClass() {
