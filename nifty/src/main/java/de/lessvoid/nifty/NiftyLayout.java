@@ -251,6 +251,7 @@ public class NiftyLayout {
       for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
           nodeImplClass(NiftyLayoutNodeImpl.class),
           toNodeImplClass(NiftyLayoutNodeImpl.class),
+          downToFirstInstance(NiftyLayoutNodeImpl.class),
           node)) {
         layoutNode.arrange(layoutNode.getArrangedRect());
       }
