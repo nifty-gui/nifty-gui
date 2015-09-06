@@ -44,10 +44,8 @@ public class NiftyTreeNodeDepthFirstIteratorTest {
   public void testIterateRoot() {
     NiftyTreeNode root = new NiftyTreeNode(niftyNodeStringImpl("root"));
     Iterator<NiftyTreeNode> it = createIterator(root, entireTree());
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next().getValue().getNiftyNode().toString());
-
     assertFalse(it.hasNext());
+
     try {
       it.next();
       fail("expected exception");
@@ -62,8 +60,6 @@ public class NiftyTreeNodeDepthFirstIteratorTest {
     root.addChild(child);
 
     Iterator<NiftyTreeNode> it = createIterator(root, entireTree());
-    assertTrue(it.hasNext());
-    assertEquals("root", it.next().getValue().getNiftyNode().toString());
 
     assertTrue(it.hasNext());
     assertEquals("child", it.next().getValue().getNiftyNode().toString());

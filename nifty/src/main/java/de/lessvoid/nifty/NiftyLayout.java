@@ -31,6 +31,7 @@ import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
+import de.lessvoid.nifty.types.NiftyPoint;
 import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.nifty.types.NiftySize;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
@@ -232,10 +233,13 @@ public class NiftyLayout {
         downToFirstInstance(NiftyLayoutNodeImpl.class))) {
       if (layoutNode.isArrangeValid()) {
         layoutNode.arrange(layoutNode.getArrangedRect());
-        removeArranged();
-        if (invalidArrangeReports.isEmpty()) {
-          return; // Early exit in case we are done.
-        }
+      } else {
+        layoutNode.arrange(new NiftyRect(new NiftyPoint(0, 0),
+            new NiftySize(nifty.getScreenWidth(), nifty.getScreenHeight())));
+      }
+      removeArranged();
+      if (invalidArrangeReports.isEmpty()) {
+        return; // Early exit in case we are done.
       }
     }
   }
@@ -245,7 +249,9 @@ public class NiftyLayout {
       ((NiftyLayoutNodeImpl) node).arrange(area);
     } else {
       for (NiftyLayoutNodeImpl<?> layoutNode : nodeTree.childNodes(
-          nodeImplClass(NiftyLayoutNodeImpl.class), toNodeImplClass(NiftyLayoutNodeImpl.class))) {
+          nodeImplClass(NiftyLayoutNodeImpl.class),
+          toNodeImplClass(NiftyLayoutNodeImpl.class),
+          node)) {
         layoutNode.arrange(layoutNode.getArrangedRect());
       }
     }

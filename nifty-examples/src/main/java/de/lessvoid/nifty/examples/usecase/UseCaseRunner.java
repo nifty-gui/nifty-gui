@@ -50,6 +50,7 @@ public class UseCaseRunner {
     initAdapters.put("lwjgl", new UseCaseRunnerAdapterOpenGL(new CoreSetupLwjgl(new LwjglCoreGL()), new LwjglCoreGL()));
     initAdapters.put("jogl", new UseCaseRunnerAdapterOpenGL(new CoreSetupJogl(new JoglCoreGL()), new JoglCoreGL()));
     initAdapters.put("java2d", new UseCaseRunnerAdapterJava2D());
+    initAdapters.put("dummy", new UseCaseRunnerAdapterDummy());
   }
 
   static void run(final Class<?> useCaseClass, final String[] args) throws Exception {

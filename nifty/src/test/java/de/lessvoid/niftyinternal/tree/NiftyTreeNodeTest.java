@@ -45,6 +45,7 @@ import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplCla
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeClass;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 /**
@@ -103,7 +104,7 @@ public class NiftyTreeNodeTest {
   @Test
   public void testGetChildrenWithNoChildren() {
     NiftyTreeNode root = niftyTreeNode("root");
-    assertNull(root.getChildren());
+    assertTrue(root.getChildren().isEmpty());
   }
 
   @Test
@@ -130,7 +131,7 @@ public class NiftyTreeNodeTest {
         "  hello", root.toStringTree());
 
     child.remove();
-    assertNull(root.getChildren());
+    assertTrue(root.getChildren().isEmpty());
 
     assertEquals(
         "root", root.toStringTree());
@@ -147,7 +148,7 @@ public class NiftyTreeNodeTest {
             "  hello", root.toStringTree());
 
     root.remove(child);
-    assertNull(root.getChildren());
+    assertTrue(root.getChildren().isEmpty());
 
     assertEquals(
         "root", root.toStringTree());
@@ -187,7 +188,6 @@ public class NiftyTreeNodeTest {
     root.addChild(child2);
 
     Iterator<NiftyNodeImpl<?>> it = root.iterator(nodeImplAny(), toNodeImpl(), entireTree());
-    assertEquals("root", it.next().toString());
     assertEquals("hello-1", it.next().toString());
     assertEquals("hello-1-1", it.next().toString());
     assertEquals("hello-2", it.next().toString());
@@ -220,7 +220,6 @@ public class NiftyTreeNodeTest {
     root.addChild(child2);
 
     Iterator<? extends NiftyNode> it = root.iterator(nodeImplAny(), toNiftyNode(), entireTree());
-    assertEquals("root", it.next().toString());
     assertEquals("hello-1", it.next().toString());
     assertEquals("hello-1-1", it.next().toString());
     assertEquals("hello-2", it.next().toString());
