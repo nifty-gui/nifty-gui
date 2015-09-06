@@ -1,17 +1,17 @@
 /*
  * Copyright (c) 2015, Nifty GUI Community 
  * All rights reserved. 
- * 
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions are 
- * met: 
- * 
- *  * Redistributions of source code must retain the above copyright 
- *    notice, this list of conditions and the following disclaimer. 
- *  * Redistributions in binary form must reproduce the above copyright 
- *    notice, this list of conditions and the following disclaimer in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *  * Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  * Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND 
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
@@ -26,6 +26,18 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyNodeBuilder;
+import de.lessvoid.nifty.node.Orientation;
+import de.lessvoid.nifty.types.NiftyColor;
+
+import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
+import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
+import static de.lessvoid.nifty.node.FixedSizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.UniformStackLayoutNode.uniformStackLayoutNode;
+
 /**
  * A single root node that is only a quarter of the screen, placed in the upper right corner and contains two child
  * nodes using a horizontal child layout.
@@ -33,19 +45,21 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes {
-/* FIXME
   public UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes(final Nifty nifty) {
-    // By changing the rootNode horizontal alignment we move it to the right. This makes it appear in the upper right.
-    NiftyNode rootNode = nifty.createRootNode(ChildLayout.Vertical, UnitValue.percent(50), UnitValue.percent(50), ChildLayout.Horizontal);
-    rootNode.setHAlign(HAlign.right);
+    NiftyNodeBuilder bigNode = nifty.addNode(absoluteLayoutNode())
+        .addNode(absoluteLayoutChildNode())
+        .addNode(fixedSizeLayoutNode(nifty.getScreenWidth() / 2.f, nifty.getScreenHeight() / 2.f))
+        .addNode(uniformStackLayoutNode(Orientation.Vertical));
 
-    // add two child nodes to the root node
-    rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#ff08"));
-    rootNode.newChildNode().setBackgroundColor(NiftyColor.fromString("#ff0f"));
+    bigNode.addNode(backgroundColorNode(NiftyColor.fromString("#ff0f")))
+        .addNode(fixedSizeLayoutNode())
+        .addNode(contentNode());
+    bigNode.addNode(backgroundColorNode(NiftyColor.fromString("#00ff")))
+        .addNode(fixedSizeLayoutNode())
+        .addNode(contentNode());
   }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes.class, args);
   }
-  */
 }
