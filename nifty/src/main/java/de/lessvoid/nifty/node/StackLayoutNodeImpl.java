@@ -36,6 +36,8 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
+import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
+
 /**
  * The layout node implementation for a stack layout.
  *
@@ -107,11 +109,11 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl<StackLayoutNode> 
       } else if (orientation == Orientation.Horizontal) {
         arrangedSize = new NiftySize(Math.min(remainingSize.getWidth(), childSize.getWidth()), remainingSize.getHeight());
         remainingSize = new NiftySize(remainingSize.getWidth() - arrangedSize.getWidth(), remainingSize.getHeight());
-        nextOrigin = new NiftyPoint(currentOrigin.getX() + arrangedSize.getWidth(), currentOrigin.getY());
+        nextOrigin = newNiftyPoint(currentOrigin.getX() + arrangedSize.getWidth(), currentOrigin.getY());
       } else {
         arrangedSize = new NiftySize(remainingSize.getWidth(), Math.min(remainingSize.getHeight(), childSize.getHeight()));
         remainingSize = new NiftySize(remainingSize.getWidth(), remainingSize.getHeight() - arrangedSize.getHeight());
-        nextOrigin = new NiftyPoint(currentOrigin.getX(), currentOrigin.getY() + arrangedSize.getHeight());
+        nextOrigin = newNiftyPoint(currentOrigin.getX(), currentOrigin.getY() + arrangedSize.getHeight());
       }
 
       getLayout().arrange(child, new NiftyRect(currentOrigin, arrangedSize));

@@ -8,6 +8,8 @@ import de.lessvoid.nifty.types.NiftySize;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
+import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPointWithOffset;
+
 /**
  * This is the implementation of a layout node that support padding. It will apply some padding to any child layout
  * node.
@@ -125,7 +127,7 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNode> {
       return;
     }
 
-    NiftyPoint newOrigin = new NiftyPoint(area.getOrigin(), left, top);
+    NiftyPoint newOrigin = newNiftyPointWithOffset(area.getOrigin(), left, top);
     NiftySize newSize = new NiftySize(area.getSize().getWidth() - left - right, area.getSize().getHeight() - top - bottom);
     NiftyRect newArea = new NiftyRect(newOrigin, newSize);
 

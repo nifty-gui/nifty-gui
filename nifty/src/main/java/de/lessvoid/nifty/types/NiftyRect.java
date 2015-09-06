@@ -31,6 +31,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
+
 /**
  * A rectangle marking a area at a specific location.
  *
@@ -39,7 +41,7 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class NiftyRect {
   @Nonnull
-  public static final NiftyRect INVALID = new NiftyRect(new NiftyPoint(0, 0), NiftySize.INVALID);
+  public static final NiftyRect INVALID = new NiftyRect(newNiftyPoint(0, 0), NiftySize.INVALID);
 
   @Nonnull
   private final NiftyPoint origin;

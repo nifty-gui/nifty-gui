@@ -41,6 +41,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.logging.Logger;
 
+import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeControls.downToFirstInstance;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeControls.onlyOneLevel;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNodeImpl;
@@ -234,7 +235,7 @@ public class NiftyLayout {
       if (layoutNode.isArrangeValid()) {
         layoutNode.arrange(layoutNode.getArrangedRect());
       } else {
-        layoutNode.arrange(new NiftyRect(new NiftyPoint(0, 0),
+        layoutNode.arrange(new NiftyRect(newNiftyPoint(0, 0),
             new NiftySize(nifty.getScreenWidth(), nifty.getScreenHeight())));
       }
       removeArranged();

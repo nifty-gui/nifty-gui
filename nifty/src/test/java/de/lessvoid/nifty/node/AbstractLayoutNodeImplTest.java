@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -148,7 +149,7 @@ public class AbstractLayoutNodeImplTest {
   public void testInvalidateArrange() throws Exception {
     /* Setup Test */
     NiftySize tempSize = new NiftySize(10, 10);
-    NiftyRect tempRect = new NiftyRect(new NiftyPoint(0, 0), tempSize);
+    NiftyRect tempRect = new NiftyRect(newNiftyPoint(0, 0), tempSize);
 
     expect(testInstance.measureInternal(tempSize)).andReturn(tempSize);
     layout.reportMeasureInvalid(testInstance);
@@ -192,7 +193,7 @@ public class AbstractLayoutNodeImplTest {
   public void testGetArrangedRect() throws Exception {
     /* Setup Test */
     NiftySize tempSize = new NiftySize(10, 10);
-    NiftyRect tempRect = new NiftyRect(new NiftyPoint(0, 0), tempSize);
+    NiftyRect tempRect = new NiftyRect(newNiftyPoint(0, 0), tempSize);
 
     layout.reportMeasureInvalid(testInstance);
     expectLastCall();

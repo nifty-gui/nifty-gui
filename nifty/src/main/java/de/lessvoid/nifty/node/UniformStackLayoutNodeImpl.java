@@ -35,6 +35,8 @@ import de.lessvoid.nifty.types.NiftySize;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
+import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
+
 /**
  * The layout node implementation for a uniform stack layout.
  *
@@ -90,9 +92,9 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl<UniformSta
 
       /* Move the origin along the orientation */
       if (orientation == Orientation.Horizontal) {
-        currentOrigin = new NiftyPoint(currentOrigin.getX() + sizePerChild.getWidth(), currentOrigin.getY());
+        currentOrigin = newNiftyPoint(currentOrigin.getX() + sizePerChild.getWidth(), currentOrigin.getY());
       } else {
-        currentOrigin = new NiftyPoint(currentOrigin.getX(), currentOrigin.getY() + sizePerChild.getHeight());
+        currentOrigin = newNiftyPoint(currentOrigin.getX(), currentOrigin.getY() + sizePerChild.getHeight());
       }
     }
   }
