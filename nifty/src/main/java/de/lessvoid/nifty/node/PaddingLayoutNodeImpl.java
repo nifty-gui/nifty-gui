@@ -129,7 +129,7 @@ class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNode> {
 
     NiftyPoint newOrigin = newNiftyPointWithOffset(area.getOrigin(), left, top);
     NiftySize newSize = new NiftySize(area.getSize().getWidth() - left - right, area.getSize().getHeight() - top - bottom);
-    NiftyRect newArea = new NiftyRect(newOrigin, newSize);
+    NiftyRect newArea = NiftyRect.newNiftyRect(newOrigin, newSize);
 
     for (NiftyNodeImpl<?> child : children) {
       getLayout().arrange(child, newArea);

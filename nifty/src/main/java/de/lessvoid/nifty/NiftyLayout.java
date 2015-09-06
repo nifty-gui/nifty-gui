@@ -31,7 +31,6 @@ import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import de.lessvoid.nifty.types.NiftyPoint;
 import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.nifty.types.NiftySize;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
@@ -235,7 +234,7 @@ public class NiftyLayout {
       if (layoutNode.isArrangeValid()) {
         layoutNode.arrange(layoutNode.getArrangedRect());
       } else {
-        layoutNode.arrange(new NiftyRect(newNiftyPoint(0, 0),
+        layoutNode.arrange(NiftyRect.newNiftyRect(newNiftyPoint(0, 0),
             new NiftySize(nifty.getScreenWidth(), nifty.getScreenHeight())));
       }
       removeArranged();

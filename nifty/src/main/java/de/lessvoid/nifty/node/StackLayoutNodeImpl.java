@@ -116,7 +116,7 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl<StackLayoutNode> 
         nextOrigin = newNiftyPoint(currentOrigin.getX(), currentOrigin.getY() + arrangedSize.getHeight());
       }
 
-      getLayout().arrange(child, new NiftyRect(currentOrigin, arrangedSize));
+      getLayout().arrange(child, NiftyRect.newNiftyRect(currentOrigin, arrangedSize));
       currentOrigin = nextOrigin;
     }
   }

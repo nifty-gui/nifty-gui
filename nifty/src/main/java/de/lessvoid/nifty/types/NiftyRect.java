@@ -24,7 +24,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package de.lessvoid.nifty.types;
 
 import javax.annotation.Nonnull;
@@ -41,7 +40,7 @@ import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
 @Immutable
 public final class NiftyRect {
   @Nonnull
-  public static final NiftyRect INVALID = new NiftyRect(newNiftyPoint(0, 0), NiftySize.INVALID);
+  public static final NiftyRect INVALID = newNiftyRect(newNiftyPoint(0, 0), NiftySize.INVALID);
 
   @Nonnull
   private final NiftyPoint origin;
@@ -49,7 +48,11 @@ public final class NiftyRect {
   @Nonnull
   private final NiftySize size;
 
-  public NiftyRect(@Nonnull final NiftyPoint origin, @Nonnull final NiftySize size) {
+  public static NiftyRect newNiftyRect(@Nonnull final NiftyPoint origin, @Nonnull final NiftySize size) {
+    return new NiftyRect(origin, size);
+  }
+
+  private NiftyRect(@Nonnull final NiftyPoint origin, @Nonnull final NiftySize size) {
     this.origin = origin;
     this.size = size;
   }

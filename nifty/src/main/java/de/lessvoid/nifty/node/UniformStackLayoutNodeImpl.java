@@ -88,7 +88,7 @@ final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl<UniformSta
     NiftySize sizePerChild = getSizePerChild(area.getSize(), children.size());
     NiftyPoint currentOrigin = area.getOrigin();
     for (NiftyNodeImpl<?> child : children) {
-      getLayout().arrange(child, new NiftyRect(currentOrigin, sizePerChild));
+      getLayout().arrange(child, NiftyRect.newNiftyRect(currentOrigin, sizePerChild));
 
       /* Move the origin along the orientation */
       if (orientation == Orientation.Horizontal) {
