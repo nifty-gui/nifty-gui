@@ -40,11 +40,17 @@ public final class UniformStackLayoutNode implements NiftyNode {
   @Nonnull
   private final UniformStackLayoutNodeImpl implementation;
 
-  public UniformStackLayoutNode() {
-    this(Orientation.Vertical);
+  @Nonnull
+  public static UniformStackLayoutNode uniformStackLayoutNode() {
+    return uniformStackLayoutNode(Orientation.Vertical);
   }
 
-  public UniformStackLayoutNode(@Nonnull final Orientation orientation) {
+  @Nonnull
+  public static UniformStackLayoutNode uniformStackLayoutNode(@Nonnull final Orientation orientation) {
+    return new UniformStackLayoutNode(orientation);
+  }
+
+  private UniformStackLayoutNode(@Nonnull final Orientation orientation) {
     this(new UniformStackLayoutNodeImpl(orientation));
   }
 

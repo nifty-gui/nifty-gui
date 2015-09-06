@@ -39,15 +39,27 @@ public final class StackLayoutNode implements NiftyNode {
   @Nonnull
   private final StackLayoutNodeImpl implementation;
 
-  public StackLayoutNode() {
-    this(Orientation.Vertical);
+  @Nonnull
+  public static StackLayoutNode stackLayoutNode() {
+    return stackLayoutNode(Orientation.Vertical);
   }
 
-  public StackLayoutNode(@Nonnull final Orientation orientation) {
-    this(orientation, false);
+  @Nonnull
+  public static StackLayoutNode stackLayoutNode(final boolean stretchLast) {
+    return stackLayoutNode(Orientation.Vertical, stretchLast);
   }
 
-  public StackLayoutNode(@Nonnull final Orientation orientation, final boolean stretchLast) {
+  @Nonnull
+  public static StackLayoutNode stackLayoutNode(@Nonnull final Orientation orientation) {
+    return stackLayoutNode(orientation, false);
+  }
+
+  @Nonnull
+  public static StackLayoutNode stackLayoutNode(@Nonnull final Orientation orientation, final boolean stretchLast) {
+    return new StackLayoutNode(orientation, stretchLast);
+  }
+
+  private StackLayoutNode(@Nonnull final Orientation orientation, final boolean stretchLast) {
     this(new StackLayoutNodeImpl(orientation, stretchLast));
   }
 

@@ -18,15 +18,22 @@ public final class AbsoluteLayoutChildNode implements NiftyNode {
   @Nonnull
   private final AbsoluteLayoutChildNodeImpl implementation;
 
-  public AbsoluteLayoutChildNode() {
-    this(0.f, 0.f);
+  @Nonnull
+  public static AbsoluteLayoutChildNode absoluteLayoutChildNode(@Nonnull final NiftyPoint point) {
+    return new AbsoluteLayoutChildNode(point);
   }
 
-  public AbsoluteLayoutChildNode(final float x, final float y) {
-    this(newNiftyPoint(x, y));
+  @Nonnull
+  public static AbsoluteLayoutChildNode absoluteLayoutChildNode(final float x, final float y) {
+    return absoluteLayoutChildNode(newNiftyPoint(x, y));
   }
 
-  public AbsoluteLayoutChildNode(@Nonnull final NiftyPoint point) {
+  @Nonnull
+  public static AbsoluteLayoutChildNode absoluteLayoutChildNode() {
+    return absoluteLayoutChildNode(0.f, 0.f);
+  }
+
+  private AbsoluteLayoutChildNode(@Nonnull final NiftyPoint point) {
     this(new AbsoluteLayoutChildNodeImpl(point));
   }
 

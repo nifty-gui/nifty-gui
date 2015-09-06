@@ -15,11 +15,17 @@ public final class FixedSizeLayoutNode implements NiftyNode {
   @Nonnull
   private final FixedSizeLayoutNodeImpl implementation;
 
-  public FixedSizeLayoutNode(final float width, final float height) {
-    this(newNiftySize(width, height));
+  @Nonnull
+  public static FixedSizeLayoutNode fixedSizeLayoutNode(@Nonnull final NiftySize size) {
+    return new FixedSizeLayoutNode(size);
   }
 
-  public FixedSizeLayoutNode(@Nonnull final NiftySize size) {
+  @Nonnull
+  public static FixedSizeLayoutNode fixedSizeLayoutNode(final float width, final float height) {
+    return fixedSizeLayoutNode(newNiftySize(width, height));
+  }
+
+  private FixedSizeLayoutNode(@Nonnull final NiftySize size) {
     this(new FixedSizeLayoutNodeImpl(size));
   }
 

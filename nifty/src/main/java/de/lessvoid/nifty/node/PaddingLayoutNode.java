@@ -12,19 +12,27 @@ public final class PaddingLayoutNode implements NiftyNode {
   @Nonnull
   private final PaddingLayoutNodeImpl implementation;
 
-  public PaddingLayoutNode(final float allSides) {
-    this(allSides, allSides);
+  @Nonnull
+  public static PaddingLayoutNode paddingLayoutNode(final float allSides) {
+    return paddingLayoutNode(allSides, allSides);
   }
 
-  public PaddingLayoutNode(final float topBottom, final float rightLeft) {
-    this(topBottom, rightLeft, topBottom);
+  @Nonnull
+  public static PaddingLayoutNode paddingLayoutNode(final float topBottom, final float rightLeft) {
+    return paddingLayoutNode(topBottom, rightLeft, topBottom);
   }
 
-  public PaddingLayoutNode(final float top, final float rightLeft, final float bottom) {
-    this(top, rightLeft, bottom, rightLeft);
+  @Nonnull
+  public static PaddingLayoutNode paddingLayoutNode(final float top, final float rightLeft, final float bottom) {
+    return paddingLayoutNode(top, rightLeft, bottom, rightLeft);
   }
 
-  public PaddingLayoutNode(final float top, final float right, final float bottom, final float left) {
+  @Nonnull
+  public static PaddingLayoutNode paddingLayoutNode(final float top, final float right, final float bottom, final float left) {
+    return new PaddingLayoutNode(top, right, bottom, left);
+  }
+
+  private PaddingLayoutNode(final float top, final float right, final float bottom, final float left) {
     this(new PaddingLayoutNodeImpl(top, right, bottom, left));
   }
 

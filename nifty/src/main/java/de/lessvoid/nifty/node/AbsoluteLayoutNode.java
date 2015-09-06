@@ -14,7 +14,12 @@ public final class AbsoluteLayoutNode implements NiftyNode {
   @Nonnull
   private final AbsoluteLayoutNodeImpl implementation;
 
-  public AbsoluteLayoutNode() {
+  @Nonnull
+  public static AbsoluteLayoutNode absoluteLayoutNode() {
+    return new AbsoluteLayoutNode();
+  }
+
+  private AbsoluteLayoutNode() {
     this(new AbsoluteLayoutNodeImpl());
   }
 
