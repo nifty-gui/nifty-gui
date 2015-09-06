@@ -140,8 +140,14 @@ public class Nifty {
     stats = statistics.getImpl();
     renderer = new InternalNiftyRenderer(statistics.getImpl(), newRenderDevice);
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
-    tree = new InternalNiftyTree(niftyNodeImpl(new NiftyRootNode()));
+
+    NiftyNodeImpl<NiftyRootNode> rootNodeImpl = niftyNodeImpl(new NiftyRootNode());
+    tree = new InternalNiftyTree(rootNodeImpl);
     layout = new NiftyLayout(this, tree);
+
+    if (rootNodeImpl instanceof NiftyLayoutNodeImpl) {
+      ((NiftyLayoutNodeImpl) rootNodeImpl).onAttach(layout);
+    }
   }
 
   /**

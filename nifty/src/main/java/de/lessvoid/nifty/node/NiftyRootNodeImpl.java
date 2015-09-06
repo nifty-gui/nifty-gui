@@ -52,7 +52,11 @@ final class NiftyRootNodeImpl extends AbstractLayoutNodeImpl<NiftyRootNode> {
   @Override
   protected NiftySize measureInternal(@Nonnull final NiftySize availableSize) {
     Nifty nifty = getLayout().getNifty();
-    return newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight());
+    NiftySize size = newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight());
+    for (NiftyNodeImpl<?> child : getLayout().getDirectChildren(this)) {
+      getLayout().measure(child, size);
+    }
+    return size;
   }
 
   @Override
