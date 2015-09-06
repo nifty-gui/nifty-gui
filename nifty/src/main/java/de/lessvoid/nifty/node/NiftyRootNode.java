@@ -28,21 +28,25 @@ package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.spi.node.NiftyNode;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by void on 08.08.15.
  */
-public class NiftyRootNode implements NiftyNode {
+public final class NiftyRootNode implements NiftyNode {
+  @Nonnull
   private final NiftyRootNodeImpl impl;
 
   public NiftyRootNode() {
-    impl = new NiftyRootNodeImpl();
+    this(new NiftyRootNodeImpl());
   }
 
-  NiftyRootNode(final NiftyRootNodeImpl impl) {
+  NiftyRootNode(@Nonnull final NiftyRootNodeImpl impl) {
     this.impl = impl;
   }
 
   @Override
+  @Nonnull
   public String toString() {
     return "root";
   }
@@ -53,16 +57,17 @@ public class NiftyRootNode implements NiftyNode {
     if (o == null || getClass() != o.getClass()) return false;
 
     NiftyRootNode that = (NiftyRootNode) o;
-    return !(impl != null ? !impl.equals(that.impl) : that.impl != null);
+    return impl.equals(that.impl);
   }
 
   @Override
   public int hashCode() {
-    return impl != null ? impl.hashCode() : 0;
+    return impl.hashCode();
   }
 
   // friend access
 
+  @Nonnull
   NiftyRootNodeImpl getImpl() {
     return impl;
   }

@@ -100,6 +100,12 @@ public class NiftyLayout {
     nodeTree = tree;
   }
 
+
+  @Nonnull
+  public Nifty getNifty() {
+    return nifty;
+  }
+
   /**
    * Report the removal of a specific node. This causes the parent node to require a recalculation.
    *
