@@ -34,6 +34,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
+ * The layout node implementation for a uniform stack layout.
+ *
+ * <p>This layout type is able to place multiple child nodes in either horizontal or vertical orientation. Every
+ * child element is the same size assigned</p>
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class UniformStackLayoutNode implements NiftyNode {

@@ -38,11 +38,6 @@ import java.util.Collection;
 import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
 
 /**
- * The layout node implementation for a uniform stack layout.
- *
- * <p>This layout type is able to place multiple child nodes in either horizontal or vertical orientation. Every
- * child element is the same size assigned</p>
- *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 final class UniformStackLayoutNodeImpl extends AbstractLayoutNodeImpl<UniformStackLayoutNode> {

@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 /**
  * This is a layout node for a absolute value. It will place every single child node at 0,0 unless it is a
  * {@link AbsoluteLayoutChildNode} that supports setting a location.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class AbsoluteLayoutNode implements NiftyNode {

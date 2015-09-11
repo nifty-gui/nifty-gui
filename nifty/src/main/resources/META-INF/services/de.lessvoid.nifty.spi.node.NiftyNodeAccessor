@@ -8,5 +8,6 @@ de.lessvoid.nifty.node.AbsoluteLayoutChildNodeAccessor
 de.lessvoid.nifty.node.AbsoluteLayoutNodeAccessor
 de.lessvoid.nifty.node.FixedSizeLayoutNodeAccessor
 de.lessvoid.nifty.node.PaddingLayoutNodeAccessor
+de.lessvoid.nifty.node.SimpleLayoutNodeAccessor
 de.lessvoid.nifty.node.StackLayoutNodeAccessor
 de.lessvoid.nifty.node.UniformStackLayoutNodeAccessor

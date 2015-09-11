@@ -29,67 +29,46 @@ package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
+import de.lessvoid.nifty.types.NiftySize;
 
 import javax.annotation.Nonnull;
 
+import static de.lessvoid.nifty.types.NiftySize.newNiftySize;
+
 /**
- * The layout node implementation for a stack layout.
- *
- * <p>This layout type is able to place multiple child nodes in either horizontal or vertical orientation.</p>
+ * This type of layout node has the maximal size of any of it's children as size requirement and forwards the
+ * arrangement to all children in the same way.
+ * <p />
+ * This node is very handy to have a additional layer of layout nodes that are able to receive some layout data
+ * before attaching additional nodes that receive the layout data.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public final class StackLayoutNode implements NiftyNode {
+public final class SimpleLayoutNode implements NiftyNode {
   @Nonnull
-  private final StackLayoutNodeImpl implementation;
-
-  @Nonnull
-  public static StackLayoutNode stackLayoutNode() {
-    return stackLayoutNode(Orientation.Vertical);
-  }
+  private final SimpleLayoutNodeImpl implementation;
 
   @Nonnull
-  public static StackLayoutNode stackLayoutNode(final boolean stretchLast) {
-    return stackLayoutNode(Orientation.Vertical, stretchLast);
+  public static SimpleLayoutNode simpleLayoutNode() {
+    return new SimpleLayoutNode();
   }
 
-  @Nonnull
-  public static StackLayoutNode stackLayoutNode(@Nonnull final Orientation orientation) {
-    return stackLayoutNode(orientation, false);
+  private SimpleLayoutNode() {
+    this(new SimpleLayoutNodeImpl());
   }
 
-  @Nonnull
-  public static StackLayoutNode stackLayoutNode(@Nonnull final Orientation orientation, final boolean stretchLast) {
-    return new StackLayoutNode(orientation, stretchLast);
-  }
-
-  private StackLayoutNode(@Nonnull final Orientation orientation, final boolean stretchLast) {
-    this(new StackLayoutNodeImpl(orientation, stretchLast));
-  }
-
-  StackLayoutNode(@Nonnull final StackLayoutNodeImpl implementation) {
+  SimpleLayoutNode(@Nonnull final SimpleLayoutNodeImpl implementation) {
     this.implementation = implementation;
   }
 
   @Nonnull
-  public Orientation getOrientation() {
-    return implementation.getOrientation();
-  }
-
-  public void setOrientation(@Nonnull final Orientation orientation) {
-    implementation.setOrientation(orientation);
-  }
-
-  public boolean isStretchLast() {
-    return implementation.isStretchLast();
-  }
-
-  public void setStretchLast(final boolean stretchLast) {
-    implementation.setStretchLast(stretchLast);
+  NiftyNodeImpl<SimpleLayoutNode> getImpl() {
+    return implementation;
   }
 
   @Nonnull
-  NiftyNodeImpl<StackLayoutNode> getImpl() {
-    return implementation;
+  @Override
+  public String toString() {
+    return "(SimpleLayoutNode)";
   }
 }

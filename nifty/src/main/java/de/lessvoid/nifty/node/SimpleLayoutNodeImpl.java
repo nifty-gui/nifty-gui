@@ -37,39 +37,16 @@ import java.util.Collection;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-final class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayoutNode> {
-  @Nonnull
-  private NiftySize size;
-
-  public FixedSizeLayoutNodeImpl(@Nonnull final NiftySize size) {
-    if (size.isInfinite() || size.isInvalid()) throw new IllegalArgumentException("The size has to be a finite value.");
-
-    this.size = size;
-  }
-
-  @Nonnull
-  public NiftySize getSize() {
-    return size;
-  }
-
-  public void setSize(@Nonnull final NiftySize size) {
-    if (size.isInfinite() || size.isInvalid()) throw new IllegalArgumentException("The size has to be a finite value.");
-
-    if (!this.size.equals(size)) {
-      this.size = size;
-      invalidateMeasure();
-    }
-  }
-
+final class SimpleLayoutNodeImpl extends AbstractLayoutNodeImpl<SimpleLayoutNode> {
   @Nonnull
   @Override
   protected NiftySize measureInternal(@Nonnull final NiftySize availableSize) {
-    /* Even if the measuring data of the children is not required, the children still need to be measured to ensure
-     * that their size data is up to date. */
+    NiftySize result = NiftySize.ZERO;
     for (NiftyNodeImpl<?> child : getLayout().getDirectChildren(this)) {
-      getLayout().measure(child, size);
+      NiftySize childSize = getLayout().measure(child, availableSize);
+      result = NiftySize.max(result, childSize);
     }
-    return size;
+    return result;
   }
 
   @Override
@@ -86,7 +63,7 @@ final class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayo
   }
 
   @Override
-  protected FixedSizeLayoutNode createNode() {
-    return new FixedSizeLayoutNode(this);
+  protected SimpleLayoutNode createNode() {
+    return new SimpleLayoutNode(this);
   }
 }

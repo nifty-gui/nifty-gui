@@ -36,6 +36,7 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
 import de.lessvoid.nifty.spi.TimeProvider;
 import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
+import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.niftyinternal.InternalNiftyEventBus;
@@ -335,10 +336,8 @@ public class Nifty {
       @Nonnull final NiftyNode parent,
       @Nonnull final NiftyNode child) {
     NiftyNodeImpl<? extends NiftyNode> childImpl = niftyNodeImpl(child);
+    processNodeAdding(childImpl);
     tree.addChild(niftyNodeImpl(parent), childImpl);
-    if (childImpl instanceof NiftyLayoutNodeImpl) {
-      ((NiftyLayoutNodeImpl) childImpl).onAttach(layout);
-    }
     return new NiftyNodeBuilder(this, parent, child);
   }
 
@@ -349,10 +348,8 @@ public class Nifty {
    */
   public void remove(@Nonnull final NiftyNode niftyNode) {
     NiftyNodeImpl<? extends NiftyNode> nodeImpl = niftyNodeImpl(niftyNode);
-    if (nodeImpl instanceof NiftyLayoutNodeImpl) {
-      ((NiftyLayoutNodeImpl) nodeImpl).onDetach(layout);
-    }
     tree.remove(nodeImpl);
+    processNodeRemoving(nodeImpl);
   }
 
   /**
@@ -391,6 +388,7 @@ public class Nifty {
     return tree.childNodes(nodeClass(clazz), toNiftyNodeClass(clazz), niftyNodeImpl(startNode));
   }
 
+  @Nonnull
   private <T extends NiftyNode> NiftyNodeImpl<T> niftyNodeImpl(final T child) {
     return nodeAccessorRegistry.getImpl(child);
   }
@@ -458,6 +456,33 @@ public class Nifty {
         return false;
       }
     });
+  }
+
+  /**
+   * Prepare the node before adding them to the Nifty Node Tree. Any kind of initialization the specific node type
+   * requires is done here.
+   *
+   * @param newNodeImpl the node implementation that is added to the tree
+   */
+  private void processNodeAdding(@Nonnull final NiftyNodeImpl<? extends NiftyNode> newNodeImpl) {
+    if (newNodeImpl instanceof NiftyLayoutNodeImpl) {
+      ((NiftyLayoutNodeImpl) newNodeImpl).onAttach(layout);
+    }
+    if (newNodeImpl instanceof NiftyLayoutReceiver) {
+      layout.reportNewReceivers((NiftyLayoutReceiver<?>) newNodeImpl);
+    }
+  }
+
+  /**
+   * Inform the node that it was removed from the tree if required. This function is called directly after the node
+   * is removed from the tree.
+   *
+   * @param newNodeImpl the node implementation that was removed from the tree
+   */
+  private void processNodeRemoving(@Nonnull final NiftyNodeImpl<? extends NiftyNode> newNodeImpl) {
+    if (newNodeImpl instanceof NiftyLayoutNodeImpl) {
+      ((NiftyLayoutNodeImpl) newNodeImpl).onDetach(layout);
+    }
   }
 
   // Friend methods

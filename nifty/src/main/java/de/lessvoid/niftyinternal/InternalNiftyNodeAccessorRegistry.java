@@ -26,6 +26,7 @@ public class InternalNiftyNodeAccessorRegistry {
     }
   }
 
+  @Nonnull
   public <T extends NiftyNode> NiftyNodeImpl<T> getImpl(@Nonnull final T niftyNode) {
     //noinspection unchecked
     NiftyNodeAccessor<T> niftyNodeAccessor = accessorMap.get(niftyNode.getClass());
