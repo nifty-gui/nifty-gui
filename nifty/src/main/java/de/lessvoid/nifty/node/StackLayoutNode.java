@@ -33,6 +33,10 @@ import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import javax.annotation.Nonnull;
 
 /**
+ * The layout node implementation for a stack layout.
+ *
+ * <p>This layout type is able to place multiple child nodes in either horizontal or vertical orientation.</p>
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class StackLayoutNode implements NiftyNode {

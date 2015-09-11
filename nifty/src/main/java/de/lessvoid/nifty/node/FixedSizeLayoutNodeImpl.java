@@ -52,7 +52,7 @@ final class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayo
     return size;
   }
 
-  public void setSize(@Nonnull NiftySize size) {
+  public void setSize(@Nonnull final NiftySize size) {
     if (size.isInfinite() || size.isInvalid()) throw new IllegalArgumentException("The size has to be a finite value.");
 
     if (!this.size.equals(size)) {
@@ -64,6 +64,8 @@ final class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayo
   @Nonnull
   @Override
   protected NiftySize measureInternal(@Nonnull final NiftySize availableSize) {
+    /* Even if the measuring data of the children is not required, the children still need to be measured to ensure
+     * that their size data is up to date. */
     for (NiftyNodeImpl<?> child : getLayout().getDirectChildren(this)) {
       getLayout().measure(child, size);
     }

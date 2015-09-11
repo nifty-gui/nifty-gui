@@ -10,7 +10,8 @@ import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
 
 /**
  * This is a child layout node for the {@link AbsoluteLayoutNode}. This node allows to set the x and y coordinate
- * where the node is placed.
+ * where the node is placed. Aside from the additional information applied, acts in the same way as a
+ * {@link SimpleLayoutNode}. So it just arranges any child item to it's full available size.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */

@@ -6,6 +6,12 @@ import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import javax.annotation.Nonnull;
 
 /**
+ * The padding layout nodes applies a padding to the inner layout nodes. Each direct inner layout node is subject to
+ * the padding applied.
+ * <p />
+ * Each child node will be stretched to the full available size minus the padding. The desired size will be the
+ * maximum size requested by the child nodes plus the padding.
+ *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class PaddingLayoutNode implements NiftyNode {

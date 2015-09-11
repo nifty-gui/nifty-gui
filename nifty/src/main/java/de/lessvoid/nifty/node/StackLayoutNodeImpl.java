@@ -39,10 +39,6 @@ import java.util.List;
 import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
 
 /**
- * The layout node implementation for a stack layout.
- *
- * <p>This layout type is able to place multiple child nodes in either horizontal or vertical orientation.</p>
- *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl<StackLayoutNode> {
