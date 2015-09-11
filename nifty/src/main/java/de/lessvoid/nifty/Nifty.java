@@ -36,6 +36,7 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
 import de.lessvoid.nifty.spi.TimeProvider;
 import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
+import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.niftyinternal.InternalNiftyEventBus;
@@ -463,9 +464,12 @@ public class Nifty {
    *
    * @param newNodeImpl the node implementation that is added to the tree
    */
-  private void processNodeAdding(@Nonnull NiftyNodeImpl<? extends NiftyNode> newNodeImpl) {
+  private void processNodeAdding(@Nonnull final NiftyNodeImpl<? extends NiftyNode> newNodeImpl) {
     if (newNodeImpl instanceof NiftyLayoutNodeImpl) {
       ((NiftyLayoutNodeImpl) newNodeImpl).onAttach(layout);
+    }
+    if (newNodeImpl instanceof NiftyLayoutReceiver) {
+      layout.reportNewReceivers((NiftyLayoutReceiver<?>) newNodeImpl);
     }
   }
 
@@ -475,7 +479,7 @@ public class Nifty {
    *
    * @param newNodeImpl the node implementation that was removed from the tree
    */
-  private void processNodeRemoving(@Nonnull NiftyNodeImpl<? extends NiftyNode> newNodeImpl) {
+  private void processNodeRemoving(@Nonnull final NiftyNodeImpl<? extends NiftyNode> newNodeImpl) {
     if (newNodeImpl instanceof NiftyLayoutNodeImpl) {
       ((NiftyLayoutNodeImpl) newNodeImpl).onDetach(layout);
     }

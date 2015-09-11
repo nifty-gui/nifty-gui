@@ -79,6 +79,12 @@ public class NiftyLayout {
   private final Queue<NiftyLayoutNodeImpl<? extends NiftyNode>> unpublishedArrangements;
 
   /**
+   * The layout receivers that were added to the Nifty-Tree but did not yet receive new layout data.
+   */
+  @Nonnull
+  private final Queue<NiftyLayoutReceiver<? extends NiftyNode>> newReceivers;
+
+  /**
    * The node tree that is used to locate parent and children nodes.
    * <p />
    * TODO: Verify if the internal implementation for the public implementation should be used
@@ -96,6 +102,7 @@ public class NiftyLayout {
     invalidMeasureReports = new LinkedList<>();
     invalidArrangeReports = new LinkedList<>();
     unpublishedArrangements = new LinkedList<>();
+    newReceivers = new LinkedList<>();
     this.nifty = nifty;
     nodeTree = tree;
   }
@@ -153,11 +160,21 @@ public class NiftyLayout {
   }
 
   /**
+   * Report a new receiver that was added to the Nifty tree and requires new layout data.
+   *
+   * @param receiver the receiver that was added
+   */
+  void reportNewReceivers(@Nonnull final NiftyLayoutReceiver<? extends NiftyNode> receiver) {
+    newReceivers.add(receiver);
+  }
+
+  /**
    * This function triggers the entire layout process.
    */
   void update() {
     measure();
     arrange();
+    publishNewReceivers();
     publishArrangements();
   }
 
@@ -175,7 +192,7 @@ public class NiftyLayout {
     @Nullable NiftyLayoutNodeImpl<?> currentLayoutNode;
     while ((currentLayoutNode = invalidMeasureReports.poll()) != null) {
       NiftyLayoutNodeImpl parentNode = nodeTree.getParent(NiftyLayoutNodeImpl.class, currentLayoutNode);
-      if (parentNode != null && parentNode.isMeasureValid()) {
+      if ((parentNode != null) && parentNode.isMeasureValid()) {
         parentNode.invalidateMeasure();
       }
     }
@@ -230,7 +247,6 @@ public class NiftyLayout {
     }
 
     for (NiftyLayoutNodeImpl<?> layoutNode : getChildLayoutNodes()) {
-
       layoutNode.arrange(newNiftyRect(ZERO, newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight())));
       removeArranged();
       if (invalidArrangeReports.isEmpty()) {
@@ -254,6 +270,20 @@ public class NiftyLayout {
     while (itr.hasNext()) {
       if (itr.next().isArrangeValid()) {
         itr.remove();
+      }
+    }
+  }
+
+  private void publishNewReceivers() {
+    if (newReceivers.isEmpty()) {
+      return;
+    }
+
+    NiftyLayoutReceiver<?> newReceiver;
+    while ((newReceiver = newReceivers.poll()) != null) {
+      NiftyLayoutNodeImpl<?> parentLayoutNode = nodeTree.getParent(NiftyLayoutNodeImpl.class, newReceiver);
+      if ((parentLayoutNode != null) && parentLayoutNode.isArrangeValid()) {
+        reportChangedArrangement(parentLayoutNode);
       }
     }
   }
