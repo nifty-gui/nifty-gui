@@ -78,6 +78,20 @@ public final class NiftyRect {
     return (other != null) && size.equals(other.size, tolerance) && origin.equals(other.origin, tolerance);
   }
 
+  public boolean isOverlapping(final NiftyRect other) {
+    float otherx0 = other.getOrigin().getX();
+    float othery0 = other.getOrigin().getY();
+    float otherx1 = other.getOrigin().getX() + other.getSize().getWidth() - 1.f;
+    float othery1 = other.getOrigin().getY() + other.getSize().getHeight() - 1.f;
+
+    float x0 = getOrigin().getX();
+    float y0 = getOrigin().getY();
+    float x1 = getOrigin().getX() + other.getSize().getWidth() - 1.f;
+    float y1 = getOrigin().getY() + other.getSize().getHeight() - 1.f;
+
+    return !((x0 > otherx1) || (x1 < otherx0) || (y0 > othery1) || (y1 < othery0));
+  }
+
   @Override
   public int hashCode() {
     int hash = 31;

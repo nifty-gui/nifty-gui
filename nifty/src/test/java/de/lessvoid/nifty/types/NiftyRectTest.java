@@ -63,4 +63,67 @@ public class NiftyRectTest {
     NiftyRect rect2 = newNiftyRect(newNiftyPoint(20.00f, 21.00f), NiftySize.newNiftySize(10.02f, 11.00f));
     assertTrue(rect1.equals(rect2, 0.1f));
   }
+
+  @Test
+  public void testNotOverlappingLeft() {
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(100.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint( 90.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    assertFalse(rect1.isOverlapping(rect2));
+  }
+
+  @Test
+  public void testOverlappingLeft() {
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(100.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint( 91.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    assertTrue(rect1.isOverlapping(rect2));
+  }
+
+  @Test
+  public void testNotOverlappingRight() {
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(100.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint(110.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    assertFalse(rect1.isOverlapping(rect2));
+  }
+
+  @Test
+  public void testOverlappingRight() {
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(100.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint(109.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    assertTrue(rect1.isOverlapping(rect2));
+  }
+
+  @Test
+  public void testNotOverlappingTop() {
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(100.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint(100.f,  90.f), NiftySize.newNiftySize(10.f, 10.f));
+    assertFalse(rect1.isOverlapping(rect2));
+  }
+
+  @Test
+  public void testOverlappingTop() {
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(100.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint(100.f,  91.f), NiftySize.newNiftySize(10.f, 10.f));
+    assertTrue(rect1.isOverlapping(rect2));
+  }
+
+  @Test
+  public void testNotOverlappingBottom() {
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(100.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint(100.f, 110.f), NiftySize.newNiftySize(10.f, 10.f));
+    assertFalse(rect1.isOverlapping(rect2));
+  }
+
+  @Test
+  public void testOverlappingBottom() {
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(100.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint(100.f, 109.f), NiftySize.newNiftySize(10.f, 10.f));
+    assertTrue(rect1.isOverlapping(rect2));
+  }
+
+  @Test
+  public void testTotallyOverlapping() {
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(100.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint(100.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
+    assertTrue(rect1.isOverlapping(rect2));
+  }
 }
