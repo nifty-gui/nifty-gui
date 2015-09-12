@@ -59,6 +59,13 @@ public final class NiftySize {
     }
   }
 
+  @Nonnull
+  public static NiftySize max(@Nonnull final NiftySize size1,
+                              @Nonnull final NiftySize size2,
+                              @Nonnull final NiftySize size3) {
+    return max(max(size1, size2), size3);
+  }
+
   private NiftySize(final float width, final float height) {
     this.width = width;
     this.height = height;

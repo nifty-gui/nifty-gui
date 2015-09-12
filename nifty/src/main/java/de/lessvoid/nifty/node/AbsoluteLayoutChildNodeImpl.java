@@ -24,7 +24,7 @@ final class AbsoluteLayoutChildNodeImpl extends AbstractLayoutNodeImpl<AbsoluteL
     return point;
   }
 
-  public void setPoint(@Nonnull NiftyPoint point) {
+  public void setPoint(@Nonnull final NiftyPoint point) {
     if (!this.point.equals(point)) {
       this.point = point;
       invalidateMeasure();
@@ -33,7 +33,7 @@ final class AbsoluteLayoutChildNodeImpl extends AbstractLayoutNodeImpl<AbsoluteL
 
   @Nonnull
   @Override
-  protected NiftySize measureInternal(@Nonnull NiftySize availableSize) {
+  protected NiftySize measureInternal(@Nonnull final NiftySize availableSize) {
     Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements, means that we do not require any size. */
@@ -48,7 +48,7 @@ final class AbsoluteLayoutChildNodeImpl extends AbstractLayoutNodeImpl<AbsoluteL
   }
 
   @Override
-  protected void arrangeInternal(@Nonnull NiftyRect area) {
+  protected void arrangeInternal(@Nonnull final NiftyRect area) {
     Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements -> We are all done. */

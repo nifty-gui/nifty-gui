@@ -18,7 +18,7 @@ import static de.lessvoid.nifty.types.NiftyRect.newNiftyRect;
 final class AbsoluteLayoutNodeImpl extends AbstractLayoutNodeImpl<AbsoluteLayoutNode> {
   @Nonnull
   @Override
-  protected NiftySize measureInternal(@Nonnull NiftySize availableSize) {
+  protected NiftySize measureInternal(@Nonnull final NiftySize availableSize) {
     NiftySize resultSize = NiftySize.ZERO;
     for (NiftyLayoutNodeImpl<?> childLayoutNode : getLayout().getChildLayoutNodes(this)) {
       NiftyPoint location = NiftyPoint.ZERO;
@@ -33,7 +33,7 @@ final class AbsoluteLayoutNodeImpl extends AbstractLayoutNodeImpl<AbsoluteLayout
   }
 
   @Override
-  protected void arrangeInternal(@Nonnull NiftyRect area) {
+  protected void arrangeInternal(@Nonnull final NiftyRect area) {
     for (NiftyLayoutNodeImpl<?> childLayoutNode : getLayout().getChildLayoutNodes(this)) {
       NiftyPoint location = NiftyPoint.ZERO;
       if (childLayoutNode instanceof AbsoluteLayoutChildNodeImpl) {
