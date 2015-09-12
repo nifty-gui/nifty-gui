@@ -173,8 +173,8 @@ public class NiftyLayout {
    */
   void update() {
     measure();
-    arrange();
     publishNewReceivers();
+    arrange();
     publishArrangements();
   }
 

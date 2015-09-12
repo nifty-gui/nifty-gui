@@ -92,6 +92,6 @@ public final class DockLayoutChildNode implements NiftyNode {
   @Nonnull
   @Override
   public String toString() {
-    return "(DockLayoutChildNode)";
+    return "(DockLayoutChildNode) [" + getDock().name() + "]";
   }
 }
