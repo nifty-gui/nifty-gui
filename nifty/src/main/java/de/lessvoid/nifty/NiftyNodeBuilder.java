@@ -26,6 +26,7 @@
  */
 package de.lessvoid.nifty;
 
+import de.lessvoid.nifty.node.NiftyReferenceNode;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 
 /**
@@ -41,7 +42,7 @@ public class NiftyNodeBuilder {
   /**
    * Nifty will return this instance for you. You're not supposed to construct it yourself.
    * @param nifty the Nifty instance
-   * @param parent
+   * @param parent the parent node
    * @param node the node node just added
    */
   NiftyNodeBuilder(final Nifty nifty, final NiftyNode parent, final NiftyNode node) {
@@ -85,5 +86,17 @@ public class NiftyNodeBuilder {
    */
   public NiftyNodeBuilder addSibling(final NiftyNode sibling) {
     return nifty.addNode(parent, sibling);
+  }
+
+  /**
+   * Find a NiftyReferenceNode for the given nodeId and a return a NiftyNodeBuilder to add nodes as child nodes to this
+   * reference node.
+   *
+   * @param nodeId the referenceNode to lookup
+   * @return a NiftyNodeBuilder
+   */
+  public NiftyNodeBuilder addAsChildOf(final String nodeId) {
+    NiftyReferenceNode referenceNode = nifty.getNiftyReferenceNode(nodeId);
+    return new NiftyNodeBuilder(nifty, nifty.getParent(referenceNode), referenceNode);
   }
 }

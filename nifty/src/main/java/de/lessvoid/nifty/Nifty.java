@@ -55,7 +55,9 @@ import org.jglfont.JGLFontFactory;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNiftyNode;
@@ -108,6 +110,9 @@ public class Nifty {
 
   // The main data structure to keep the Nifty scene graph
   private final InternalNiftyTree tree;
+
+  // We keep NiftyReferenceNodes in this map for fast lookup by the reference
+  private final Map<String, NiftyReferenceNode> referenceNodeLookup = new HashMap<>();
 
   //The layout handler for Nifty.
   private final NiftyLayout layout;
@@ -338,6 +343,12 @@ public class Nifty {
     NiftyNodeImpl<? extends NiftyNode> childImpl = niftyNodeImpl(child);
     processNodeAdding(childImpl);
     tree.addChild(niftyNodeImpl(parent), childImpl);
+
+    if (child instanceof NiftyReferenceNode) {
+      NiftyReferenceNode referenceNode = (NiftyReferenceNode) child;
+      referenceNodeLookup.put(referenceNode.getId(), referenceNode);
+    }
+
     return new NiftyNodeBuilder(this, parent, child);
   }
 
@@ -386,6 +397,32 @@ public class Nifty {
   public <X extends NiftyNode> Iterable<X> filteredChildNodes(@Nonnull final Class<X> clazz,
                                                               @Nonnull final NiftyNode startNode) {
     return tree.childNodes(nodeClass(clazz), toNiftyNodeClass(clazz), niftyNodeImpl(startNode));
+  }
+
+  /**
+   * Return a NiftyReferenceNode for the given id.
+   *
+   * @param id the id of the reference node
+   * @return the NiftyReferenceNode that corresponds to the given id or null if the node doesn't exist
+   */
+  public NiftyReferenceNode getNiftyReferenceNode(final String id) {
+    return referenceNodeLookup.get(id);
+  }
+
+  /**
+   * Return the parent NiftyNode of the niftyNode given.
+   *
+   * @param niftyNode the NiftyNode to determine the parent node from
+   * @param <T> NiftyNode
+   * @return the parent NiftyNode
+   */
+  public <T extends NiftyNode> NiftyNode getParent(final T niftyNode) {
+    NiftyNodeImpl<T> impl = niftyNodeImpl(niftyNode);
+    NiftyNodeImpl parent = tree.getParent(impl);
+    if (parent == null) {
+      return null;
+    }
+    return parent.getNiftyNode();
   }
 
   @Nonnull

@@ -29,7 +29,6 @@ package de.lessvoid.nifty.examples.usecase;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyNodeBuilder;
 import de.lessvoid.nifty.node.Orientation;
-import de.lessvoid.nifty.node.SimpleLayoutNode;
 import de.lessvoid.nifty.types.NiftyColor;
 
 import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
@@ -37,6 +36,7 @@ import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
 import static de.lessvoid.nifty.node.FixedSizeLayoutNode.fixedSizeLayoutNode;
 import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.NiftyReferenceNode.referenceNode;
 import static de.lessvoid.nifty.node.SimpleLayoutNode.simpleLayoutNode;
 import static de.lessvoid.nifty.node.UniformStackLayoutNode.uniformStackLayoutNode;
 
@@ -48,17 +48,19 @@ import static de.lessvoid.nifty.node.UniformStackLayoutNode.uniformStackLayoutNo
  */
 public class UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes {
   public UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes(final Nifty nifty) {
-    NiftyNodeBuilder bigNode = nifty.addNode(absoluteLayoutNode())
+    nifty
+      .addNode(absoluteLayoutNode())
         .addNode(absoluteLayoutChildNode())
-        .addNode(fixedSizeLayoutNode(nifty.getScreenWidth() / 2.f, nifty.getScreenHeight() / 2.f))
-        .addNode(uniformStackLayoutNode(Orientation.Vertical));
-
-    bigNode.addNode(backgroundColorNode(NiftyColor.fromString("#ff0f")))
-        .addNode(simpleLayoutNode())
-        .addNode(contentNode())
-    bigNode.addNode(backgroundColorNode(NiftyColor.fromString("#00ff")))
-        .addNode(simpleLayoutNode())
-        .addNode(contentNode());
+          .addNode(fixedSizeLayoutNode(nifty.getScreenWidth() / 2.f, nifty.getScreenHeight() / 2.f))
+            .addNode(uniformStackLayoutNode(Orientation.Vertical))
+              .addNode(referenceNode("node"))
+                .addNode(backgroundColorNode(NiftyColor.fromString("#ff0f")))
+                  .addNode(simpleLayoutNode())
+                    .addNode(contentNode())
+              .addAsChildOf("node")
+                .addNode(backgroundColorNode(NiftyColor.fromString("#00ff")))
+                  .addNode(simpleLayoutNode())
+                    .addNode(contentNode());
   }
 
   public static void main(final String[] args) throws Exception {

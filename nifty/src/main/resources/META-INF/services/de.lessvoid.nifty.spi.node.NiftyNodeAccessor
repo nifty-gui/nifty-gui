@@ -1,3 +1,5 @@
+# Regular Nodes
+de.lessvoid.nifty.node.NiftyReferenceNodeAccessor
 de.lessvoid.nifty.node.NiftyBackgroundColorNodeAccessor
 de.lessvoid.nifty.node.NiftyContentNodeAccessor
 de.lessvoid.nifty.node.NiftyRootNodeAccessor
