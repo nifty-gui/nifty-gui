@@ -51,7 +51,7 @@ public class NiftyReferenceNode implements NiftyNode {
   }
 
   public String toString() {
-    return "(" + this.getClass().getSimpleName() + ") " + impl.getId();
+    return "(" + this.getClass().getSimpleName() + ") id [" + impl.getId() + "]";
   }
 
   @Override

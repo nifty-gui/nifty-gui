@@ -54,12 +54,12 @@ public class UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes {
           .addNode(fixedSizeLayoutNode(nifty.getScreenWidth() / 2.f, nifty.getScreenHeight() / 2.f))
             .addNode(uniformStackLayoutNode(Orientation.Vertical))
               .addNode(referenceNode("node"))
-                .addNode(backgroundColorNode(NiftyColor.fromString("#ff0f")))
-                  .addNode(simpleLayoutNode())
+                .addNode(simpleLayoutNode())
+                  .addNode(backgroundColorNode(NiftyColor.fromString("#ff0f")))
                     .addNode(contentNode())
               .addAsChildOf("node")
-                .addNode(backgroundColorNode(NiftyColor.fromString("#00ff")))
-                  .addNode(simpleLayoutNode())
+                .addNode(simpleLayoutNode())
+                  .addNode(backgroundColorNode(NiftyColor.fromString("#00ff")))
                     .addNode(contentNode());
   }
 

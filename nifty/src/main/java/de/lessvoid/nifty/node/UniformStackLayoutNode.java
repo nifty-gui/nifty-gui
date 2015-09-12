@@ -86,6 +86,11 @@ public final class UniformStackLayoutNode implements NiftyNode {
     return implementation.hashCode();
   }
 
+  @Override
+  public String toString() {
+    return "(" + this.getClass().getSimpleName() + ") orientation [" + getOrientation() + "]";
+  }
+
   @Nonnull
   NiftyNodeImpl<UniformStackLayoutNode> getImpl() {
     return implementation;

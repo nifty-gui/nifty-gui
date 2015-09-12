@@ -61,7 +61,7 @@ public class NiftyContentNode implements NiftyNode {
   }
 
   public String toString() {
-    return "(" + this.getClass().getSimpleName() + ") FIXME";
+    return "(" + this.getClass().getSimpleName() + ") width [" + getWidth() + "] height [" + getHeight() + "]";
   }
 
   @Override

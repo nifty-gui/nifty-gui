@@ -120,7 +120,6 @@ class NiftyContentNodeImpl
 
   @Override
   public void setLayoutResult(@Nonnull NiftyRect rect) {
-    System.out.println(rect);
     width = Math.round(rect.getSize().getWidth());
     height = Math.round(rect.getSize().getHeight());
     layoutTranslate = Mat4.createTranslate(rect.getOrigin().getX(), rect.getOrigin().getY(), 0.f);
