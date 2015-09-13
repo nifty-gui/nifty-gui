@@ -44,6 +44,7 @@ public final class NiftySize {
   private final float width;
   private final float height;
 
+  @Nonnull
   public static NiftySize newNiftySize(final float width, final float height) {
     return new NiftySize(width, height);
   }
