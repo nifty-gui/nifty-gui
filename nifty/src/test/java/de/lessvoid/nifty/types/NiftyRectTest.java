@@ -154,4 +154,12 @@ public class NiftyRectTest {
     NiftyRect rect2 = newNiftyRect(newNiftyPoint(100.f, 100.f), NiftySize.newNiftySize(10.f, 10.f));
     assertTrue(rect1.isOverlapping(rect2));
   }
+
+  @Test
+  public void testOverlappingBug() {
+    NiftyRect rect1 = newNiftyRect(newNiftyPoint(10.f,  10.f), NiftySize.newNiftySize(110.f, 110.f));
+    NiftyRect rect2 = newNiftyRect(newNiftyPoint( 0.f, 256.f), NiftySize.newNiftySize(256.f, 256.f));
+    assertFalse(rect1.isOverlapping(rect2));
+  }
+
 }

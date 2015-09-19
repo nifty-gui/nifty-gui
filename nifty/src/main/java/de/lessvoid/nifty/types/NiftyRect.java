@@ -86,8 +86,8 @@ public final class NiftyRect {
 
     float x0 = getOrigin().getX();
     float y0 = getOrigin().getY();
-    float x1 = getOrigin().getX() + other.getSize().getWidth();
-    float y1 = getOrigin().getY() + other.getSize().getHeight();
+    float x1 = getOrigin().getX() + getSize().getWidth();
+    float y1 = getOrigin().getY() + getSize().getHeight();
 
     return ((otherX1 < otherX0) || (otherX1 > x0)) && ((otherY1 < otherY0) || (otherY1 > y0)) &&
         ((x1 < x0) || (x1 > otherX0)) && ((y1 < y0) || (y1 > otherY0));
