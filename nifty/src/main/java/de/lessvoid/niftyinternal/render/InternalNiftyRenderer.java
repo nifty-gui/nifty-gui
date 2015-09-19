@@ -26,23 +26,20 @@
  */
 package de.lessvoid.niftyinternal.render;
 
-import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.NiftyState;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
-import de.lessvoid.nifty.types.NiftyCompositeOperation;
-import de.lessvoid.niftyinternal.accessor.NiftyCanvasAccessor;
+import de.lessvoid.nifty.types.NiftyPoint;
+import de.lessvoid.nifty.types.NiftyRect;
+import de.lessvoid.nifty.types.NiftySize;
 import de.lessvoid.niftyinternal.accessor.NiftyStateAccessor;
-import de.lessvoid.niftyinternal.canvas.Command;
-import de.lessvoid.niftyinternal.canvas.InternalNiftyCanvas;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNodeImplClass;
@@ -56,13 +53,24 @@ import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplCla
 public class InternalNiftyRenderer {
   private final static Logger logger = Logger.getLogger(InternalNiftyRenderer.class.getName());
 
+  private final RenderBucketRenderNodeFactory renderNodeFactory = new RenderBucketRenderNodeFactory();
   private final Statistics stats;
   private final NiftyRenderDevice renderDevice;
-  private final Map<Integer, RenderNodeCanvas> existingNodes = new LinkedHashMap<>();
 
-  public InternalNiftyRenderer(final Statistics stats, final NiftyRenderDevice renderDevice) {
+  // we keep all RenderNodeCanvas instances sorted in a list of buckets
+  // a bucket is a part of the screen that is cached in a texture. when rendering the screen we only
+  // re-render buckets that contain changed RenderNodeCanvas instances.
+  // a RenderNodeCanvas can be a part of multiple buckets. When a RenderNodeCanvas overlaps multiple
+  // buckets in is stored in all that it overlaps.
+  private final List<RenderBucket> renderBucketList;
+
+  public InternalNiftyRenderer(
+      final Statistics stats,
+      final NiftyRenderDevice renderDevice,
+      final RenderBucketConfiguration config) {
     this.stats = stats;
     this.renderDevice = renderDevice;
+    this.renderBucketList = createBuckets(renderDevice.getDisplayWidth(), renderDevice.getDisplayHeight(), config);
   }
 
   public boolean render(final InternalNiftyTree tree) {
@@ -81,37 +89,17 @@ public class InternalNiftyRenderer {
 
   private void nodeCanvasPass(final Iterable<NiftyNodeContentImpl> nodes) {
     for (NiftyNodeContentImpl child : nodes) {
-      RenderNodeCanvas renderNodeCanvas = ensureRenderNode(child, existingNodes.get(child.hashCode()));
-      getCanvas(renderNodeCanvas).reset();
-      child.updateCanvas(renderNodeCanvas.canvas);
-      renderNodeCanvas.renderNode.setLocal(child.getScreenToLocal());
-      renderNodeCanvas.renderNode.updateContent(renderNodeCanvas.canvas);
+      RenderBucketRenderNode renderNode = renderNodeFactory.create(child, renderDevice);
+      renderNode.updateCanvas(child);
+      renderNode.updateContent(child.getContentWidth(), child.getContentHeight(), child.getScreenToLocal(), renderDevice);
+      updateRenderBuckets(renderNode);
     }
   }
 
-  private InternalNiftyCanvas getCanvas(RenderNodeCanvas renderNodeCanvas) {
-    return NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(renderNodeCanvas.canvas);
-  }
-
-  private RenderNodeCanvas ensureRenderNode(final NiftyNodeContentImpl child, final RenderNodeCanvas renderNodeCanvas) {
-    if (renderNodeCanvas != null) {
-      return renderNodeCanvas;
+  private void updateRenderBuckets(final RenderBucketRenderNode renderNode) {
+    for (RenderBucket renderBucket : renderBucketList) {
+      renderBucket.update(renderNode);
     }
-    int canvasWidth = child.getContentWidth();
-    int canvasHeight = child.getContentHeight();
-    RenderNodeCanvas result = new RenderNodeCanvas();
-    result.canvas = NiftyCanvasAccessor.getDefault().newNiftyCanvas();
-    result.renderNode = new RenderNode(
-        child.getScreenToLocal(),
-        canvasWidth,
-        canvasHeight,
-        new ArrayList<Command>(),
-        renderDevice.createTexture(canvasWidth, canvasHeight, NiftyRenderDevice.FilterMode.Linear),
-        renderDevice.createTexture(canvasWidth, canvasHeight, NiftyRenderDevice.FilterMode.Linear),
-        NiftyCompositeOperation.SourceOver,
-        0);
-    existingNodes.put(child.hashCode(), result);
-    return result;
   }
 
   private void render() {
@@ -119,16 +107,30 @@ public class InternalNiftyRenderer {
 
     BatchManager batchManager = new BatchManager();
     batchManager.begin();
-    for (RenderNodeCanvas renderNodeCanvas : existingNodes.values()) {
-      renderNodeCanvas.renderNode.render(batchManager, renderDevice);
+    for (RenderBucket renderBucket : renderBucketList) {
+      renderBucket.render(batchManager, renderDevice);
     }
     batchManager.end(renderDevice);
 
     renderDevice.endRender();
   }
 
-  private static class RenderNodeCanvas {
-    RenderNode renderNode;
-    NiftyCanvas canvas;
+  private List<RenderBucket> createBuckets(
+      final int displayWidth,
+      final int displayHeight,
+      final RenderBucketConfiguration config) {
+    List<RenderBucket> result = new ArrayList<>();
+    for (int y=0; y<displayHeight/config.getBucketHeight(); y++) {
+      for (int x=0; x<displayWidth/config.getBucketWidth(); x++) {
+        result.add(
+            new RenderBucket(
+                NiftyRect.newNiftyRect(
+                    NiftyPoint.newNiftyPoint(x * config.getBucketWidth(), y * config.getBucketHeight()),
+                    NiftySize.newNiftySize(config.getBucketWidth(), config.getBucketHeight())
+                ),
+                renderDevice));
+      }
+    }
+    return result;
   }
 }

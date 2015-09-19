@@ -48,6 +48,7 @@ import de.lessvoid.niftyinternal.animate.IntervalAnimator;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.common.StatisticsRendererFPS;
 import de.lessvoid.niftyinternal.render.InternalNiftyRenderer;
+import de.lessvoid.niftyinternal.render.RenderBucketConfiguration;
 import de.lessvoid.niftyinternal.render.font.FontRenderer;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 import org.jglfont.JGLFontFactory;
@@ -144,7 +145,7 @@ public class Nifty {
 
     statistics = new NiftyStatistics(new Statistics(timeProvider));
     stats = statistics.getImpl();
-    renderer = new InternalNiftyRenderer(statistics.getImpl(), newRenderDevice);
+    renderer = new InternalNiftyRenderer(statistics.getImpl(), newRenderDevice, new RenderBucketConfiguration(256, 256));
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
 
     NiftyNodeImpl<NiftyRootNode> rootNodeImpl = niftyNodeImpl(new NiftyRootNode());
