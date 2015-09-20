@@ -31,6 +31,9 @@ import de.lessvoid.nifty.NiftyNodeCallback;
 import de.lessvoid.nifty.node.NiftyTransformationNode;
 import de.lessvoid.nifty.types.NiftyColor;
 
+import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
+import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
+import static de.lessvoid.nifty.node.FixedSizeLayoutNode.fixedSizeLayoutNode;
 import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
@@ -43,13 +46,13 @@ public class UseCase_a04_RotatingRootNode {
 
   public UseCase_a04_RotatingRootNode(final Nifty nifty) {
     nifty.clearScreenBeforeRender();
-    NiftyTransformationNode rootTransformation = transformationNode().setPosX(150).setPosY(150);
+    NiftyTransformationNode rootTransformation = transformationNode();
     nifty
-        .addNode(rootTransformation)
-          .addNode(backgroundColorNode(NiftyColor.green()))
-            .addNode(contentNode())
-              .addNode(transformationNode().setPosX(50).setPosY(50))
-                .addNode(backgroundColorNode(NiftyColor.red()))
+        .addNode(absoluteLayoutNode())
+          .addNode(absoluteLayoutChildNode(nifty.getScreenWidth() / 2 - 50, nifty.getScreenHeight() / 2 - 50))
+            .addNode(fixedSizeLayoutNode(100.f, 100.f))
+              .addNode(rootTransformation)
+                .addNode(backgroundColorNode(NiftyColor.green()))
                   .addNode(contentNode());
 
     nifty.startAnimated(0, 15, rootTransformation, new NiftyNodeCallback<Float, NiftyTransformationNode>() {

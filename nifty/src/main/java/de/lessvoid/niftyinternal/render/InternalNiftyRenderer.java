@@ -56,21 +56,22 @@ public class InternalNiftyRenderer {
   private final RenderBucketRenderNodeFactory renderNodeFactory = new RenderBucketRenderNodeFactory();
   private final Statistics stats;
   private final NiftyRenderDevice renderDevice;
+  private final RenderBucketConfiguration renderBucketConfig;
 
-  // we keep all RenderNodeCanvas instances sorted in a list of buckets
-  // a bucket is a part of the screen that is cached in a texture. when rendering the screen we only
-  // re-render buckets that contain changed RenderNodeCanvas instances.
-  // a RenderNodeCanvas can be a part of multiple buckets. When a RenderNodeCanvas overlaps multiple
-  // buckets in is stored in all that it overlaps.
+  // We keep all RenderBucketRenderNode instances in this list of RenderBucket. A RenderBucket is a part of the screen
+  // that is cached in a texture. When rendering the screen we only re-render RenderBuckets that contain changed
+  // RenderBucketRenderNode instances. A RenderBucketRenderNode can be a part of multiple RenderBuckets. When a
+  // RenderBucketRenderNode overlaps multiple buckets it is stored in all of the ones that overlaps.
   private final List<RenderBucket> renderBucketList;
 
   public InternalNiftyRenderer(
       final Statistics stats,
       final NiftyRenderDevice renderDevice,
-      final RenderBucketConfiguration config) {
+      final RenderBucketConfiguration renderBucketConfig) {
     this.stats = stats;
     this.renderDevice = renderDevice;
-    this.renderBucketList = createBuckets(renderDevice.getDisplayWidth(), renderDevice.getDisplayHeight(), config);
+    this.renderBucketConfig = renderBucketConfig;
+    this.renderBucketList = createBuckets(renderDevice.getDisplayWidth(), renderDevice.getDisplayHeight());
   }
 
   public boolean render(final InternalNiftyTree tree) {
@@ -91,7 +92,7 @@ public class InternalNiftyRenderer {
     for (NiftyNodeContentImpl child : nodes) {
       RenderBucketRenderNode renderNode = renderNodeFactory.create(child, renderDevice);
       renderNode.updateCanvas(child);
-      renderNode.updateContent(child.getContentWidth(), child.getContentHeight(), child.getScreenToLocal(), renderDevice);
+      renderNode.updateContent(child.getContentWidth(), child.getContentHeight(), child.getLocalToScreen(), renderDevice);
       updateRenderBuckets(renderNode);
     }
   }
@@ -117,18 +118,21 @@ public class InternalNiftyRenderer {
 
   private List<RenderBucket> createBuckets(
       final int displayWidth,
-      final int displayHeight,
-      final RenderBucketConfiguration config) {
+      final int displayHeight) {
+    int bucketHeight = renderBucketConfig.getBucketHeight();
+    int bucketWidth = renderBucketConfig.getBucketWidth();
+
     List<RenderBucket> result = new ArrayList<>();
-    for (int y=0; y<displayHeight/config.getBucketHeight(); y++) {
-      for (int x=0; x<displayWidth/config.getBucketWidth(); x++) {
+    for (int y=0; y<displayHeight/ bucketHeight; y++) {
+      for (int x=0; x<displayWidth/ bucketWidth; x++) {
         result.add(
             new RenderBucket(
                 NiftyRect.newNiftyRect(
-                    NiftyPoint.newNiftyPoint(x * config.getBucketWidth(), y * config.getBucketHeight()),
-                    NiftySize.newNiftySize(config.getBucketWidth(), config.getBucketHeight())
+                    NiftyPoint.newNiftyPoint(x * bucketWidth, y * bucketHeight),
+                    NiftySize.newNiftySize(bucketWidth, bucketHeight)
                 ),
-                renderDevice));
+                renderDevice,
+                renderBucketConfig));
       }
     }
     return result;

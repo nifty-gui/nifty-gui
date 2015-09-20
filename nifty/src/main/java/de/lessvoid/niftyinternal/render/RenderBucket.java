@@ -29,6 +29,7 @@ package de.lessvoid.niftyinternal.render;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
+import de.lessvoid.nifty.types.NiftyMutableColor;
 import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.niftyinternal.canvas.Context;
 import de.lessvoid.niftyinternal.math.Mat4;
@@ -53,12 +54,19 @@ public class RenderBucket {
   private final List<RenderBucketRenderNode> renderNodes = new ArrayList<>();
   private final NiftyRect rect;
   private final Context context;
-  private final Mat4 localToScreen;
+  private final Mat4 bucketTransform;
+  private final Mat4 bucketTransformInverse;
+  private final RenderBucketConfiguration renderBucketConfig;
 
-  public RenderBucket(final NiftyRect rect, final NiftyRenderDevice renderDevice) {
+  public RenderBucket(
+      final NiftyRect rect,
+      final NiftyRenderDevice renderDevice,
+      final RenderBucketConfiguration renderBucketConfig) {
     this.rect = rect;
     this.context = createContext(renderDevice);
-    this.localToScreen = Mat4.createTranslate(rect.getOrigin().getX(), rect.getOrigin().getY(), 0.f);
+    this.bucketTransform = Mat4.createTranslate(rect.getOrigin().getX(), rect.getOrigin().getY(), 0.f);
+    this.bucketTransformInverse = Mat4.invert(bucketTransform, null);
+    this.renderBucketConfig = renderBucketConfig;
 
     // update
     context.bind(renderDevice, new BatchManager());
@@ -70,7 +78,7 @@ public class RenderBucket {
   }
 
   public void update(final RenderBucketRenderNode renderNode) {
-    if (renderNode.getScreenRect().isOverlapping(rect)) {
+    if (renderNode.getScreenSpaceAABB().isOverlapping(rect)) {
       if (!renderNodes.contains(renderNode)) {
         renderNodes.add(renderNode);
       }
@@ -81,20 +89,30 @@ public class RenderBucket {
 
   public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice) {
     if (!renderNodes.isEmpty()) {
-      Mat4 localToScreenInverse = Mat4.invert(localToScreen, null);
       BatchManager localBatchManager = new BatchManager();
       context.bind(renderDevice, localBatchManager);
       context.prepare();
       for (int i=0; i<renderNodes.size(); i++) {
         RenderBucketRenderNode renderNode = renderNodes.get(i);
-        renderNode.render(localBatchManager, localToScreenInverse);
+        renderNode.render(localBatchManager, bucketTransformInverse);
+
+        if (renderBucketConfig.isShowRenderNodeOverlayEnabled()) {
+          NiftyRect r = renderNode.getScreenSpaceAABB();
+          localBatchManager.addColorQuad(
+              r.getOrigin().getX(),
+              r.getOrigin().getY(),
+              r.getOrigin().getX() + r.getSize().getWidth(),
+              r.getOrigin().getY() + r.getSize().getHeight(),
+              renderBucketConfig.getShowRenderNodeOverlayColor(),
+              bucketTransformInverse);
+        }
       }
       context.flush();
     }
 
     // render
     batchManager.addChangeCompositeOperation(NiftyCompositeOperation.SourceOver);
-    batchManager.addTextureQuad(context.getNiftyTexture(), localToScreen, NiftyColor.white());
+    batchManager.addTextureQuad(context.getNiftyTexture(), bucketTransform, NiftyColor.white());
   }
 
   private Context createContext(final NiftyRenderDevice renderDevice) {

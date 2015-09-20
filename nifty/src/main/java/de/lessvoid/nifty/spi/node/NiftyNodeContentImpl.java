@@ -51,9 +51,13 @@ public interface NiftyNodeContentImpl<T extends NiftyNode> extends NiftyNodeImpl
 
   /**
    * Should return the height of the content.
-   * @return
+   * @return height
    */
   int getContentHeight();
 
-  Mat4 getScreenToLocal();
+  /**
+   * Get a Mat4 to transform points in local space for this node to screen space.
+   * @return the transformation matrix to transform local to screen space
+   */
+  Mat4 getLocalToScreen();
 }

@@ -54,7 +54,7 @@ public class RenderBucketRenderNodeFactory {
     return new RenderBucketRenderNode(
         node.getContentWidth(),
         node.getContentHeight(),
-        node.getScreenToLocal(),
+        node.getLocalToScreen(),
         renderDevice);
   }
 }

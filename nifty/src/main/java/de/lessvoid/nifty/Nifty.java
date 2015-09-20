@@ -145,7 +145,7 @@ public class Nifty {
 
     statistics = new NiftyStatistics(new Statistics(timeProvider));
     stats = statistics.getImpl();
-    renderer = new InternalNiftyRenderer(statistics.getImpl(), newRenderDevice, new RenderBucketConfiguration(256, 256));
+    renderer = new InternalNiftyRenderer(statistics.getImpl(), newRenderDevice, new RenderBucketConfiguration());
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
 
     NiftyNodeImpl<NiftyRootNode> rootNodeImpl = niftyNodeImpl(new NiftyRootNode());

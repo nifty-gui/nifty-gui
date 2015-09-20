@@ -53,7 +53,7 @@ class NiftyContentNodeImpl
   private int height;
 
   private NiftyColor backgroundColor;
-  private Mat4 screenToLocal = Mat4.createIdentity();
+  private Mat4 localToScreen = Mat4.createIdentity();
   private Mat4 layoutTranslate = Mat4.createIdentity();
   private NiftyCanvasPainter canvasPainter = defaultNiftyCanvasPainter();
 
@@ -68,7 +68,7 @@ class NiftyContentNodeImpl
   @Override
   public void update(final NiftyState niftyState) {
     backgroundColor = niftyState.getState(NiftyStateBackgroundColor, NiftyColor.purple());
-    screenToLocal = niftyState.getState(NiftyStateTransformation, Mat4.createIdentity());
+    localToScreen = niftyState.getState(NiftyStateTransformation, Mat4.createIdentity());
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,8 +91,8 @@ class NiftyContentNodeImpl
   }
 
   @Override
-  public Mat4 getScreenToLocal() {
-    return Mat4.mul(screenToLocal, layoutTranslate);
+  public Mat4 getLocalToScreen() {
+    return Mat4.mul(layoutTranslate, localToScreen);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

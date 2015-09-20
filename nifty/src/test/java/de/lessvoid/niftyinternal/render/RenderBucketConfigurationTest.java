@@ -26,9 +26,13 @@
  */
 package de.lessvoid.niftyinternal.render;
 
+import de.lessvoid.nifty.types.NiftyColor;
 import org.junit.Test;
 
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by void on 13.09.15.
@@ -36,9 +40,34 @@ import static org.junit.Assert.assertEquals;
 public class RenderBucketConfigurationTest {
 
   @Test
-  public void test() {
-    RenderBucketConfiguration config = new RenderBucketConfiguration(256, 256);
+  public void testDefaults() {
+    RenderBucketConfiguration config = new RenderBucketConfiguration();
     assertEquals(256, config.getBucketWidth());
     assertEquals(256, config.getBucketHeight());
+    assertFalse(config.isShowRenderNodeOverlayEnabled());
+    assertNotNull(config.getShowRenderNodeOverlayColor());
+  }
+
+  @Test
+  public void testBucketSize() {
+    RenderBucketConfiguration config = new RenderBucketConfiguration(512, 512);
+    assertEquals(512, config.getBucketWidth());
+    assertEquals(512, config.getBucketHeight());
+  }
+
+  @Test
+  public void testEnableShowRenderNodeOverlay() {
+    RenderBucketConfiguration config = new RenderBucketConfiguration();
+    config.enableShowRenderNodeOverlay();
+    assertTrue(config.isShowRenderNodeOverlayEnabled());
+    assertNotNull(config.getShowRenderNodeOverlayColor());
+  }
+
+  @Test
+  public void testEnableShowRenderNodeOverlayWithColor() {
+    RenderBucketConfiguration config = new RenderBucketConfiguration();
+    config.enableShowRenderNodeOverlay(NiftyColor.aqua());
+    assertTrue(config.isShowRenderNodeOverlayEnabled());
+    assertEquals(NiftyColor.aqua(), config.getShowRenderNodeOverlayColor());
   }
 }

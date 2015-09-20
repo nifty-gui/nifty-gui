@@ -87,17 +87,23 @@ public class RenderBucketRenderNode {
   }
 
   public void render(final BatchManager batchManager, final Mat4 bucketTransformation) {
-    Mat4 local = Mat4.mul(localToScreen, bucketTransformation);
+    Mat4 local = Mat4.mul(bucketTransformation, localToScreen);
     batchManager.addChangeCompositeOperation(NiftyCompositeOperation.SourceOver);
     batchManager.addTextureQuad(context.getNiftyTexture(), local, NiftyColor.white());
   }
 
-  public NiftyRect getScreenRect() {
-    Vec4 o = Mat4.transform(localToScreen, new Vec4(0.f, 0.f, 0.f, 1.f));
-    Vec4 w = Mat4.transform(localToScreen, new Vec4(width, height, 0.f, 1.f));
+  public NiftyRect getScreenSpaceAABB() {
+    Vec4 p0 = Mat4.transform(localToScreen, new Vec4(  0.f,    0.f, 0.f, 1.f));
+    Vec4 p1 = Mat4.transform(localToScreen, new Vec4(width,    0.f, 0.f, 1.f));
+    Vec4 p2 = Mat4.transform(localToScreen, new Vec4(width, height, 0.f, 1.f));
+    Vec4 p3 = Mat4.transform(localToScreen, new Vec4(  0.f, height, 0.f, 1.f));
+    float minX = Math.min(Math.min(p0.getX(), p1.getX()), Math.min(p2.getX(), p3.getX()));
+    float maxX = Math.max(Math.max(p0.getX(), p1.getX()), Math.max(p2.getX(), p3.getX()));
+    float minY = Math.min(Math.min(p0.getY(), p1.getY()), Math.min(p2.getY(), p3.getY()));
+    float maxY = Math.max(Math.max(p0.getY(), p1.getY()), Math.max(p2.getY(), p3.getY()));
     return NiftyRect.newNiftyRect(
-        NiftyPoint.newNiftyPoint(o.x, o.y),
-        NiftySize.newNiftySize(w.x, w.y));
+        NiftyPoint.newNiftyPoint(minX, minY),
+        NiftySize.newNiftySize(maxX - minX, maxY - minY));
   }
 
   private boolean updateSize(

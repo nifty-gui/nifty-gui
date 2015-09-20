@@ -26,12 +26,20 @@
  */
 package de.lessvoid.niftyinternal.render;
 
+import de.lessvoid.nifty.types.NiftyColor;
+
 /**
  * Created by void on 13.09.15.
  */
 public class RenderBucketConfiguration {
   private final int bucketWidth;
   private final int bucketHeight;
+  private boolean showRenderNodeOverlayEnabled = false;
+  private NiftyColor showRenderNodeOverlayColor = NiftyColor.fromString("#ff00ff50");
+
+  public RenderBucketConfiguration() {
+    this(256, 256);
+  }
 
   public RenderBucketConfiguration(final int bucketWidth, final int bucketHeight) {
     this.bucketWidth = bucketWidth;
@@ -44,5 +52,26 @@ public class RenderBucketConfiguration {
 
   public int getBucketHeight() {
     return bucketHeight;
+  }
+
+  public void enableShowRenderNodeOverlay() {
+    this.showRenderNodeOverlayEnabled = true;
+  }
+
+  public void enableShowRenderNodeOverlay(final NiftyColor color) {
+    this.showRenderNodeOverlayEnabled = true;
+    this.showRenderNodeOverlayColor = color;
+  }
+
+  public void disableShowRenderNodeOverlay() {
+    this.showRenderNodeOverlayEnabled = false;
+  }
+
+  public boolean isShowRenderNodeOverlayEnabled() {
+    return showRenderNodeOverlayEnabled;
+  }
+
+  public NiftyColor getShowRenderNodeOverlayColor() {
+    return showRenderNodeOverlayColor;
   }
 }
