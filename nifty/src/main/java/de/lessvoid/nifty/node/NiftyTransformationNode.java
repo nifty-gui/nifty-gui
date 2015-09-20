@@ -147,7 +147,19 @@ public class NiftyTransformationNode implements NiftyNode {
   }
 
   public String toString() {
-    return "(" + this.getClass().getSimpleName() + ") FIXME";
+    return
+        "(" + this.getClass().getSimpleName() + ") " +
+            "pivotX [" + getPivotX() + "] " +
+            "pivotY [" + getPivotY() + "] " +
+            "angleX [" + getAngleX() + "] " +
+            "angleY [" + getAngleY() + "] " +
+            "angleZ [" + getAngleZ() + "] " +
+            "scaleX [" + getScaleX() + "] " +
+            "scaleY [" + getScaleY() + "] " +
+            "scaleZ [" + getScaleZ() + "] " +
+            "posX [" + getPosX() + "] " +
+            "posY [" + getPosY() + "] " +
+            "posZ [" + getPosZ() + "]";
   }
 
   @Override
