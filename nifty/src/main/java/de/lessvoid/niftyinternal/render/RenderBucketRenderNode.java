@@ -66,10 +66,13 @@ public class RenderBucketRenderNode {
   }
 
   public void updateContent(final int width, final int height, final Mat4 localToScreen, final NiftyRenderDevice renderDevice) {
-    boolean sizeChanged = updateSize(width, height, localToScreen, renderDevice);
-
     InternalNiftyCanvas canvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas);
-    if (sizeChanged || canvas.isChanged()) {
+
+    boolean canvasChanged = canvas.isChanged();
+    boolean sizeChanged = updateSize(width, height, renderDevice);
+    boolean transformationChanged = updateTransformation(localToScreen);
+
+    if (canvasChanged || sizeChanged || transformationChanged) {
       context.bind(renderDevice, new BatchManager());
       context.prepare();
 
@@ -100,18 +103,24 @@ public class RenderBucketRenderNode {
   private boolean updateSize(
       final int newWidth,
       final int newHeight,
-      final Mat4 newLocalToScreen,
       final NiftyRenderDevice renderDevice) {
-    if (newWidth == width && newHeight == height && newLocalToScreen.compare(localToScreen)) {
+    if (newWidth == width && newHeight == height) {
       return false;
     }
 
     width = newWidth;
     height = newHeight;
-    localToScreen = newLocalToScreen;
 
     context.free();
     context = createContext(renderDevice);
+    return true;
+  }
+
+  private boolean updateTransformation(final Mat4 newLocalToScreen) {
+    if (newLocalToScreen.compare(localToScreen)) {
+      return false;
+    }
+    localToScreen = newLocalToScreen;
     return true;
   }
 
