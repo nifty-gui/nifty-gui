@@ -26,43 +26,65 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCallback;
+import de.lessvoid.nifty.node.NiftyTransformationNode;
+import de.lessvoid.nifty.types.NiftyColor;
+
+import java.io.IOException;
+
+import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
+import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
+import static de.lessvoid.nifty.node.FixedSizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
+
 /**
- * A single root node of a fixed size with a background color that is constantly rotating.
+ * A root node with two child nodes.
  * @author void
  */
 public class UseCase_a05_RotatingChildNode {
-/* FIXME
+
   public UseCase_a05_RotatingChildNode(final Nifty nifty) throws IOException {
+    final NiftyTransformationNode rootTransformation = transformationNode();
+    final NiftyTransformationNode childTransformation = transformationNode();
+    final NiftyTransformationNode grandChildNodeTransformation = transformationNode();
+
     nifty.clearScreenBeforeRender();
-    nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
-
-    final NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
-    niftyNode.setBackgroundColor(NiftyColor.green());
-    niftyNode.setPivot(0.5, 0.5);
-
-    final NiftyNode childNode = niftyNode.newChildNode(UnitValue.px(100), UnitValue.px(100), ChildLayout.Center);
-    childNode.setBackgroundColor(NiftyColor.black());
-    childNode.setPivot(0.5, 0.5);
-
-    final NiftyNode grandChildNode = childNode.newChildNode(UnitValue.px(25), UnitValue.px(25));
-    grandChildNode.setBackgroundColor(NiftyColor.red());
-    grandChildNode.setPivot(0.5, 0.5);
-
-    niftyNode.startAnimated(0, 25, new NiftyCallback<Float>() {
+    nifty
+        .addNode(absoluteLayoutNode())
+          .addNode(absoluteLayoutChildNode(nifty.getScreenWidth() / 2 - 200, nifty.getScreenHeight() / 2 - 200))
+            .addNode(fixedSizeLayoutNode(400.f, 400.f))
+              .addNode(rootTransformation)
+                .addNode(backgroundColorNode(NiftyColor.green()))
+                  .addNode(contentNode())
+                    .addNode(absoluteLayoutChildNode())
+                      .addNode(fixedSizeLayoutNode(100.f, 100.f))
+                        .addNode(childTransformation)
+                          .addNode(backgroundColorNode(NiftyColor.black()))
+                            .addNode(contentNode())
+                              .addNode(absoluteLayoutChildNode())
+                                .addNode(fixedSizeLayoutNode(25.f, 25.f))
+                                  .addNode(grandChildNodeTransformation)
+                                    .addNode(backgroundColorNode(NiftyColor.red()))
+                                      .addNode(contentNode());
+    nifty.startAnimated(0, 25, new NiftyCallback<Float>() {
       private float rot = 0;
 
       @Override
       public void execute(final Float totalTime) {
         rot += 1.f;
+/*
+        childTransformation.setAngleX(rot);
+        childTransformation.setAngleY(rot);
+        childTransformation.setAngleZ(rot);
 
-        childNode.setRotationX(rot);
-        childNode.setRotationY(rot);
-        childNode.setRotationZ(rot);
+        grandChildNodeTransformation.setAngleZ(rot * 10);
+        */
 
-        grandChildNode.setRotationZ(rot*10);
-
-        niftyNode.setScaleX((Math.sin(rot/50.f) + 1.0f) / 2.f + 0.25f);
-        niftyNode.setScaleY((Math.sin(rot/50.f) + 1.0f) / 2.f + 0.25f);
+        rootTransformation.setScaleX((Math.sin(rot/50.f) + 1.0f) / 2.f + 0.25f);
+        rootTransformation.setScaleY((Math.sin(rot/50.f) + 1.0f) / 2.f + 0.25f);
       }
     });
   }
@@ -70,5 +92,4 @@ public class UseCase_a05_RotatingChildNode {
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a05_RotatingChildNode.class, args);
   }
-  */
 }

@@ -45,8 +45,16 @@ import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
 public class UseCase_a04_RotatingRootNode {
 
   public UseCase_a04_RotatingRootNode(final Nifty nifty) {
-    nifty.clearScreenBeforeRender();
     NiftyTransformationNode rootTransformation = transformationNode();
+    nifty.startAnimated(0, 15, rootTransformation, new NiftyNodeCallback<Float, NiftyTransformationNode>() {
+      private float angle = 0;
+      @Override
+      public void execute(final Float time, final NiftyTransformationNode niftyTransformationNode) {
+        niftyTransformationNode.setAngleZ(angle++);
+      }
+    });
+
+    nifty.clearScreenBeforeRender();
     nifty
         .addNode(absoluteLayoutNode())
           .addNode(absoluteLayoutChildNode(nifty.getScreenWidth() / 2 - 50, nifty.getScreenHeight() / 2 - 50))
@@ -54,15 +62,6 @@ public class UseCase_a04_RotatingRootNode {
               .addNode(rootTransformation)
                 .addNode(backgroundColorNode(NiftyColor.green()))
                   .addNode(contentNode());
-
-    nifty.startAnimated(0, 15, rootTransformation, new NiftyNodeCallback<Float, NiftyTransformationNode>() {
-      private float angle = 0;
-
-      @Override
-      public void execute(final Float time, final NiftyTransformationNode niftyTransformationNode) {
-        niftyTransformationNode.setAngleZ(angle++);
-      }
-    });
   }
 
   public static void main(final String[] args) throws Exception {
