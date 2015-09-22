@@ -80,15 +80,13 @@ public class NiftyEventAnnotationProcessor {
     StringBuilder sb = new StringBuilder(" [{0}] -> [{1}]");
     if (add) {      
       sb.insert(0, "-> subscribe");
-      if(!eventService.subscribeStrongly(pattern, subscriber))
-      {
+      if(!eventService.subscribeStrongly(pattern, subscriber)){
           sb.insert(2, " failed to");
       }
       log.log(Level.FINE, sb.toString(), new Object[]{pattern, subscriber});
     } else {
       sb.insert(0, "<- unsubscribe");
-      if(!eventService.unsubscribe(pattern, subscriber))
-      {
+      if(!eventService.unsubscribe(pattern, subscriber)){
           sb.insert(2, " failed to");
       }
       log.log(Level.FINE, sb.toString(), new Object[]{pattern, subscriber});
@@ -100,15 +98,13 @@ public class NiftyEventAnnotationProcessor {
     StringBuilder sb = new StringBuilder(" [{0}] -> [{1}]");
     if (add) {      
       sb.insert(0, "-> subscribe");
-      if(!eventService.subscribeStrongly(id, subscriber))
-      {
+      if(!eventService.subscribeStrongly(id, subscriber)){
           sb.insert(2, " failed to");
       }
       log.log(Level.FINE, sb.toString(), new Object[]{id, subscriber});
     } else {
       sb.insert(0, "<- unsubscribe");
-      if(!eventService.unsubscribe(id, subscriber))
-      {
+      if(!eventService.unsubscribe(id, subscriber)){
           sb.insert(2, " failed to");
       }
       log.log(Level.FINE, sb.toString(), new Object[]{id, subscriber});
