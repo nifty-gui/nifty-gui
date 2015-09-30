@@ -256,9 +256,11 @@ public class NiftyRenderEngineImpl implements NiftyRenderEngine {
       final int height) {
     Color c = image.getColor();
     if (c == null) {
+        c = whiteColor;
+    }
+    if(isColorAlphaChanged()){
       float alpha = color.getAlpha();
-      whiteColor.setAlpha(alpha);
-      c = whiteColor;
+      c = new Color(c, alpha);
     }
     image.render(x + getX(), y + getY(), width, height, c, imageScale);
   }
