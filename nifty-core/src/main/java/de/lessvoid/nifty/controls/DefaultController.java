@@ -45,4 +45,8 @@ public class DefaultController implements Controller {
   @Override
   public void onFocus(final boolean getFocus) {
   }
+
+  @Override
+  public void onEndScreen() {
+  }
 }

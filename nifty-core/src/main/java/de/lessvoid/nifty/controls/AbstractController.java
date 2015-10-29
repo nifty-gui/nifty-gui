@@ -164,4 +164,9 @@ public abstract class AbstractController implements Controller, NiftyControl {
   public boolean isBound() {
     return bound;
   }
+
+  @Override
+  public void onEndScreen() {
+  }
+
 }

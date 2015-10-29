@@ -71,4 +71,9 @@ public interface Controller {
    * @return true, the event has been handled and false, the event has not been handled
    */
   boolean inputEvent(@Nonnull NiftyInputEvent inputEvent);
+
+  /**
+   * Called when the screen ended.
+   */
+  void onEndScreen();
 }
