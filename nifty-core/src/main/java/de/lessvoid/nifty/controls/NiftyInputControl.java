@@ -90,6 +90,7 @@ public class NiftyInputControl {
   }
 
   public void onEndScreen(@Nonnull final Nifty nifty, @Nonnull final Screen screen, @Nullable final String elementId) {
+    controller.onEndScreen();
     nifty.unsubscribeAnnotations(controller);
     if (elementId != null) {
       nifty.unsubscribeElement(screen, elementId);

@@ -43,6 +43,7 @@ import de.lessvoid.nifty.input.mouse.MouseInputEventProcessor;
 import de.lessvoid.nifty.layout.Box;
 import de.lessvoid.nifty.layout.BoxConstraints;
 import de.lessvoid.nifty.layout.LayoutPart;
+import de.lessvoid.nifty.loaderv2.ControllerFactory;
 import de.lessvoid.nifty.loaderv2.NiftyLoader;
 import de.lessvoid.nifty.loaderv2.RootLayerFactory;
 import de.lessvoid.nifty.loaderv2.types.ControlDefinitionType;
@@ -130,6 +131,8 @@ public class Nifty {
   private final Map<String, RegisterEffectType> registeredEffects;
   @Nonnull
   private final Map<String, ScreenController> registeredScreenControllers;
+  @Nonnull
+  private final ControllerFactory controllerFactory;
 
   @Nonnull
   private final FlipFlop<List<DelayedMethodInvoke>> delayedMethodInvokes;
@@ -198,6 +201,7 @@ public class Nifty {
     controlDefinitions = new HashMap<String, ControlDefinitionType>();
     registeredEffects = new HashMap<String, RegisterEffectType>();
     registeredScreenControllers = new HashMap<String, ScreenController>();
+    controllerFactory = new ControllerFactory();
     controlStylesChanged = new HashSet<String>();
 
     delayedMethodInvokes = new FlipFlop<List<DelayedMethodInvoke>>(
@@ -1310,6 +1314,17 @@ public class Nifty {
       @Nonnull final ScreenController c = controllers[i];
       registeredScreenControllers.remove(c.getClass().getName());
     }
+  }
+
+  /**
+   * Obtain the controllerFactory, used to register and unregister Factories
+   * that create controllers.
+   * <p>
+   * @return
+   */
+  @Nonnull
+  public ControllerFactory getControllerFactory() {
+    return controllerFactory;
   }
 
   @Nonnull

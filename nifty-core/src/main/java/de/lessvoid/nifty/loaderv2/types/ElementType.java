@@ -224,14 +224,6 @@ public class ElementType extends XmlBaseType {
   }
 
   @Nullable
-  private Controller createLocalController(@Nullable final String controllerClassParam) {
-    if (controllerClassParam == null) {
-      return null;
-    }
-    return ClassHelper.getInstance(controllerClassParam, Controller.class);
-  }
-
-  @Nullable
   private NiftyInputControl createNiftyInputControl(
       @Nonnull final Attributes controlDefinitionAttributes,
       @Nonnull final Controller controller) {
@@ -344,7 +336,7 @@ public class ElementType extends XmlBaseType {
     // in case we have surviving special values (f.i. from applied controlDefinitions) we need to translate them too
     translateSpecialValues(nifty, screen);
 
-    resolveControllers(new LinkedList<Object>());
+    resolveControllers(nifty, new LinkedList<Object>());
   }
 
   @Override
@@ -413,14 +405,14 @@ public class ElementType extends XmlBaseType {
     return styleResolver;
   }
 
-  void resolveControllers(@Nonnull final Collection<Object> controllerParam) {
+  void resolveControllers(@Nonnull final Nifty nifty, @Nonnull final Collection<Object> controllerParam) {
     controllers = new LinkedList<Object>(controllerParam);
-    controller = createLocalController(getAttributes().get("controller"));
+    controller = nifty.getControllerFactory().create(getAttributes().get("controller"));
     if (controller != null) {
       controllers.addFirst(controller);
     }
     for (ElementType elementType : elements) {
-      elementType.resolveControllers(controllers);
+      elementType.resolveControllers(nifty, controllers);
     }
   }
 
