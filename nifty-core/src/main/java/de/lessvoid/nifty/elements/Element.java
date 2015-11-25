@@ -1066,6 +1066,17 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     }
   }
 
+  public void restoreForShow() {
+    effectManager.restoreForShow();
+    if (children != null) {
+      final int childrenCount = children.size();
+      for (int i = 0; i < childrenCount; i++) {
+        Element w = children.get(i);
+        w.restoreForShow();
+      }
+    }
+  }
+
   public void resetForHide() {
     effectManager.resetForHide();
     if (children != null) {
@@ -1504,7 +1515,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
   private void internalShow() {
     visible = true;
-    effectManager.restoreForShow();
+    restoreForShow();
 
     if (id != null) {
       nifty.publishEvent(id, new ElementShowEvent(this));
