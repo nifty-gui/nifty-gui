@@ -48,7 +48,12 @@ public class TreeboxControlDialogController implements Controller {
         return false;
     }
 
-    @Nonnull
+  @Override
+  public void onEndScreen() {
+
+  }
+
+  @Nonnull
     private TreeItem<String> setupTree() {
         TreeItem<String> treeRoot = new TreeItem<String>();
         TreeItem<String> branch1 = new TreeItem<String>("branch 1");

@@ -79,4 +79,9 @@ public class PageControl implements Controller {
     }
     return false;
   }
+
+  @Override
+  public void onEndScreen() {
+
+  }
 }

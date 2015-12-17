@@ -73,6 +73,11 @@ public class TabsControlDialogController implements Controller {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   @NiftyEventSubscriber(id = "tab1_label_checkboxstate")
   public void onLabelClick(final String id, final NiftyMousePrimaryClickedEvent label) {
     CheckBox checkBox = screen.findNiftyControl("tab_2_checkbox", CheckBox.class);

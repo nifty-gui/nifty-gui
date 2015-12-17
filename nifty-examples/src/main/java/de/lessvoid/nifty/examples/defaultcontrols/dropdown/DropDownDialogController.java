@@ -66,6 +66,11 @@ public class DropDownDialogController implements Controller {
     return false;
   }
 
+  @Override
+  public void onEndScreen() {
+
+  }
+
   @NiftyEventSubscriber(id="addDropDownItemText")
   public void onAppendTextFieldChanged(final String id, final TextFieldChangedEvent event) {
     setDropDownItemButtonState();
