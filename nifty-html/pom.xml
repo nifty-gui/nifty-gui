@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>nifty-main</artifactId>
-    <groupId>lessvoid</groupId>
+    <groupId>com.github.nifty-gui</groupId>
     <version>1.4.2-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
@@ -16,23 +16,23 @@
       <version>2.1</version>
     </dependency>
     <dependency>
-      <groupId>lessvoid</groupId>
+      <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty</artifactId>
       <version>1.4.2-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>lessvoid</groupId>
+      <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-lwjgl-renderer</artifactId>
       <version>1.4.2-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>lessvoid</groupId>
+    	<groupId>com.github.nifty-gui</groupId>
     	<artifactId>nifty-style-black</artifactId>
     	<version>1.4.2-SNAPSHOT</version>
     </dependency>
     <dependency>
-    	<groupId>lessvoid</groupId>
+    	<groupId>com.github.nifty-gui</groupId>
     	<artifactId>nifty-default-controls</artifactId>
     	<version>1.4.2-SNAPSHOT</version>
     </dependency>
