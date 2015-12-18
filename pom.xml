@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>lessvoid</groupId>
+  <groupId>com.github.nifty-gui</groupId>
   <artifactId>nifty-main</artifactId>
   <packaging>pom</packaging>
   <version>2.0-SNAPSHOT</version>
@@ -13,7 +13,7 @@
     <module>nifty-input-lwjgl</module>
     <module>nifty-examples</module>
   </modules>
-  <url>http://sourceforge.net/projects/nifty-gui/</url>
+  <url>https://github.com/nifty-gui/nifty-gui</url>
   <licenses>
     <license>
       <name>The BSD 2-Clause License</name>
@@ -26,13 +26,30 @@
       <id>void256</id>
       <name>void</name>
       <email>void@lessvoid.com</email>
-      <url>http://www.lessvoid.com</url>
+      <url>https://github.com/void256</url>
       <roles>
         <role>developer</role>
       </roles>
     </developer>
   </developers>
+  <properties>
+    <!-- The CoreGL version we currently use since this is required in multiple modules -->
+    <coregl-utils.version>2.0-SNAPSHOT</coregl-utils.version>
+  </properties>
   <build>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.3</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
+      </plugin>
+    </plugins>
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
@@ -78,18 +95,18 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:git:git://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty/</connection>
-    <developerConnection>scm:git:ssh://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty/</developerConnection>
-    <url>scm:git:git://nifty-gui.git.sourceforge.net/gitroot/nifty-gui/nifty/</url>
+    <connection>scm:git:git://github.com/nifty-gui/nifty-gui.git</connection>
+    <developerConnection>scm:git:git@github.com:nifty-gui/nifty-gui.git</developerConnection>
+    <url>scm:git:https://github.com/nifty-gui/nifty-gui.git</url>
   </scm>
   <distributionManagement>
     <repository>
-      <id>nifty-maven-repo.sourceforge.net</id>
-      <url>sftp://web.sourceforge.net/home/project-web/nifty-gui/htdocs/nifty-maven-repo</url>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
     <snapshotRepository>
-      <id>nifty-maven-repo.sourceforge.net</id>
-      <url>sftp://web.sourceforge.net/home/project-web/nifty-gui/htdocs/nifty-maven-repo</url>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
     <site>
       <id>nifty.sourceforge.net</id>
@@ -97,6 +114,10 @@
     </site>
   </distributionManagement>
   <repositories>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
     <repository>
       <id>nifty-maven-repo.sourceforge.net</id>
       <url>http://nifty-gui.sourceforge.net/nifty-maven-repo</url>
@@ -133,8 +154,4 @@
       </build>
     </profile>
   </profiles>
-  <properties>
-    <!-- The CoreGL version we currently use since this is required in multiple modules -->
-    <coregl-utils.version>2.0-SNAPSHOT</coregl-utils.version>
-  </properties>
 </project>
