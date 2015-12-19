@@ -24,54 +24,39 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.render;
+package de.lessvoid.niftyinternal;
 
 import de.lessvoid.nifty.types.NiftyColor;
 
 /**
+ * Represents configurable values inside of Nifty.
  * Created by void on 13.09.15.
  */
-public class RenderBucketConfiguration {
-  private final int bucketWidth;
-  private final int bucketHeight;
-  private boolean showRenderNodeOverlayEnabled = false;
-  private NiftyColor showRenderNodeOverlayColor = NiftyColor.fromString("#ff00ff50");
+public interface NiftyConfiguration {
 
-  public RenderBucketConfiguration() {
-    this(256, 256);
-  }
+  /**
+   * The render bucket width parameter.
+   * @return render bucket width
+   */
+  int getBucketWidth();
 
-  public RenderBucketConfiguration(final int bucketWidth, final int bucketHeight) {
-    this.bucketWidth = bucketWidth;
-    this.bucketHeight = bucketHeight;
-  }
+  /**
+   * The render bucket height parameter.
+   * @return render bucket height
+   */
+  int getBucketHeight();
 
-  public int getBucketWidth() {
-    return bucketWidth;
-  }
+  /**
+   * If this is set to true all render nodes will be overlayed
+   * by a single colored quad to display and debug its position.
+   * @return the showRenderNodeOverlay parameter
+   */
+  boolean showRenderNodeOverlay();
 
-  public int getBucketHeight() {
-    return bucketHeight;
-  }
-
-  public void enableShowRenderNodeOverlay() {
-    this.showRenderNodeOverlayEnabled = true;
-  }
-
-  public void enableShowRenderNodeOverlay(final NiftyColor color) {
-    this.showRenderNodeOverlayEnabled = true;
-    this.showRenderNodeOverlayColor = color;
-  }
-
-  public void disableShowRenderNodeOverlay() {
-    this.showRenderNodeOverlayEnabled = false;
-  }
-
-  public boolean isShowRenderNodeOverlayEnabled() {
-    return showRenderNodeOverlayEnabled;
-  }
-
-  public NiftyColor getShowRenderNodeOverlayColor() {
-    return showRenderNodeOverlayColor;
-  }
+  /**
+   * This returns the overlay color to be used when showRenderNodeOverlay
+   * is enabled.
+   * @return the color to use when showRenderNodeOverlay is enabled
+   */
+  NiftyColor showRenderNodeOverlayColor();
 }

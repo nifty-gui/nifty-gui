@@ -29,8 +29,8 @@ package de.lessvoid.niftyinternal.render;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
-import de.lessvoid.nifty.types.NiftyMutableColor;
 import de.lessvoid.nifty.types.NiftyRect;
+import de.lessvoid.niftyinternal.NiftyConfiguration;
 import de.lessvoid.niftyinternal.canvas.Context;
 import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
@@ -56,12 +56,12 @@ public class RenderBucket {
   private final Context context;
   private final Mat4 bucketTransform;
   private final Mat4 bucketTransformInverse;
-  private final RenderBucketConfiguration renderBucketConfig;
+  private final NiftyConfiguration renderBucketConfig;
 
   public RenderBucket(
       final NiftyRect rect,
       final NiftyRenderDevice renderDevice,
-      final RenderBucketConfiguration renderBucketConfig) {
+      final NiftyConfiguration renderBucketConfig) {
     this.rect = rect;
     this.context = createContext(renderDevice);
     this.bucketTransform = Mat4.createTranslate(rect.getOrigin().getX(), rect.getOrigin().getY(), 0.f);
@@ -96,14 +96,14 @@ public class RenderBucket {
         RenderBucketRenderNode renderNode = renderNodes.get(i);
         renderNode.render(localBatchManager, bucketTransformInverse);
 
-        if (renderBucketConfig.isShowRenderNodeOverlayEnabled()) {
+        if (renderBucketConfig.showRenderNodeOverlay()) {
           NiftyRect r = renderNode.getScreenSpaceAABB();
           localBatchManager.addColorQuad(
               r.getOrigin().getX(),
               r.getOrigin().getY(),
               r.getOrigin().getX() + r.getSize().getWidth(),
               r.getOrigin().getY() + r.getSize().getHeight(),
-              renderBucketConfig.getShowRenderNodeOverlayColor(),
+              renderBucketConfig.showRenderNodeOverlayColor(),
               bucketTransformInverse);
         }
       }

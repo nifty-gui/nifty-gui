@@ -29,7 +29,8 @@ package de.lessvoid.nifty;
 import de.lessvoid.nifty.input.NiftyInputConsumer;
 import de.lessvoid.nifty.input.NiftyKeyboardEvent;
 import de.lessvoid.nifty.input.NiftyPointerEvent;
-import de.lessvoid.nifty.node.*;
+import de.lessvoid.nifty.node.NiftyReferenceNode;
+import de.lessvoid.nifty.node.NiftyRootNode;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
@@ -39,16 +40,13 @@ import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import de.lessvoid.niftyinternal.InternalNiftyEventBus;
-import de.lessvoid.niftyinternal.InternalNiftyImage;
-import de.lessvoid.niftyinternal.InternalNiftyNodeAccessorRegistry;
-import de.lessvoid.niftyinternal.NiftyResourceLoader;
+import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.niftyinternal.*;
 import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
 import de.lessvoid.niftyinternal.animate.IntervalAnimator;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.common.StatisticsRendererFPS;
 import de.lessvoid.niftyinternal.render.InternalNiftyRenderer;
-import de.lessvoid.niftyinternal.render.RenderBucketConfiguration;
 import de.lessvoid.niftyinternal.render.font.FontRenderer;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 import org.jglfont.JGLFontFactory;
@@ -63,8 +61,8 @@ import java.util.logging.Logger;
 
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNiftyNode;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNiftyNodeClass;
-import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplAny;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeClass;
+import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplAny;
 
 /**
  * The main control class of all things Nifty.
@@ -124,6 +122,9 @@ public class Nifty {
   // IntervalAnimator will execute given NiftyCallbacks at given intervals
   private List<IntervalAnimator> animators = new ArrayList<>();
 
+  // configuration
+  private NiftyConfigurationImpl configuration = new NiftyConfigurationImpl();
+
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
@@ -145,7 +146,7 @@ public class Nifty {
 
     statistics = new NiftyStatistics(new Statistics(timeProvider));
     stats = statistics.getImpl();
-    renderer = new InternalNiftyRenderer(statistics.getImpl(), newRenderDevice, new RenderBucketConfiguration());
+    renderer = new InternalNiftyRenderer(statistics.getImpl(), newRenderDevice, configuration);
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
 
     NiftyNodeImpl<NiftyRootNode> rootNodeImpl = niftyNodeImpl(new NiftyRootNode());
@@ -431,7 +432,25 @@ public class Nifty {
     return nodeAccessorRegistry.getImpl(child);
   }
 
+  /////////////////////////////////////////////////////////////////////////////
+  // NiftyConfiguration
+  /////////////////////////////////////////////////////////////////////////////
+
+  public void enableShowRenderNodeOverlay() {
+    configuration.enableShowRenderNodeOverlay();
+  }
+
+  public void enableShowRenderNodeOverlay(final NiftyColor color) {
+    configuration.enableShowRenderNodeOverlay(color);
+  }
+
+  public void disableShowRenderNodeOverlay() {
+    configuration.disableShowRenderNodeOverlay();
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
   // Private methods
+  /////////////////////////////////////////////////////////////////////////////
 
   private List<NiftyNode> collectInputReceivers() {
     /* FIXME

@@ -24,7 +24,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.render;
+package de.lessvoid.niftyinternal;
 
 import de.lessvoid.nifty.types.NiftyColor;
 import org.junit.Test;
@@ -37,37 +37,30 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by void on 13.09.15.
  */
-public class RenderBucketConfigurationTest {
+public class NiftyConfigurationImplTest {
 
   @Test
   public void testDefaults() {
-    RenderBucketConfiguration config = new RenderBucketConfiguration();
+    NiftyConfigurationImpl config = new NiftyConfigurationImpl();
     assertEquals(256, config.getBucketWidth());
     assertEquals(256, config.getBucketHeight());
-    assertFalse(config.isShowRenderNodeOverlayEnabled());
-    assertNotNull(config.getShowRenderNodeOverlayColor());
-  }
-
-  @Test
-  public void testBucketSize() {
-    RenderBucketConfiguration config = new RenderBucketConfiguration(512, 512);
-    assertEquals(512, config.getBucketWidth());
-    assertEquals(512, config.getBucketHeight());
+    assertFalse(config.showRenderNodeOverlay());
+    assertNotNull(config.showRenderNodeOverlayColor());
   }
 
   @Test
   public void testEnableShowRenderNodeOverlay() {
-    RenderBucketConfiguration config = new RenderBucketConfiguration();
+    NiftyConfigurationImpl config = new NiftyConfigurationImpl();
     config.enableShowRenderNodeOverlay();
-    assertTrue(config.isShowRenderNodeOverlayEnabled());
-    assertNotNull(config.getShowRenderNodeOverlayColor());
+    assertTrue(config.showRenderNodeOverlay());
+    assertNotNull(config.showRenderNodeOverlayColor());
   }
 
   @Test
   public void testEnableShowRenderNodeOverlayWithColor() {
-    RenderBucketConfiguration config = new RenderBucketConfiguration();
+    NiftyConfigurationImpl config = new NiftyConfigurationImpl();
     config.enableShowRenderNodeOverlay(NiftyColor.aqua());
-    assertTrue(config.isShowRenderNodeOverlayEnabled());
-    assertEquals(NiftyColor.aqua(), config.getShowRenderNodeOverlayColor());
+    assertTrue(config.showRenderNodeOverlay());
+    assertEquals(NiftyColor.aqua(), config.showRenderNodeOverlayColor());
   }
 }

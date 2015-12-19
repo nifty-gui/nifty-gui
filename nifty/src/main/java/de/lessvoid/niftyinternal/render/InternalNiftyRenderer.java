@@ -33,6 +33,7 @@ import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
 import de.lessvoid.nifty.types.NiftyPoint;
 import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.nifty.types.NiftySize;
+import de.lessvoid.niftyinternal.NiftyConfiguration;
 import de.lessvoid.niftyinternal.accessor.NiftyStateAccessor;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
@@ -56,7 +57,7 @@ public class InternalNiftyRenderer {
   private final RenderBucketRenderNodeFactory renderNodeFactory = new RenderBucketRenderNodeFactory();
   private final Statistics stats;
   private final NiftyRenderDevice renderDevice;
-  private final RenderBucketConfiguration renderBucketConfig;
+  private final NiftyConfiguration renderBucketConfig;
 
   // We keep all RenderBucketRenderNode instances in this list of RenderBucket. A RenderBucket is a part of the screen
   // that is cached in a texture. When rendering the screen we only re-render RenderBuckets that contain changed
@@ -67,7 +68,7 @@ public class InternalNiftyRenderer {
   public InternalNiftyRenderer(
       final Statistics stats,
       final NiftyRenderDevice renderDevice,
-      final RenderBucketConfiguration renderBucketConfig) {
+      final NiftyConfiguration renderBucketConfig) {
     this.stats = stats;
     this.renderDevice = renderDevice;
     this.renderBucketConfig = renderBucketConfig;
