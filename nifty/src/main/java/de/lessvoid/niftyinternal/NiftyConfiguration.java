@@ -47,16 +47,23 @@ public interface NiftyConfiguration {
   int getBucketHeight();
 
   /**
+   * If this is set to true all RenderBuckets will be overlayed
+   * by a random color.
+   * @return the showRenderBuckets parameter
+   */
+  boolean isShowRenderBuckets();
+
+  /**
    * If this is set to true all render nodes will be overlayed
    * by a single colored quad to display and debug its position.
    * @return the showRenderNodeOverlay parameter
    */
-  boolean showRenderNodeOverlay();
+  boolean isShowRenderNodes();
 
   /**
    * This returns the overlay color to be used when showRenderNodeOverlay
    * is enabled.
    * @return the color to use when showRenderNodeOverlay is enabled
    */
-  NiftyColor showRenderNodeOverlayColor();
+  NiftyColor getShowRenderNodeOverlayColor();
 }

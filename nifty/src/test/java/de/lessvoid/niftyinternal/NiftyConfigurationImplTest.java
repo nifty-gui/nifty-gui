@@ -44,23 +44,32 @@ public class NiftyConfigurationImplTest {
     NiftyConfigurationImpl config = new NiftyConfigurationImpl();
     assertEquals(256, config.getBucketWidth());
     assertEquals(256, config.getBucketHeight());
-    assertFalse(config.showRenderNodeOverlay());
-    assertNotNull(config.showRenderNodeOverlayColor());
+    assertFalse(config.isShowRenderBuckets());
+    assertFalse(config.isShowRenderNodes());
+    assertNotNull(config.getShowRenderNodeOverlayColor());
   }
 
   @Test
   public void testEnableShowRenderNodeOverlay() {
     NiftyConfigurationImpl config = new NiftyConfigurationImpl();
-    config.enableShowRenderNodeOverlay();
-    assertTrue(config.showRenderNodeOverlay());
-    assertNotNull(config.showRenderNodeOverlayColor());
+    config.setShowRenderNodes(true);
+    assertTrue(config.isShowRenderNodes());
+    assertNotNull(config.getShowRenderNodeOverlayColor());
   }
 
   @Test
   public void testEnableShowRenderNodeOverlayWithColor() {
     NiftyConfigurationImpl config = new NiftyConfigurationImpl();
-    config.enableShowRenderNodeOverlay(NiftyColor.aqua());
-    assertTrue(config.showRenderNodeOverlay());
-    assertEquals(NiftyColor.aqua(), config.showRenderNodeOverlayColor());
+    config.setShowRenderNodes(true);
+    config.setShowRenderNodeOverlayColor(NiftyColor.aqua());
+    assertTrue(config.isShowRenderNodes());
+    assertEquals(NiftyColor.aqua(), config.getShowRenderNodeOverlayColor());
+  }
+
+  @Test
+  public void testEnableShowRenderBuckets() {
+    NiftyConfigurationImpl config = new NiftyConfigurationImpl();
+    config.setShowRenderBuckets(true);
+    assertTrue(config.isShowRenderBuckets());
   }
 }

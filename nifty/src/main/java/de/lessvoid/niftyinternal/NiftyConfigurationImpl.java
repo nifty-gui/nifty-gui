@@ -34,7 +34,8 @@ import de.lessvoid.nifty.types.NiftyColor;
 public class NiftyConfigurationImpl implements NiftyConfiguration {
   private final int bucketWidth = 256;
   private final int bucketHeight = 256;
-  private boolean showRenderNodeOverlayEnabled = false;
+  private boolean showRenderBuckets = false;
+  private boolean showRenderNodes = false;
   private NiftyColor showRenderNodeOverlayColor = NiftyColor.fromString("#ff00ff50");
 
   @Override
@@ -48,25 +49,29 @@ public class NiftyConfigurationImpl implements NiftyConfiguration {
   }
 
   @Override
-  public boolean showRenderNodeOverlay() {
-    return showRenderNodeOverlayEnabled;
+  public boolean isShowRenderBuckets() {
+    return showRenderBuckets;
   }
 
   @Override
-  public NiftyColor showRenderNodeOverlayColor() {
+  public boolean isShowRenderNodes() {
+    return showRenderNodes;
+  }
+
+  @Override
+  public NiftyColor getShowRenderNodeOverlayColor() {
     return showRenderNodeOverlayColor;
   }
 
-  public void enableShowRenderNodeOverlay() {
-    this.showRenderNodeOverlayEnabled = true;
+  public void setShowRenderBuckets(final boolean showRenderBuckets) {
+    this.showRenderBuckets = showRenderBuckets;
   }
 
-  public void enableShowRenderNodeOverlay(final NiftyColor color) {
-    this.showRenderNodeOverlayEnabled = true;
-    this.showRenderNodeOverlayColor = color;
+  public void setShowRenderNodes(final boolean showRenderNodes) {
+    this.showRenderNodes = showRenderNodes;
   }
 
-  public void disableShowRenderNodeOverlay() {
-    this.showRenderNodeOverlayEnabled = false;
+  public void setShowRenderNodeOverlayColor(final NiftyColor showRenderNodeOverlayColor) {
+    this.showRenderNodeOverlayColor = showRenderNodeOverlayColor;
   }
 }

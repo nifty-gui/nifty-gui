@@ -436,16 +436,31 @@ public class Nifty {
   // NiftyConfiguration
   /////////////////////////////////////////////////////////////////////////////
 
-  public void enableShowRenderNodeOverlay() {
-    configuration.enableShowRenderNodeOverlay();
+  /**
+   * Set showRenderBuckets to true to overlay a random color quad above each
+   * updated RenderBucket.
+   * @param showRenderBuckets the value to set showRenderBuckets to
+   */
+  public void setShowRenderBuckets(final boolean showRenderBuckets) {
+    configuration.setShowRenderBuckets(showRenderBuckets);
   }
 
-  public void enableShowRenderNodeOverlay(final NiftyColor color) {
-    configuration.enableShowRenderNodeOverlay(color);
+  /**
+   * Set showRenderNodes to true to overlay a quad in the color set
+   * to the showRenderNodeOverlayColor.
+   * @param showRenderNodes the value to set showRenderNodes to
+   */
+  public void setShowRenderNodes(final boolean showRenderNodes) {
+    configuration.setShowRenderNodes(showRenderNodes);
   }
 
-  public void disableShowRenderNodeOverlay() {
-    configuration.disableShowRenderNodeOverlay();
+  /**
+   * Set the showRenderNodeOverlayColor - the color used to overlay
+   * each renderNode when showRenderNodes is set to true.
+   * @param color the color to render showRenderNodes overlays with
+   */
+  public void setShowRenderNodeOverlayColor(final NiftyColor color) {
+    configuration.setShowRenderNodeOverlayColor(color);
   }
 
   /////////////////////////////////////////////////////////////////////////////
