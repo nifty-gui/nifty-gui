@@ -26,9 +26,9 @@
  */
 package de.lessvoid.nifty.types;
 
-import java.util.Random;
-
 import de.lessvoid.niftyinternal.common.ColorStringParser;
+
+import java.util.Random;
 
 /**
  * Immutable Color representation for Nifty. Nifty uses this class when color information is needed or returned by
@@ -237,6 +237,16 @@ public class NiftyColor {
   public static NiftyColor randomColor() {
     Random random = new Random();
     return new NiftyColor(random.nextDouble(), random.nextDouble(), random.nextDouble(), 1.f);
+  }
+
+  /**
+   * Create a random Color with given Alpha
+   * @param alpha the alpha value to use
+   * @return a color with random red, green and blue components
+   */
+  public static NiftyColor randomColorWithAlpha(final double alpha) {
+    Random random = new Random();
+    return new NiftyColor(random.nextDouble(), random.nextDouble(), random.nextDouble(), alpha);
   }
 
   /**

@@ -26,9 +26,10 @@
  */
 package de.lessvoid.nifty;
 
-import static org.junit.Assert.assertEquals;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyMutableColor;
+
+import static org.junit.Assert.assertEquals;
 
 public class AssertColor {
   private static final float DELTA = 1.f / 255.f;
@@ -49,5 +50,9 @@ public class AssertColor {
 
   public static void assertColor(final String expected, final NiftyColor c) {
     assertEquals(expected, c.toHexString());
+  }
+
+  public static void assertAlpha(final double expectedAlpha, final NiftyColor c) {
+    assertEquals(expectedAlpha, c.getAlpha(), DELTA);
   }
 }

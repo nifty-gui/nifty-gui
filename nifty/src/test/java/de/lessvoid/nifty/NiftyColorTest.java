@@ -26,12 +26,13 @@
  */
 package de.lessvoid.nifty;
 
+import de.lessvoid.nifty.types.NiftyColor;
+import org.junit.Test;
+
+import static de.lessvoid.nifty.AssertColor.assertAlpha;
 import static de.lessvoid.nifty.AssertColor.assertColor;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import de.lessvoid.nifty.types.NiftyColor;
-import org.junit.Test;
 
 public class NiftyColorTest {
 
@@ -110,6 +111,11 @@ public class NiftyColorTest {
   @Test
   public void testFromRandom() {
     NiftyColor.randomColor();
+  }
+
+  @Test
+  public void testFromRandomWithAlpha() {
+    assertAlpha(0.5, NiftyColor.randomColorWithAlpha(0.5));
   }
 
   @Test
