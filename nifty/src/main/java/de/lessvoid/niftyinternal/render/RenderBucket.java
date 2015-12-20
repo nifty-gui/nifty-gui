@@ -56,25 +56,28 @@ public class RenderBucket {
   private final Context context;
   private final Mat4 bucketTransform;
   private final Mat4 bucketTransformInverse;
-  private final NiftyConfiguration renderBucketConfig;
+  private final NiftyConfiguration config;
+  private final NiftyColor debugOverlayColor = NiftyColor.randomColorWithAlpha(0.5);
+  private boolean used;
 
   public RenderBucket(
       final NiftyRect rect,
       final NiftyRenderDevice renderDevice,
-      final NiftyConfiguration renderBucketConfig) {
+      final NiftyConfiguration config) {
     this.rect = rect;
     this.context = createContext(renderDevice);
     this.bucketTransform = Mat4.createTranslate(rect.getOrigin().getX(), rect.getOrigin().getY(), 0.f);
     this.bucketTransformInverse = Mat4.invert(bucketTransform, null);
-    this.renderBucketConfig = renderBucketConfig;
+    this.config = config;
 
     // update
     context.bind(renderDevice, new BatchManager());
     context.prepare();
-    context.setFillColor(NiftyColor.randomColor());
     context.setFillColor(NiftyColor.transparent());
     context.filledRect(0., 0., rect.getSize().getWidth(), rect.getSize().getHeight());
     context.flush();
+
+    this.used = false;
   }
 
   public void update(final RenderBucketRenderNode renderNode) {
@@ -92,22 +95,40 @@ public class RenderBucket {
       BatchManager localBatchManager = new BatchManager();
       context.bind(renderDevice, localBatchManager);
       context.prepare();
+
       for (int i=0; i<renderNodes.size(); i++) {
         RenderBucketRenderNode renderNode = renderNodes.get(i);
         renderNode.render(localBatchManager, bucketTransformInverse);
 
-        if (renderBucketConfig.showRenderNodeOverlay()) {
+        if (config.isShowRenderNodes()) {
           NiftyRect r = renderNode.getScreenSpaceAABB();
           localBatchManager.addColorQuad(
               r.getOrigin().getX(),
               r.getOrigin().getY(),
               r.getOrigin().getX() + r.getSize().getWidth(),
               r.getOrigin().getY() + r.getSize().getHeight(),
-              renderBucketConfig.showRenderNodeOverlayColor(),
+              config.getShowRenderNodeOverlayColor(),
               bucketTransformInverse);
         }
       }
+
+      if (config.isShowRenderBuckets()) {
+        context.setFillColor(debugOverlayColor);
+        context.filledRect(0., 0., rect.getSize().getWidth(), rect.getSize().getHeight());
+      }
+
       context.flush();
+      used = true;
+    } else {
+      if (used) {
+        BatchManager localBatchManager = new BatchManager();
+        context.bind(renderDevice, localBatchManager);
+        context.prepare();
+        context.setFillColor(NiftyColor.transparent());
+        context.filledRect(0., 0., rect.getSize().getWidth(), rect.getSize().getHeight());
+        context.flush();
+        used = false;
+      }
     }
 
     // render
