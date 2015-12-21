@@ -4,7 +4,7 @@ Nifty 2.0 - You haven't seen anything yet ...
 
 ```
 cd /tmp
-git clone git://github.com/void256/nifty-gui.git
+git clone git://github.com/nifty-gui/nifty-gui.git
 cd nifty-gui/
 git checkout 2.0
 mvn clean install
