@@ -36,6 +36,7 @@ import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -91,6 +92,8 @@ public class RenderBucket {
   }
 
   public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice) {
+    Collections.sort(renderNodes);
+
     if (!renderNodes.isEmpty()) {
       BatchManager localBatchManager = new BatchManager();
       context.bind(renderDevice, localBatchManager);

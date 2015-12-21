@@ -46,13 +46,14 @@ import java.util.List;
  *
  * Created by void on 13.09.15.
  */
-public class RenderBucketRenderNode {
+public class RenderBucketRenderNode implements Comparable<RenderBucketRenderNode> {
   private final NiftyCanvas niftyCanvas = NiftyCanvasAccessor.getDefault().newNiftyCanvas();
 
   private int width;
   private int height;
   private Mat4 localToScreen;
   private Context context;
+  private int renderOrder;
 
   public RenderBucketRenderNode(
       final int width,
@@ -63,6 +64,15 @@ public class RenderBucketRenderNode {
     this.height = height;
     this.localToScreen = localToScreen;
     this.context = createContext(renderDevice);
+  }
+
+  public void updateRenderOrder(final int renderOrder) {
+    this.renderOrder = renderOrder;
+  }
+
+  public void updateCanvas(final NiftyNodeContentImpl child) {
+    NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas).reset();
+    child.updateCanvas(niftyCanvas);
   }
 
   public void updateContent(final int width, final int height, final Mat4 localToScreen, final NiftyRenderDevice renderDevice) {
@@ -106,6 +116,11 @@ public class RenderBucketRenderNode {
         NiftySize.newNiftySize(maxX - minX, maxY - minY));
   }
 
+  @Override
+  public int compareTo(final RenderBucketRenderNode o) {
+    return Integer.valueOf(this.renderOrder).compareTo(o.renderOrder);
+  }
+
   private boolean updateSize(
       final int newWidth,
       final int newHeight,
@@ -134,10 +149,5 @@ public class RenderBucketRenderNode {
     return new Context(
         renderDevice.createTexture(width, height, NiftyRenderDevice.FilterMode.Linear),
         renderDevice.createTexture(width, height, NiftyRenderDevice.FilterMode.Linear));
-  }
-
-  public void updateCanvas(final NiftyNodeContentImpl child) {
-    NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas).reset();
-    child.updateCanvas(niftyCanvas);
   }
 }

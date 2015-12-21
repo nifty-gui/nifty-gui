@@ -90,11 +90,14 @@ public class InternalNiftyRenderer {
   }
 
   private void nodeCanvasPass(final Iterable<NiftyNodeContentImpl> nodes) {
+    int renderOrder = 0;
     for (NiftyNodeContentImpl child : nodes) {
       RenderBucketRenderNode renderNode = renderNodeFactory.create(child, renderDevice);
+      renderNode.updateRenderOrder(renderOrder);
       renderNode.updateCanvas(child);
       renderNode.updateContent(child.getContentWidth(), child.getContentHeight(), child.getLocalToScreen(), renderDevice);
       updateRenderBuckets(renderNode);
+      renderOrder++;
     }
   }
 
