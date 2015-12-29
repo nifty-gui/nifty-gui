@@ -36,9 +36,9 @@ import javax.annotation.Nonnull;
 import static de.lessvoid.nifty.types.NiftySize.newNiftySize;
 
 /**
- * This layout node has a fixed size it applies. This node actually ignores the size requirements of all child nodes
- * and forces the set size. For the arrangement the size is not enforced. It will forward the arrangement size to the
- * child nodes unmodified.
+ * This layout node allows to set a specific size that is applied to all child nodes.
+ * <p />
+ * This size can be treated as fixed size or as a maximal or minimal value for the size.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
