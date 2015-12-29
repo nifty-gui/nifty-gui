@@ -29,34 +29,44 @@ package de.lessvoid.niftyinternal.tree;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by void on 21.08.15.
  */
-public class NiftyTreeNodePredicates {
+public final class NiftyTreeNodePredicates {
+  @Nonnull
   public static NiftyTreeNodePredicate nodeImplAny() {
-    return new NiftyTreeNodePredicate() {
-      @Override
-      public boolean accept(final NiftyNodeImpl niftyNodeImpl) {
-        return true;
-      }
-    };
+    return PredicateAny.Instance;
   }
 
-  public static <T> NiftyTreeNodePredicate nodeImplClass(final Class<T> clazz) {
+  @Nonnull
+  public static <T extends NiftyNodeImpl> NiftyTreeNodePredicate nodeImplClass(@Nonnull final Class<T> clazz) {
     return new NiftyTreeNodePredicate() {
       @Override
-      public boolean accept(final NiftyNodeImpl niftyNodeImpl) {
+      public boolean accept(@Nonnull final NiftyNodeImpl niftyNodeImpl) {
         return clazz.isAssignableFrom(niftyNodeImpl.getClass());
       }
     };
   }
 
+  @Nonnull
   public static <T extends NiftyNode> NiftyTreeNodePredicate nodeClass(final Class<T> clazz) {
     return new NiftyTreeNodePredicate() {
       @Override
-      public boolean accept(final NiftyNodeImpl niftyNodeImpl) {
+      public boolean accept(@Nonnull final NiftyNodeImpl niftyNodeImpl) {
         return clazz.isAssignableFrom(niftyNodeImpl.getNiftyNode().getClass());
       }
     };
+  }
+
+  private NiftyTreeNodePredicates() {}
+
+  private enum PredicateAny implements NiftyTreeNodePredicate {
+    Instance;
+    @Override
+    public boolean accept(@Nonnull final NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl) {
+      return true;
+    }
   }
 }
