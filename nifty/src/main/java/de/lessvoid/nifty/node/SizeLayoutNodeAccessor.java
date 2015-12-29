@@ -8,16 +8,16 @@ import javax.annotation.Nonnull;
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-final class FixedSizeLayoutNodeAccessor implements NiftyNodeAccessor<FixedSizeLayoutNode> {
+final class SizeLayoutNodeAccessor implements NiftyNodeAccessor<SizeLayoutNode> {
   @Nonnull
   @Override
-  public Class<FixedSizeLayoutNode> getNodeClass() {
-    return FixedSizeLayoutNode.class;
+  public Class<SizeLayoutNode> getNodeClass() {
+    return SizeLayoutNode.class;
   }
 
   @Nonnull
   @Override
-  public NiftyNodeImpl<FixedSizeLayoutNode> getImplementation(@Nonnull final FixedSizeLayoutNode niftyNode) {
+  public NiftyNodeImpl<SizeLayoutNode> getImplementation(@Nonnull final SizeLayoutNode niftyNode) {
     return niftyNode.getImpl();
   }
 }
