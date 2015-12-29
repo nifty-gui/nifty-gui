@@ -309,9 +309,27 @@ public class NiftyLayout {
   public List<NiftyNodeImpl<? extends NiftyNode>> getDirectChildren(
       @Nonnull final NiftyLayoutNodeImpl<? extends NiftyNode> node) {
     Iterable<NiftyNodeImpl<?>> itr = nodeTree.childNodes(nodeImplAny(), toNodeImpl(), onlyOneLevel(), node);
-    List<NiftyNodeImpl<?>> list = new LinkedList<>();
+
+    List<NiftyNodeImpl<? extends NiftyNode>> list = null;
+    NiftyNodeImpl<? extends NiftyNode> singleItem = null;
+
     for (NiftyNodeImpl<?> impl : itr) {
-      list.add(impl);
+      if (singleItem == null) {
+        singleItem = impl;
+      } else {
+        if (list == null) {
+          list = new LinkedList<>();
+          list.add(singleItem);
+        }
+        list.add(impl);
+      }
+    }
+
+    if (singleItem == null) {
+      return Collections.emptyList();
+    }
+    if (list == null) {
+      return Collections.<NiftyNodeImpl<? extends NiftyNode>>singletonList(singleItem);
     }
     return list;
   }
