@@ -27,13 +27,12 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyNodeBuilder;
 import de.lessvoid.nifty.node.Orientation;
 import de.lessvoid.nifty.types.NiftyColor;
 
 import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
 import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
-import static de.lessvoid.nifty.node.FixedSizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
 import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.NiftyReferenceNode.referenceNode;
