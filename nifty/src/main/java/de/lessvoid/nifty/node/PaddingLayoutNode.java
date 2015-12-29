@@ -50,7 +50,7 @@ public final class PaddingLayoutNode implements NiftyNode {
     return implementation.getLeft();
   }
 
-  public void setLeft(float left) {
+  public void setLeft(final float left) {
     implementation.setLeft(left);
   }
 
@@ -58,7 +58,7 @@ public final class PaddingLayoutNode implements NiftyNode {
     return implementation.getRight();
   }
 
-  public void setRight(float right) {
+  public void setRight(final float right) {
     implementation.setRight(right);
   }
 
@@ -66,7 +66,7 @@ public final class PaddingLayoutNode implements NiftyNode {
     return implementation.getTop();
   }
 
-  public void setTop(float top) {
+  public void setTop(final float top) {
     implementation.setTop(top);
   }
 
@@ -74,7 +74,7 @@ public final class PaddingLayoutNode implements NiftyNode {
     return implementation.getBottom();
   }
 
-  public void setBottom(float bottom) {
+  public void setBottom(final float bottom) {
     implementation.setBottom(bottom);
   }
 
