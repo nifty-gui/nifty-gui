@@ -52,6 +52,10 @@ public class UseCaseRunnerAdapterDummy implements UseCaseRunnerAdapter {
         new AccurateTimeProvider());
 
     useCaseClass.getConstructor(Nifty.class).newInstance(nifty);
+
+    nifty.update();
+    nifty.render();
+
     logScene(nifty);
 
     Runtime.getRuntime().addShutdownHook(new Thread() {
