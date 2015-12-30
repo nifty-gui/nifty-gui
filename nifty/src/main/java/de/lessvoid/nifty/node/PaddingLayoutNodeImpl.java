@@ -50,7 +50,7 @@ final class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNo
     return bottom;
   }
 
-  void setBottom(float bottom) {
+  void setBottom(final float bottom) {
     if (!(Math.abs(bottom) <= Float.MAX_VALUE)) throw new IllegalArgumentException("bottom is expected to be a finite value.");
 
     if (this.bottom != bottom){
@@ -64,7 +64,7 @@ final class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNo
     return left;
   }
 
-  void setLeft(float left) {
+  void setLeft(final float left) {
     if (!(Math.abs(left) <= Float.MAX_VALUE)) throw new IllegalArgumentException("left is expected to be a finite value.");
 
     if (this.left != left) {
@@ -78,7 +78,7 @@ final class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNo
     return right;
   }
 
-  void setRight(float right) {
+  void setRight(final float right) {
     if (!(Math.abs(right) <= Float.MAX_VALUE)) throw new IllegalArgumentException("right is expected to be a finite value.");
 
     if (this.right != right) {
@@ -92,7 +92,7 @@ final class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNo
     return top;
   }
 
-  void setTop(float top) {
+  void setTop(final float top) {
     if (!(Math.abs(top) <= Float.MAX_VALUE)) throw new IllegalArgumentException("top is expected to be a finite value.");
 
     if (this.top != top) {
@@ -104,7 +104,7 @@ final class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNo
 
   @Nonnull
   @Override
-  protected NiftySize measureInternal(@Nonnull NiftySize availableSize) {
+  protected NiftySize measureInternal(@Nonnull final NiftySize availableSize) {
     Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements, means that we do not require any size. */
@@ -120,7 +120,7 @@ final class PaddingLayoutNodeImpl extends AbstractLayoutNodeImpl<PaddingLayoutNo
   }
 
   @Override
-  protected void arrangeInternal(@Nonnull NiftyRect area) {
+  protected void arrangeInternal(@Nonnull final NiftyRect area) {
     Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
     if (children.isEmpty()) {
       /* No child elements -> We are all done. */

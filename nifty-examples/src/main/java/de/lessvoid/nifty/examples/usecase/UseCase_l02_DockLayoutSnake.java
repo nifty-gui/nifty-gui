@@ -40,7 +40,7 @@ import java.util.Queue;
 
 import static de.lessvoid.nifty.node.DockLayoutChildNode.dockLayoutChildNode;
 import static de.lessvoid.nifty.node.DockLayoutNode.dockLayoutNode;
-import static de.lessvoid.nifty.node.FixedSizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
 import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.types.NiftyColor.*;

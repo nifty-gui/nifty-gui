@@ -34,17 +34,28 @@ import de.lessvoid.nifty.types.NiftySize;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
+import static de.lessvoid.nifty.node.SizeLayoutNodeMode.Fixed;
+import static de.lessvoid.nifty.node.SizeLayoutNodeMode.Maximal;
+import static de.lessvoid.nifty.node.SizeLayoutNodeMode.Minimal;
+
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-final class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayoutNode> {
+final class SizeLayoutNodeImpl extends AbstractLayoutNodeImpl<SizeLayoutNode> {
   @Nonnull
   private NiftySize size;
+  @Nonnull
+  private SizeLayoutNodeMode widthMode;
+  @Nonnull
+  private SizeLayoutNodeMode heightMode;
 
-  public FixedSizeLayoutNodeImpl(@Nonnull final NiftySize size) {
+  public SizeLayoutNodeImpl(@Nonnull final NiftySize size,
+                            @Nonnull final SizeLayoutNodeMode widthMode, @Nonnull final SizeLayoutNodeMode heightMode) {
     if (size.isInfinite() || size.isInvalid()) throw new IllegalArgumentException("The size has to be a finite value.");
 
     this.size = size;
+    this.widthMode = widthMode;
+    this.heightMode = heightMode;
   }
 
   @Nonnull
@@ -62,14 +73,66 @@ final class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayo
   }
 
   @Nonnull
+  public SizeLayoutNodeMode getHeightMode() {
+    return heightMode;
+  }
+
+  public void setHeightMode(@Nonnull final SizeLayoutNodeMode heightMode) {
+    this.heightMode = heightMode;
+  }
+
+  @Nonnull
+  public SizeLayoutNodeMode getWidthMode() {
+    return widthMode;
+  }
+
+  public void setWidthMode(@Nonnull final SizeLayoutNodeMode widthMode) {
+    this.widthMode = widthMode;
+  }
+
+  @Nonnull
   @Override
   protected NiftySize measureInternal(@Nonnull final NiftySize availableSize) {
-    /* Even if the measuring data of the children is not required, the children still need to be measured to ensure
-     * that their size data is up to date. */
+    SizeLayoutNodeMode widthMode = getWidthMode();
+    SizeLayoutNodeMode heightMode = getHeightMode();
+
+    NiftySize size = this.size;
+    NiftySize maxChildSize = NiftySize.ZERO;
+
     for (NiftyNodeImpl<?> child : getLayout().getDirectChildren(this)) {
-      getLayout().measure(child, size);
+      NiftySize childSize = getLayout().measure(child, size);
+      maxChildSize = NiftySize.max(childSize, maxChildSize);
     }
-    return size;
+
+    if ((widthMode == Fixed) && (heightMode == Fixed)) {
+      return size;
+    } else if ((widthMode == Maximal) && (heightMode == Maximal)) {
+      return NiftySize.min(size, maxChildSize);
+    } else if ((widthMode == Minimal) && (heightMode == Minimal)) {
+      return NiftySize.min(size, maxChildSize);
+    }
+
+    float usedHeight;
+    float usedWidth;
+    switch (widthMode) {
+      case Fixed: usedWidth = size.getWidth(); break;
+      case Maximal: usedWidth = Math.min(size.getWidth(), maxChildSize.getWidth()); break;
+      case Minimal: usedWidth = Math.max(size.getWidth(), maxChildSize.getWidth()); break;
+      default: throw new UnsupportedOperationException("Unreachable");
+    }
+    switch (heightMode) {
+      case Fixed: usedHeight = size.getHeight(); break;
+      case Maximal: usedHeight = Math.min(size.getHeight(), maxChildSize.getHeight()); break;
+      case Minimal: usedHeight = Math.max(size.getHeight(), maxChildSize.getHeight()); break;
+      default: throw new UnsupportedOperationException("Unreachable");
+    }
+
+    if (size.equals(usedWidth, usedHeight)) {
+      return size;
+    } else if (maxChildSize.equals(usedWidth, usedHeight)) {
+      return maxChildSize;
+    }
+    return NiftySize.newNiftySize(usedWidth, usedHeight);
   }
 
   @Override
@@ -86,7 +149,7 @@ final class FixedSizeLayoutNodeImpl extends AbstractLayoutNodeImpl<FixedSizeLayo
   }
 
   @Override
-  protected FixedSizeLayoutNode createNode() {
-    return new FixedSizeLayoutNode(this);
+  protected SizeLayoutNode createNode() {
+    return new SizeLayoutNode(this);
   }
 }

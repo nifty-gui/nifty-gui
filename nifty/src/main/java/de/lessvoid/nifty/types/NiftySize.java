@@ -61,6 +61,17 @@ public final class NiftySize {
   }
 
   @Nonnull
+  public static NiftySize min(@Nonnull final NiftySize size1, @Nonnull final NiftySize size2) {
+    if ((size1.width <= size2.width) && (size1.height <= size2.height)) {
+      return size1;
+    } else if ((size1.width >= size2.width) && (size1.height >= size2.height)) {
+      return size2;
+    } else {
+      return newNiftySize(Math.min(size1.width, size2.width), Math.min(size1.height, size2.height));
+    }
+  }
+
+  @Nonnull
   public static NiftySize max(@Nonnull final NiftySize size1,
                               @Nonnull final NiftySize size2,
                               @Nonnull final NiftySize size3) {
@@ -110,6 +121,16 @@ public final class NiftySize {
     return (other != null) &&
         (Float.floatToIntBits(width) == Float.floatToIntBits(other.width)) &&
         (Float.floatToIntBits(height) == Float.floatToIntBits(other.height));
+  }
+
+  public boolean equals(final float width, final float height) {
+    return (Float.floatToIntBits(width) == Float.floatToIntBits(this.width)) &&
+        (Float.floatToIntBits(height) == Float.floatToIntBits(this.height));
+  }
+
+  public boolean equals(final float width, final float height, final float tolerance) {
+    return (Math.abs(this.width - width) <= tolerance) &&
+        (Math.abs(this.height - height) <= tolerance);
   }
 
   public boolean equals(@Nullable final NiftySize other, final float tolerance) {

@@ -29,6 +29,8 @@ package de.lessvoid.niftyinternal.tree;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
+import javax.annotation.Nonnull;
+
 /**
  * The NiftyTreeNodePredicate decides if a NiftyNodeImpl is acceptable.
  */
@@ -40,5 +42,5 @@ public interface NiftyTreeNodePredicate {
    * @param niftyNodeImpl The NiftyNodeImpl to check
    * @return true if the NiftyNodeImpl is acceptable and false if not
    */
-  boolean accept(NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl);
+  boolean accept(@Nonnull NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl);
 }

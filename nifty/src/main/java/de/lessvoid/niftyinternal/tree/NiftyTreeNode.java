@@ -79,6 +79,9 @@ public class NiftyTreeNode {
   public <T> Iterator<T> iterator(@Nonnull final NiftyTreeNodePredicate predicate,
                                   @Nonnull final NiftyTreeNodeConverter<T> converter,
                                   @Nonnull final NiftyTreeNodeControl control) {
+    if (getChildren().isEmpty()) {
+      return Collections.emptyIterator();
+    }
     return
         new NiftyTreeNodeIterator<>(
             new NiftyTreeNodeDepthFirstIterator(this, control),
