@@ -1,17 +1,17 @@
 /*
  * Copyright (c) 2015, Nifty GUI Community 
  * All rights reserved. 
- * 
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions are 
- * met: 
- * 
- *  * Redistributions of source code must retain the above copyright 
- *    notice, this list of conditions and the following disclaimer. 
- *  * Redistributions in binary form must reproduce the above copyright 
- *    notice, this list of conditions and the following disclaimer in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *  * Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  * Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND 
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
@@ -28,18 +28,22 @@ package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyNodeBuilder;
+import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyDock;
 import de.lessvoid.nifty.types.NiftySize;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import static de.lessvoid.nifty.node.DockLayoutChildNode.dockLayoutChildNode;
 import static de.lessvoid.nifty.node.DockLayoutNode.dockLayoutNode;
 import static de.lessvoid.nifty.node.FixedSizeLayoutNode.fixedSizeLayoutNode;
 import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
-import static de.lessvoid.nifty.types.NiftyColor.randomColor;
+import static de.lessvoid.nifty.types.NiftyColor.*;
 import static de.lessvoid.nifty.types.NiftySize.newNiftySize;
 
 /**
@@ -58,9 +62,8 @@ import static de.lessvoid.nifty.types.NiftySize.newNiftySize;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-public class UseCase_l02_DockLayoutSnake {
-
-  public UseCase_l02_DockLayoutSnake(final Nifty nifty) {
+public final class UseCase_l02_DockLayoutSnake {
+  public UseCase_l02_DockLayoutSnake(@Nonnull final Nifty nifty) {
     NiftyNodeBuilder dockLayout = nifty.addNode(dockLayoutNode());
 
     List<NiftyDock> dockPositions = new ArrayList<>();
@@ -72,13 +75,29 @@ public class UseCase_l02_DockLayoutSnake {
     NiftySize topBottomSize = newNiftySize(0.f, 50.f);
     NiftySize leftRightSize = newNiftySize(50.f, 0.f);
 
+    Queue<NiftyColor> colors = new LinkedList<>();
+    colors.add(red());
+    colors.add(green());
+    colors.add(blue());
+    colors.add(yellow());
+
+    colors.add(aqua());
+    colors.add(maroon());
+    colors.add(navy());
+    colors.add(fuchsia());
+
+    colors.add(purple());
+    colors.add(silver());
+    colors.add(teal());
+    colors.add(white());
+
     for (int i = 0; i < 3; i++) {
       for (NiftyDock dock : dockPositions) {
         NiftySize usedSize = ((dock == NiftyDock.North) || (dock == NiftyDock.South)) ? topBottomSize : leftRightSize;
 
         dockLayout.addNode(dockLayoutChildNode(dock))
             .addNode(fixedSizeLayoutNode(usedSize))
-            .addNode(backgroundColorNode(randomColor()))
+            .addNode(backgroundColorNode(colors.isEmpty() ? randomColor() : colors.poll()))
             .addNode(contentNode());
       }
     }
