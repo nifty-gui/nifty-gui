@@ -48,4 +48,5 @@ public abstract class NiftyStateAccessor {
     }
 
     public abstract NiftyState newNiftyState();
+    public abstract NiftyState copyNiftyState(NiftyState niftyState);
 }

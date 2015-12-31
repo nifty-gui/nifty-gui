@@ -48,4 +48,15 @@ public class NiftyStateTest {
     niftyState.setState(NiftyStateBackgroundColor, NiftyColor.black());
     assertEquals(NiftyColor.black(), niftyState.getState(NiftyStateBackgroundColor));
   }
+
+  @Test
+  public void testCopy() {
+    niftyState.setState(NiftyStateBackgroundColor, NiftyColor.black());
+    NiftyState copy = new NiftyState(niftyState);
+    assertEquals(NiftyColor.black(), copy.getState(NiftyStateBackgroundColor));
+
+    // changing the original state should not modify the copy
+    niftyState.setState(NiftyStateBackgroundColor, NiftyColor.blue());
+    assertEquals(NiftyColor.black(), copy.getState(NiftyStateBackgroundColor));
+  }
 }

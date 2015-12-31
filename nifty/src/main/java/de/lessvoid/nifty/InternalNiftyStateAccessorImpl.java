@@ -33,4 +33,9 @@ final class InternalNiftyStateAccessorImpl extends NiftyStateAccessor {
   public NiftyState newNiftyState() {
     return new NiftyState();
   }
+
+  @Override
+  public NiftyState copyNiftyState(final NiftyState niftyState) {
+    return new NiftyState(niftyState);
+  }
 }

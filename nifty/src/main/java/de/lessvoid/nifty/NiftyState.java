@@ -44,6 +44,10 @@ public class NiftyState {
   NiftyState() {
   }
 
+  NiftyState(final NiftyState niftyState) {
+    stateMap.putAll(niftyState.stateMap);
+  }
+
   public enum NiftyStandardState implements State {
     NiftyStateBackgroundColor,
     NiftyStateTransformation,
