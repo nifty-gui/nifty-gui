@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2015, Nifty GUI Community 
- * All rights reserved. 
- * 
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions are 
- * met: 
- * 
- *  * Redistributions of source code must retain the above copyright 
- *    notice, this list of conditions and the following disclaimer. 
- *  * Redistributions in binary form must reproduce the above copyright 
- *    notice, this list of conditions and the following disclaimer in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ * Copyright (c) 2016, Nifty GUI Community
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *  * Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  * Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND 
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
@@ -26,6 +26,7 @@
  */
 package de.lessvoid.niftyinternal.common;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -63,24 +64,27 @@ public class ColorStringParser {
   /*
    * CSS3 color constants we support. 
    */
-  private static final Map<String, String> COLOR_MAP = new HashMap<String, String>();
-  {
-    COLOR_MAP.put("black",   "#000000");
-    COLOR_MAP.put("silver",  "#C0C0C0");
-    COLOR_MAP.put("gray",    "#808080");
-    COLOR_MAP.put("white",   "#FFFFFF");
-    COLOR_MAP.put("maroon",  "#800000");
-    COLOR_MAP.put("red",     "#FF0000");
-    COLOR_MAP.put("purple",  "#800080");
-    COLOR_MAP.put("fuchsia", "#FF00FF");
-    COLOR_MAP.put("green",   "#008000");
-    COLOR_MAP.put("lime",    "#00FF00");
-    COLOR_MAP.put("olive",   "#808000");
-    COLOR_MAP.put("yellow",  "#FFFF00");
-    COLOR_MAP.put("navy",    "#000080");
-    COLOR_MAP.put("blue",    "#0000FF");
-    COLOR_MAP.put("teal",    "#008080");
-    COLOR_MAP.put("aqua",    "#00FFFF");
+  private static final Map<String, NiftyColor> COLOR_MAP;
+  static {
+    HashMap<String, NiftyColor> colorMapBuilder = new HashMap<>(16, 1.f);
+    colorMapBuilder.put("black",   NiftyColor.fromInt(0x000000FF));
+    colorMapBuilder.put("silver",  NiftyColor.fromInt(0xC0C0C0FF));
+    colorMapBuilder.put("gray",    NiftyColor.fromInt(0x808080FF));
+    colorMapBuilder.put("white",   NiftyColor.fromInt(0xFFFFFFFF));
+    colorMapBuilder.put("maroon",  NiftyColor.fromInt(0x800000FF));
+    colorMapBuilder.put("red",     NiftyColor.fromInt(0xFF0000FF));
+    colorMapBuilder.put("purple",  NiftyColor.fromInt(0x800080FF));
+    colorMapBuilder.put("fuchsia", NiftyColor.fromInt(0xFF00FFFF));
+    colorMapBuilder.put("green",   NiftyColor.fromInt(0x008000FF));
+    colorMapBuilder.put("lime",    NiftyColor.fromInt(0x00FF00FF));
+    colorMapBuilder.put("olive",   NiftyColor.fromInt(0x808000FF));
+    colorMapBuilder.put("yellow",  NiftyColor.fromInt(0xFFFF00FF));
+    colorMapBuilder.put("navy",    NiftyColor.fromInt(0x000080FF));
+    colorMapBuilder.put("blue",    NiftyColor.fromInt(0x0000FFFF));
+    colorMapBuilder.put("teal",    NiftyColor.fromInt(0x008080FF));
+    colorMapBuilder.put("aqua",    NiftyColor.fromInt(0x00FFFFFF));
+
+    COLOR_MAP = Collections.unmodifiableMap(colorMapBuilder);
   } 
 
   /**
@@ -132,10 +136,7 @@ public class ColorStringParser {
       blue = getBFromString(color);
       alpha = getAFromString(color);
     } else if (isColorConstant(color)) {
-      String colorString = COLOR_MAP.get(color.toLowerCase());
-      red = getRFromString(colorString);
-      green = getGFromString(colorString);
-      blue = getBFromString(colorString);
+      return COLOR_MAP.get(color.toLowerCase());
     } else {
       log.fine("error parsing color [" + color + "] automatically adjusted to white [#ffffffff]");
       red = green = blue = alpha = 1.0f;
@@ -150,9 +151,9 @@ public class ColorStringParser {
    */
   private float getRFromString(final String color) {
     if (isShortMode(color)) {
-      return (Integer.valueOf(color.substring(1, 2), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
+      return (Integer.parseInt(color.substring(1, 2), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
     } else {
-      return Integer.valueOf(color.substring(1, 3), HEX_BASE) / MAX_INT_VALUE;
+      return Integer.parseInt(color.substring(1, 3), HEX_BASE) / MAX_INT_VALUE;
     }
   }
 
@@ -163,9 +164,9 @@ public class ColorStringParser {
    */
   private float getGFromString(final String color) {
     if (isShortMode(color)) {
-      return (Integer.valueOf(color.substring(2, 3), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
+      return (Integer.parseInt(color.substring(2, 3), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
     } else {
-      return Integer.valueOf(color.substring(3, 5), HEX_BASE) / MAX_INT_VALUE;
+      return Integer.parseInt(color.substring(3, 5), HEX_BASE) / MAX_INT_VALUE;
     }
   }
 
@@ -176,9 +177,9 @@ public class ColorStringParser {
    */
   private float getBFromString(final String color) {
     if (isShortMode(color)) {
-      return (Integer.valueOf(color.substring(3, 4), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
+      return (Integer.parseInt(color.substring(3, 4), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
     } else {
-      return Integer.valueOf(color.substring(5, 7), HEX_BASE) / MAX_INT_VALUE;
+      return Integer.parseInt(color.substring(5, 7), HEX_BASE) / MAX_INT_VALUE;
     }
   }
 
@@ -189,9 +190,9 @@ public class ColorStringParser {
    */
   private float getAFromString(final String color) {
     if (isShortMode(color)) {
-      return (Integer.valueOf(color.substring(4, 5), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
+      return (Integer.parseInt(color.substring(4, 5), HEX_BASE) * SCALE_SHORT_MODE) / MAX_INT_VALUE;
     } else {
-      return Integer.valueOf(color.substring(7, 9), HEX_BASE) / MAX_INT_VALUE;
+      return Integer.parseInt(color.substring(7, 9), HEX_BASE) / MAX_INT_VALUE;
     }
   }
 

@@ -126,8 +126,8 @@ void main() {
     vec2 capPoint = vec2(t.x, t.y) - capCenterPoint;
     vec2 capCenterNormal = normalize(vec2(cos(startAngleAlpha), sin(startAngleAlpha)));
     vec2 capCenterNormalFlip = vec2(-capCenterNormal.y, capCenterNormal.x);
-    float distance = smoothstep(lineWidth, lineWidth + delta, distance(capPoint, capCenterPoint));
-    finalAlpha = max(finalAlpha, mix(lineColorAlpha, 0.0, distance) * step(0.0, dot(capCenterNormalFlip, capPoint)));
+    float capDistance = smoothstep(lineWidth, lineWidth + delta, distance(capPoint, capCenterPoint));
+    finalAlpha = max(finalAlpha, mix(lineColorAlpha, 0.0, capDistance) * step(0.0, dot(capCenterNormalFlip, capPoint)));
 
     startAngleAlpha = endAngle;
     if (startAngleAlpha < 0) {
@@ -138,8 +138,8 @@ void main() {
     capPoint = vec2(t.x, t.y) - capCenterPoint;
     capCenterNormal = normalize(vec2(cos(startAngleAlpha), sin(startAngleAlpha)));
     capCenterNormalFlip = vec2(-capCenterNormal.y, capCenterNormal.x);
-    distance = smoothstep(lineWidth, lineWidth + delta, distance(capPoint, capCenterPoint));
-    finalAlpha = max(finalAlpha, mix(lineColorAlpha, 0.0, distance) * (1.0 - step(0.0, dot(capCenterNormalFlip, capPoint))));
+    capDistance = smoothstep(lineWidth, lineWidth + delta, distance(capPoint, capCenterPoint));
+    finalAlpha = max(finalAlpha, mix(lineColorAlpha, 0.0, capDistance) * (1.0 - step(0.0, dot(capCenterNormalFlip, capPoint))));
 
 #endif
 

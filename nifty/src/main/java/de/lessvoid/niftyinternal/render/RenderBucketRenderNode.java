@@ -38,6 +38,7 @@ import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.math.Vec4;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -54,6 +55,8 @@ public class RenderBucketRenderNode implements Comparable<RenderBucketRenderNode
   private Mat4 localToScreen;
   private Context context;
   private int renderOrder;
+  @Nullable
+  private NiftyRect screenSpace;
 
   public RenderBucketRenderNode(
       final int width,
@@ -103,17 +106,22 @@ public class RenderBucketRenderNode implements Comparable<RenderBucketRenderNode
   }
 
   public NiftyRect getScreenSpaceAABB() {
-    Vec4 p0 = Mat4.transform(localToScreen, new Vec4(  0.f,    0.f, 0.f, 1.f));
-    Vec4 p1 = Mat4.transform(localToScreen, new Vec4(width,    0.f, 0.f, 1.f));
-    Vec4 p2 = Mat4.transform(localToScreen, new Vec4(width, height, 0.f, 1.f));
-    Vec4 p3 = Mat4.transform(localToScreen, new Vec4(  0.f, height, 0.f, 1.f));
-    float minX = Math.min(Math.min(p0.getX(), p1.getX()), Math.min(p2.getX(), p3.getX()));
-    float maxX = Math.max(Math.max(p0.getX(), p1.getX()), Math.max(p2.getX(), p3.getX()));
-    float minY = Math.min(Math.min(p0.getY(), p1.getY()), Math.min(p2.getY(), p3.getY()));
-    float maxY = Math.max(Math.max(p0.getY(), p1.getY()), Math.max(p2.getY(), p3.getY()));
-    return NiftyRect.newNiftyRect(
-        NiftyPoint.newNiftyPoint(minX, minY),
-        NiftySize.newNiftySize(maxX - minX, maxY - minY));
+    NiftyRect screenSpace = this.screenSpace;
+    if (screenSpace == null) {
+      Vec4 p0 = Mat4.transform(localToScreen, new Vec4(0.f, 0.f, 0.f, 1.f));
+      Vec4 p1 = Mat4.transform(localToScreen, new Vec4(width, 0.f, 0.f, 1.f));
+      Vec4 p2 = Mat4.transform(localToScreen, new Vec4(width, height, 0.f, 1.f));
+      Vec4 p3 = Mat4.transform(localToScreen, new Vec4(0.f, height, 0.f, 1.f));
+      float minX = Math.min(Math.min(p0.getX(), p1.getX()), Math.min(p2.getX(), p3.getX()));
+      float maxX = Math.max(Math.max(p0.getX(), p1.getX()), Math.max(p2.getX(), p3.getX()));
+      float minY = Math.min(Math.min(p0.getY(), p1.getY()), Math.min(p2.getY(), p3.getY()));
+      float maxY = Math.max(Math.max(p0.getY(), p1.getY()), Math.max(p2.getY(), p3.getY()));
+      screenSpace = NiftyRect.newNiftyRect(
+          NiftyPoint.newNiftyPoint(minX, minY),
+          NiftySize.newNiftySize(maxX - minX, maxY - minY));
+      this.screenSpace = screenSpace;
+    }
+    return screenSpace;
   }
 
   @Override
@@ -131,6 +139,7 @@ public class RenderBucketRenderNode implements Comparable<RenderBucketRenderNode
 
     width = newWidth;
     height = newHeight;
+    this.screenSpace = null;
 
     context.free();
     context = createContext(renderDevice);
@@ -142,6 +151,7 @@ public class RenderBucketRenderNode implements Comparable<RenderBucketRenderNode
       return false;
     }
     localToScreen = newLocalToScreen;
+    this.screenSpace = null;
     return true;
   }
 

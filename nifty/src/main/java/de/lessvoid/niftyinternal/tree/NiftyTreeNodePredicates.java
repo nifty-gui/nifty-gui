@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Nifty GUI Community
+ * Copyright (c) 2016, Nifty GUI Community
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,11 +30,21 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created by void on 21.08.15.
+ * This contains a couple of helper classes and caches for {@link NiftyTreeNodePredicate} instances.
+ *
+ * @author void
+ * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public final class NiftyTreeNodePredicates {
+  @Nonnull
+  private static final Map<Class<?>, PredicateToNodeImplClass> NODE_IMPL_CACHE = new HashMap<>();
+  @Nonnull
+  private static final Map<Class<?>, PredicateToNodeClass> NODE_CACHE = new HashMap<>();
+
   @Nonnull
   public static NiftyTreeNodePredicate nodeImplAny() {
     return PredicateAny.Instance;
@@ -42,22 +52,22 @@ public final class NiftyTreeNodePredicates {
 
   @Nonnull
   public static <T extends NiftyNodeImpl> NiftyTreeNodePredicate nodeImplClass(@Nonnull final Class<T> clazz) {
-    return new NiftyTreeNodePredicate() {
-      @Override
-      public boolean accept(@Nonnull final NiftyNodeImpl niftyNodeImpl) {
-        return clazz.isAssignableFrom(niftyNodeImpl.getClass());
-      }
-    };
+    PredicateToNodeImplClass instance = NODE_IMPL_CACHE.get(clazz);
+    if (instance == null) {
+      instance = new PredicateToNodeImplClass(clazz);
+      NODE_IMPL_CACHE.put(clazz, instance);
+    }
+    return instance;
   }
 
   @Nonnull
   public static <T extends NiftyNode> NiftyTreeNodePredicate nodeClass(final Class<T> clazz) {
-    return new NiftyTreeNodePredicate() {
-      @Override
-      public boolean accept(@Nonnull final NiftyNodeImpl niftyNodeImpl) {
-        return clazz.isAssignableFrom(niftyNodeImpl.getNiftyNode().getClass());
-      }
-    };
+    PredicateToNodeClass instance = NODE_CACHE.get(clazz);
+    if (instance == null) {
+      instance = new PredicateToNodeClass(clazz);
+      NODE_CACHE.put(clazz, instance);
+    }
+    return instance;
   }
 
   private NiftyTreeNodePredicates() {}
@@ -67,6 +77,34 @@ public final class NiftyTreeNodePredicates {
     @Override
     public boolean accept(@Nonnull final NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl) {
       return true;
+    }
+  }
+
+  private static final class PredicateToNodeImplClass implements NiftyTreeNodePredicate {
+    @Nonnull
+    private final Class<?> clazz;
+
+    PredicateToNodeImplClass(@Nonnull final Class<?> clazz) {
+      this.clazz = clazz;
+    }
+
+    @Override
+    public boolean accept(@Nonnull final NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl) {
+      return clazz.isAssignableFrom(niftyNodeImpl.getClass());
+    }
+  }
+
+  private static final class PredicateToNodeClass implements NiftyTreeNodePredicate {
+    @Nonnull
+    private final Class<?> clazz;
+
+    PredicateToNodeClass(@Nonnull final Class<?> clazz) {
+      this.clazz = clazz;
+    }
+
+    @Override
+    public boolean accept(@Nonnull final NiftyNodeImpl<? extends NiftyNode> niftyNodeImpl) {
+      return clazz.isAssignableFrom(niftyNodeImpl.getNiftyNode().getClass());
     }
   }
 }
