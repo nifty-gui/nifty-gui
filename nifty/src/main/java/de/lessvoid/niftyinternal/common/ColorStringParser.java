@@ -64,7 +64,7 @@ public class ColorStringParser {
    * CSS3 color constants we support. 
    */
   private static final Map<String, String> COLOR_MAP = new HashMap<String, String>();
-  {
+  static {
     COLOR_MAP.put("black",   "#000000");
     COLOR_MAP.put("silver",  "#C0C0C0");
     COLOR_MAP.put("gray",    "#808080");
