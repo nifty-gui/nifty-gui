@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Nifty GUI Community
+ * Copyright (c) 2016, Nifty GUI Community
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -200,7 +200,7 @@ public class InternalNiftyTree {
       @Nonnull final NiftyTreeNodeConverter<T> converter,
       @Nonnull final NiftyTreeNodeControl control,
       @Nonnull final NiftyTreeNode startTreeNode) {
-    return makeIterable(startTreeNode.iterator(predicate, converter, control));
+    return startTreeNode.iterable(predicate, converter, control);
   }
 
   @Nullable
@@ -262,15 +262,6 @@ public class InternalNiftyTree {
     NiftyTreeNode childTreeNode = new NiftyTreeNode(child);
     parent.addChild(childTreeNode);
     registerNode(child, childTreeNode);
-  }
-
-  private <X> Iterable<X> makeIterable(final Iterator<X> iterator) {
-    return new Iterable<X>() {
-      @Override
-      public Iterator<X> iterator() {
-        return iterator;
-      }
-    };
   }
 
   private void assertNotNull(final NiftyNodeImpl rootNode) {
