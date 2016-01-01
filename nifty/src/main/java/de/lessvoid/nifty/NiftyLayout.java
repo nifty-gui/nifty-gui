@@ -246,11 +246,18 @@ public class NiftyLayout {
       return; // There are no dirty arrange entries reported. So we are done here.
     }
 
-    for (NiftyLayoutNodeImpl<?> layoutNode : getChildLayoutNodes()) {
-      layoutNode.arrange(newNiftyRect(ZERO, newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight())));
+    NiftyNodeImpl<?> root = nodeTree.getRootNode();
+    if (root instanceof NiftyLayoutNodeImpl<?>) {
+      NiftyLayoutNodeImpl<?> layoutRoot = (NiftyLayoutNodeImpl<?>) root;
+      layoutRoot.arrange(newNiftyRect(ZERO, newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight())));
       removeArranged();
-      if (invalidArrangeReports.isEmpty()) {
-        return; // Early exit in case we are done.
+    } else {
+      for (NiftyLayoutNodeImpl<?> layoutNode : getChildLayoutNodes()) {
+        layoutNode.arrange(newNiftyRect(ZERO, newNiftySize(nifty.getScreenWidth(), nifty.getScreenHeight())));
+        removeArranged();
+        if (invalidArrangeReports.isEmpty()) {
+          return; // Early exit in case we are done.
+        }
       }
     }
   }
