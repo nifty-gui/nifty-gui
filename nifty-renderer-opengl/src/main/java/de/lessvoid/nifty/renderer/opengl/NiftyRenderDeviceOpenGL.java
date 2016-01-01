@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2016, Nifty GUI Community
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- *  * Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *  * Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
+ * Copyright (c) 2015, Nifty GUI Community 
+ * All rights reserved. 
+ * 
+ * Redistribution and use in source and binary forms, with or without 
+ * modification, are permitted provided that the following conditions are 
+ * met: 
+ * 
+ *  * Redistributions of source code must retain the above copyright 
+ *    notice, this list of conditions and the following disclaimer. 
+ *  * Redistributions in binary form must reproduce the above copyright 
+ *    notice, this list of conditions and the following disclaimer in the 
+ *    documentation and/or other materials provided with the distribution. 
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND 
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
@@ -51,7 +51,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
-  private final static CoreLogger log = CoreLogger.getCoreLogger(NiftyRenderDeviceOpenGL.class);
+  private final static Logger log = Logger.getLogger(NiftyRenderDeviceOpenGL.class.getName());
 
   private static final int VERTEX_SIZE = 5*6;
   private static final int MAX_QUADS = 2000;
@@ -360,8 +360,9 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void changeCompositeOperation(final NiftyCompositeOperation compositeOperation) {
-    log.fine("changeCompositeOperation({})", compositeOperation);
-
+    if (log.isLoggable(Level.FINE)) {
+      log.fine("changeCompositeOperation(" + compositeOperation + ")");
+    }
     switch (compositeOperation) {
       case Clear:
         gl.glEnable(gl.GL_BLEND());
