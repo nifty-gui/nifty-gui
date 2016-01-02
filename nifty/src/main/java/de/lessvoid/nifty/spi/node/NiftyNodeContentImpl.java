@@ -28,6 +28,7 @@ package de.lessvoid.nifty.spi.node;
 
 import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.niftyinternal.math.Mat4;
+import de.lessvoid.niftyinternal.math.Vec2;
 
 /**
  * NiftyNodeCanvasImpl is a renderable NiftyNode.
@@ -60,4 +61,16 @@ public interface NiftyNodeContentImpl<T extends NiftyNode> extends NiftyNodeImpl
    * @return the transformation matrix to transform local to screen space
    */
   Mat4 getLocalToScreen();
+
+  /**
+   * Get a Mat4 representing the transformation applied to this node.
+   * @return the transformation matrix to transform local to transformed local coordinates
+   */
+  Mat4 getLocal();
+
+  /**
+   * Get the layout position in screen space for this node.
+   * @return the layout pos
+   */
+  Vec2 getLayoutPos();
 }

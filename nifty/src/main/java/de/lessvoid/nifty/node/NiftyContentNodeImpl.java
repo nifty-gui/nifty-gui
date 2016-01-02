@@ -35,11 +35,13 @@ import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.niftyinternal.math.Mat4;
+import de.lessvoid.niftyinternal.math.Vec2;
 
 import javax.annotation.Nonnull;
 
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundColor;
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformation;
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationLocal;
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationLocalToScreen;
 
 /**
  * Created by void on 09.08.15.
@@ -53,8 +55,10 @@ class NiftyContentNodeImpl
   private int height;
 
   private NiftyColor backgroundColor;
+  private Mat4 local = Mat4.createIdentity();
   private Mat4 localToScreen = Mat4.createIdentity();
   private Mat4 layoutTranslate = Mat4.createIdentity();
+  private Vec2 layoutPos = new Vec2();
   private NiftyCanvasPainter canvasPainter = defaultNiftyCanvasPainter();
 
   public void setCanvasPainter(final NiftyCanvasPainter canvasPainter) {
@@ -68,7 +72,8 @@ class NiftyContentNodeImpl
   @Override
   public void update(final NiftyState niftyState) {
     backgroundColor = niftyState.getState(NiftyStateBackgroundColor, NiftyColor.purple());
-    localToScreen = niftyState.getState(NiftyStateTransformation, Mat4.createIdentity());
+    local = niftyState.getState(NiftyStateTransformationLocal, Mat4.createIdentity());
+    localToScreen = niftyState.getState(NiftyStateTransformationLocalToScreen, Mat4.createIdentity());
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,6 +98,16 @@ class NiftyContentNodeImpl
   @Override
   public Mat4 getLocalToScreen() {
     return Mat4.mul(layoutTranslate, localToScreen);
+  }
+
+  @Override
+  public Mat4 getLocal() {
+    return local;
+  }
+
+  @Override
+  public Vec2 getLayoutPos() {
+    return layoutPos;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,5 +138,6 @@ class NiftyContentNodeImpl
     width = Math.round(rect.getSize().getWidth());
     height = Math.round(rect.getSize().getHeight());
     layoutTranslate = Mat4.createTranslate(rect.getOrigin().getX(), rect.getOrigin().getY(), 0.f);
+    layoutPos = new Vec2(rect.getOrigin().getX(), rect.getOrigin().getY());
   }
 }
