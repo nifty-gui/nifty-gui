@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2015, Nifty GUI Community 
- * All rights reserved. 
- * 
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions are 
- * met: 
- * 
- *  * Redistributions of source code must retain the above copyright 
- *    notice, this list of conditions and the following disclaimer. 
- *  * Redistributions in binary form must reproduce the above copyright 
- *    notice, this list of conditions and the following disclaimer in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ * Copyright (c) 2016, Nifty GUI Community
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *  * Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  * Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND 
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
@@ -37,6 +37,8 @@ import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
+import javax.annotation.Nonnull;
+
 public class BatchManager {
   private List<Batch<?>> activeBatches = new ArrayList<Batch<?>>();
 
@@ -54,45 +56,19 @@ public class BatchManager {
     requestBatch(
         ChangeCompositeOperationBatch.class,
         compositeOperation,
-        new BatchFactory<ChangeCompositeOperationBatch>() {
-          @Override
-          public ChangeCompositeOperationBatch createBatch() {
-            return new ChangeCompositeOperationBatch(compositeOperation);
-          }
-        });
+        ChangeCompositeOperationBatchFactory.Instance);
   }
 
   public void addBeginPath() {
-    requestBatch(
-        BeginPathBatch.class,
-        null,
-        new BatchFactory<BeginPathBatch>() {
-          @Override
-          public BeginPathBatch createBatch() {
-            return new BeginPathBatch();
-          }
-        });
+    requestBatch(BeginPathBatch.class, null, BeginPathBatchFactory.Instance);
   }
 
   public void addEndPath(final NiftyColor lineColor) {
-    requestBatch(
-        EndPathBatch.class,
-        null,
-        new BatchFactory<EndPathBatch>() {
-          @Override
-          public EndPathBatch createBatch() {
-            return new EndPathBatch(lineColor);
-          }
-        });
+    requestBatch(EndPathBatch.class, lineColor, EndPathBatchFactory.Instance);
   }
 
   public void addTextureQuad(final NiftyTexture niftyTexture, final Mat4 mat, final NiftyColor color) {
-    TextureBatch batch = requestBatch(TextureBatch.class, niftyTexture, new BatchFactory<TextureBatch>() {
-      @Override
-      public TextureBatch createBatch() {
-        return new TextureBatch(niftyTexture);
-      }
-    });
+    TextureBatch batch = requestBatch(TextureBatch.class, niftyTexture, TextureBatchFactory.Instance);
     batch.add(
         0.0, 0.0,
         niftyTexture.getWidth(), niftyTexture.getHeight(),
@@ -114,12 +90,7 @@ public class BatchManager {
       final double u1,
       final double v1,
       final NiftyColor color) {
-    TextureBatch batch = requestBatch(TextureBatch.class, niftyTexture, new BatchFactory<TextureBatch>() {
-      @Override
-      public TextureBatch createBatch() {
-        return new TextureBatch(niftyTexture);
-      }
-    });
+    TextureBatch batch = requestBatch(TextureBatch.class, niftyTexture, TextureBatchFactory.Instance);
     batch.add(x, y, width, height, u0, v0, u1, v1, mat, color);
   }
 
@@ -130,14 +101,10 @@ public class BatchManager {
       final double y1,
       final Mat4 mat,
       final NiftyLinearGradient fillLinearGradient) {
-    final LinearGradient gradient = new LinearGradient(x0, y0, x1, y1, fillLinearGradient);
+    LinearGradient gradient = new LinearGradient(x0, y0, x1, y1, fillLinearGradient);
 
-    LinearGradientQuadBatch batch = requestBatch(LinearGradientQuadBatch.class, gradient, new BatchFactory<LinearGradientQuadBatch>() {
-      @Override
-      public LinearGradientQuadBatch createBatch() {
-        return new LinearGradientQuadBatch(gradient);
-      }
-    });
+    LinearGradientQuadBatch batch = requestBatch(LinearGradientQuadBatch.class, gradient,
+        LinearGradientQuadBatchFactory.Instance);
     batch.add(x0, y0, x1, y1, mat);
   }
 
@@ -148,22 +115,12 @@ public class BatchManager {
       final double y1,
       final NiftyColor c,
       final Mat4 mat) {
-    ColorQuadBatch batch = requestBatch(ColorQuadBatch.class, null, new BatchFactory<ColorQuadBatch>() {
-      @Override
-      public ColorQuadBatch createBatch() {
-        return new ColorQuadBatch();
-      }
-    });
+    ColorQuadBatch batch = requestBatch(ColorQuadBatch.class, null, ColorQuadBatchFactory.Instance);
     batch.add(x0, y0, x1, y1, c, c, c, c, mat);
   }
 
   public void addCustomShader(final String shaderId) {
-    requestBatch(CustomShaderBatch.class, shaderId, new BatchFactory<CustomShaderBatch>() {
-      @Override
-      public CustomShaderBatch createBatch() {
-        return new CustomShaderBatch(shaderId);
-      }
-    });
+    requestBatch(CustomShaderBatch.class, shaderId, CustomShaderBatchFactory.Instance);
   }
 
   public void addLineVertex(
@@ -171,7 +128,7 @@ public class BatchManager {
       final float y,
       final Mat4 mat,
       final LineParameters lineParameters) {
-    LineBatch batch = requestBatch(LineBatch.class, lineParameters, createLineBatchFactory(lineParameters));
+    LineBatch batch = requestBatch(LineBatch.class, lineParameters, LineBatchFactory.Instance);
     batch.add(x, y, mat);
   }
 
@@ -180,7 +137,7 @@ public class BatchManager {
       final float y,
       final Mat4 mat,
       final LineParameters lineParameters) {
-    LineBatch batch = addBatch(createLineBatchFactory(lineParameters));
+    LineBatch batch = addBatch(LineBatchFactory.Instance, lineParameters);
     batch.add(x, y, mat);
   }
 
@@ -189,28 +146,16 @@ public class BatchManager {
       final double y,
       final Mat4 mat,
       final ArcParameters arcParameters) {
-    BatchFactory<ArcBatch> batchFactory = new BatchFactory<ArcBatch>() {
-      @Override
-      public ArcBatch createBatch() {
-        return new ArcBatch(arcParameters);
-      }
-    };
-    ArcBatch batch = requestBatch(ArcBatch.class, arcParameters, batchFactory);
+    ArcBatch batch = requestBatch(ArcBatch.class, arcParameters, ArcBatchFactory.Instance);
     batch.add(x, y, arcParameters.getRadius(), mat);
   }
 
   public void addTriangleFanVertex(final float x, final float y, final Mat4 mat, final boolean forceNewBatch, final boolean last) {
-    BatchFactory<TriangleFanBatch> batchFactory = new BatchFactory<TriangleFanBatch>() {
-      @Override
-      public TriangleFanBatch createBatch() {
-        return new TriangleFanBatch();
-      }
-    };
     TriangleFanBatch batch;
     if (forceNewBatch) {
-      batch = addBatch(batchFactory);
+      batch = addBatch(TriangleFanBatchFactory.Instance, null);
     } else {
-      batch = requestBatch(TriangleFanBatch.class, (Void) null, batchFactory);
+      batch = requestBatch(TriangleFanBatch.class, null, TriangleFanBatchFactory.Instance);
     }
     if (forceNewBatch) {
       batch.enableStartPathBatch();
@@ -221,40 +166,123 @@ public class BatchManager {
     batch.add(x, y, mat);
   }
 
+  @SuppressWarnings("unchecked")
   private <T extends Batch<P>, P> T requestBatch(
       final Class<T> clazz,
       final P param,
-      final BatchFactory<T> batchFactory) {
+      final BatchFactory<T, P> batchFactory) {
     if (activeBatches.isEmpty()) {
-      return addBatch(batchFactory);
+      return addBatch(batchFactory, param);
     }
     Batch<P> lastBatch = (Batch<P>) activeBatches.get(activeBatches.size() - 1);
     if (!clazz.isInstance(lastBatch)) {
-      return addBatch(batchFactory);
+      return addBatch(batchFactory, param);
     }
     if (!lastBatch.requiresNewBatch(param)) {
       return (T) lastBatch;
     }
-    return addBatch(batchFactory);
+    return addBatch(batchFactory, param);
   }
 
-  private <T extends Batch<P>, P> T addBatch(final BatchFactory<T> batchFactory) {
-    T batch = batchFactory.createBatch();
+  private <T extends Batch<P>, P> T addBatch(final BatchFactory<T, P> batchFactory, final P param) {
+    T batch = batchFactory.createBatch(param);
     activeBatches.add(batch);
     return batch;
   }
 
-  private BatchFactory<LineBatch> createLineBatchFactory(final LineParameters lineParameters) {
-    BatchFactory<LineBatch> batchFactory = new BatchFactory<LineBatch>() {
-      @Override
-      public LineBatch createBatch() {
-        return new LineBatch(lineParameters);
-      }
-    };
-    return batchFactory;
+  private interface BatchFactory<T extends Batch<P>, P> {
+    @Nonnull
+    T createBatch(P param);
   }
 
-  private interface BatchFactory<T> {
-    T createBatch();
+  private enum ArcBatchFactory implements BatchFactory<ArcBatch, ArcParameters> {
+    Instance;
+    @Nonnull
+    @Override
+    public ArcBatch createBatch(final ArcParameters param) {
+      return new ArcBatch(param);
+    }
+  }
+
+  private enum BeginPathBatchFactory implements BatchFactory<BeginPathBatch, Void> {
+    Instance;
+    @Nonnull
+    @Override
+    public BeginPathBatch createBatch(final Void param) {
+      return new BeginPathBatch();
+    }
+  }
+
+  private enum ChangeCompositeOperationBatchFactory
+      implements BatchFactory<ChangeCompositeOperationBatch, NiftyCompositeOperation> {
+    Instance;
+    @Nonnull
+    @Override
+    public ChangeCompositeOperationBatch createBatch(final NiftyCompositeOperation param) {
+      return new ChangeCompositeOperationBatch(param);
+    }
+  }
+
+  private enum ColorQuadBatchFactory implements BatchFactory<ColorQuadBatch, Void> {
+    Instance;
+    @Nonnull
+    @Override
+    public ColorQuadBatch createBatch(final Void param) {
+      return new ColorQuadBatch();
+    }
+  }
+
+  private enum CustomShaderBatchFactory implements BatchFactory<CustomShaderBatch, String> {
+    Instance;
+    @Nonnull
+    @Override
+    public CustomShaderBatch createBatch(final String param) {
+      return new CustomShaderBatch(param);
+    }
+  }
+
+  private enum EndPathBatchFactory implements BatchFactory<EndPathBatch, NiftyColor> {
+    Instance;
+    @Nonnull
+    @Override
+    public EndPathBatch createBatch(final NiftyColor param) {
+      return new EndPathBatch(param);
+    }
+  }
+
+  private enum LinearGradientQuadBatchFactory implements BatchFactory<LinearGradientQuadBatch, LinearGradient> {
+    Instance;
+    @Nonnull
+    @Override
+    public LinearGradientQuadBatch createBatch(final LinearGradient param) {
+      return new LinearGradientQuadBatch(param);
+    }
+  }
+
+  private enum LineBatchFactory implements BatchFactory<LineBatch, LineParameters> {
+    Instance;
+    @Nonnull
+    @Override
+    public LineBatch createBatch(final LineParameters param) {
+      return new LineBatch(param);
+    }
+  }
+
+  private enum TextureBatchFactory implements BatchFactory<TextureBatch, NiftyTexture> {
+    Instance;
+    @Nonnull
+    @Override
+    public TextureBatch createBatch(final NiftyTexture param) {
+      return new TextureBatch(param);
+    }
+  }
+
+  private enum TriangleFanBatchFactory implements BatchManager.BatchFactory<TriangleFanBatch, Void> {
+    Instance;
+    @Nonnull
+    @Override
+    public TriangleFanBatch createBatch(final Void param) {
+      return new TriangleFanBatch();
+    }
   }
 }
