@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Nifty GUI Community
+ * Copyright (c) 2016, Nifty GUI Community
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -74,6 +74,21 @@ public class NiftyTreeNode {
 
   public void setParent(final NiftyTreeNode parent) {
     this.parent = parent;
+  }
+
+  public <T> Iterable<T> iterable(@Nonnull final NiftyTreeNodePredicate predicate,
+                                  @Nonnull final NiftyTreeNodeConverter<T> converter,
+                                  @Nonnull final NiftyTreeNodeControl control) {
+    if (getChildren().isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    return new Iterable<T>() {
+      @Override
+      public Iterator<T> iterator() {
+        return NiftyTreeNode.this.iterator(predicate, converter, control);
+      }
+    };
   }
 
   public <T> Iterator<T> iterator(@Nonnull final NiftyTreeNodePredicate predicate,
