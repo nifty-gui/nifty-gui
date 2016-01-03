@@ -16,5 +16,8 @@
     </breadcrumbs>
     <menu ref="reports"/>
     <menu ref="modules" />
+    <menu name="Manual">
+      <item name="Layout" href="layout.html" />
+    </menu>
   </body>
 </project>

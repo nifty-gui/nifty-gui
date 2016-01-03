@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2015, Nifty GUI Community 
- * All rights reserved. 
- * 
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions are 
- * met: 
- * 
- *  * Redistributions of source code must retain the above copyright 
- *    notice, this list of conditions and the following disclaimer. 
- *  * Redistributions in binary form must reproduce the above copyright 
- *    notice, this list of conditions and the following disclaimer in the 
- *    documentation and/or other materials provided with the distribution. 
- * 
+ * Copyright (c) 2016, Nifty GUI Community
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *  * Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  * Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND 
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
@@ -29,7 +29,7 @@ package de.lessvoid.niftyinternal.render.batch;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
-public class EndPathBatch implements Batch<Void> {
+public class EndPathBatch implements Batch<NiftyColor> {
   private final NiftyColor lineColor;
 
   public EndPathBatch(final NiftyColor lineColor) {
@@ -42,7 +42,7 @@ public class EndPathBatch implements Batch<Void> {
   }
 
   @Override
-  public boolean requiresNewBatch(final Void param) {
+  public boolean requiresNewBatch(final NiftyColor param) {
     return true;
   }
 }

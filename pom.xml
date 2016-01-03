@@ -32,6 +32,19 @@
       </roles>
     </developer>
   </developers>
+  <contributors>
+    <contributor>
+      <name>Martin Karing</name>
+      <email>nitram@illarion.org</email>
+      <organization>Illarion e.V.</organization>
+      <organizationUrl>http://illarion.org</organizationUrl>
+      <timezone>Europe/Berlin</timezone>
+      <roles>
+        <role>developer</role>
+        <role>tester</role>
+      </roles>
+    </contributor>
+  </contributors>
   <properties>
     <!-- The CoreGL version we currently use since this is required in multiple modules -->
     <coregl-utils.version>2.0-SNAPSHOT</coregl-utils.version>
