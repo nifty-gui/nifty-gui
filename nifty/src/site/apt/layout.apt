@@ -1,0 +1,26 @@
+Nifty 2.0 Layout
+
+* Basic Concept
+
+  The basic concept of the Nifty-GUI layout is that it processes the layout in two stages:
+
+    [[1]] Measure
+
+    [[2]] Arrange
+
+  The first stage is the measurement stage. During that stage the elements calculate and report the optimal size they
+  require to display their content. This calculation happens based on the available size that is reported by the
+  parent node. If a layout node splits it's area in two equally it will report only half of it's original size to the
+  child nodes. This way the nodes are able to calculate their layout according to the present restrictions. This may be
+  relevant in case nodes need to wrap their children into lines or columns and require more height.
+
+  The calculated size is treated as desired size. It is not a requirement for the layout. Most of the layout nodes are
+  not able to arrange the children at exactly the same size as they requested.
+
+  The second stage of the layout is the arrangement stage. During this stage each nodes receives it's exact position
+  and size relative to the root node. The default behavior for the layout is to use all space that is available to
+  place the child nodes, regardless of their desired size. Some of the layout nodes are able to handle nodes that
+  request a smaller surface in one dimension or in both. These layout nodes will use the desired size of their children.
+  An example for such a layout node is
+  the {{{./apidocs/de/lessvoid/nifty/node/AbsoluteLayoutNode.html}AbsoluteLayoutNode}}. This node is able to place
+  child nodes freely on it's surface and layout them according to their desired size in both dimensions.
