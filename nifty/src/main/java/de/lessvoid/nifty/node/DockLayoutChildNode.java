@@ -32,6 +32,7 @@ import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.NiftyDock;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This is the child node for a dock layout that allows docking the node to a specific border of the parent node.
@@ -87,6 +88,20 @@ public final class DockLayoutChildNode implements NiftyNode {
   @Nonnull
   NiftyNodeImpl<DockLayoutChildNode> getImpl() {
     return implementation;
+  }
+
+  @Override
+  public boolean equals(@Nullable final Object obj) {
+    return (obj instanceof DockLayoutChildNode) && equals((DockLayoutChildNode) obj);
+  }
+
+  public boolean equals(@Nullable final DockLayoutChildNode node) {
+    return (node != null) && node.implementation.equals(implementation);
+  }
+
+  @Override
+  public int hashCode() {
+    return implementation.hashCode();
   }
 
   @Nonnull

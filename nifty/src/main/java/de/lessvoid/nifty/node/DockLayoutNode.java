@@ -30,6 +30,7 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This is the layout node for a docking layout. This means that child nodes are docked to one of the four sides of
@@ -71,6 +72,20 @@ public final class DockLayoutNode implements NiftyNode {
   @Nonnull
   NiftyNodeImpl<DockLayoutNode> getImpl() {
     return implementation;
+  }
+
+  @Override
+  public boolean equals(@Nullable final Object obj) {
+    return (obj instanceof DockLayoutNode) && equals((DockLayoutNode) obj);
+  }
+
+  public boolean equals(@Nullable final DockLayoutNode node) {
+    return (node != null) && node.implementation.equals(implementation);
+  }
+
+  @Override
+  public int hashCode() {
+    return implementation.hashCode();
   }
 
   @Nonnull

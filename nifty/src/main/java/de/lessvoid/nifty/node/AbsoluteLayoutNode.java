@@ -85,8 +85,12 @@ public final class AbsoluteLayoutNode implements NiftyNode {
   }
 
   @Override
-  public boolean equals(@Nullable  final Object obj) {
-    return (obj instanceof AbsoluteLayoutNode) && ((AbsoluteLayoutNode) obj).implementation.equals(implementation);
+  public boolean equals(@Nullable final Object obj) {
+    return (obj instanceof AbsoluteLayoutNode) && equals((AbsoluteLayoutNode) obj);
+  }
+
+  public boolean equals(@Nullable final AbsoluteLayoutNode node) {
+    return (node != null) && node.implementation.equals(implementation);
   }
 
   @Override

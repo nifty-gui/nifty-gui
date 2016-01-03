@@ -32,6 +32,7 @@ import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.NiftySize;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static de.lessvoid.nifty.types.NiftySize.newNiftySize;
 
@@ -149,6 +150,20 @@ public final class SizeLayoutNode implements NiftyNode {
   @Nonnull
   NiftyNodeImpl<SizeLayoutNode> getImpl() {
     return implementation;
+  }
+
+  @Override
+  public boolean equals(@Nullable final Object obj) {
+    return (obj instanceof SizeLayoutNode) && equals((SizeLayoutNode) obj);
+  }
+
+  public boolean equals(@Nullable final SizeLayoutNode node) {
+    return (node != null) && node.implementation.equals(implementation);
+  }
+
+  @Override
+  public int hashCode() {
+    return implementation.hashCode();
   }
 
   @Nonnull

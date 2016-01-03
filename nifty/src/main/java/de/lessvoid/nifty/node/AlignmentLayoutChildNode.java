@@ -31,6 +31,7 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This is the child node for {@link AlignmentLayoutNode}. It allows setting the alignment that is supposed to be
@@ -78,5 +79,25 @@ public final class AlignmentLayoutChildNode implements NiftyNode {
   @Nonnull
   NiftyNodeImpl<AlignmentLayoutChildNode> getImpl() {
     return implementation;
+  }
+
+  @Override
+  public boolean equals(@Nullable final Object obj) {
+    return (obj instanceof AlignmentLayoutChildNode) && equals((AlignmentLayoutChildNode) obj);
+  }
+
+  public boolean equals(@Nullable final AlignmentLayoutChildNode node) {
+    return (node != null) && node.implementation.equals(implementation);
+  }
+
+  @Override
+  public int hashCode() {
+    return implementation.hashCode();
+  }
+
+  @Nonnull
+  @Override
+  public String toString() {
+    return "(AlignmentLayoutChildNode) [" + getHorizontal().name() + "] [" + getVertical().name()+ ']';
   }
 }

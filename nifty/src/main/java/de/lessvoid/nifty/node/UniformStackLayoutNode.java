@@ -72,6 +72,11 @@ public final class UniformStackLayoutNode implements NiftyNode {
     implementation.setOrientation(orientation);
   }
 
+  @Nonnull
+  NiftyNodeImpl<UniformStackLayoutNode> getImpl() {
+    return implementation;
+  }
+
   @Override
   public boolean equals(@Nullable final Object obj) {
     return (obj instanceof UniformStackLayoutNode) && equals((UniformStackLayoutNode) obj);
@@ -86,13 +91,9 @@ public final class UniformStackLayoutNode implements NiftyNode {
     return implementation.hashCode();
   }
 
+  @Nonnull
   @Override
   public String toString() {
     return "(" + this.getClass().getSimpleName() + ") orientation [" + getOrientation() + "]";
-  }
-
-  @Nonnull
-  NiftyNodeImpl<UniformStackLayoutNode> getImpl() {
-    return implementation;
   }
 }

@@ -30,6 +30,7 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * The padding layout nodes applies a padding to the inner layout nodes. Each direct inner layout node is subject to
@@ -107,5 +108,26 @@ public final class PaddingLayoutNode implements NiftyNode {
   @Nonnull
   NiftyNodeImpl<PaddingLayoutNode> getImpl() {
     return implementation;
+  }
+
+  @Override
+  public boolean equals(@Nullable final Object obj) {
+    return (obj instanceof PaddingLayoutNode) && equals((PaddingLayoutNode) obj);
+  }
+
+  public boolean equals(@Nullable final PaddingLayoutNode node) {
+    return (node != null) && node.implementation.equals(implementation);
+  }
+
+  @Override
+  public int hashCode() {
+    return implementation.hashCode();
+  }
+
+  @Nonnull
+  @Override
+  public String toString() {
+    return "(PaddingLayoutNode) top [" + getTop() + "px] right [" + getRight() +
+        "px] bottom [" + getBottom() + "px] left [" + getLeft() + "px]";
   }
 }

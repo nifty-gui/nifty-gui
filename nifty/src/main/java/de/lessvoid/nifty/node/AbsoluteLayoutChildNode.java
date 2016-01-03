@@ -31,6 +31,7 @@ import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.NiftyPoint;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
 
@@ -146,6 +147,20 @@ public final class AbsoluteLayoutChildNode implements NiftyNode {
   @Nonnull
   NiftyNodeImpl<AbsoluteLayoutChildNode> getImpl() {
     return implementation;
+  }
+
+  @Override
+  public boolean equals(@Nullable final Object obj) {
+    return (obj instanceof AbsoluteLayoutChildNode) && equals((AbsoluteLayoutChildNode) obj);
+  }
+
+  public boolean equals(@Nullable final AbsoluteLayoutChildNode node) {
+    return (node != null) && node.implementation.equals(implementation);
+  }
+
+  @Override
+  public int hashCode() {
+    return implementation.hashCode();
   }
 
   @Nonnull

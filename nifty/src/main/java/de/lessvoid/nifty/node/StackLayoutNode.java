@@ -31,6 +31,7 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * The layout node implementation for a stack layout.
@@ -91,5 +92,25 @@ public final class StackLayoutNode implements NiftyNode {
   @Nonnull
   NiftyNodeImpl<StackLayoutNode> getImpl() {
     return implementation;
+  }
+
+  @Override
+  public boolean equals(@Nullable final Object obj) {
+    return (obj instanceof StackLayoutNode) && equals((StackLayoutNode) obj);
+  }
+
+  public boolean equals(@Nullable final StackLayoutNode node) {
+    return (node != null) && node.implementation.equals(implementation);
+  }
+
+  @Override
+  public int hashCode() {
+    return implementation.hashCode();
+  }
+
+  @Nonnull
+  @Override
+  public String toString() {
+    return "(StackLayoutNode) orientation [" + getOrientation().name() + "] Stretch: [" + isStretchLast() + ']';
   }
 }
