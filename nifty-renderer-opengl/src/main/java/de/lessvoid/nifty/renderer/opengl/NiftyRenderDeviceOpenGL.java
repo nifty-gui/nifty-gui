@@ -220,7 +220,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     vao.bind();
     vbo.bind();
-    vbo.getBuffer().rewind();
+    vbo.getBuffer().flip();
     vbo.send();
 
     vao.enableVertexAttribute(0);
@@ -252,7 +252,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     vao.bind();
     vbo.bind();
-    vbo.getBuffer().rewind();
+    vbo.getBuffer().flip();
     vbo.send();
 
     vao.enableVertexAttribute(0);
@@ -295,7 +295,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     vao.bind();
     vbo.bind();
-    vbo.getBuffer().rewind();
+    vbo.getBuffer().flip();
     vbo.send();
 
     vao.enableVertexAttribute(0);
@@ -487,7 +487,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     vao.bind();
     vbo.bind();
-    vbo.getBuffer().rewind();
+    vbo.getBuffer().flip();
     vbo.send();
 
     vao.enableVertexAttribute(0);
@@ -523,7 +523,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     vao.bind();
     vbo.bind();
-    vbo.getBuffer().rewind();
+    vbo.getBuffer().flip();
     vbo.send();
 
     vao.enableVertexAttribute(0);
@@ -555,7 +555,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     vao.bind();
     vbo.bind();
-    vbo.getBuffer().rewind();
+    vbo.getBuffer().flip();
     vbo.send();
 
     vao.enableVertexAttribute(0);
@@ -602,7 +602,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     quad.put((float) lineColor.getGreen());
     quad.put((float) lineColor.getBlue());
     quad.put((float) lineColor.getAlpha());
-    quad.rewind();
+    quad.flip();
 
     vao.bind();
     vbo.bind();
@@ -665,7 +665,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     quad.put(1.0f);
     quad.put(1.0f);
     quad.put(1.0f);
-    quad.rewind();
+    quad.flip();
 
     vao.bind();
     vbo.bind();
