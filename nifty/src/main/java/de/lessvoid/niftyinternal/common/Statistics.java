@@ -26,11 +26,11 @@
  */
 package de.lessvoid.niftyinternal.common;
 
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import de.lessvoid.nifty.NiftyStatistics.FrameInfo;
 import de.lessvoid.nifty.spi.TimeProvider;
+
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Statistics {
   private static final int TIME_HISTORY = 10;
@@ -52,7 +52,8 @@ public class Statistics {
     Update,
     Render,
     RenderBatchCount,
-    InputProcessing
+    InputProcessing,
+    TotalFrameTime
   }
 
   public Statistics(final TimeProvider timeProvider) {
@@ -65,6 +66,7 @@ public class Statistics {
       times[type.ordinal()] = -1;
     }
     times[Type.RenderBatchCount.ordinal()] = 0;
+    start(Type.TotalFrameTime);
   }
 
   /**
@@ -72,13 +74,15 @@ public class Statistics {
    * FrameInfo instance and will store it for later retrieval.
    */
   public void endFrame() {
+    stop(Type.TotalFrameTime);
     addSample(new FrameInfo(
         frameCounter++,
         times[Type.Render.ordinal()],
         times[Type.Update.ordinal()],
         times[Type.Synchronize.ordinal()],
         times[Type.RenderBatchCount.ordinal()],
-        times[Type.InputProcessing.ordinal()]));
+        times[Type.InputProcessing.ordinal()],
+        times[Type.TotalFrameTime.ordinal()]));
   }
 
   /**

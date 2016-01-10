@@ -26,18 +26,19 @@
  */
 package de.lessvoid.nifty;
 
+import de.lessvoid.niftyinternal.common.Statistics;
+
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import de.lessvoid.niftyinternal.common.Statistics;
 
 /**
  * Several different statistical informations about Niftys internal processing.
  * @author void
  */
 public class NiftyStatistics {
+
   /**
    * A FrameInfo instance records sample times for a specific frame.
    * @author void
@@ -49,6 +50,7 @@ public class NiftyStatistics {
     private final long syncTime;
     private final long renderBatchCount;
     private final long inputProcessingUpdateTime;
+    private final long totalFrameTime; // for now this requires update() immediately followed by render() to be correct
 
     public FrameInfo(
         final long frame,
@@ -56,13 +58,15 @@ public class NiftyStatistics {
         final long updateTime,
         final long syncTime,
         final long renderBatchCount,
-        final long inputProcessingUpdateTime) {
+        final long inputProcessingUpdateTime,
+        final long totalFrameTime) {
       this.frame = frame;
       this.renderTime = renderTime;
       this.updateTime = updateTime;
       this.syncTime = syncTime;
       this.renderBatchCount = renderBatchCount;
       this.inputProcessingUpdateTime = inputProcessingUpdateTime;
+      this.totalFrameTime = totalFrameTime;
     }
 
     public long getFrame() {
@@ -88,6 +92,10 @@ public class NiftyStatistics {
     public long getInputProcessingUpdateTime() {
       return inputProcessingUpdateTime;
     }
+
+    public long getTotalFrameTime() {
+      return totalFrameTime;
+    }
   }
 
   private final Statistics statistics;
@@ -110,18 +118,20 @@ public class NiftyStatistics {
   }
 
   public List<String> getStatistics() {
-    List<String> stuff = new ArrayList<String>();
+    List<String> stuff = new ArrayList<>();
     FrameInfo[] frameInfos = getAllSamples();
-    stuff.add("     frame    update     render      synch   batchc.   inputUpdate\n");
+    stuff.add("     frame    update    render     synch   # batch     input     total       fps\n");
     StringBuilder line = new StringBuilder();
     for (FrameInfo frameInfo : frameInfos) {
       line.setLength(0);
       line.append(String.format("%10s", frameInfo.getFrame()));
-      line.append(formatValue(frameInfo.getUpdateTime()));
-      line.append(formatValue(frameInfo.getRenderTime()));
-      line.append(formatValue(frameInfo.getSyncTime()));
+      line.append(formatValue(toMS(frameInfo.getUpdateTime())));
+      line.append(formatValue(toMS(frameInfo.getRenderTime())));
+      line.append(formatValue(toMS(frameInfo.getSyncTime())));
       line.append(formatDirect(frameInfo.getRenderBatchCount()));
-      line.append(formatValue(frameInfo.getInputProcessingUpdateTime()));
+      line.append(formatValue(toMS(frameInfo.getInputProcessingUpdateTime())));
+      line.append(formatValue(toMS(frameInfo.getTotalFrameTime())));
+      line.append(formatValue(1000./toMS(frameInfo.getTotalFrameTime())));
       line.append("\n");
       stuff.add(line.toString());
     }
@@ -142,21 +152,25 @@ public class NiftyStatistics {
     return fpsText.toString();
   }
 
-  private String formatValue(final long value) {
+  private String formatValue(final double value) {
     if (value == -1) {
-      return "N/A";
+      return String.format("%10s", "N/A");
     }
     NumberFormat format = NumberFormat.getInstance(Locale.US);
     format.setGroupingUsed(false);
     format.setMinimumFractionDigits(4);
     format.setMaximumFractionDigits(4);
-    return String.format("%10s", format.format(value / 100000.f));
+    return String.format("%10s", format.format(value));
   }
 
   private String formatDirect(final long value) {
     if (value == -1) {
-      return "N/A";
+      return String.format("%10s", "N/A");
     }
     return String.format("%10s", value);
+  }
+
+  private double toMS(final double value) {
+    return value / 100000.;
   }
 }
