@@ -37,7 +37,7 @@ public class Statistics {
 
   private final TimeProvider timeProvider;
   private int frameCounter = 0;
-  private final Queue<FrameInfo> frameHistory = new LinkedBlockingQueue<FrameInfo>(TIME_HISTORY);
+  private final Queue<FrameInfo> frameHistory = new LinkedBlockingQueue<>(TIME_HISTORY);
   private final long[] times = new long[Type.values().length];
 
   private int fpsFrameCounter = 0;
@@ -45,12 +45,11 @@ public class Statistics {
   private int fpsFrames = -1;
 
   private enum Type {
-    /**
-     * Time spent synchronizing the Nifty scene graph with the render node scene graph.
-     */
-    Synchronize,
     Update,
     Render,
+    RenderStatePass,
+    RenderContentPass,
+    RenderPass,
     RenderBatchCount,
     InputProcessing,
     TotalFrameTime
@@ -79,7 +78,9 @@ public class Statistics {
         frameCounter++,
         times[Type.Render.ordinal()],
         times[Type.Update.ordinal()],
-        times[Type.Synchronize.ordinal()],
+        times[Type.RenderStatePass.ordinal()],
+        times[Type.RenderContentPass.ordinal()],
+        times[Type.RenderPass.ordinal()],
         times[Type.RenderBatchCount.ordinal()],
         times[Type.InputProcessing.ordinal()],
         times[Type.TotalFrameTime.ordinal()]));
@@ -129,12 +130,28 @@ public class Statistics {
     }
   }
 
-  public void startSynchronize() {
-    start(Type.Synchronize);
+  public void startRenderStatePass() {
+    start(Type.RenderStatePass);
   }
 
-  public void stopSynchronize() {
-    stop(Type.Synchronize);
+  public void stopRenderStatePass() {
+    stop(Type.RenderStatePass);
+  }
+
+  public void startRenderContentPass() {
+    start(Type.RenderContentPass);
+  }
+
+  public void stopRenderContentPass() {
+    stop(Type.RenderContentPass);
+  }
+
+  public void startRenderPass() {
+    start(Type.RenderPass);
+  }
+
+  public void stopRenderPass() {
+    stop(Type.RenderPass);
   }
 
   private void addSample(final FrameInfo frameInfo) {

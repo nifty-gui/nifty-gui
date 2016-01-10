@@ -210,7 +210,7 @@ public class Nifty {
    */
   public boolean render() {
     stats.startRender();
-    boolean frameChanged = renderer.render(tree);
+    boolean frameChanged = renderer.render(tree, stats);
     stats.stopRender();
     stats.endFrame();
     return frameChanged;

@@ -79,15 +79,25 @@ public class InternalNiftyRenderer {
     this.renderBucketList = createBuckets(renderDevice.getDisplayWidth(), renderDevice.getDisplayHeight());
   }
 
-  public boolean render(final InternalNiftyTree tree) {
+  public boolean render(final InternalNiftyTree tree, final Statistics stats) {
     StringBuilder b = new StringBuilder();
+
+    stats.startRenderStatePass();
     nodeStatePass(tree, tree.getRootNode(), NiftyStateAccessor.getDefault().newNiftyState(), b, 0);
+    stats.stopRenderStatePass();
+
     if (logger.isLoggable(Level.FINE)) {
       logger.fine(b.toString());
     }
-    contentNodePass(tree, tree.getRootNode(), 0, 0, null);
 
+    stats.startRenderContentPass();
+    contentNodePass(tree, tree.getRootNode(), 0, 0, null);
+    stats.stopRenderContentPass();
+
+    stats.startRenderPass();
     render();
+    stats.stopRenderPass();
+
     return true;
   }
 

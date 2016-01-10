@@ -46,24 +46,30 @@ public class NiftyStatistics {
   public static class FrameInfo {
     private final long frame;
     private final long renderTime;
+    private final long renderStatePassTime;
+    private final long renderContentPassTime;
+    private final long renderPassTime;
     private final long updateTime;
-    private final long syncTime;
     private final long renderBatchCount;
     private final long inputProcessingUpdateTime;
-    private final long totalFrameTime; // for now this requires update() immediately followed by render() to be correct
+    private final long totalFrameTime; // for now this requires nifty.update() immediately followed by nifty.render() to be correct
 
     public FrameInfo(
         final long frame,
         final long renderTime,
         final long updateTime,
-        final long syncTime,
+        final long renderStatePassTime,
+        final long renderContentPassTime,
+        final long renderPassTime,
         final long renderBatchCount,
         final long inputProcessingUpdateTime,
         final long totalFrameTime) {
       this.frame = frame;
       this.renderTime = renderTime;
+      this.renderStatePassTime = renderStatePassTime;
+      this.renderContentPassTime = renderContentPassTime;
+      this.renderPassTime = renderPassTime;
       this.updateTime = updateTime;
-      this.syncTime = syncTime;
       this.renderBatchCount = renderBatchCount;
       this.inputProcessingUpdateTime = inputProcessingUpdateTime;
       this.totalFrameTime = totalFrameTime;
@@ -77,12 +83,20 @@ public class NiftyStatistics {
       return renderTime;
     }
 
-    public long getUpdateTime() {
-      return updateTime;
+    public long getRenderStatePassTime() {
+      return renderStatePassTime;
     }
 
-    public long getSyncTime() {
-      return syncTime;
+    public long getRenderContentPassTime() {
+      return renderContentPassTime;
+    }
+
+    public long getRenderPassTime() {
+      return renderPassTime;
+    }
+
+    public long getUpdateTime() {
+      return updateTime;
     }
 
     public long getRenderBatchCount() {
@@ -120,14 +134,16 @@ public class NiftyStatistics {
   public List<String> getStatistics() {
     List<String> stuff = new ArrayList<>();
     FrameInfo[] frameInfos = getAllSamples();
-    stuff.add("     frame    update    render     synch   # batch     input     total       fps\n");
+    stuff.add("      frame     update     render    r.state  r.content     r.pass    # batch      input      total        fps\n");
     StringBuilder line = new StringBuilder();
     for (FrameInfo frameInfo : frameInfos) {
       line.setLength(0);
-      line.append(String.format("%10s", frameInfo.getFrame()));
+      line.append(String.format("%11s", frameInfo.getFrame()));
       line.append(formatValue(toMS(frameInfo.getUpdateTime())));
       line.append(formatValue(toMS(frameInfo.getRenderTime())));
-      line.append(formatValue(toMS(frameInfo.getSyncTime())));
+      line.append(formatValue(toMS(frameInfo.getRenderStatePassTime())));
+      line.append(formatValue(toMS(frameInfo.getRenderContentPassTime())));
+      line.append(formatValue(toMS(frameInfo.getRenderPassTime())));
       line.append(formatDirect(frameInfo.getRenderBatchCount()));
       line.append(formatValue(toMS(frameInfo.getInputProcessingUpdateTime())));
       line.append(formatValue(toMS(frameInfo.getTotalFrameTime())));
@@ -154,20 +170,20 @@ public class NiftyStatistics {
 
   private String formatValue(final double value) {
     if (value == -1) {
-      return String.format("%10s", "N/A");
+      return String.format("%11s", "N/A");
     }
     NumberFormat format = NumberFormat.getInstance(Locale.US);
     format.setGroupingUsed(false);
     format.setMinimumFractionDigits(4);
     format.setMaximumFractionDigits(4);
-    return String.format("%10s", format.format(value));
+    return String.format("%11s", format.format(value));
   }
 
   private String formatDirect(final long value) {
     if (value == -1) {
-      return String.format("%10s", "N/A");
+      return String.format("%11s", "N/A");
     }
-    return String.format("%10s", value);
+    return String.format("%11s", value);
   }
 
   private double toMS(final double value) {
