@@ -1,10 +1,10 @@
 package de.lessvoid.nifty.render.batch.spi.core;
 
-import de.lessvoid.nifty.render.batch.spi.GL;
-
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+
+import de.lessvoid.nifty.render.batch.spi.GL;
 
 /**
  * OpenGL Core Profile abstraction to make it easy for internal OpenGL-based rendering classes to make direct OpenGL
@@ -43,6 +43,7 @@ public interface CoreGL extends GL {
   public int GL_PRIMITIVE_RESTART();
   public int GL_PRIMITIVE_RESTART_INDEX();
   public int GL_RED();
+  public int GL_SAMPLER_BINDING();
   public int GL_STATIC_DRAW();
   public int GL_STREAM_DRAW();
   public int GL_TEXTURE0();
@@ -70,6 +71,7 @@ public interface CoreGL extends GL {
   public void glAttachShader(int program, int shader);
   public void glBindAttribLocation(int program, int index, String name);
   public void glBindBuffer(int target, int buffer);
+  public void glBindSampler(int unit, int sampler);
   public void glBindVertexArray(int array);
   public void glBufferData(int target, IntBuffer data, int usage);
   public void glBufferData(int target, FloatBuffer data, int usage);

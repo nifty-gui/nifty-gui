@@ -1,8 +1,5 @@
 package de.lessvoid.nifty.renderer.lwjgl.render;
 
-import de.lessvoid.nifty.render.batch.spi.core.CoreGL;
-import de.lessvoid.nifty.renderer.lwjgl.render.LwjglGL;
-
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -15,6 +12,9 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL31;
 import org.lwjgl.opengl.GL32;
+import org.lwjgl.opengl.GL33;
+
+import de.lessvoid.nifty.render.batch.spi.core.CoreGL;
 
 /**
  * Note: Requires OpenGL 3.2 or higher.
@@ -144,6 +144,11 @@ public class LwjglCoreGL extends LwjglGL implements CoreGL {
   }
 
   @Override
+  public int GL_SAMPLER_BINDING() {
+    return GL33.GL_SAMPLER_BINDING;
+  }
+
+  @Override
   public int GL_STATIC_DRAW() {
     return GL15.GL_STATIC_DRAW;
   }
@@ -266,6 +271,11 @@ public class LwjglCoreGL extends LwjglGL implements CoreGL {
   @Override
   public void glBindBuffer(int target, int buffer) {
     GL15.glBindBuffer(target, buffer);
+  }
+
+  @Override
+  public void glBindSampler(int unit, int sampler) {
+    GL33.glBindSampler(unit, sampler);
   }
 
   @Override
