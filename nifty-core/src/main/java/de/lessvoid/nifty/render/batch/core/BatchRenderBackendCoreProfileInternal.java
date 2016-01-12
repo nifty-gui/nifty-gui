@@ -103,7 +103,6 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
     shader.link();
     shader.activate();
     shader.setUniformi("uTex", 0);
-    gl.glBindSampler(0, 0); // make sure default tex unit and sampler are bound
     batchPool = new ObjectPool<CoreBatch>(new Factory<CoreBatch>() {
       @Nonnull
       @Override
@@ -558,6 +557,7 @@ public class BatchRenderBackendCoreProfileInternal implements BatchRenderBackend
 
   private void beginRendering() {
     gl.glActiveTexture(gl.GL_TEXTURE0());
+    gl.glBindSampler(0, 0); // make sure default tex unit and sampler are bound
     gl.glEnable(gl.GL_BLEND());
     gl.glEnable(gl.GL_PRIMITIVE_RESTART());
     gl.glPrimitiveRestartIndex(PRIMITIVE_RESTART_INDEX);
