@@ -45,7 +45,7 @@ public class CoreProfileSaveGLState {
 
     params.clear();
     // set active texture to zero for reading sampler binding
-    gl.glActiveTexture(gl.GL_ACTIVE_TEXTURE());
+    gl.glActiveTexture(gl.GL_TEXTURE0 ());
     gl.glGetIntegerv(gl.GL_SAMPLER_BINDING(), params);
     samplerBindingTex0 = params.get(0);
 
