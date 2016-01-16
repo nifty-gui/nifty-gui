@@ -52,7 +52,7 @@
   </dependencies>
   <build>
     <plugins>
-        <plugin>
+      <plugin>
         <groupId>com.googlecode.mavennatives</groupId>
         <artifactId>maven-nativedependencies-plugin</artifactId>
         <version>0.0.5</version>
