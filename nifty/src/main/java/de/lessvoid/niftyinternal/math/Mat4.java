@@ -154,15 +154,14 @@ public class Mat4 implements Serializable {
 
 	public static Mat4 createTranslate(final float x, final float y, final float z) {
 	  Mat4 result = new Mat4();
-    result.setTranslate(x, y, z);
+    result.m30 = x;
+    result.m31 = y;
+    result.m32 = z;
 	  return result;
 	}
 
   /**
    * Modify the values responsible for translation in this Mat4.
-   * <p/>
-   * Please note that this method will only work properly if this matrix represents an identity matrix or
-   * another translation matrix. Therefore you can't use this method on any matrix.
    * <p/>
    * You would like to use this method for performance reasons since the existing Mat4 object is modified instead of
    * a new one being allocated. Just make sure you know what you're doing in this case :)
@@ -173,23 +172,35 @@ public class Mat4 implements Serializable {
    * @return this
    */
   public Mat4 setTranslate(final float x, final float y, final float z) {
+    m00 = 1.0f;
+    m01 = 0.0f;
+    m02 = 0.0f;
+    m03 = 0.0f;
+    m10 = 0.0f;
+    m11 = 1.0f;
+    m12 = 0.0f;
+    m13 = 0.0f;
+    m20 = 0.0f;
+    m21 = 0.0f;
+    m22 = 1.0f;
+    m23 = 0.0f;
     m30 = x;
     m31 = y;
     m32 = z;
+    m33 = 1.0f;
     return this;
   }
 
   public static Mat4 createScale(final float x, final float y, final float z) {
 	  Mat4 result = new Mat4();
-    result.setScale(x, y, z);
-	  return result;
+    result.m00 = x;
+    result.m11 = y;
+    result.m22 = z;
+    return result;
 	}
 
   /**
    * Modify the values responsible for scale in this Mat4.
-   * <p/>
-   * Please note that this method will only work properly if this matrix represents an identity matrix or
-   * another scale matrix. Therefore you can't use this method on any matrix.
    * <p/>
    * You would like to use this method for performance reasons since the existing Mat4 object is modified instead of
    * a new one being allocated. Just make sure you know what you're doing in this case :)
@@ -201,8 +212,21 @@ public class Mat4 implements Serializable {
    */
   public Mat4 setScale(final float x, final float y, final float z) {
     m00 = x;
+    m01 = 0.0f;
+    m02 = 0.0f;
+    m03 = 0.0f;
+    m10 = 0.0f;
     m11 = y;
+    m12 = 0.0f;
+    m13 = 0.0f;
+    m20 = 0.0f;
+    m21 = 0.0f;
     m22 = z;
+    m23 = 0.0f;
+    m30 = 0.0f;
+    m31 = 0.0f;
+    m32 = 0.0f;
+    m33 = 1.0f;
     return this;
   }
 
@@ -215,12 +239,10 @@ public class Mat4 implements Serializable {
   /**
    * Modify the values responsible for rotation in this Mat4.
    * <p/>
-   * Please note that this method will only work properly if this matrix represents an identity matrix or
-   * another rotation matrix. Therefore you can't use this method on any matrix.
-   * <p/>
    * You would like to use this method for performance reasons since the existing Mat4 object is modified instead of
    * a new one being allocated. Just make sure you know what you're doing in this case :)
    * <p/>
+   * @param angle
    * @param x
    * @param y
    * @param z
@@ -232,23 +254,23 @@ public class Mat4 implements Serializable {
     float s = (float) Math.sin(angleRad);
 
     m00 = x*x*(1-c)+c;
-    m10 = x*y*(1-c)-z*s;
-    m20 = x*z*(1-c)+y*s;
-    m30 = 0;
-
     m01 = y*x*(1-c)+z*s;
-    m11 = y*y*(1-c)+c;
-    m21 = y*z*(1-c)-x*s;
-    m31 = 0;
-
     m02 = x*z*(1-c)-y*s;
-    m12 = y*z*(1-c)+x*s;
-    m22 = z*z*(1-c)+c;
-    m32 = 0;
+    m03 = 0.0f;
 
-    m03 = 0;
-    m13 = 0;
-    m23 = 0;
+    m10 = x*y*(1-c)-z*s;
+    m11 = y*y*(1-c)+c;
+    m12 = y*z*(1-c)+x*s;
+    m13 = 0.0f;
+
+    m20 = x*z*(1-c)+y*s;
+    m21 = y*z*(1-c)-x*s;
+    m22 = z*z*(1-c)+c;
+    m23 = 0.0f;
+
+    m30 = 0.0f;
+    m31 = 0.0f;
+    m32 = 0.0f;
     m33 = 1;
 
     return this;
