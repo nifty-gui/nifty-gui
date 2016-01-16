@@ -54,6 +54,7 @@ class NiftyContentNodeImpl
   private int width;
   private int height;
 
+  private final Mat4 identity = Mat4.createIdentity();
   private NiftyColor backgroundColor;
   private Mat4 local = Mat4.createIdentity();
   private Mat4 localToScreen = Mat4.createIdentity();
@@ -72,8 +73,8 @@ class NiftyContentNodeImpl
   @Override
   public void update(final NiftyState niftyState) {
     backgroundColor = niftyState.getState(NiftyStateBackgroundColor, NiftyColor.purple());
-    local = niftyState.getState(NiftyStateTransformationLocal, Mat4.createIdentity());
-    localToScreen = niftyState.getState(NiftyStateTransformationLocalToScreen, Mat4.createIdentity());
+    local = niftyState.getState(NiftyStateTransformationLocal, identity);
+    localToScreen = niftyState.getState(NiftyStateTransformationLocalToScreen, identity);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

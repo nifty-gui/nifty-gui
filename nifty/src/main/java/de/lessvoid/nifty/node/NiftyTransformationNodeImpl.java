@@ -34,9 +34,9 @@ import de.lessvoid.niftyinternal.math.Mat4;
 
 import javax.annotation.Nonnull;
 
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationChanged;
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationLocal;
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationLocalToScreen;
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationChanged;
 
 /**
  * Created by void on 09.08.15.
@@ -45,6 +45,8 @@ class NiftyTransformationNodeImpl
     implements
       NiftyNodeStateImpl<NiftyTransformationNode>,
       NiftyLayoutReceiver<NiftyTransformationNode> {
+  private final Mat4 identity = Mat4.createIdentity();
+
   private boolean transformationChanged = true;
   private double pivotX = 0.5;
   private double pivotY = 0.5;
@@ -59,13 +61,14 @@ class NiftyTransformationNodeImpl
   private double posZ = 0.0;
 
   private Mat4 localTransformation;
-  private Mat4 localTransformationInverse;
+  //private Mat4 localTransformationInverse;
   private Mat4 localToScreenTransformation;
-  private Mat4 screenToLocalTransformation;
+  //private Mat4 screenToLocalTransformation;
   private float layoutWidth = 1.f;
   private float layoutHeight = 1.f;
   private float layoutX = 0.f;
   private float layoutY = 0.f;
+  private LocalTransform localTransform = new LocalTransform();
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // NiftyNodeImpl
@@ -82,7 +85,7 @@ class NiftyTransformationNodeImpl
 
   @Override
   public void update(final NiftyState niftyState) {
-    Mat4 parentLocalToScreen = niftyState.getState(NiftyStateTransformationLocalToScreen, Mat4.createIdentity());
+    Mat4 parentLocalToScreen = niftyState.getState(NiftyStateTransformationLocalToScreen, identity);
     boolean parentLocalToScreenChanged = niftyState.getState(NiftyStateTransformationChanged, false);
     boolean thisStateChanged = isTransformationChanged() || parentLocalToScreenChanged;
     niftyState.setState(NiftyStateTransformationLocalToScreen, updateTransformation(parentLocalToScreen, parentLocalToScreenChanged));
@@ -206,10 +209,10 @@ class NiftyTransformationNodeImpl
       return localToScreenTransformation;
     }
     localTransformation = new Mat4(buildLocalTransformation());
-    localTransformationInverse = Mat4.invert(localTransformation, new Mat4());
+    //localTransformationInverse = Mat4.invert(localTransformation, new Mat4());
 
     localToScreenTransformation = Mat4.mul(parentTransformation, localTransformation);
-    screenToLocalTransformation = Mat4.invert(localToScreenTransformation, new Mat4());
+    //screenToLocalTransformation = Mat4.invert(localToScreenTransformation, new Mat4());
 
     transformationChanged = false;
     return localToScreenTransformation;
@@ -222,25 +225,52 @@ class NiftyTransformationNodeImpl
   }
 
   private Mat4 buildLocalTransformation() {
-    float pivotX = (float) this.pivotX * layoutWidth;
-    float pivotY = (float) this.pivotY * layoutHeight;
-    return
-        Mat4.mul(
-          Mat4.mul(
-              Mat4.mul(
-                  Mat4.mul(
-                      Mat4.mul(
-                          Mat4.mul(
-                                Mat4.createTranslate((float) posX, (float) posY, 0.f),
-                            Mat4.createTranslate(pivotX, pivotY, 0.0f)),
-                        Mat4.createRotate((float) angleX, 1.f, 0.f, 0.f)),
-                    Mat4.createRotate((float) angleY, 0.f, 1.f, 0.f)),
-                Mat4.createRotate((float) angleZ, 0.f, 0.f, 1.f)),
-            Mat4.createScale((float) scaleX, (float) scaleY, (float) scaleZ)),
-          Mat4.createTranslate(-pivotX, -pivotY, 0.0f));
+    return localTransform.buildLocalTransformation(
+        posX,
+        posY,
+        angleX,
+        angleY,
+        angleZ,
+        scaleX,
+        scaleY,
+        scaleZ,
+        this.pivotX * layoutWidth,
+        this.pivotY * layoutHeight);
   }
 
   private boolean isTransformationChanged() {
     return transformationChanged;
+  }
+
+  private static class LocalTransform {
+    private final Mat4 a = Mat4.createIdentity();
+    private final Mat4 b = Mat4.createIdentity();
+    private final Mat4 c = Mat4.createIdentity();
+
+    private Mat4 buildLocalTransformation(
+        double posX,
+        double posY,
+        double angleX,
+        double angleY,
+        double angleZ,
+        double scaleX,
+        double scaleY,
+        double scaleZ,
+        double pivotX,
+        double pivotY) {
+      a.setTranslate((float) posX, (float) posY, 0.f);
+      b.setTranslate((float) pivotX, (float) pivotY, 0.f);
+      Mat4.mul(a, b, c);
+      a.setRotate((float) angleX, 1.f, 0.f, 0.f);
+      Mat4.mul(c, a, b);
+      a.setRotate((float) angleY, 0.f, 1.f, 0.f);
+      Mat4.mul(b, a, c);
+      a.setRotate((float) angleZ, 0.f, 0.f, 1.f);
+      Mat4.mul(c, a, b);
+      a.setScale((float) scaleX, (float) scaleY, (float) scaleZ);
+      Mat4.mul(b, a, c);
+      a.setTranslate((float) -pivotX, (float) -pivotY, 0.f);
+      return Mat4.mul(c, a);
+    }
   }
 }
