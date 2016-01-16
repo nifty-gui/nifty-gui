@@ -33,6 +33,8 @@ import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyPoint;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
 import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
@@ -89,6 +91,18 @@ public class UseCase_a05_RotatingChildNode {
                           .addNode(backgroundColorNode(NiftyColor.yellow()))
                             .addNode(transformationNode())
                               .addNode(contentNode());
+    nifty.startAnimated(0, 1000, new NiftyCallback<Float>() {
+      private final List<String> data = new ArrayList<>();
+
+      @Override
+      public void execute(Float aFloat) {
+        nifty.getStatistics().getStatistics(data);
+        for (int i=0; i<data.size(); i++) {
+          System.out.print(data.get(i));
+        }
+      }
+    });
+
     nifty.startAnimated(0, 25, new NiftyCallback<Float>() {
       private float rot = 0;
 

@@ -131,8 +131,8 @@ public class NiftyStatistics {
     return statistics;
   }
 
-  public List<String> getStatistics() {
-    List<String> stuff = new ArrayList<>();
+  public void getStatistics(final List<String> stuff) {
+    stuff.clear();
     FrameInfo[] frameInfos = getAllSamples();
     stuff.add("      frame     update     render    r.state  r.content     r.pass    # batch      input      total        fps\n");
     StringBuilder line = new StringBuilder();
@@ -151,7 +151,6 @@ public class NiftyStatistics {
       line.append("\n");
       stuff.add(line.toString());
     }
-    return stuff;
   }
 
   public int getFps() {
