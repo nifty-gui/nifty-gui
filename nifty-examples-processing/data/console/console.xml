@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <!-- load default styles and controls -->
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <useStyles filename="console/custom-console-style.xml"/>
+    <useStyles filename="nifty-default-styles.xml"/>
+    <useControls filename="nifty-default-controls.xml"/>
+
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <!-- start screen -->
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <screen id="start" controller="${PROP.APP}ConsoleDemoStartScreen"
+            defaultFocusElement="name">
+        <layer id="layer" childLayout="center" backgroundImage="background.png">
+        </layer>
+        <layer id="layer2" childLayout="center">
+            <panel id="dialog" style="nifty-panel" padding="18px,28px,28px,16px" childLayout="center" width="50%"
+                   height="38%" align="center" valign="center">
+                <effect>
+                    <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500"
+                                   inherit="true"/>
+                    <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500"
+                                 inherit="true"/>
+                </effect>
+                <panel childLayout="vertical" align="center" valign="center">
+                    <panel id="namePanel" childLayout="horizontal">
+                        <text id="labelName" style="nifty-label" text="Your Name: " width="150px" align="left"
+                              textVAlign="center" textHAlign="left"/>
+                        <control id="name" name="textfield" text="press F1 to toggle console"/>
+                    </panel>
+                    <panel childLayout="horizontal" height="8px"/>
+                    <panel childLayout="vertical" width="100%">
+                        <control id="backButton" name="button" label="Back to Menu" align="right">
+                            <interact onClick="back()"/>
+                        </control>
+                    </panel>
+                </panel>
+            </panel>
+        </layer>
+    </screen>
+
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <!-- the console popup -->
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <popup id="consolePopup" childLayout="center" backgroundColor="#000a">
+        <effect>
+            <onStartScreen name="fade" start="#0" end="#a" length="200" inherit="true"/>
+            <onEndScreen name="fade" start="#a" end="#0" length="200" startDelay="100" inherit="true"/>
+        </effect>
+        <panel childLayout="center" width="95%" align="center" valign="center">
+            <control id="console" name="nifty-console" lines="25" align="center" valign="center">
+                <effect>
+                    <onStartScreen name="move" direction="top" mode="in" length="200" startDelay="100" inherit="true"/>
+                    <onEndScreen name="move" direction="top" mode="out" length="200" startDelay="0" inherit="true"/>
+                </effect>
+            </control>
+        </panel>
+    </popup>
+</nifty>

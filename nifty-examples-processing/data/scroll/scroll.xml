@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- load default styles and controls -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <!-- custom scroll panel style so that we can show off the cool overlay blending shizzle -->
+  <style id="special-scrollpanel#scrollpanel">
+    <attributes backgroundColor="#9999" />
+    <effect>
+      <onActive overlay="true" name="blendMode" blendMode="multiply" post="true" />
+      <onActive overlay="true" name="imageOverlay" filename="scroll/overlay.png" imageMode="resize:0,64,0,30,0,64,0,2,0,64,0,30" post="true" />
+      <onActive overlay="true" name="imageOverlay" filename="blackborder.png" imageMode="resize:1,30,1,1,1,30,1,1,1,30,1,1" post="true" />
+    </effect>
+  </style>
+
+  <style id="special-scrollpanel#bottom-right">
+    <attributes width="28px" height="28px" />
+  </style>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- start screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="start" defaultFocusElement="backButton" controller="${PROP.APP}ScrollDemoStartScreen">
+    <layer id="layer" childLayout="center" backgroundImage="background.png">     
+      <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,40px,16px" width="55%" height="45%" align="center" valign="center">
+        <effect>
+          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" startDelay="500" inherit="true"/>
+          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" startDelay="500" inherit="true"/>
+        </effect>
+        <panel childLayout="vertical" align="center" valign="center">
+          <panel childLayout="horizontal">
+            <text id="scrollbarLabel" style="nifty-label" text="Scrollbar: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+            <control id="scrollbarPanel" style="special-scrollpanel" name="scrollPanel" horizontal="false" height="225px">
+              <panel id="myScrollStuff" width="370px" childLayout="vertical" />
+            </control>
+          </panel>
+          <panel childLayout="horizontal" height="*" />
+          <panel childLayout="vertical" width="100%">
+            <control id="backButton" name="button" label="Back to Menu" align="right">
+              <interact onClick="back()" />
+            </control>
+          </panel>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+</nifty>

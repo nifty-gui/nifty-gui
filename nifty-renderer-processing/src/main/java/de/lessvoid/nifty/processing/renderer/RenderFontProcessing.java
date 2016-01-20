@@ -1,7 +1,9 @@
 package de.lessvoid.nifty.processing.renderer;
 
 import de.lessvoid.nifty.spi.render.RenderFont;
-import processing.core.*;
+import processing.core.PFont;
+import processing.core.PGraphics;
+import processing.core.PApplet;
 import java.io.File;
 
 /**

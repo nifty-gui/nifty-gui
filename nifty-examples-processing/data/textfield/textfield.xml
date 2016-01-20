@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- load default styles and controls -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <style id="my" base="button-font">
+    <attributes font="menu.vlw" color="#f00f"/>
+  </style>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- start screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="start" controller="${PROP.APP}TextFieldDemoStartScreen">
+    <layer id="layer" childLayout="center" backgroundImage="background.png">
+      <panel id="dialog" style="nifty-panel" padding="18px,28px,28px,16px" childLayout="center" width="50%" height="38%" align="center" valign="center">
+        <effect>
+          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
+          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
+        </effect>
+        <panel childLayout="vertical" align="center" valign="center">
+          <panel id="namePanel" childLayout="horizontal">
+            <text id="labelName" text="Your Name: " width="150px" align="left" textVAlign="center" textHAlign="left" style="my"/>
+            <control id="name" name="textfield" text="kevmeister" />
+          </panel>
+          <panel childLayout="horizontal" height="8px" />
+          <panel childLayout="horizontal">
+            <text style="nifty-label" text="Your Host: " width="150px" align="left" textVAlign="center" textHAlign="left"/>
+            <control id="ip" name="textfield" />
+          </panel>
+          <panel childLayout="horizontal" height="8px" />
+          <panel childLayout="horizontal">
+            <text style="nifty-label" text="Your Password: " width="150px" align="left" textVAlign="center" textHAlign="left"/>
+            <control id="password" name="textfield" passwordChar="*" />
+          </panel>
+          <panel childLayout="horizontal" height="8px" />
+          <panel childLayout="horizontal">
+            <text style="nifty-label" text="setMaxLength(5): " width="150px" align="left" textVAlign="center" textHAlign="left"/>
+            <control id="maxLengthTest" name="textfield" maxLength="5" />
+          </panel>
+          <panel id="dynamic-parent" childLayout="vertical">
+          </panel>
+          <panel childLayout="horizontal" height="*" />
+          <panel childLayout="vertical" width="100%">
+            <control id="backButton" name="button" label="Back to Menu" align="right">
+              <interact onClick="back()" />
+            </control>
+          </panel>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+</nifty>

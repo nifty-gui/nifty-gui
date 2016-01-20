@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+    <useStyles filename="nifty-default-styles.xml"/>
+    <useControls filename="nifty-default-controls.xml"/>
+
+    <screen id="start" controller="${PROP.APP}HintScreen">
+        <layer id="layer" childLayout="vertical">
+            <effect>
+                <onActive name="gradient" direction="vertical">
+                    <value offset="0%" color="#eeef"/>
+                    <value offset="100%" color="#999f"/>
+                </onActive>
+            </effect>
+
+            <panel childLayout="horizontal" height="50%" width="100%" padding="50px">
+                <panel style="nifty-panel" height="100%" width="*" align="center" valign="center" childLayout="center"
+                       visibleToMouse="true">
+                    <interact onClick="quit()"/>
+                    <effect>
+                        <onHover name="hint"
+                                 hintText="style=&quot;nifty-panel&quot;&#10;The standard Nifty Panel style. This style is resizable.&#10;It looks best for popups and dialogs that are bigger than about 200x200 pixel."/>
+                    </effect>
+                    <text font="aurulent-sans-16.vlw" color="#ffff" text="nifty-panel" align="center" valign="center"/>
+                </panel>
+                <panel width="50px"/>
+                <panel style="nifty-panel-no-shadow" height="100%" width="*" align="center" valign="center"
+                       childLayout="center" visibleToMouse="true">
+                    <interact onClick="quit()"/>
+                    <effect>
+                        <onHover name="hint"
+                                 hintText="style=&quot;nifty-panel-no-shadow&quot;&#10;This is the same style as &quot;nifty-panel&quot; but without the shadow."/>
+                    </effect>
+                    <text font="aurulent-sans-16.vlw" color="#ffff" text="nifty-panel-no-shadow" align="center"
+                          valign="center"/>
+                </panel>
+                <panel width="50px"/>
+                <panel style="nifty-panel-simple" height="100%" width="*" align="center" valign="center"
+                       childLayout="center" visibleToMouse="true">
+                    <interact onClick="quit()"/>
+                    <effect>
+                        <onHover name="hint"
+                                 hintText="style=&quot;nifty-panel-simple&quot;&#10;This is a simple grey style."/>
+                    </effect>
+                    <text font="aurulent-sans-16.vlw" color="#000f" text="nifty-panel-simple" align="center"
+                          valign="center"/>
+                </panel>
+            </panel>
+
+            <panel childLayout="horizontal" height="50%" width="100%" padding="50px">
+                <panel style="nifty-panel-red" height="100%" width="*" align="center" valign="center"
+                       childLayout="center" visibleToMouse="true">
+                    <interact onClick="quit()"/>
+                    <effect>
+                        <onHover name="hint"
+                                 hintText="style=&quot;nifty-panel-red&quot;&#10;The red style is used by the nifty-&#10;examples project for message dialog popups."/>
+                    </effect>
+                    <text font="aurulent-sans-16.vlw" color="#ffff" text="nifty-panel-red" align="center"
+                          valign="center"/>
+                </panel>
+                <panel width="50px"/>
+                <panel style="nifty-panel-red-no-shadow" height="100%" width="*" align="center" valign="center"
+                       childLayout="center" visibleToMouse="true">
+                    <interact onClick="quit()"/>
+                    <effect>
+                        <onHover name="hint"
+                                 hintText="style=&quot;nifty-panel-red-no-shadow&quot;&#10;Like the red style but again without the shadow."/>
+                    </effect>
+                    <text font="aurulent-sans-16.vlw" color="#ffff" text="nifty-panel-red-no-shadow" align="center"
+                          valign="center"/>
+                </panel>
+                <panel width="50px"/>
+                <panel style="nifty-panel-bright" height="100%" width="*" align="center" valign="center"
+                       childLayout="center" visibleToMouse="true">
+                    <interact onClick="quit()"/>
+                    <effect>
+                        <onHover name="hint"
+                                 hintText="style=&quot;nifty-panel-bright&quot;&#10;This style is used for hint effects&#10;but you can use it for panels too."/>
+                    </effect>
+                    <text font="aurulent-sans-16.vlw" color="#000f" text="nifty-panel-bright" align="center"
+                          valign="center"/>
+                </panel>
+            </panel>
+        </layer>
+    </screen>
+</nifty>

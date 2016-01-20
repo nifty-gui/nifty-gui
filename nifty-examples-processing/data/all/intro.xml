@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- load styles -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- register sounds -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <registerSound id="gong" filename="sound/19546__tobi123__Gong_mf2.wav" />
+  <registerSound id="eagle" filename="sound/27257__kerri__eagle_feather_short.mp3" />
+  <registerSound id="panel" filename="sound/34556__Corsica_S__reverse_bass_blip_2.wav" />
+  <registerSound id="select" filename="sound/select.wav" />
+  <registerSound id="popup" filename="sound/744__elmomo__MutantJewsArp.mp3" />
+  <registerMusic id="outro" filename="sound/a.mp3" />
+
+  <style id="special-scrollpanel#scrollpanel">
+    <attributes />
+  </style>
+
+  <style id="thumbStyle">
+    <effect>
+      <onShow name="fade" start="#0" end="#f" length="500" />
+      <onHide name="fade" start="#f" end="#0" length="500" />
+    </effect>
+  </style>
+
+  <!-- main menu style -->
+  <style id="menu">
+    <attributes align="left" valign="center" backgroundImage="special-panel.png" width="1024px" height="409px" />
+    <effect>
+      <onStartScreen name="move" timeType="exp" factor="3.5" direction="left" mode="in" length="250" startDelay="1500" inherit="true"/>
+      <onStartScreen name="playSound" sound="panel" length="10" startDelay="1500" />
+      <onEndScreen name="move" timeType="exp" factor="3.5" direction="left" mode="out" length="250" inherit="true"/>
+    </effect>
+  </style>
+
+  <style id="menu-font">
+    <attributes font="aurulent-sans-36-bold-with-shadow.vlw" />
+  </style>
+
+  <!-- menu item style -->
+  <style id="menu-item" base="menu-font">
+    <attributes align="left" textHAlign="left" color="#cccf" width="100%"
+                focusable="true"
+                controller="de.lessvoid.nifty.controls.MenuItemControl"
+                inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping" />
+    <effect>
+      <onHover name="focus" />
+      <onFocus name="simpleHint" targetElement="hintElement" hintText="$hintText" />
+      <onFocus name="colorBar" width="120%" height="120%" color="#fff5" />
+      <onFocus name="textColor" color="#ffff" />
+      <onFocus name="textSize" startSize="1.0" endSize="1.25" length="150" />
+      <onFocus name="playSound" sound="select" />
+      <onGetFocus name="updateScrollpanelPositionToDisplayElement" target="menuScrollPanel" oneShot="true" />
+      <onGetFocus name="show" targetElement="$targetElement" oneShot="true" />
+      <onLostFocus name="textSize" startSize="1.25" endSize="1.0" length="150" />
+      <onLostFocus name="hide" targetElement="$targetElement" oneShot="true"  />
+    </effect>
+  </style>
+
+  <!-- glowing text -->
+  <style id="glowText">
+    <effect>
+      <onHover name="saveState" />
+      <onHover name="changeFont" font="aurulent-sans-16.vlw" post="false" inherit="false"/>
+      <onHover name="colorPulsate" startColor="#0000" endColor="#000f" post="false" inherit="false"/>
+      <onHover name="renderElement" />
+      <onHover name="restoreState" />
+    </effect>
+  </style>
+
+  <controlDefinition name="endscroller-page-1">
+    <panel childLayout="vertical" width="100%">
+      <panel height="600px" childLayout="vertical" />
+      <text style="button-font" text="Nifty GUI&#13;&#10;(Examples/Demo)" align="center" />
+      <panel height="100px" childLayout="vertical" />
+      <text style="button-font" text="written and performed&#13;&#10;by void" align="center" />
+      <panel height="100px" childLayout="vertical" />
+        <text style="button-font" text="Nifty is written in Java&#13;&#10;" align="center" />
+        <image filename="all/java.png" align="center" />
+      <panel height="100px" childLayout="vertical" />
+        <text style="button-font" text="Nifty is using the following libs:" align="center" />
+      <panel height="50px" childLayout="vertical" />
+        <text style="button-font" text="LWJGL&#13;&#10;" align="center" />
+        <image filename="all/lwjgl.png" align="center" />
+      <panel height="50px" childLayout="vertical" />
+        <text style="button-font" text="Slick2D&#13;&#10;" align="center" />
+        <image filename="all/slick.png" align="center" />
+      <panel height="50px" childLayout="vertical" />
+        <text style="button-font" text="LibGDX&#13;&#10;" align="center" />
+        <panel width="313px" height="61px" backgroundColor="#ffff" align="center" childLayout="center">
+          <image filename="all/libgdx.png" align="center"/>
+        </panel>
+      <panel height="50px" childLayout="vertical" />
+        <panel childLayout="horizontal" align="center">
+          <panel childLayout="vertical">
+            <text style="button-font" text="OpenGL&#13;&#10;" align="center" />
+            <image filename="all/opengl.png" align="center" />
+          </panel>
+          <panel childLayout="vertical">
+            <text style="button-font" text="OpenAL&#13;&#10;" align="center" />
+            <image filename="all/openal.png" align="center" />
+          </panel>
+        </panel>
+      <panel height="50px" childLayout="vertical" />
+        <text style="button-font" text="Ogg Vorbis with JOrbis&#13;&#10;" align="center" />
+        <image filename="all/oggvorbis.png" align="center" />
+      <panel height="150px" childLayout="vertical" />
+        <text style="button-font" text="This Example uses creative commons licenced sound samples&#13;&#10;and music from the following Sources" align="center" />
+      <panel height="50px" childLayout="vertical" />
+        <text style="button-font" text="The Freesound Project&#13;&#10;" align="center" />
+        <image filename="all/freesound.png" align="center" />
+      <panel height="30px" childLayout="vertical" />
+        <text style="button-font" text="19546__tobi123__Gong_mf2.wav&#13;&#10;
+27257__kerri__eagle_feather_short.wav&#13;&#10;
+34556__Corsica_S__reverse_bass_blip_2.wav&#13;&#10;
+744__elmomo__MutantJewsArp.wav&#13;&#10;" align="center" />
+      <panel height="50px" childLayout="vertical" />
+        <text style="button-font" text="Nine Inch Nails&#13;&#10;" align="center" />
+        <image filename="all/nin.png" align="center" />
+      <panel height="30px" childLayout="vertical" />
+        <text style="button-font" text="&quot;The Four of Us are Dying&quot;&#13;&#10;
+from the&#13;&#10;
+&quot;creative commons attribution-noncommercial share alike&quot;&#13;&#10;
+licensed album&#13;&#10;
+&quot;The Slip&quot;&#13;&#10;
+&#13;&#10;
+&#13;&#10;
+Thank you Trent.&#13;&#10;" align="center" />
+        <panel height="200px" childLayout="vertical" />
+        <text style="button-font" text="THE END" align="center" />
+        <panel height="20px" childLayout="vertical" />
+      </panel>
+  </controlDefinition>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- intro screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="start" controller="${PROP.APP}SplashController" inputMapping="de.lessvoid.nifty.input.mapping.DefaultScreenMapping">
+    <layer id="background" childLayout="center" backgroundColor="#000f">
+      <effect>
+        <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" startDelay="1500" post="false" inherit="true" alternateEnable="exit"/>
+      </effect>
+      <panel id="panel" childLayout="center" backgroundImage="intro-background.png" width="100%" height="100%">
+        <effect>
+          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1000" post="false"/> 
+          <onStartScreen name="playSound" sound="gong" startDelay="1400" />
+        </effect>
+        <panel align="center" valign="center" childLayout="vertical">
+          <effect>
+            <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" startDelay="1500" post="false" inherit="true"/>
+          </effect>
+          <image align="center" valign="center" filename="intro-quote.png">
+            <effect>
+              <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="1500" post="false"/>
+            </effect>
+          </image> 
+          <image align="center" valign="center" filename="intro-quote-2.png">
+            <effect>
+              <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="3000" post="false"/>
+            </effect>
+          </image>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+
+  <screen id="start2" controller="${PROP.APP}SplashController2" inputMapping="de.lessvoid.nifty.input.mapping.DefaultScreenMapping">
+    <layer id="background" childLayout="center" backgroundImage="intro-background.png">
+      <effect>
+        <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1500" startDelay="3500" inherit="true" alternateDisable="exit"/>
+        <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" startDelay="1500" post="false" inherit="true" alternateEnable="exit" />
+      </effect>
+      <panel childLayout="absolute">
+        <effect>
+          <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="500" startDelay="500" inherit="true"/>
+          <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="1000" startDelay="2500" inherit="true" alternateDisable="exit" />
+        </effect>
+        <image x="240px" y="400px" filename="intro-logo-snow.png" align="center">
+          <effect>
+            <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" startDelay="500" />
+            <onStartScreen name="playSound" sound="eagle" startDelay="900" />
+            <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="1000" startDelay="2500" alternateDisable="exit" />
+          </effect>
+        </image>
+        <image x="240px" y="600px" filename="intro-logo-mirrored-snow.png" align="center">
+          <effect>
+            <onStartScreen name="move" direction="bottom" mode="in" length="500" startDelay="500" />
+          </effect>
+        </image>
+      </panel>
+    </layer>
+    <layer childLayout="vertical">
+      <effect>
+        <onEndScreen name="fade" start="#f" end="#0" length="900" startDelay="6000" inherit="true" alternateDisable="exit" />
+        <onEndScreen name="fade" startColor="#ffff" endColor="#0000" length="500" startDelay="1500" post="false" inherit="true" alternateEnable="exit" />
+      </effect>
+      <panel childLayout="vertical" align="center" valign="center" width="20%">
+        <panel childLayout="horizontal" height="100px" />
+        <panel childLayout="horizontal">
+          <image id="first" filename="checkbox/checkbox.png">
+            <effect>
+              <onStartScreen name="imageSize" startSize="2.0" endSize="1.0" length="250" startDelay="6000" />
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="6000" />
+            </effect>
+          </image>
+          <panel childLayout="horizontal" width="10px" />
+          <image filename="intro/text-layout.png">
+            <effect>
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="6500" />
+              <onStartScreen name="playSound" sound="gong" startDelay="6500" />
+            </effect>
+          </image>
+        </panel>
+        <panel childLayout="horizontal" height="20px" />
+        <panel childLayout="horizontal">
+          <image filename="checkbox/checkbox.png" style="my-checkmark">
+            <effect>
+              <onStartScreen name="imageSize" startSize="2.0" endSize="1.0" length="250" startDelay="8000" />
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="8000" />
+            </effect>
+          </image>
+          <panel childLayout="horizontal" width="10px" />
+          <image filename="intro/text-display.png">
+            <effect>
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="8500" />
+              <onStartScreen name="playSound" sound="gong" startDelay="8500" />
+            </effect>
+          </image>
+        </panel>
+        <panel childLayout="horizontal" height="20px" />
+        <panel childLayout="horizontal">
+          <image filename="checkbox/checkbox.png" style="my-checkmark">
+            <effect>
+              <onStartScreen name="imageSize" startSize="2.0" endSize="1.0" length="250" startDelay="10000" />
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="10000" />
+            </effect>
+          </image>
+          <panel childLayout="horizontal" width="10px" />
+          <image filename="intro/text-interact.png">
+            <effect>
+              <onStartScreen name="fade" start="#0" end="#f" length="250" startDelay="10500" />
+              <onStartScreen name="playSound" sound="gong" startDelay="10500" />
+            </effect>
+          </image>
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- menu screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="menu" controller="${PROP.APP}MenuController">
+    <layer id="top" childLayout="vertical" backgroundImage="background.png">
+      <effect>
+        <onStartScreen name="fade" start="#0" end="#f" length="500" alternateEnable="fade" />
+        <onEndScreen name="fade" startColor="#393939ff" endColor="#00000000" startDelay="1000" length="500" alternateEnable="fade"/>
+      </effect>
+      <panel id="panel" width="100%" height="30%" childLayout="center">
+        <image id="image" filename="demo-logo.png" align="center" valign="center">
+          <effect>
+            <onStartScreen name="fade" start="#0" end="#f" startDelay="500" length="500" />
+            <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" startDelay="500" length="500" />
+            <onEndScreen name="fade" startColor="#ffff" endColor="#0000" startDelay="500" length="500" />
+          </effect>
+        </image>
+      </panel>
+    </layer>
+    <layer id="menu" childLayout="vertical">
+      <panel height="20%" childLayout="center"/>
+      <panel height="*" childLayout="center">
+        <panel id="mainMenu" font="menu.vlw" style="menu" childLayout="center" padding="50px,20px,60px,20px">
+          <panel childLayout="horizontal" width="100%" height="100%">
+            <panel width="50%" childLayout="absolute">
+              <image id="thumbHelloWorld" style="thumbStyle" x="150px" y="50px" filename="all/thumb-helloWorld.png" />
+              <image id="thumbHint" style="thumbStyle" x="150px" y="50px" filename="all/thumb-hint.png" />
+              <image id="thumbMouse" style="thumbStyle" x="150px" y="50px" filename="all/thumb-mouse.png" />
+              <image id="thumbMenu" style="thumbStyle" x="150px" y="50px" filename="all/thumb-menu.png" />
+              <image id="thumbDragAndDrop" style="thumbStyle" x="150px" y="50px" filename="all/thumb-drag-and-drop.png" />
+              <image id="thumbTextAlign" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textAlign.png" />
+              <image id="thumbTextField" style="thumbStyle" x="150px" y="50px" filename="all/thumb-textField.png" />
+              <image id="thumbDropDownList" style="thumbStyle" x="150px" y="50px" filename="all/thumb-dropDownList.png" />
+              <image id="thumbScrollpanel" style="thumbStyle" x="150px" y="50px" filename="all/thumb-scrollPanel.png" />
+              <image id="thumbMultiplayer" style="thumbStyle" x="150px" y="50px" filename="all/thumb-multiplayer.png" />
+              <image id="thumbConsole" style="thumbStyle" x="150px" y="50px" filename="all/thumb-console.png" />
+              <image id="thumbCredits" style="thumbStyle" x="150px" y="50px" filename="all/thumb-credits.png" />
+              <image id="thumbExit" style="thumbStyle" x="150px" y="50px" filename="all/thumb-exit.png" />
+            </panel>
+            <control id="menuScrollPanel" name="scrollPanel" style="special-scrollpanel" horizontal="false" stepSizeY="30" height="100%">
+              <panel id="huhu-1" childLayout="center" width="100%" height="620px" padding="0px,40px,0px,40px">
+                <panel id="huhu-2" childLayout="vertical" width="100%">
+                  <text id="helloWorld" text="Hello World" style="menu-item" hintText="Hello World Example" targetElement="thumbHelloWorld">
+                    <interact onClick="helloWorld()" onClickAlternateKey="fade" />
+                  </text>
+                  <text id="hint" text="Panels and Hint (1.3)" style="menu-item" hintText="Panels and Hint Demonstration (Nifty 1.3)" targetElement="thumbHint">
+                    <interact onClick="hint()" onClickAlternateKey="fade" />
+                  </text>
+                  <text id="mouse" text="Mouse Update (1.3)" style="menu-item" hintText="Multiple Mouse Buttons/Events Support (Nifty 1.3)" targetElement="thumbMouse">
+                    <interact onClick="mouse()" onClickAlternateKey="fade" />
+                  </text>
+                  <text id="popupMenu" text="Popup Menu (1.3)" style="menu-item" hintText="Basic Popup Menu Support (Nifty 1.3)" targetElement="thumbMenu">
+                    <interact onClick="menu()" onClickAlternateKey="fade" />
+                  </text>
+                  <text id="dragndrop" text="Drag'n'Drop (1.2/1.3)" style="menu-item" hintText="Drag'n'Drop Support (Extended in Nifty 1.3)" targetElement="thumbDragAndDrop">
+                    <interact onClick="dragAndDrop()" onClickAlternateKey="fade" />
+                  </text>
+                  <text id="textalign" text="Textalign" style="menu-item" hintText="Textalign Example" targetElement="thumbTextAlign">
+                    <interact onClick="textAlign()" onClickAlternateKey="fade" />
+                  </text>
+                  <text id="textfield" text="Textfield" style="menu-item" hintText="Textfield Example" targetElement="thumbTextField">
+                    <interact onClick="textField()"/>
+                  </text>
+                  <text id="dropDown" text="Drop Down List" hintText="Drop Down List Example" style="menu-item" targetElement="thumbDropDownList">
+                    <interact onClick="dropDown()"/>
+                  </text>
+                  <text id="scrollpanel" text="Scrollpanel" hintText="Scrollpanel Example" style="menu-item" targetElement="thumbScrollpanel">
+                    <interact onClick="scrollpanel()"/>
+                  </text>
+                  <text id="multiplayer" text="Avatar &amp; Multiplayer" hintText="Avatar &amp; Multiplayer Example" style="menu-item" targetElement="thumbMultiplayer">
+                    <interact onClick="multiplayer()"/>
+                  </text>
+                  <text id="console" text="Console Example" hintText="Console" style="menu-item" targetElement="thumbConsole">
+                    <interact onClick="console()"/>
+                  </text>
+                  <text id="credits" text="Credits" style="menu-item" hintText="Exit" targetElement="thumbCredits">
+                    <interact onClick="credits()"/>
+                  </text>
+                  <text id="exit" text="Exit" style="menu-item" hintText="Exit" targetElement="thumbExit">
+                    <interact onClick="exit()"/>
+                  </text>
+                </panel>
+              </panel>            
+            </control>
+          </panel>
+        </panel>
+      </panel>
+      <panel height="10%" id="hintArea" childLayout="center" align="center" valign="center">
+        <effect>
+          <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" inherit="true" />
+          <onEndScreen name="fade" startColor="#000f" endColor="#0000" length="500" inherit="true" />
+        </effect>
+        <text id="hintElement" style="base-font" text="Welcome to Nifty Examples" align="center" valign="center"/>
+      </panel>
+    </layer>
+  </screen>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- outro screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="outro" controller="${PROP.APP}OutroController" inputMapping="de.lessvoid.nifty.input.mapping.DefaultScreenMapping">
+    <layer id="background" childLayout="absolute">
+      <effect>
+        <onEndScreen name="alphaHide" alternateEnable="exit" inherit="true" oneShot="true" />
+      </effect>
+      <image id="1" filename="all/thumb-helloWorld.png" x="600px" y="400px">
+        <effect>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="10000" onEndEffect="shizzleHide(1)" alternateDisable="exit"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(2)" alternateDisable="exit"/>
+        </effect>
+      </image>
+      <image id="2" filename="all/thumb-textAlign.png" x="100px" y="400px">
+        <effect>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(2)" alternateDisable="exit"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(3)" alternateDisable="exit"/>
+        </effect>
+      </image>
+      <image id="3" filename="all/thumb-textField.png" x="40px" y="500px">
+        <effect>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(3)" alternateDisable="exit"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(4)" alternateDisable="exit"/>
+        </effect>
+      </image>
+      <image id="4" filename="all/thumb-dropDownList.png" x="760px" y="300px">
+        <effect>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(4)" alternateDisable="exit"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(5)" alternateDisable="exit"/>
+        </effect>
+      </image>
+      <image id="5" filename="all/thumb-scrollPanel.png" x="60px" y="550px">
+        <effect>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(5)" alternateDisable="exit"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(6)" alternateDisable="exit"/>
+        </effect>
+      </image>
+      <image id="6" filename="all/thumb-multiplayer.png" x="680px" y="200px">
+        <effect>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(6)" alternateDisable="exit"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(7)" alternateDisable="exit"/>
+        </effect>
+      </image>
+      <image id="7" filename="all/thumb-console.png" x="10px" y="400px">
+        <effect>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(7)" alternateDisable="exit"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(8)" alternateDisable="exit"/>
+        </effect>
+      </image>
+      <image id="8" filename="all/thumb-exit.png" x="70px" y="300px">
+        <effect>
+          <onShow name="fade" start="#0" end="#A" length="3000" startDelay="1000" onEndEffect="shizzleHide(8)" alternateDisable="exit"/>
+          <onHide name="fade" start="#A" end="#0" length="3000" startDelay="3000" onEndEffect="shizzleShow(end)" alternateDisable="exit"/>
+        </effect>
+      </image>
+    </layer>
+    <layer id="logo" childLayout="vertical">
+      <panel height="25%" childLayout="center" width="100%">
+        <image id="image" filename="demo-logo.png" align="center" valign="center">
+	      <effect>
+	        <onStartScreen name="fade" startColor="#fff0" endColor="#ffff" length="1500" startDelay="500"/>
+	        <onStartScreen name="imageSize" startSize="0.0" endSize="1.0" length="1500" startDelay="500"/>
+	        <onStartScreen name="playSound" sound="outro" startDelay="0"/>
+	        <onEndScreen name="fade" startColor="#ffff" endColor="#fff0" length="2000" startDelay="5000" alternateDisable="exit" />
+	        <onEndScreen name="imageSize" startSize="1.0" endSize="2.0" length="2000" startDelay="5000" alternateDisable="exit" />
+	      </effect>
+        </image>
+      </panel>
+      <control id="scrollbarPanel" style="autoscroll" name="scrollPanel" horizontal="false" vertical="false" height="75%">
+        <panel id="myScrollStuff" childLayout="vertical" width="100%">
+          <effect>
+            <onCustom name="autoScroll" length="90000" start="0" end="-3100" inherit="true" onEndEffect="scrollEnd()" neverStopRendering="true" />
+          </effect>
+        </panel>
+      </control>
+    </layer>
+    <layer childLayout="vertical">
+      <panel height="25%" childLayout="center" />
+      <panel height="75%" childLayout="vertical">
+        <panel height="64px" childLayout="vertical">
+          <effect>
+            <onActive overlay="true" name="blendMode" blendMode="multiply" post="true" />
+            <onActive overlay="true" name="imageOverlay" filename="all/overlay-outro.png" post="true"/>
+          </effect>
+        </panel>
+      </panel>
+    </layer>
+    <layer childLayout="absolute">
+      <text id="theEndLabel" x="477px" y="394px" align="center" valign="center" style="button-font" text="THE END" visible="false">
+        <effect>
+          <onCustom name="alphaHide" length="20000000" />
+          <onEndScreen name="fade" start="#f" end="#0" startDelay="7000" length="2000" alternateDisable="exit" />
+          <onEndScreen name="fadeSound" sound="outro" startDelay="7000" length="5000" alternateDisable="exit" />
+        </effect>
+      </text>
+    </layer>
+  </screen>
+  
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- sure to exit popup -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <popup id="popupExit" childLayout="center" backgroundColor="#000a">
+    <effect>
+      <onStartScreen name="fade" startColor="#0000" endColor="#000a" length="250" />
+      <onStartScreen name="playSound" sound="popup" startDelay="250" />
+      <onEndScreen name="fade" startColor="#000a" endColor="#0000" length="250" startDelay="250" />
+    </effect>
+    <panel style="nifty-panel-red" childLayout="center" padding="18px,28px,40px,16px" width="30%" height="20%" align="center" valign="center">
+      <effect>
+        <onStartScreen name="fade" start="#0" end="#f" length="150" startDelay="250"/>
+        <onStartScreen name="imageSize" timeType="exp" factor="3.5" startSize="1.5" endSize="1.0" inherit="true" length="150" startDelay="250"/>
+        <onEndScreen name="fade" start="#f" end="#0" length="150" startDelay="0"/>
+        <onEndScreen name="imageSize" timeType="exp" factor="3.5" startSize="1.0" endSize="1.5" inherit="true" length="150" startDelay="0"/>
+      </effect>
+      <panel childLayout="vertical" align="center" valign="center">
+        <effect>
+          <onStartScreen name="alphaHide" length="500" inherit="true" />
+          <onEndScreen name="fade" length="10" start="#f" end="#0" inherit="true" />
+        </effect>
+        <panel childLayout="center" height="70%" width="100%">
+          <text text="Really want to Exit?" style="base-font" align="center" valign="center" color="#000f"/>
+        </panel>
+        <panel childLayout="horizontal" align="center" height="30%">
+          <panel childLayout="center" width="50%">
+            <control id="yesButton" name="button" label="Yes" width="100px" align="center">
+              <interact onClick="popupExit(yes)" /> 
+            </control>
+          </panel>
+          <panel childLayout="center" width="50%">
+            <control id="noButton" name="button" label="No" width="100px" align="center">
+              <interact onClick="popupExit(no)" /> 
+            </control>
+          </panel>
+        </panel>
+      </panel>
+    </panel>
+  </popup>
+</nifty>
