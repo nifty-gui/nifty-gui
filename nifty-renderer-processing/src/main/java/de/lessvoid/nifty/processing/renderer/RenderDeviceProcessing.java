@@ -19,14 +19,13 @@ public class RenderDeviceProcessing implements RenderDevice {
 	private final PGraphics graphics;
 	private final PApplet app;
 	private NiftyResourceLoader resourceLoader;
-	private MouseCursor mouseCursor;
 	
 	/**
 	 * Instantiate RenderDeviceProcessing.
 	 * @param app PApplet instance that Processing is currently running in.
 	 */
 	public RenderDeviceProcessing(PApplet app) {
-		this(app, app.width, app.height, true);
+		this(app, app.width, app.height);
 	}
 	
 	/**
@@ -35,14 +34,9 @@ public class RenderDeviceProcessing implements RenderDevice {
 	 * @param width Desired width of Nifty instance.
 	 * @param height Desired height of Nifty instance.
 	 */
-	public RenderDeviceProcessing(PApplet app, int width, int height, boolean render) {
+	public RenderDeviceProcessing(PApplet app, int width, int height) {
 		this.graphics = app.createGraphics(width, height);
 		this.app = app;
-		
-		// If self render is turned on, register this object with Processing draw method.
-		if (render) {
-			app.registerMethod("draw", this);
-		}
 		
 		/* 
 		 * All classes in Processing are inner classes of the Processing PApplet instance.
@@ -51,14 +45,6 @@ public class RenderDeviceProcessing implements RenderDevice {
 		 * their XML layouts, where ControllerName is the name of the actual ScreenController impl.
 		 */
 		System.setProperty("APP", app.getClass().getName() + "$");
-	}
-	
-	/**
-	 * Draw method called from Processing if self render is turned on.
-	 * Draw canvas onto Processing window.
-	 */
-	public void draw() {
-		app.image(graphics, 0, 0);
 	}
 
 	@Override
@@ -94,7 +80,6 @@ public class RenderDeviceProcessing implements RenderDevice {
 	@Override
 	public void beginFrame() {
 		graphics.beginDraw();
-		clear();
 	}
 
 	@Override
@@ -160,14 +145,12 @@ public class RenderDeviceProcessing implements RenderDevice {
 	@Override
 	public void renderImage(RenderImage image, int x, int y, int width,
 			int height, Color color, float imageScale) {
-		PImage img;	
-		if (width > 0 && height > 0 && imageScale > 0.0) {
-			if (image instanceof RenderImageProcessing){
-				img = ((RenderImageProcessing) image).resize(width, height, imageScale);
-				graphics.tint(convertColor(color));
-				graphics.image(img, x, y);
-				graphics.noTint();
-			}
+		PImage img;		
+		if (image instanceof RenderImageProcessing){
+			img = ((RenderImageProcessing) image).resize(width, height, imageScale);
+			graphics.tint(convertColor(color));
+			graphics.image(img, x, y);
+			graphics.noTint();
 		}
 	}
 
@@ -176,15 +159,13 @@ public class RenderDeviceProcessing implements RenderDevice {
 			int srcX, int srcY, int srcW, int srcH, Color color, float scale,
 			int centerX, int centerY) {
 		PImage img;
-		if (w > 0 && h > 0 && scale > 0.0) {
-			if (image instanceof RenderImageProcessing) {
-				img = ((RenderImageProcessing) image).crop(srcX, srcY, srcW, srcH);
-				img.resize(w, h);
-				img.resize(Math.round(img.width * scale), Math.round(img.height * scale));
-				graphics.tint(convertColor(color));
-				graphics.image(img, x, y);
-				graphics.noTint();
-			}
+		if (image instanceof RenderImageProcessing) {
+			img = ((RenderImageProcessing) image).crop(srcX, srcY, srcW, srcH);
+			img.resize(w, h);
+			img.resize(Math.round(img.width * scale), 0);
+			graphics.tint(convertColor(color));
+			graphics.image(img, x, y);
+			graphics.noTint();
 		}
 	}
 
@@ -217,15 +198,12 @@ public class RenderDeviceProcessing implements RenderDevice {
 
 	@Override
 	public void enableMouseCursor(MouseCursor mouseCursor) {
-		this.mouseCursor = mouseCursor;
 		mouseCursor.enable();
 	}
 
 	@Override
 	public void disableMouseCursor() {
-		if (mouseCursor != null) {
-			mouseCursor.disable();
-		}
+		app.noCursor();
 	}
 	
 	/**

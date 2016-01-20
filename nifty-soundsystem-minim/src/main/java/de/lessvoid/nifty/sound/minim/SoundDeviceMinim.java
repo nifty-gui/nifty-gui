@@ -36,7 +36,7 @@ public class SoundDeviceMinim implements SoundDevice {
 
 	@Override
 	public SoundHandle loadMusic(SoundSystem soundSystem, String filename) {
-		return new SoundHandleMinim(minim, resourceLoader.getResource(filename).getPath());
+		return new SoundHandleMinim(minim, filename);
 	}
 
 	@Override

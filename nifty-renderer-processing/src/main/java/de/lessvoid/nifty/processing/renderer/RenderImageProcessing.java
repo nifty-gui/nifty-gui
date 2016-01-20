@@ -35,7 +35,7 @@ public class RenderImageProcessing implements RenderImage {
 		PImage temp;
 		temp = image.get();
 		temp.resize(width, height);
-		temp.resize(Math.round(temp.width * factor), Math.round(temp.height * factor));
+		temp.resize(Math.round(temp.width * factor), 0);
 		return temp;
 	}
 	
