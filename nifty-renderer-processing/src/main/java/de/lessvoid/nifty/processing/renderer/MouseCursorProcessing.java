@@ -21,11 +21,11 @@ public class MouseCursorProcessing implements MouseCursor {
 	 * @param x Cursor hotspot x-coordinate.
 	 * @param y Cursor hotspot y-coordinate.
 	 */
-	public MouseCursorProcessing(PApplet app, PImage img, int x, int y) {
+	public MouseCursorProcessing(PApplet app, String filename, int x, int y) {
 		this.app = app;
-		this.img = img;
+		this.img = app.loadImage(filename);
 		this.x = x;
-		this.y = y;
+		this.y = y;			
 	}
 
 	@Override

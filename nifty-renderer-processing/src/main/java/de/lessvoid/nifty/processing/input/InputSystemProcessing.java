@@ -4,7 +4,6 @@ import de.lessvoid.nifty.NiftyInputConsumer;
 import de.lessvoid.nifty.spi.input.InputSystem;
 import de.lessvoid.nifty.tools.resourceloader.NiftyResourceLoader;
 import de.lessvoid.nifty.input.keyboard.*;
-import de.lessvoid.nifty.java2d.input.*;
 import processing.event.*;
 import processing.core.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
