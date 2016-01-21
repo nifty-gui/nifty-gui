@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <!-- load styles -->
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <useStyles filename="nifty-default-styles.xml"/>
+    <useControls filename="nifty-default-controls.xml"/>
+
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <!-- start screen -->
+    <!-- +++++++++++++++++++++++++++++++++++++++ -->
+    <screen id="start" controller="${PROP.APP}TextAlignStartScreen">
+        <layer id="layer" backgroundColor="#003f" childLayout="vertical">
+            <effect>
+                <onStartScreen name="fade" startColor="#0000" endColor="#000f" length="500" startDelay="0"
+                               inherit="true"/>
+                <onEndScreen name="fade" startColor="#000f" endColor="#0000" length="500" startDelay="0"
+                             inherit="true"/>
+            </effect>
+            <text id="text1" style="nifty-label" height="15%" width="75%" backgroundColor="#f60f"
+                  text="TextHAlign: center, TextVAlign: top" color="#000f" textHAlign="center" textVAlign="top"/>
+            <text id="text2" style="nifty-label" height="15%" width="75%" backgroundColor="#f80f"
+                  text="TextHAlign: center, TextVAlign: center" color="#000f" textHAlign="center" textVAlign="center"/>
+            <text id="text3" style="nifty-label" height="15%" width="75%" backgroundColor="#fa0f"
+                  text="TextHAlign: center, TextVAlign: bottom" color="#000f" textHAlign="center" textVAlign="bottom"/>
+            <text id="text4" style="nifty-label" height="15%" width="75%" backgroundColor="#fc0f"
+                  text="TextHAlign: left, TextVAlign: center" color="#000f" textHAlign="left" textVAlign="center"/>
+            <text id="text5" style="nifty-label" height="15%" width="75%" backgroundColor="#fe0f"
+                  text="TextHAlign: center, TextVAlign: center" color="#000f" textHAlign="center" textVAlign="center"/>
+            <text id="text6" style="nifty-label" height="15%" width="75%" backgroundColor="#ff2f"
+                  text="TextHAlign: right, TextVAlign: center" color="#000f" textHAlign="right" textVAlign="center"/>
+            <panel childLayout="center" width="100%">
+                <control id="backButton" name="button" label="Back to Menu" align="center" valign="center">
+                    <interact onClick="quit()"/>
+                </control>
+            </panel>
+        </layer>
+    </screen>
+</nifty>

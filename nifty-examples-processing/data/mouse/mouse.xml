@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- start screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="start" controller="${PROP.APP}MouseStartScreen">
+    <layer id="layer" childLayout="vertical">
+      <effect>
+        <onActive name="gradient">
+          <value offset="0%" color="#cccf"/>
+          <value offset="80%" color="#888f"/>
+          <value offset="100%" color="#888f"/>
+        </onActive>
+      </effect>
+
+      <panel childLayout="horizontal" height="38%" width="100%" padding="20px">
+        <panel childLayout="center" height="100%">
+          <panel childLayout="vertical" align="left" valign="center" height="100%" width="100%">
+            <effect>
+              <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="300" inherit="true"/>
+              <onEndScreen name="fade" start="#f" end="#0" length="500" startDelay="300" inherit="true"/>
+            </effect>
+            <control align="left" name="label" text="Standard XML Interact Attributes:" color="#000f" font="verdana-48-regular.vlw" />
+            <control align="left" name="label" text="&#10;onClick(), onClickRepeat(), onClickMouseMove(), onRelease()" color="#000f" />
+            <control align="left" name="label" text="onPrimaryClick(), onPrimaryClickRepeat(), onPrimaryClickMouseMove(), onPrimaryRelease()" color="#000f" />
+            <control align="left" name="label" text="onSecondaryClick(), onSecondaryClickRepeat(), onSecondaryClickMouseMove(), onSecondaryRelease()" color="#000f" />
+            <control align="left" name="label" text="onTertiaryClick(), onTertiaryClickRepeat(), onTertiaryClickMouseMove(), onTertiaryRelease()" color="#000f" />
+            <control align="left" name="label" text="onMouseOver()" color="#000f" />
+            <control align="left" name="label" text="onMouseWheel()" color="#000f" />
+          </panel>
+        </panel>
+        <panel id="mouse" style="nifty-panel-bright" height="100%" width="40%" align="center" valign="center" childLayout="center" visibleToMouse="true">
+          <interact
+            onPrimaryClick="primaryClick()"
+            onPrimaryClickMouseMove="primaryClickMouseMoved()"
+            onPrimaryRelease="primaryRelease()"
+            onSecondaryClick="secondaryClick()"
+            onSecondaryClickMouseMove="secondaryClickMouseMove()"
+            onSecondaryRelease="secondaryRelease()"
+            onTertiaryClick="tertiaryClick()"
+            onTertiaryClickMouseMove="tertiaryClickMouseMove()"
+            onTertiaryRelease="tertiaryRelease()"
+            onMouseOver="mouseOver()"
+            onMouseWheel="mouseWheel()"
+          />
+          <effect>
+            <onStartScreen name="move" mode="in" direction="right" length="300" startDelay="0" inherit="true"/>
+            <onEndScreen name="move" mode="out" direction="right" length="300" startDelay="0" inherit="true"/>
+          </effect>
+          <panel childLayout="vertical" width="100%" height="100%" align="center" valign="center">
+            <control name="label" color="#800f" text="[Primary Mouse]" width="100%" align="center" valign="center" />
+            <control id="mousePrimaryText" name="label" color="#000f" text="(click with left mouse button)" width="100%" align="center" valign="center" />
+            <control name="label" color="#800f" text="[Secondary Mouse]" width="100%" align="center" valign="center" />
+            <control id="mouseSecondaryText" name="label" color="#000f" text="(click with right mouse button)" width="100%" align="center" valign="center" />
+            <control name="label" color="#800f" text="[Tertiary Mouse]" width="100%" align="center" valign="center" />
+            <control id="mouseTertiaryText" name="label" color="#000f" text="(click with middle mouse button)" width="100%" align="center" valign="center" />
+            <control name="label" color="#800f" text="[Mouse Move]" width="100%" align="center" valign="center" />
+            <control id="mouseMoveText" name="label" color="#000f" text="(hover this panel)" width="100%" align="center" valign="center" />
+            <control name="label" color="#800f" text="[Mouse Wheel]" width="100%" align="center" valign="center" />
+            <control id="mouseWheelText" name="label" color="#000f" text="(move mouse wheel)" width="100%" align="center" valign="center" />
+          </panel>
+        </panel>
+      </panel>
+
+      <panel width="100%" height="5%" paddingTop="25px" paddingBottom="25px" childLayout="vertical">
+        <panel width="100%" height="100%" backgroundColor="#4444" />
+      </panel>
+
+      <panel childLayout="horizontal" height="47%" padding="20px">
+        <panel id="mouseEvents" style="nifty-panel-red-no-shadow" height="100%" width="50%" align="center" valign="center" childLayout="center" visibleToMouse="true">
+          <effect>
+            <onStartScreen name="move" mode="in" direction="left" length="300" startDelay="0" inherit="true"/>
+            <onEndScreen name="move" mode="out" direction="left" length="300" startDelay="0" inherit="true"/>
+          </effect>
+          <panel childLayout="vertical" width="100%" height="100%" align="center" valign="top">
+            <control name="label" color="#222f" text="[Primary Mouse]" width="100%" align="center" valign="top" />
+            <control id="mouseEventsPrimaryText" name="label" color="#cccf" text="(click with left mouse button)" width="100%" align="center" valign="top" />
+            <control name="label" color="#222f" text="[Secondary Mouse]" width="100%" align="center" valign="top" />
+            <control id="mouseEventsSecondaryText" name="label" color="#cccf" text="(click with right mouse button)" width="100%" align="center" valign="top" />
+            <control name="label" color="#222f" text="[Tertiary Mouse]" width="100%" align="center" valign="top" />
+            <control id="mouseEventsTertiaryText" name="label" color="#cccf" text="(click with middle mouse button)" width="100%" align="center" valign="top" />
+            <control name="label" color="#222f" text="[Mouse Move]" width="100%" align="center" valign="top" />
+            <control id="mouseEventsMoveText" name="label" color="#cccf" text="(hover this panel)" width="100%" align="center" valign="top" />
+            <control name="label" color="#222f" text="[Mouse Wheel]" width="100%" align="center" valign="top" />
+            <control id="mouseEventsWheelText" name="label" color="#cccf" text="(move mouse wheel)" width="100%" align="center" valign="top" />
+            <control name="label" color="#222f" text="[General Mouse Event]" width="100%" align="center" valign="top" />
+            <control id="mouseEventsText" name="label" color="#cccf" text="(do anything with the mouse)&#10;" width="100%" align="center" valign="top" />
+          </panel>
+        </panel>
+        <panel childLayout="vertical" width="50%" height="100%" paddingLeft="30px">
+          <effect>
+            <onStartScreen name="fade" start="#0" end="#f" length="500" startDelay="300" inherit="true"/>
+            <onEndScreen name="fade" start="#f" end="#0" length="500" startDelay="300" inherit="true"/>
+          </effect>
+          <control align="right" name="label" text="EventBus Events:" color="#000f" font="verdana-48-regular.vlw" />
+          <control align="right" name="label" text="&#10;NiftyMousePrimaryClickedEvent" color="#000f" />
+          <control align="right" name="label" text="NiftyMousePrimaryClickedMovedEvent" color="#000f" />
+          <control align="right" name="label" text="NiftyMousePrimaryReleaseEvent" color="#000f" />
+          <control align="right" name="label" text="NiftyMouseSecondaryClickedEvent" color="#000f" />
+          <control align="right" name="label" text="NiftyMouseSecondaryClickedMovedEvent" color="#000f" />
+          <control align="right" name="label" text="NiftyMouseSecondaryReleaseEvent" color="#000f" />
+          <control align="right" name="label" text="NiftyMouseTertiaryClickedEvent" color="#000f" />
+          <control align="right" name="label" text="NiftyMouseTertiaryClickedMovedEvent" color="#000f" />
+          <control align="right" name="label" text="NiftyMouseTertiaryReleaseEvent" color="#000f" />
+          <control align="right" name="label" text="NiftyMouseMovedEvent" color="#000f" />
+          <control align="right" name="label" text="NiftyMouseWheelEvent" color="#000f" />
+          <control align="right" name="label" text="NiftyMouseEvent" color="#000f" />
+        </panel>
+      </panel>
+
+      <panel childLayout="center" width="100%" height="10%">
+        <control id="backButton" name="button" label="Back to Menu" align="center" valign="center">
+          <interact onClick="quit()" /> 
+        </control>
+      </panel>
+    </layer>
+  </screen>
+</nifty>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
+    <registerMouseCursor id="textFieldCursor" filename="textfield/mouse-cursor-textfield.png" hotspotX="3"
+                         hotspotY="12"/>
+
+    <!-- console panel style -->
+    <style id="nifty-console-panel">
+        <attributes childLayout="vertical" backgroundColor="#822A"/>
+        <effect>
+            <onActive name="border" border="1px" color="#222f"/>
+        </effect>
+    </style>
+
+    <!-- nifty-console-listbox -->
+
+    <style id="nifty-console-listbox">
+        <attributes/>
+    </style>
+    <style id="nifty-console-listbox#scrollpanel">
+        <attributes focusable="true" borderBottom="1px" borderColor="#000f"/>
+    </style>
+    <style id="nifty-console-listbox#bottom-right">
+        <attributes width="20px" height="20px"/>
+    </style>
+    <style id="nifty-console-listbox-item">
+        <attributes font="console.vlw" height="14px" width="100%" align="left" textVAlign="center" textHAlign="left"/>
+        <effect>
+            <onCustom customKey="focus" name="colorBar" post="false" color="#4446" neverStopRendering="true"
+                      timeType="infinite"/>
+        </effect>
+    </style>
+
+    <!-- nifty-console-textfield -->
+
+    <style id="nifty-console-textfield#panel">
+        <attributes childLayout="overlay" height="20px"/>
+        <effect>
+            <onHover name="changeMouseCursor" id="textFieldCursor"/>
+            <onActive name="border" border="1px,0px,0px,0px" color="#222f"/>
+        </effect>
+    </style>
+    <style id="nifty-console-textfield#field">
+        <attributes childLayout="center" childClip="true"/>
+    </style>
+    <style id="nifty-console-textfield#text">
+        <attributes font="console.vlw" selectionColor="#f00f" visibleToMouse="false" align="left" textHAlign="left"
+                    textVAlign="center" valign="center"/>
+    </style>
+    <style id="nifty-console-textfield#cursor-panel">
+        <attributes childLayout="absolute"/>
+    </style>
+    <style id="nifty-console-textfield#cursor">
+        <attributes filename="console_cursor_empty.png"/>
+        <effect>
+            <onCustom name="imageOverlayPulsate" period="250" timeType="infinite" pulsateType="rectangle"
+                      filename="console_cursor.png" post="true"/>
+        </effect>
+    </style>
+
+</nifty-styles>

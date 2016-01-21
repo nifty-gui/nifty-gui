@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- load default styles and controls -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <!-- this style is needed for the updateScrollpanelPositionToDisplayElement stuff -->
+  <style id="my-listbox-item-style" base="nifty-listbox-item">
+    <effect>
+      <onCustom name="updateScrollpanelPositionToDisplayElement" target="listBoxStatic" oneShot="true" />
+    </effect>
+  </style>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- start screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <screen id="start" controller="${PROP.APP}ControlsDemoStartScreen">
+    <layer id="layer" childLayout="center" backgroundImage="background.png">
+      <panel id="dialog" style="nifty-panel" childLayout="vertical" padding="18px,28px,28px,16px" width="55%" height="58%" align="center" valign="center">
+        <effect>
+          <onStartScreen name="move" timeType="exp" factor="3.5" direction="top" mode="in" length="500" inherit="true"/>
+          <onEndScreen name="move" timeType="exp" factor="3.5" direction="bottom" mode="out" length="500" inherit="true"/>
+        </effect>
+        <panel id="b" childLayout="horizontal">
+          <text id="dropDownLabel1" style="nifty-label" text="DropDown 1: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+          <control id="dropDown1" name="dropDown" />
+        </panel>
+        <panel childLayout="horizontal" height="8px" />
+        <panel childLayout="horizontal">
+          <text id="dropDownLabel2" style="nifty-label" text="DropDown 2: " width="120px" align="left" textVAlign="center" textHAlign="left" />
+          <control id="dropDown2" name="dropDown" />
+        </panel>
+        <panel childLayout="horizontal" height="8px" />
+        <panel childLayout="horizontal">
+          <text text="Fo Shizzle: " style="nifty-label" width="120px" align="left" textVAlign="center" textHAlign="left" />
+          <control id="checkbox" name="checkbox" checked="false" />
+        </panel>    
+        <panel id="dynamic-parent" childLayout="vertical">
+        </panel>
+        <panel childLayout="horizontal" height="70px" />
+        <panel childLayout="horizontal">
+          <text text="Listbox Static: " style="nifty-label" width="120px" align="left" textVAlign="center" textHAlign="left" />
+          <control id="listBoxStatic" name="listBox" horizontal="off" width="*" height="100%" displayItems="3" />
+        </panel>
+        <panel childLayout="horizontal" height="8px" />
+        <panel id="buttonPanel" childLayout="vertical" width="100%">
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+</nifty>

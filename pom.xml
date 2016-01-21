@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.nifty-gui</groupId>
@@ -24,6 +25,7 @@
     <module>nifty-examples-slick2d</module>
     <module>nifty-renderer-processing</module>
     <module>nifty-soundsystem-minim</module>
+    <module>nifty-examples-processing</module>
   </modules>
   <url>https://github.com/nifty-gui/nifty-gui</url>
   <licenses>

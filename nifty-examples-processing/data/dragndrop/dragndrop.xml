@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+    <useStyles filename="nifty-default-styles.xml"/>
+    <useControls filename="nifty-default-controls.xml"/>
+    <style id="dropArea">
+        <attributes padding="10px"/>
+        <effect>
+            <onActive name="border" post="true" color="#222f" border="1px"/>
+        </effect>
+    </style>
+    <style id="descriptionText" base="base-font">
+        <attributes color="#eeef" valign="center" width="100%"/>
+    </style>
+    <screen id="start" defaultFocusElement="backButton" controller="${PROP.APP}DragDropScreen">
+        <layer id="layer" childLayout="center">
+            <panel id="dialog" style="nifty-panel" childLayout="center" padding="18px,28px,28px,16px" width="80%"
+                   height="90%" align="center" valign="center">
+                <panel childLayout="vertical" align="center" valign="center">
+                    <panel id="draggables" childLayout="horizontal" height="*">
+                        <control id="MyDroppable3" name="droppable" style="dropArea" width="140px" height="140px"
+                                 align="center" valign="top">
+                            <text text="Drop Here!" style="descriptionText"/>
+                        </control>
+                        <control id="MyDraggable1" name="draggable" backgroundColor="#f60f" width="120px" height="120px"
+                                 childLayout="center" valign="top">
+                            <text text="Drag Me!" style="descriptionText"/>
+                        </control>
+                        <control id="MyDraggable2" name="draggable" backgroundColor="#0f6f" width="120px" height="120px"
+                                 childLayout="center" valign="top">
+                            <text text="Drag Me!" style="descriptionText"/>
+                        </control>
+                        <control id="MyDraggable3" name="draggable" backgroundColor="#6f04" width="120px" height="120px"
+                                 childLayout="center" valign="top">
+                            <text text="Drag Me!" style="descriptionText"/>
+                        </control>
+                    </panel>
+                    <panel id="droppables" childLayout="horizontal" height="*">
+                        <control id="MyDroppable2" name="droppable" style="dropArea" width="140px" height="140px">
+                            <text text="Drop Here!" style="descriptionText"/>
+                        </control>
+                        <panel width="10px"/>
+                        <control id="GoodStuff" name="droppable" style="dropArea" backgroundColor="#ffff" width="140px"
+                                 height="140px">
+                            <text text="No Evil Stuff" style="descriptionText" color="#000f"/>
+                        </control>
+                        <panel width="10px"/>
+                        <control id="EvilStuff" name="droppable" style="dropArea" backgroundColor="#222f" width="140px"
+                                 height="140px">
+                            <text text="Evil Stuff" style="descriptionText"/>
+                        </control>
+                        <panel width="*"/>
+                        <control id="Trash" name="droppable" style="dropArea" width="140px" height="140px">
+                            <text text="Discard Here!" style="descriptionText"/>
+                        </control>
+                    </panel>
+                    <panel id="buttons" childLayout="vertical" width="100%">
+                        <control id="spawnDraggableButton" name="button" label="Spawn Draggable" align="right">
+                            <interact onClick="spawnDraggable()"/>
+                        </control>
+                        <control id="spawnWindowButton" name="button" label="Spawn Window" align="right">
+                            <interact onClick="spawnWindow()"/>
+                        </control>
+                        <control id="backButton" name="button" label="Back to Menu" align="right">
+                            <interact onClick="quit()"/>
+                        </control>
+                    </panel>
+                    <panel id="statusPanel" childLayout="center" width="100%" height="40px">
+                        <control id="status" name="label" text="Nifty Drag And Drop Demo" style="base-font"
+                                 width="100%"/>
+                    </panel>
+                </panel>
+            </panel>
+        </layer>
+        <layer id="windows" childLayout="absolute">
+            <control id="window-1" name="window" title="Drag Me!" width="320px" height="120px">
+                <text text="I'm A Window!" style="descriptionText"/>
+            </control>
+            <control id="window-2" name="window" title="Drag Me!" width="460px" height="240px" y="60%"
+                     closeable="false">
+                <control id="window-2-Droppable" name="droppable" style="dropArea" width="140px" height="140px"
+                         align="center" valign="center">
+                    <text text="Drop Here!" style="descriptionText"/>
+                </control>
+            </control>
+            <control id="window-3" name="window" title="Please Drag Me Too!" width="500px" height="400px" x="400px">
+                <text text="I'm Another Window!" style="descriptionText"/>
+            </control>
+        </layer>
+    </screen>
+</nifty> 

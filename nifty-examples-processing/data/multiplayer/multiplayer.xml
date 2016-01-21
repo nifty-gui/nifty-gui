@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <!-- load default styles and controls -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <style id ="selected" base="diffStyle">
+    <attributes backgroundColor="#000f" />
+  </style>
+
+  <style id ="unselected" base="diffStyle">
+    <attributes backgroundColor="#0000" />
+    <effect>
+      <onHover name="pulsate" startColor="#f007" endColor="#800f" />
+      <onFocus name="pulsate" startColor="#f007" endColor="#800f" />
+    </effect>
+  </style>
+
+  <!-- menu item style -->
+  <style id="diffStyle" base="nifty-label">
+    <attributes width="*" focusable="true" controller="de.lessvoid.nifty.controls.DefaultController"/>
+  </style>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <!-- multiplayerPanel -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->
+  <controlDefinition name="multiplayerPanel" controller="${PROP.APP}MultiplayerPanelControl">
+    <panel style="nifty-panel" align="center" valign="center" width="65%" height="120px" childLayout="center">
+      <effect>
+        <onStartScreen name="move" direction="left" mode="in" length="250" startDelay="0" inherit="true"/>
+        <onEndScreen name="move" direction="right" mode="out" length="250" startDelay="0" inherit="true"/>
+      </effect>
+      <panel childLayout="vertical" align="center" valign="center">
+        <panel childLayout="horizontal">
+          <panel childLayout="vertical" align="left" valign="top" width="77%">
+            <panel childLayout="horizontal">
+              <text style="nifty-label" text="Name:" align="left" width="20%" textHAlign="left"/>
+              <control name="textfield" />
+            </panel>
+            <panel childLayout="horizontal" height="7px" />
+            <panel childLayout="horizontal">
+              <text style="nifty-label" text="Difficulty:" width="20%" align="left" textHAlign="left" />
+              <panel childLayout="horizontal">
+                <text id="#easy" text="Easy" style="diffStyle">
+                  <interact onClick="setDifficulty(easy)"/>
+                </text>
+                <panel childLayout="horizontal" width="4px" />
+                <text id="#medium" text="Medium" style="diffStyle"> 
+                  <interact onClick="setDifficulty(medium)"/>
+                </text>
+                <panel childLayout="horizontal" width="4px" />
+                <text id="#hard" text="Hard" style="diffStyle">
+                  <interact onClick="setDifficulty(hard)"/>
+                </text>
+                <panel childLayout="horizontal" width="4px" />
+                <text id="#expert" text="Expert" style="diffStyle">
+                  <interact onClick="setDifficulty(expert)"/>
+                </text>
+              </panel>
+            </panel>
+            <panel childLayout="horizontal" height="12px" />
+            <control id="#removeButton" name="button" label="Remove" align="left">
+              <interact onClick="removePanel()" />
+            </control>
+          </panel>
+          <panel width="12px" valign="top" />
+          <control id="#imageSelect" name="imageSelect" width="126px" imageWidth="80px" imageHeight="80px" imageList="multiplayer/avatar1.png,multiplayer/avatar2.png,multiplayer/avatar3.png,multiplayer/avatar4.png" />
+        </panel>
+      </panel>
+    </panel>
+  </controlDefinition>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <!-- screen -->
+  <!-- +++++++++++++++++++++++++++++++++++++++ -->  
+  <screen id="start" controller="${PROP.APP}StartScreenController">
+    <layer id="layer" childLayout="center" backgroundImage="background.png">
+      <panel childLayout="vertical">
+        <panel childLayout="center" height="10%" >
+          <panel childLayout="horizontal" align="center" valign="center" width="50%">
+            <panel childLayout="center" width="50%">
+              <control id="addButton" name="button" label="Add Player" align="center" valign="center">
+                <interact onClick="addPanel()" />
+              </control>
+            </panel>
+            <panel childLayout="center" width="50%">
+              <control id="startButton" name="button" label="Start" align="center" valign="center">
+                <interact onClick="quit()" />
+              </control>
+            </panel>
+          </panel>
+        </panel>
+        <panel id="box-parent" childLayout="vertical" align="center" valign="center" height="90%">
+        </panel>
+      </panel>
+    </layer>
+  </screen>
+</nifty>

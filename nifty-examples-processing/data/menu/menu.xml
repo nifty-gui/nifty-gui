@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
+  <!-- get the standard styles and controls in -->
+  <useStyles filename="nifty-default-styles.xml" />
+  <useControls filename="nifty-default-controls.xml" />
+
+  <!-- just a simple screen that opens a popup by secondary click -->
+  <screen id="start" controller="${PROP.APP}MenuStartScreen">
+    <layer id="layer" backgroundColor="#003f" childLayout="center">
+      <interact onSecondaryClick="showMenu()"/>
+      <panel align="center" valign="center" childLayout="vertical" width="50%">
+        <text style="base-font" align="center" valign="center" text="click anywhere with your right mouse button for a popup menu" />
+        <!-- we'll output menu items as they are being clicked in here -->
+        <control id="textOut" name="label" backgroundColor="#8005" width="100%"/>
+      </panel>
+    </layer>
+  </screen>
+</nifty>
