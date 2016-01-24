@@ -46,10 +46,11 @@ public class BatchManager {
     activeBatches.clear();
   }
 
-  public void end(final NiftyRenderDevice renderDevice) {
+  public int end(final NiftyRenderDevice renderDevice) {
     for (int i=0; i<activeBatches.size(); i++) {
       activeBatches.get(i).render(renderDevice);
     }
+    return activeBatches.size();
   }
 
   public void addChangeCompositeOperation(final NiftyCompositeOperation compositeOperation) {

@@ -46,7 +46,8 @@ import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
 import de.lessvoid.niftyinternal.animate.IntervalAnimator;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.common.StatisticsRendererFPS;
-import de.lessvoid.niftyinternal.render.InternalNiftyRenderer;
+import de.lessvoid.niftyinternal.render.NiftyRenderer;
+import de.lessvoid.niftyinternal.render.standard.StandardNiftyRenderer;
 import de.lessvoid.niftyinternal.render.font.FontRenderer;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 import org.jglfont.JGLFontFactory;
@@ -57,6 +58,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RunnableFuture;
 import java.util.logging.Logger;
 
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNiftyNode;
@@ -87,8 +91,8 @@ public class Nifty {
   // The list of nodes that are able to receive input events
   private final List<NiftyNode> nodesToReceiveEvents = new ArrayList<>();
 
-  // the class performing the conversion from NiftyNode to RenderNode and takes care of all rendering.
-  private final InternalNiftyRenderer renderer;
+  // the class performing the conversion from the NiftyTree to actually output on screen
+  private final NiftyRenderer renderer;
 
   // the class that interfaces us to input events (mouse, touch, keyboard)
   private NiftyInputDevice inputDevice;
@@ -125,6 +129,9 @@ public class Nifty {
   // configuration
   private NiftyConfigurationImpl configuration = new NiftyConfigurationImpl();
 
+  // ready for a whole new can of worms?
+  private Executor executor = Executors.newSingleThreadExecutor();
+
   /**
    * Create a new Nifty instance.
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
@@ -146,7 +153,7 @@ public class Nifty {
 
     statistics = new NiftyStatistics(new Statistics(timeProvider));
     stats = statistics.getImpl();
-    renderer = new InternalNiftyRenderer(statistics.getImpl(), newRenderDevice, configuration);
+    renderer = new StandardNiftyRenderer(stats, renderDevice, configuration);
     fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
 
     NiftyNodeImpl<NiftyRootNode> rootNodeImpl = niftyNodeImpl(new NiftyRootNode());
@@ -210,10 +217,32 @@ public class Nifty {
    */
   public boolean render() {
     stats.startRender();
-    boolean frameChanged = renderer.render(tree, stats);
+    boolean frameChanged = renderer.render(tree);
     stats.stopRender();
     stats.endFrame();
     return frameChanged;
+  }
+
+  /**
+   * Calls back the given callback after delay ms every interval ms. This will call NiftyCallback on another thread
+   * so be careful what you do there. Nifty 2.0 is not yet thread safe!
+   *
+   * @param delay time to wait in ms
+   * @param interval interval to call the callback in ms
+   * @param callback the actual callback
+   */
+  public void startAnimatedThreaded(final long delay, final long interval, final NiftyCallback<Float> callback) {
+    animators.add(new IntervalAnimator(getTimeProvider(), delay, interval, new NiftyCallback<Float>() {
+      @Override
+      public void execute(final Float aFloat) {
+        executor.execute(new Runnable() {
+          @Override
+          public void run() {
+            callback.execute(aFloat);
+          }
+        });
+      }
+    }));
   }
 
   public void startAnimated(final long delay, final long interval, final NiftyCallback<Float> callback) {

@@ -28,7 +28,9 @@ package de.lessvoid.nifty;
 
 import de.lessvoid.niftyinternal.accessor.NiftyStateAccessor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -46,14 +48,23 @@ public class NiftyState {
   }
 
   NiftyState(final NiftyState niftyState) {
-    stateMap.putAll(niftyState.stateMap);
+    for (Map.Entry<State, Object> e : niftyState.stateMap.entrySet()) {
+      if (e.getValue() instanceof List) {
+        List<?> copy = new ArrayList<>();
+        copy.addAll((List) e.getValue());
+        stateMap.put(e.getKey(), copy);
+      } else {
+        stateMap.put(e.getKey(), e.getValue());
+      }
+    }
   }
 
   public enum NiftyStandardState implements State {
     NiftyStateBackgroundColor,
     NiftyStateTransformationLocal,
     NiftyStateTransformationLocalToScreen,
-    NiftyStateTransformationChanged
+    NiftyStateTransformationChanged,
+    NiftyStateTransformation
   }
 
   private final Map<State, Object> stateMap = new HashMap<>();

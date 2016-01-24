@@ -51,8 +51,8 @@ import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
 public class UseCase_a05_RotatingChildNode {
 
   public UseCase_a05_RotatingChildNode(final Nifty nifty) throws IOException {
-    nifty.setShowRenderBuckets(true);
-    nifty.setShowRenderNodes(true);
+    //nifty.setShowRenderBuckets(true);
+    //nifty.setShowRenderNodes(true);
 
     final NiftyTransformationNode rootTransformation = transformationNode();
     final NiftyTransformationNode childTransformation = transformationNode();
@@ -76,7 +76,7 @@ public class UseCase_a05_RotatingChildNode {
                         .addNode(absoluteLayoutChildNode())
                           .addNode(fixedSizeLayoutNode(100.f, 100.f))
                             .addNode(childTransformation)
-                              .addNode(backgroundColorNode(NiftyColor.black()))
+                              .addNode(backgroundColorNode(NiftyColor.blue()))
                                 .addNode(contentNode())
                                   .addNode(absoluteLayoutNode())
                                     .addNode(absoluteLayoutChildNode())
@@ -84,18 +84,18 @@ public class UseCase_a05_RotatingChildNode {
                                         .addNode(grandChildNodeTransformation)
                                           .addNode(backgroundColorNode(NiftyColor.red()))
                                             .addNode(contentNode())
-                  .addAsChildOf("parent")
-                    .addNode(absoluteLayoutNode())
-                      .addNode(absoluteLayoutChildNode(NiftyPoint.newNiftyPoint(100.f, 100.f)))
-                        .addNode(fixedSizeLayoutNode(25.f, 25.f))
-                          .addNode(backgroundColorNode(NiftyColor.yellow()))
-                            .addNode(transformationNode())
-                              .addNode(contentNode());
-    nifty.startAnimated(0, 1000, new NiftyCallback<Float>() {
+                    .addAsChildOf("parent")
+                      .addNode(absoluteLayoutNode())
+                        .addNode(absoluteLayoutChildNode(NiftyPoint.newNiftyPoint(150.f, 150.f)))
+                          .addNode(fixedSizeLayoutNode(100.f, 100.f))
+                            .addNode(backgroundColorNode(NiftyColor.yellow()))
+                              .addNode(transformationNode())
+                                .addNode(contentNode());
+    nifty.startAnimatedThreaded(0, 1000, new NiftyCallback<Float>() {
       private final List<String> data = new ArrayList<>();
 
       @Override
-      public void execute(Float aFloat) {
+      public void execute(final Float aFloat) {
         nifty.getStatistics().getStatistics(data);
         for (int i=0; i<data.size(); i++) {
           System.out.print(data.get(i));
@@ -110,15 +110,12 @@ public class UseCase_a05_RotatingChildNode {
       public void execute(final Float totalTime) {
         rot += 1.f;
 
-        //childTransformation.setAngleX(rot);
-        //childTransformation.setAngleY(rot);
         childTransformation.setAngleZ(rot);
 
         grandChildNodeTransformation.setAngleZ(rot * 10);
 
         rootTransformation.setScaleX((Math.sin(rot/50.f) + 1.0f) / 2.f + 0.25f);
         rootTransformation.setScaleY((Math.sin(rot/50.f) + 1.0f) / 2.f + 0.25f);
-        //rootTransformation.setAngleZ(rot);
       }
     });
   }

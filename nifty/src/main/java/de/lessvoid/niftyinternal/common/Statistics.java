@@ -154,6 +154,10 @@ public class Statistics {
     stop(Type.RenderPass);
   }
 
+  public void incBatchCount(final int batchCount) {
+    times[Type.RenderBatchCount.ordinal()] += batchCount;
+  }
+
   private void addSample(final FrameInfo frameInfo) {
     if (frameHistory.offer(frameInfo)) {
       return;

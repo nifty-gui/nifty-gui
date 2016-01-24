@@ -27,48 +27,20 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.NiftyState;
-import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
-import de.lessvoid.nifty.types.NiftyRect;
-import de.lessvoid.niftyinternal.math.Mat4;
 
-import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationChanged;
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationLocal;
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationLocalToScreen;
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformation;
 
 /**
  * Created by void on 09.08.15.
  */
 class NiftyTransformationNodeImpl
     implements
-      NiftyNodeStateImpl<NiftyTransformationNode>,
-      NiftyLayoutReceiver<NiftyTransformationNode> {
-  private final Mat4 identity = Mat4.createIdentity();
-
-  private boolean transformationChanged = true;
-  private double pivotX = 0.5;
-  private double pivotY = 0.5;
-  private double angleX = 0.0;
-  private double angleY = 0.0;
-  private double angleZ = 0.0;
-  private double scaleX = 1.0;
-  private double scaleY = 1.0;
-  private double scaleZ = 1.0;
-  private double posX = 0.0;
-  private double posY = 0.0;
-  private double posZ = 0.0;
-
-  private Mat4 localTransformation;
-  //private Mat4 localTransformationInverse;
-  private Mat4 localToScreenTransformation;
-  //private Mat4 screenToLocalTransformation;
-  private float layoutWidth = 1.f;
-  private float layoutHeight = 1.f;
-  private float layoutX = 0.f;
-  private float layoutY = 0.f;
-  private LocalTransform localTransform = new LocalTransform();
+      NiftyNodeStateImpl<NiftyTransformationNode> {
+  private TransformationParameters transformationParameters = new TransformationParameters();
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // NiftyNodeImpl
@@ -85,192 +57,99 @@ class NiftyTransformationNodeImpl
 
   @Override
   public void update(final NiftyState niftyState) {
-    Mat4 parentLocalToScreen = niftyState.getState(NiftyStateTransformationLocalToScreen, identity);
-    boolean parentLocalToScreenChanged = niftyState.getState(NiftyStateTransformationChanged, false);
-    boolean thisStateChanged = isTransformationChanged() || parentLocalToScreenChanged;
-    niftyState.setState(NiftyStateTransformationLocalToScreen, updateTransformation(parentLocalToScreen, parentLocalToScreenChanged));
-    niftyState.setState(NiftyStateTransformationLocal, localTransformation);
-    niftyState.setState(NiftyStateTransformationChanged, thisStateChanged);
-  }
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // NiftyLayoutReceiver
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  @Override
-  public void setLayoutResult(@Nonnull NiftyRect rect) {
-    layoutX = rect.getOrigin().getX();
-    layoutY = rect.getOrigin().getY();
-    layoutWidth = rect.getSize().getWidth();
-    layoutHeight = rect.getSize().getHeight();
+    List<TransformationParameters> transformations = niftyState.getState(NiftyStateTransformation);
+    if (transformations == null) {
+      transformations = new ArrayList<>();
+    }
+    transformations.add(transformationParameters);
+    niftyState.setState(NiftyStateTransformation, transformations);
   }
 
   public double getPivotX() {
-    return pivotX;
+    return transformationParameters.getPivotX();
   }
 
   public void setPivotX(final double pivotX) {
-    updateTransformationChanged(this.pivotX, pivotX);
-    this.pivotX = pivotX;
+    transformationParameters.setPivotX(pivotX);
   }
 
   public double getPivotY() {
-    return pivotY;
+    return transformationParameters.getPivotY();
   }
 
   public void setPivotY(final double pivotY) {
-    updateTransformationChanged(this.pivotY, pivotY);
-    this.pivotY = pivotY;
+    transformationParameters.setPivotY(pivotY);
   }
 
   public double getAngleX() {
-    return angleX;
+    return transformationParameters.getAngleX();
   }
 
   public void setAngleX(final double angleX) {
-    updateTransformationChanged(this.angleX, angleX);
-    this.angleX = angleX;
+    transformationParameters.setAngleX(angleX);
   }
 
   public double getAngleY() {
-    return angleY;
+    return transformationParameters.getAngleY();
   }
 
   public void setAngleY(final double angleY) {
-    updateTransformationChanged(this.angleY, angleY);
-    this.angleY = angleY;
+    transformationParameters.setAngleY(angleY);
   }
 
   public double getAngleZ() {
-    return angleZ;
+    return transformationParameters.getAngleZ();
   }
 
   public void setAngleZ(final double angleZ) {
-    updateTransformationChanged(this.angleZ, angleZ);
-    this.angleZ = angleZ;
+    transformationParameters.setAngleZ(angleZ);
   }
 
   public double getScaleX() {
-    updateTransformationChanged(this.scaleX, scaleX);
-    return scaleX;
+    return transformationParameters.getScaleX();
   }
 
   public void setScaleX(final double scaleX) {
-    this.scaleX = scaleX;
+    transformationParameters.setScaleX(scaleX);
   }
 
   public double getScaleY() {
-    return scaleY;
+    return transformationParameters.getScaleY();
   }
 
   public void setScaleY(final double scaleY) {
-    updateTransformationChanged(this.scaleY, scaleY);
-    this.scaleY = scaleY;
+    transformationParameters.setScaleY(scaleY);
   }
 
   public double getScaleZ() {
-    return scaleZ;
+    return transformationParameters.getScaleZ();
   }
 
   public void setScaleZ(final double scaleZ) {
-    updateTransformationChanged(this.scaleZ, scaleZ);
-    this.scaleZ = scaleZ;
+    transformationParameters.setScaleZ(scaleZ);
   }
 
   public double getPosX() {
-    return posX;
+    return transformationParameters.getPosX();
   }
 
   public void setPosX(final double posX) {
-    updateTransformationChanged(this.posX, posX);
-    this.posX = posX;
+    transformationParameters.setPosX(posX);
   }
 
   public double getPosY() {
-    return posY;
+    return transformationParameters.getPosY();
   }
 
   public void setPosY(final double posY) {
-    updateTransformationChanged(this.posY, posY);
-    this.posY = posY;
+    transformationParameters.setPosY(posY);
   }
 
   public double getPosZ() {
-    return posZ;
+    return transformationParameters.getPosZ();
   }
 
   public void setPosZ(final double posZ) {
-    updateTransformationChanged(this.posZ, posZ);
-    this.posZ = posZ;
-  }
-
-  private Mat4 updateTransformation(final Mat4 parentTransformation, final boolean parentTransformationChanged) {
-    if (!(isTransformationChanged() || parentTransformationChanged)) {
-      return localToScreenTransformation;
-    }
-    localTransformation = new Mat4(buildLocalTransformation());
-    //localTransformationInverse = Mat4.invert(localTransformation, new Mat4());
-
-    localToScreenTransformation = Mat4.mul(parentTransformation, localTransformation);
-    //screenToLocalTransformation = Mat4.invert(localToScreenTransformation, new Mat4());
-
-    transformationChanged = false;
-    return localToScreenTransformation;
-  }
-
-  private void updateTransformationChanged(final double oldValue, final double newValue) {
-    if (newValue != oldValue) {
-      transformationChanged = true;
-    }
-  }
-
-  private Mat4 buildLocalTransformation() {
-    return localTransform.buildLocalTransformation(
-        posX,
-        posY,
-        angleX,
-        angleY,
-        angleZ,
-        scaleX,
-        scaleY,
-        scaleZ,
-        this.pivotX * layoutWidth,
-        this.pivotY * layoutHeight);
-  }
-
-  private boolean isTransformationChanged() {
-    return transformationChanged;
-  }
-
-  private static class LocalTransform {
-    private final Mat4 a = Mat4.createIdentity();
-    private final Mat4 b = Mat4.createIdentity();
-    private final Mat4 c = Mat4.createIdentity();
-
-    private Mat4 buildLocalTransformation(
-        double posX,
-        double posY,
-        double angleX,
-        double angleY,
-        double angleZ,
-        double scaleX,
-        double scaleY,
-        double scaleZ,
-        double pivotX,
-        double pivotY) {
-      a.setTranslate((float) posX, (float) posY, 0.f);
-      b.setTranslate((float) pivotX, (float) pivotY, 0.f);
-      Mat4.mul(a, b, c);
-      a.setRotate((float) angleX, 1.f, 0.f, 0.f);
-      Mat4.mul(c, a, b);
-      a.setRotate((float) angleY, 0.f, 1.f, 0.f);
-      Mat4.mul(b, a, c);
-      a.setRotate((float) angleZ, 0.f, 0.f, 1.f);
-      Mat4.mul(c, a, b);
-      a.setScale((float) scaleX, (float) scaleY, (float) scaleZ);
-      Mat4.mul(b, a, c);
-      a.setTranslate((float) -pivotX, (float) -pivotY, 0.f);
-      return Mat4.mul(c, a);
-    }
+    transformationParameters.setPosZ(posZ);
   }
 }
