@@ -37,6 +37,24 @@ import java.util.Random;
  * @author void
  */
 public class NiftyColor {
+  private static final NiftyColor Transparent = NiftyColor.fromInt(0x00000000);
+  private static final NiftyColor None = NiftyColor.fromInt(0x00000000);
+  private static final NiftyColor Black = NiftyColor.fromInt(0x000000FF);
+  private static final NiftyColor Gray = NiftyColor.fromInt(0x808080FF);
+  private static final NiftyColor White = NiftyColor.fromInt(0xFFFFFFFF);
+  private static final NiftyColor Silver = NiftyColor.fromInt(0xC0C0C0FF);
+  private static final NiftyColor Maroon = NiftyColor.fromInt(0x800000FF);
+  private static final NiftyColor Red = NiftyColor.fromInt(0xFF0000FF);
+  private static final NiftyColor Purple = NiftyColor.fromInt(0x800080FF);
+  private static final NiftyColor Fuchsia = NiftyColor.fromInt(0xFF00FFFF);
+  private static final NiftyColor Green = NiftyColor.fromInt(0x008000FF);
+  private static final NiftyColor Lime = NiftyColor.fromInt(0x00FF00FF);
+  private static final NiftyColor Olive = NiftyColor.fromInt(0x808000FF);
+  private static final NiftyColor Yellow = NiftyColor.fromInt(0xFFFF00FF);
+  private static final NiftyColor Navy = NiftyColor.fromInt(0x000080FF);
+  private static final NiftyColor Blue = NiftyColor.fromInt(0x0000FFFF);
+  private static final NiftyColor Teal = NiftyColor.fromInt(0x008080FF);
+  private static final NiftyColor Aqua = NiftyColor.fromInt(0x00FFFFFF);
   /**
    * A helper class to parse color Strings.
    */
@@ -86,83 +104,83 @@ public class NiftyColor {
   }
 
   public static NiftyColor black() {
-    return NiftyColor.fromString("black");
+    return Black;
   }
 
   public static NiftyColor silver() {
-    return NiftyColor.fromString("silver");
+    return Silver;
   }
 
   public static NiftyColor gray() {
-    return NiftyColor.fromString("gray");
+    return Gray;
   }
 
   public static NiftyColor white() {
-    return NiftyColor.fromString("white");
+    return White;
   }
 
   public static NiftyColor maroon() {
-    return NiftyColor.fromString("maroon");
+    return Maroon;
   }
 
   public static NiftyColor red() {
-    return NiftyColor.fromString("red");
+    return Red;
   }
 
   public static NiftyColor purple() {
-    return NiftyColor.fromString("purple");
+    return Purple;
   }
 
   public static NiftyColor fuchsia() {
-    return NiftyColor.fromString("fuchsia");
+    return Fuchsia;
   }
 
   public static NiftyColor green() {
-    return NiftyColor.fromString("green");
+    return Green;
   }
 
   public static NiftyColor lime() {
-    return NiftyColor.fromString("lime");
+    return Lime;
   }
 
   public static NiftyColor olive() {
-    return NiftyColor.fromString("olive");
+    return Olive;
   }
 
   public static NiftyColor yellow() {
-    return NiftyColor.fromString("yellow");
+    return Yellow;
   }
 
   public static NiftyColor navy() {
-    return NiftyColor.fromString("navy");
+    return Navy;
   }
 
   public static NiftyColor blue() {
-    return NiftyColor.fromString("blue");
+    return Blue;
   }
 
   public static NiftyColor teal() {
-    return NiftyColor.fromString("teal");
+    return Teal;
   }
 
   public static NiftyColor aqua() {
-    return NiftyColor.fromString("aqua");
+    return Aqua;
   }
 
   /**
-   * Get a new fully transparent black color.
+   * Get a fully transparent black color.
    * @return NiftyColor
    */
   public static NiftyColor none() {
-    return new NiftyColor(0.0f, 0.0f, 0.0f, 0.0f);
+    return None;
   }
 
   /**
-   * Get a new fully transparent color.
+   * Get a fully transparent color.
    * @return NiftyColor
    */
   public static NiftyColor transparent() {
-    return new NiftyColor(0.0f, 0.0f, 0.0f, 0.0f);
+    return Transparent;
   }
 
   /**
