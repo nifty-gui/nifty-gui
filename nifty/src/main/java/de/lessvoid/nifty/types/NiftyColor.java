@@ -31,12 +31,31 @@ import de.lessvoid.niftyinternal.common.ColorStringParser;
 import java.util.Random;
 
 /**
- * Immutable Color representation for Nifty. Nifty uses this class when color information is needed or returned by
- * a method. A mutable Color representation is available in a separate class @see NftyMutableColor.
+ * Immutable Color representation for Nifty. Nifty uses this class when color
+ * information is needed or returned by a method. A mutable Color representation
+ * is available in a separate class @see NftyMutableColor.
  *
  * @author void
  */
 public class NiftyColor {
+  private static final NiftyColor Transparent = NiftyColor.fromInt(0x00000000);
+  private static final NiftyColor None = NiftyColor.fromInt(0x00000000);
+  private static final NiftyColor Black = NiftyColor.fromInt(0x000000FF);
+  private static final NiftyColor Gray = NiftyColor.fromInt(0x808080FF);
+  private static final NiftyColor White = NiftyColor.fromInt(0xFFFFFFFF);
+  private static final NiftyColor Silver = NiftyColor.fromInt(0xC0C0C0FF);
+  private static final NiftyColor Maroon = NiftyColor.fromInt(0x800000FF);
+  private static final NiftyColor Red = NiftyColor.fromInt(0xFF0000FF);
+  private static final NiftyColor Purple = NiftyColor.fromInt(0x800080FF);
+  private static final NiftyColor Fuchsia = NiftyColor.fromInt(0xFF00FFFF);
+  private static final NiftyColor Green = NiftyColor.fromInt(0x008000FF);
+  private static final NiftyColor Lime = NiftyColor.fromInt(0x00FF00FF);
+  private static final NiftyColor Olive = NiftyColor.fromInt(0x808000FF);
+  private static final NiftyColor Yellow = NiftyColor.fromInt(0xFFFF00FF);
+  private static final NiftyColor Navy = NiftyColor.fromInt(0x000080FF);
+  private static final NiftyColor Blue = NiftyColor.fromInt(0x0000FFFF);
+  private static final NiftyColor Teal = NiftyColor.fromInt(0x008080FF);
+  private static final NiftyColor Aqua = NiftyColor.fromInt(0x00FFFFFF);
   /**
    * A helper class to parse color Strings.
    */
@@ -64,21 +83,28 @@ public class NiftyColor {
 
   /**
    * Create a color from components.
-   * @param newRed red component
-   * @param newGreen green component
-   * @param newBlue blue component
-   * @param newAlpha alpha component
+   * 
+   * @param newRed
+   *          red component
+   * @param newGreen
+   *          green component
+   * @param newBlue
+   *          blue component
+   * @param newAlpha
+   *          alpha component
    */
   public NiftyColor(final double newRed, final double newGreen, final double newBlue, final double newAlpha) {
-      this.red = newRed;
-      this.green = newGreen;
-      this.blue = newBlue;
-      this.alpha = newAlpha;
+    this.red = newRed;
+    this.green = newGreen;
+    this.blue = newBlue;
+    this.alpha = newAlpha;
   }
 
   /**
    * Copy constructor.
-   * @param color the other color
+   * 
+   * @param color
+   *          the other color
    * @return NiftyColor
    */
   public NiftyColor(final NiftyColor color) {
@@ -86,87 +112,90 @@ public class NiftyColor {
   }
 
   public static NiftyColor black() {
-    return NiftyColor.fromString("black");
+    return Black;
   }
 
   public static NiftyColor silver() {
-    return NiftyColor.fromString("silver");
+    return Silver;
   }
 
   public static NiftyColor gray() {
-    return NiftyColor.fromString("gray");
+    return Gray;
   }
 
   public static NiftyColor white() {
-    return NiftyColor.fromString("white");
+    return White;
   }
 
   public static NiftyColor maroon() {
-    return NiftyColor.fromString("maroon");
+    return Maroon;
   }
 
   public static NiftyColor red() {
-    return NiftyColor.fromString("red");
+    return Red;
   }
 
   public static NiftyColor purple() {
-    return NiftyColor.fromString("purple");
+    return Purple;
   }
 
   public static NiftyColor fuchsia() {
-    return NiftyColor.fromString("fuchsia");
+    return Fuchsia;
   }
 
   public static NiftyColor green() {
-    return NiftyColor.fromString("green");
+    return Green;
   }
 
   public static NiftyColor lime() {
-    return NiftyColor.fromString("lime");
+    return Lime;
   }
 
   public static NiftyColor olive() {
-    return NiftyColor.fromString("olive");
+    return Olive;
   }
 
   public static NiftyColor yellow() {
-    return NiftyColor.fromString("yellow");
+    return Yellow;
   }
 
   public static NiftyColor navy() {
-    return NiftyColor.fromString("navy");
+    return Navy;
   }
 
   public static NiftyColor blue() {
-    return NiftyColor.fromString("blue");
+    return Blue;
   }
 
   public static NiftyColor teal() {
-    return NiftyColor.fromString("teal");
+    return Teal;
   }
 
   public static NiftyColor aqua() {
-    return NiftyColor.fromString("aqua");
+    return Aqua;
   }
 
   /**
-   * Get a new fully transparent black color.
+   * Get a fully transparent black color.
+   * 
    * @return NiftyColor
    */
   public static NiftyColor none() {
-    return new NiftyColor(0.0f, 0.0f, 0.0f, 0.0f);
+    return None;
   }
 
   /**
-   * Get a new fully transparent color.
+   * Get a fully transparent color.
+   * 
    * @return NiftyColor
    */
   public static NiftyColor transparent() {
-    return new NiftyColor(0.0f, 0.0f, 0.0f, 0.0f);
+    return Transparent;
   }
 
   /**
    * Returns true if the given String could be parsed as a color.
+   * 
    * @return true if the color String can be parsed as a color
    */
   public static boolean isColor(final String color) {
@@ -174,8 +203,11 @@ public class NiftyColor {
   }
 
   /**
-   * Create a color from a color String formated like in HTML but with alpha, e.g.: "#ff00ffff" or "#f0ff"
-   * @param color the color string
+   * Create a color from a color String formated like in HTML but with alpha,
+   * e.g.: "#ff00ffff" or "#f0ff"
+   * 
+   * @param color
+   *          the color string
    */
   public static NiftyColor fromString(final String color) {
     return parser.fromString(color);
@@ -183,16 +215,21 @@ public class NiftyColor {
 
   /**
    * Create a color from another color, using the given alpha value.
-   * @param color color
-   * @param alpha alpha component
+   * 
+   * @param color
+   *          color
+   * @param alpha
+   *          alpha component
    */
   public static NiftyColor fromColorWithAlpha(final NiftyColor color, final double alpha) {
-      return new NiftyColor(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+    return new NiftyColor(color.getRed(), color.getGreen(), color.getBlue(), alpha);
   }
 
   /**
    * Create a color from an encoded int value R + G + B + Alpha.
-   * @param color color value
+   * 
+   * @param color
+   *          color value
    */
   public static NiftyColor fromInt(final int color) {
     int red = (color >> 24) & 0xFF;
@@ -203,28 +240,54 @@ public class NiftyColor {
   }
 
   /**
-   * Create a color from Hue, Saturation and Value values. With Hue in [0, 360] and Saturation and Value [0, 1].
+   * Create a color from Hue, Saturation and Value values. With Hue in [0, 360]
+   * and Saturation and Value [0, 1].
+   * 
    * @return NiftyColor
    */
   public static NiftyColor fromHSV(final double hue, final double saturation, final double value) {
-    int h_i = ((int)(hue/60)) % 6;
-    double f = (hue/60) - (int)(hue/60);
+    int h_i = ((int) (hue / 60)) % 6;
+    double f = (hue / 60) - (int) (hue / 60);
 
     double red = 0;
     double green = 0;
     double blue = 0;
 
     double p = (value * (1.0 - saturation));
-    double q = (value * (1.0 - f*saturation));
+    double q = (value * (1.0 - f * saturation));
     double t = (value * (1.0 - saturation * (1.0 - f)));
 
-    switch(h_i) {
-      case 0:  red = value; green = t; blue = p; break;
-      case 1:  red = q; green = value; blue = p; break;
-      case 2:  red = p; green = value; blue = t; break;
-      case 3:  red = p; green = q; blue = value; break;
-      case 4:  red = t; green = p; blue = value; break;
-      case 5:  red = value; green = p; blue = q; break;
+    switch (h_i) {
+    case 0:
+      red = value;
+      green = t;
+      blue = p;
+      break;
+    case 1:
+      red = q;
+      green = value;
+      blue = p;
+      break;
+    case 2:
+      red = p;
+      green = value;
+      blue = t;
+      break;
+    case 3:
+      red = p;
+      green = q;
+      blue = value;
+      break;
+    case 4:
+      red = t;
+      green = p;
+      blue = value;
+      break;
+    case 5:
+      red = value;
+      green = p;
+      blue = q;
+      break;
     }
 
     return new NiftyColor(red, green, blue, 1.0f);
@@ -232,6 +295,7 @@ public class NiftyColor {
 
   /**
    * Create a random Color with full Alpha (1.0f)
+   * 
    * @return a color with random red, green and blue components
    */
   public static NiftyColor randomColor() {
@@ -241,7 +305,9 @@ public class NiftyColor {
 
   /**
    * Create a random Color with given Alpha
-   * @param alpha the alpha value to use
+   * 
+   * @param alpha
+   *          the alpha value to use
    * @return a color with random red, green and blue components
    */
   public static NiftyColor randomColorWithAlpha(final double alpha) {
@@ -251,34 +317,38 @@ public class NiftyColor {
 
   /**
    * Get red component.
+   * 
    * @return red component
    */
   public double getRed() {
-      return red;
+    return red;
   }
 
   /**
    * Get green component.
+   * 
    * @return green component
    */
   public double getGreen() {
-      return green;
+    return green;
   }
 
   /**
    * Get blue component.
+   * 
    * @return blue component
    */
   public double getBlue() {
-      return blue;
+    return blue;
   }
 
   /**
    * Get alpha component.
+   * 
    * @return alpha component
    */
   public double getAlpha() {
-      return alpha;
+    return alpha;
   }
 
   /**
@@ -287,10 +357,10 @@ public class NiftyColor {
   public String toString() {
     StringBuilder result = new StringBuilder();
     result.append("#");
-    result.append(zeroPadded(Integer.toHexString((int) (red*255.))));
-    result.append(zeroPadded(Integer.toHexString((int) (green*255.))));
-    result.append(zeroPadded(Integer.toHexString((int) (blue*255.))));
-    result.append(zeroPadded(Integer.toHexString((int) (alpha*255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (red * 255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (green * 255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (blue * 255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (alpha * 255.))));
     result.append(" {");
     result.append(red).append(", ");
     result.append(green).append(", ");
@@ -303,10 +373,10 @@ public class NiftyColor {
   public String toHexString() {
     StringBuilder result = new StringBuilder();
     result.append("#");
-    result.append(zeroPadded(Integer.toHexString((int) (red*255.))));
-    result.append(zeroPadded(Integer.toHexString((int) (green*255.))));
-    result.append(zeroPadded(Integer.toHexString((int) (blue*255.))));
-    result.append(zeroPadded(Integer.toHexString((int) (alpha*255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (red * 255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (green * 255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (blue * 255.))));
+    result.append(zeroPadded(Integer.toHexString((int) (alpha * 255.))));
     return result.toString();
   }
 
