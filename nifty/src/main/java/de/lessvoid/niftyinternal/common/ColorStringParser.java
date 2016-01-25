@@ -67,22 +67,22 @@ public class ColorStringParser {
   private static final Map<String, NiftyColor> COLOR_MAP;
   static {
     HashMap<String, NiftyColor> colorMapBuilder = new HashMap<>(16, 1.f);
-    colorMapBuilder.put("black",   NiftyColor.fromInt(0x000000FF));
-    colorMapBuilder.put("silver",  NiftyColor.fromInt(0xC0C0C0FF));
-    colorMapBuilder.put("gray",    NiftyColor.fromInt(0x808080FF));
-    colorMapBuilder.put("white",   NiftyColor.fromInt(0xFFFFFFFF));
-    colorMapBuilder.put("maroon",  NiftyColor.fromInt(0x800000FF));
-    colorMapBuilder.put("red",     NiftyColor.fromInt(0xFF0000FF));
-    colorMapBuilder.put("purple",  NiftyColor.fromInt(0x800080FF));
-    colorMapBuilder.put("fuchsia", NiftyColor.fromInt(0xFF00FFFF));
-    colorMapBuilder.put("green",   NiftyColor.fromInt(0x008000FF));
-    colorMapBuilder.put("lime",    NiftyColor.fromInt(0x00FF00FF));
-    colorMapBuilder.put("olive",   NiftyColor.fromInt(0x808000FF));
-    colorMapBuilder.put("yellow",  NiftyColor.fromInt(0xFFFF00FF));
-    colorMapBuilder.put("navy",    NiftyColor.fromInt(0x000080FF));
-    colorMapBuilder.put("blue",    NiftyColor.fromInt(0x0000FFFF));
-    colorMapBuilder.put("teal",    NiftyColor.fromInt(0x008080FF));
-    colorMapBuilder.put("aqua",    NiftyColor.fromInt(0x00FFFFFF));
+    colorMapBuilder.put("black", NiftyColor.black());
+    colorMapBuilder.put("silver", NiftyColor.silver());
+    colorMapBuilder.put("gray", NiftyColor.gray());
+    colorMapBuilder.put("white", NiftyColor.white());
+    colorMapBuilder.put("maroon", NiftyColor.maroon());
+    colorMapBuilder.put("red", NiftyColor.red());
+    colorMapBuilder.put("purple", NiftyColor.purple());
+    colorMapBuilder.put("fuchsia", NiftyColor.fuchsia());
+    colorMapBuilder.put("green", NiftyColor.green());
+    colorMapBuilder.put("lime", NiftyColor.lime());
+    colorMapBuilder.put("olive", NiftyColor.olive());
+    colorMapBuilder.put("yellow", NiftyColor.yellow());
+    colorMapBuilder.put("navy", NiftyColor.navy());
+    colorMapBuilder.put("blue", NiftyColor.blue());
+    colorMapBuilder.put("teal", NiftyColor.teal());
+    colorMapBuilder.put("aqua", NiftyColor.aqua());
 
     COLOR_MAP = Collections.unmodifiableMap(colorMapBuilder);
   } 
