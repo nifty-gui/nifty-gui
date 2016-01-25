@@ -186,13 +186,19 @@ public class RenderBucketRenderNode {
     Mat4 b = new Mat4();
     Mat4 c = new Mat4();
     Mat4 s;
-    for (int i = transformations.size() - 1; i >= 0; i--) {
-      TransformationParameters param = transformations.get(i);
-      param.buildTransformationMatrix(b, layoutPosX, layoutPosY, width, height);
+    if (transformations.isEmpty()) {
+      b = Mat4.createTranslate(layoutPosX, layoutPosY, 0.f);
       Mat4.mul(a, b, c);
-      s = a;
       a = c;
-      c = s;
+    } else {
+      for (int i = transformations.size() - 1; i >= 0; i--) {
+        TransformationParameters param = transformations.get(i);
+        param.buildTransformationMatrix(b, layoutPosX, layoutPosY, width, height);
+        Mat4.mul(a, b, c);
+        s = a;
+        a = c;
+        c = s;
+      }
     }
     Mat4 newLocalToScreen = a;
     if (newLocalToScreen.compare(localToScreen)) {
