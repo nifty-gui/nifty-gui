@@ -29,7 +29,8 @@ public final class ClassHelper {
   @Nullable
   public static Class<?> loadClass(@Nonnull final String className) {
     try {
-      return Class.forName(className);
+		return Thread.currentThread().getContextClassLoader().loadClass(className);
+//      return Class.forName(className);
     } catch (Exception e) {
       log.warning("class [" + className + "] could not be found (" + e.getMessage() + ")");
     }
@@ -46,7 +47,8 @@ public final class ClassHelper {
   @Nullable
   public static <T> T getInstance(@Nonnull final String className, @Nonnull final Class<T> type) {
     try {
-	  Class<?> cls = Class.forName(className);
+		Class<?> cls = Thread.currentThread().getContextClassLoader().loadClass(className);
+//	  Class<?> cls = Class.forName(className);
 	  if (type.isAssignableFrom(cls)) {
 	    return type.cast(cls.newInstance());
 	  } else {
