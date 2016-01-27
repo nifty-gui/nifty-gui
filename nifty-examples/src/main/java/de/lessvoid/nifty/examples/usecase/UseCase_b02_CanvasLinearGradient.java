@@ -26,47 +26,63 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
+import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
+import static de.lessvoid.nifty.node.Horizontal.Center;
+import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.Vertical.Middle;
+
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCanvas;
+import de.lessvoid.nifty.NiftyCanvasPainter;
+import de.lessvoid.nifty.node.NiftyContentNode;
+import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.types.NiftyLinearGradient;
+
 /**
  * custom canvas painter rendering gradients.
+ * 
  * @author void
  */
 public class UseCase_b02_CanvasLinearGradient {
-/* FIXME
+
   public UseCase_b02_CanvasLinearGradient(final Nifty nifty) {
-    NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
-    niftyNode.setBackgroundColor(NiftyColor.transparent());
 
-    NiftyNode child = niftyNode.newChildNode(UnitValue.percent(100), UnitValue.percent(100));
-    child.setBackgroundColor(NiftyColor.red());
-    child.setCanvasPainter(new NiftyCanvasPainter() {
-      @Override
-      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.blue());
-        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+    nifty.addNode(alignmentLayoutNode()).addNode(alignmentLayoutChildNode(Center, Middle))
+        .addNode(fixedSizeLayoutNode(400.f, 400.f)).addNode(backgroundColorNode(NiftyColor.transparent()))
+        .addNode(contentNode().setCanvasPainter(new NiftyCanvasPainter() {
 
-        NiftyLinearGradient gradient = NiftyLinearGradient.createFromAngleInDeg(90.);
-        gradient.addColorStop(0.0, NiftyColor.red());
-        gradient.addColorStop(1.0, NiftyColor.white());
-        canvas.setFillStyle(gradient);
-        canvas.fillRect(50, 50, 300, 100);
+          @Override
+          public void paint(NiftyContentNode node, NiftyCanvas canvas) {
+            canvas.setFillStyle(NiftyColor.blue());
+            canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-        gradient = NiftyLinearGradient.createFromAngleInDeg(180.);
-        gradient.addColorStop(0.0, NiftyColor.green());
-        gradient.addColorStop(1.0, NiftyColor.black());
-        canvas.setFillStyle(gradient);
-        canvas.fillRect(50, 150, 300, 100);
+            NiftyLinearGradient gradient = NiftyLinearGradient.createFromAngleInDeg(90.);
+            gradient.addColorStop(0.0, NiftyColor.red());
+            gradient.addColorStop(1.0, NiftyColor.white());
+            canvas.setFillStyle(gradient);
+            canvas.fillRect(50, 50, 300, 100);
 
-        gradient = NiftyLinearGradient.createFromAngleInDeg(135.);
-        gradient.addColorStop(0.0, NiftyColor.white());
-        gradient.addColorStop(1.0, NiftyColor.black());
-        canvas.setFillStyle(gradient);
-        canvas.fillRect(50, 250, 300, 100);
-      }
-    });
+            gradient = NiftyLinearGradient.createFromAngleInDeg(180.);
+            gradient.addColorStop(0.0, NiftyColor.green());
+            gradient.addColorStop(1.0, NiftyColor.black());
+            canvas.setFillStyle(gradient);
+            canvas.fillRect(50, 150, 300, 100);
+
+            gradient = NiftyLinearGradient.createFromAngleInDeg(135.);
+            gradient.addColorStop(0.0, NiftyColor.white());
+            gradient.addColorStop(1.0, NiftyColor.black());
+            canvas.setFillStyle(gradient);
+            canvas.fillRect(50, 250, 300, 100);
+          }
+        }));
+
   }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b02_CanvasLinearGradient.class, args);
   }
-  */
+
 }
