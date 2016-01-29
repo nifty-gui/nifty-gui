@@ -156,7 +156,7 @@ class NiftyContentNodeImpl
     builder.setLength(0);
     builder.append("{");
     builder.append("layoutPosX [").append(layoutPosX).append("] ");
-    builder.append("layoutPosY [").append(layoutPosX).append("] ");
+    builder.append("layoutPosY [").append(layoutPosY).append("] ");
     builder.append("layoutWidth [").append(layoutWidth).append("] ");
     builder.append("layoutHeight [").append(layoutHeight).append("] ");
     builder.append("backgroundColor [").append(backgroundColor).append("]");
