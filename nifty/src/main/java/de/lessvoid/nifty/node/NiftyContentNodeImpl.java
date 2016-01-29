@@ -51,15 +51,17 @@ class NiftyContentNodeImpl
       NiftyNodeStateImpl<NiftyContentNode>,
       NiftyNodeContentImpl<NiftyContentNode>,
       NiftyLayoutReceiver<NiftyContentNode> {
-  private int layoutWidth;
-  private int layoutHeight;
+  private final StringBuilder builder = new StringBuilder();
 
   private NiftyColor backgroundColor;
   private NiftyCanvasPainter canvasPainter = defaultNiftyCanvasPainter();
   private List<TransformationParameters> defaultTransformations = new ArrayList<>();
   private List<TransformationParameters> transformations = new ArrayList<>();
+
   private float layoutPosX;
   private float layoutPosY;
+  private int layoutWidth;
+  private int layoutHeight;
 
   public void setCanvasPainter(final NiftyCanvasPainter canvasPainter) {
     this.canvasPainter = canvasPainter;
@@ -145,4 +147,21 @@ class NiftyContentNodeImpl
     layoutWidth = Math.round(rect.getSize().getWidth());
     layoutHeight = Math.round(rect.getSize().getHeight());
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Other
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  public String toString() {
+    builder.setLength(0);
+    builder.append("{");
+    builder.append("layoutPosX [").append(layoutPosX).append("] ");
+    builder.append("layoutPosY [").append(layoutPosX).append("] ");
+    builder.append("layoutWidth [").append(layoutWidth).append("] ");
+    builder.append("layoutHeight [").append(layoutHeight).append("] ");
+    builder.append("backgroundColor [").append(backgroundColor).append("]");
+    builder.append("}");
+    return builder.toString();
+  }
+
 }
