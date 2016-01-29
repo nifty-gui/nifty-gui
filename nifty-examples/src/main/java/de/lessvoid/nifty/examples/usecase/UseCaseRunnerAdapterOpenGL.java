@@ -62,6 +62,7 @@ public class UseCaseRunnerAdapterOpenGL implements UseCaseRunnerAdapter {
     // create nifty instance
     final Nifty nifty = createNifty();
     final Object useCase = useCaseClass.getConstructor(Nifty.class).newInstance(nifty);
+    nifty.update();
     logScene(nifty);
 
     setup.renderLoop(new RenderLoopCallback() {
