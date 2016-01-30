@@ -26,46 +26,66 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
+import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
+import static de.lessvoid.nifty.node.Horizontal.Center;
+import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.Vertical.Middle;
+
+import java.io.IOException;
+
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCanvas;
+import de.lessvoid.nifty.NiftyCanvasPainter;
+import de.lessvoid.nifty.NiftyFont;
+import de.lessvoid.nifty.node.NiftyContentNode;
+import de.lessvoid.nifty.types.NiftyColor;
+
 /**
  * custom canvas painter rendering text
+ * 
  * @author void
  */
 public class UseCase_b03_CanvasText {
-/* FIXME
+
   public UseCase_b03_CanvasText(final Nifty nifty) throws IOException {
     final NiftyFont font = nifty.createFont("fonts/aurulent-sans-16.fnt");
+    nifty.addNode(alignmentLayoutNode()).addNode(alignmentLayoutChildNode(Center, Middle))
+        .addNode(fixedSizeLayoutNode(400.f, 400.f)).addNode(backgroundColorNode(NiftyColor.transparent()))
+        .addNode(contentNode().setCanvasPainter(new NiftyCanvasPainter() {
 
-    NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
-    niftyNode.setCanvasPainter(new NiftyCanvasPainter() {
-      @Override
-      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setFillStyle(NiftyColor.blue());
-        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+          @Override
+          public void paint(NiftyContentNode node, NiftyCanvas canvas) {
+            canvas.setFillStyle(NiftyColor.blue());
+            canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-        canvas.setTextColor(NiftyColor.white());
-        canvas.text(font, 10, 10, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            canvas.setTextColor(NiftyColor.white());
+            canvas.text(font, 10, 10, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-        canvas.setTextColor(NiftyColor.red());
-        canvas.setTextSize(1.2f);
-        canvas.text(font, 10, 40, "abcdefghijklmnopqrstuvwxyz");
+            canvas.setTextColor(NiftyColor.red());
+            canvas.setTextSize(1.2f);
+            canvas.text(font, 10, 40, "abcdefghijklmnopqrstuvwxyz");
 
-        canvas.setTextColor(NiftyColor.green());
-        canvas.setTextSize(1.4f);
-        canvas.text(font, 10, 70, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            canvas.setTextColor(NiftyColor.green());
+            canvas.setTextSize(1.4f);
+            canvas.text(font, 10, 70, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-        canvas.setTextColor(NiftyColor.yellow());
-        canvas.setTextSize(1.6f);
-        canvas.text(font, 10, 100, "0123456789");
+            canvas.setTextColor(NiftyColor.yellow());
+            canvas.setTextSize(1.6f);
+            canvas.text(font, 10, 100, "0123456789");
 
-        canvas.setTextColor(NiftyColor.white());
-        canvas.setTextSize(2.0f);
-        canvas.text(font, 10, 150, "ABC Hello Nifty 2.0 Text");
-}
-    });
+            canvas.setTextColor(NiftyColor.white());
+            canvas.setTextSize(2.0f);
+            canvas.text(font, 10, 150, "ABC Hello Nifty 2.0 Text");
+
+          }
+        }));
   }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b03_CanvasText.class, args);
   }
-  */
+
 }

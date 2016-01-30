@@ -31,7 +31,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_b11_CanvasLines {
-  /* FIXME
+  /* FIXME: star redraw method not implemented.
   private static final float Y_POS = 60.f;
 
   public UseCase_b11_CanvasLines(final Nifty nifty) throws IOException {

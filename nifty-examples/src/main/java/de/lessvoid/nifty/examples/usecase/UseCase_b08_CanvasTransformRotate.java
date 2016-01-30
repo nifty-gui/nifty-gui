@@ -31,7 +31,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_b08_CanvasTransformRotate {
-/* FIXME
+/* FIXME: Find a way to express size in percentages. 
   public UseCase_b08_CanvasTransformRotate(final Nifty nifty) throws IOException {
     NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
 

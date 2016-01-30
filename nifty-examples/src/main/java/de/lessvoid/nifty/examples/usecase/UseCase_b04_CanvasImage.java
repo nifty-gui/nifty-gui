@@ -26,28 +26,44 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
+import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
+import static de.lessvoid.nifty.node.Horizontal.Center;
+import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.Vertical.Middle;
+
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCanvas;
+import de.lessvoid.nifty.NiftyCanvasPainter;
+import de.lessvoid.nifty.NiftyImage;
+import de.lessvoid.nifty.node.NiftyContentNode;
+import de.lessvoid.nifty.types.NiftyColor;
+
 /**
  * custom canvas painter for rendering images
  * @author void
  */
 public class UseCase_b04_CanvasImage {
-/* FIXME
+
   public UseCase_b04_CanvasImage(final Nifty nifty) {
     final NiftyImage image = nifty.createNiftyImage("nifty.png");
-
-    NiftyNode niftyNode = nifty.createRootNode(UnitValue.px(400), UnitValue.px(400), ChildLayout.Center);
-    niftyNode.setCanvasPainter(new NiftyCanvasPainter() {
+    nifty.addNode(alignmentLayoutNode()).addNode(alignmentLayoutChildNode(Center, Middle))
+    .addNode(fixedSizeLayoutNode(400.f, 400.f)).addNode(backgroundColorNode(NiftyColor.transparent()))
+    .addNode(contentNode().setCanvasPainter(new NiftyCanvasPainter() {
+      
       @Override
-      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+      public void paint(NiftyContentNode node, NiftyCanvas canvas) {
         canvas.setFillStyle(NiftyColor.blue());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
         canvas.drawImage(image, 10, 10);
       }
-    });
-  }
+    }));
+  }  
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b04_CanvasImage.class, args);
   }
-  */
+  
 }

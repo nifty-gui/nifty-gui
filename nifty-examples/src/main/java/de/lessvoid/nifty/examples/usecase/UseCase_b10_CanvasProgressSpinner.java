@@ -31,7 +31,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_b10_CanvasProgressSpinner {
-  /* FIXME
+  /* FIXME: There's no start redraw method. 
   private int pos = 0;
 
   public UseCase_b10_CanvasProgressSpinner(final Nifty nifty) throws IOException {

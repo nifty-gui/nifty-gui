@@ -31,7 +31,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_c02_LabelControlMinSize {
-/* FIXME
+/* FIXME: No controls implementation
   public UseCase_c02_LabelControlMinSize(final Nifty nifty) throws IOException {
     NiftyFont font = nifty.createFont("fonts/aurulent-sans-16.fnt");
     NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
