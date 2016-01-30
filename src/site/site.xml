@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Nifty GUI">
+  <bannerLeft>
+    <name>Nifty GUI</name>
+    <href>http://nifty-gui.github.io/nifty-gui/</href>
+  </bannerLeft>
+  <publishDate format="dd.MM.yyyy" position="left" />
+  <version position="left" />
+  <body>
+    <links>
+      <item name="[Blog]" href="http://void256.github.io/blog/"/>
+    </links>
+    <breadcrumbs>
+      <item name="${project.name}" />
+    </breadcrumbs>
+    <menu ref="modules" />
+    <menu ref="reports"/>
+  </body>
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.4</version>
+  </skin>
+</project>
