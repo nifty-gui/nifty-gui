@@ -34,14 +34,14 @@ import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyRect;
-import de.lessvoid.niftyinternal.math.Mat4;
-import de.lessvoid.niftyinternal.math.Vec2;
 
 import javax.annotation.Nonnull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundColor;
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationLocal;
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationLocalToScreen;
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformation;
 
 /**
  * Created by void on 09.08.15.
@@ -51,15 +51,17 @@ class NiftyContentNodeImpl
       NiftyNodeStateImpl<NiftyContentNode>,
       NiftyNodeContentImpl<NiftyContentNode>,
       NiftyLayoutReceiver<NiftyContentNode> {
-  private int width;
-  private int height;
+  private final StringBuilder builder = new StringBuilder();
 
   private NiftyColor backgroundColor;
-  private Mat4 local = Mat4.createIdentity();
-  private Mat4 localToScreen = Mat4.createIdentity();
-  private Mat4 layoutTranslate = Mat4.createIdentity();
-  private Vec2 layoutPos = new Vec2();
   private NiftyCanvasPainter canvasPainter = defaultNiftyCanvasPainter();
+  private List<TransformationParameters> defaultTransformations = new ArrayList<>();
+  private List<TransformationParameters> transformations = new ArrayList<>();
+
+  private float layoutPosX;
+  private float layoutPosY;
+  private int layoutWidth;
+  private int layoutHeight;
 
   public void setCanvasPainter(final NiftyCanvasPainter canvasPainter) {
     this.canvasPainter = canvasPainter;
@@ -72,8 +74,13 @@ class NiftyContentNodeImpl
   @Override
   public void update(final NiftyState niftyState) {
     backgroundColor = niftyState.getState(NiftyStateBackgroundColor, NiftyColor.purple());
-    local = niftyState.getState(NiftyStateTransformationLocal, Mat4.createIdentity());
-    localToScreen = niftyState.getState(NiftyStateTransformationLocalToScreen, Mat4.createIdentity());
+
+    // get a copy of all the transformations we've collected so far
+    transformations.clear();
+    transformations.addAll(niftyState.getState(NiftyStateTransformation, defaultTransformations));
+
+    // and then clear the transformations
+    niftyState.setState(NiftyStateTransformation, new ArrayList<>());
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,27 +94,27 @@ class NiftyContentNodeImpl
 
   @Override
   public int getContentWidth() {
-    return width;
+    return layoutWidth;
   }
 
   @Override
   public int getContentHeight() {
-    return height;
+    return layoutHeight;
   }
 
   @Override
-  public Mat4 getLocalToScreen() {
-    return Mat4.mul(layoutTranslate, localToScreen);
+  public List<TransformationParameters> getTransformations() {
+    return transformations;
   }
 
   @Override
-  public Mat4 getLocal() {
-    return local;
+  public float getLayoutPosX() {
+    return layoutPosX;
   }
 
   @Override
-  public Vec2 getLayoutPos() {
-    return layoutPos;
+  public float getLayoutPosY() {
+    return layoutPosY;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,9 +142,26 @@ class NiftyContentNodeImpl
 
   @Override
   public void setLayoutResult(@Nonnull NiftyRect rect) {
-    width = Math.round(rect.getSize().getWidth());
-    height = Math.round(rect.getSize().getHeight());
-    layoutTranslate = Mat4.createTranslate(rect.getOrigin().getX(), rect.getOrigin().getY(), 0.f);
-    layoutPos = new Vec2(rect.getOrigin().getX(), rect.getOrigin().getY());
+    layoutPosX = rect.getOrigin().getX();
+    layoutPosY = rect.getOrigin().getY();
+    layoutWidth = Math.round(rect.getSize().getWidth());
+    layoutHeight = Math.round(rect.getSize().getHeight());
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Other
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  public String toString() {
+    builder.setLength(0);
+    builder.append("{");
+    builder.append("layoutPosX [").append(layoutPosX).append("] ");
+    builder.append("layoutPosY [").append(layoutPosY).append("] ");
+    builder.append("layoutWidth [").append(layoutWidth).append("] ");
+    builder.append("layoutHeight [").append(layoutHeight).append("] ");
+    builder.append("backgroundColor [").append(backgroundColor).append("]");
+    builder.append("}");
+    return builder.toString();
+  }
+
 }

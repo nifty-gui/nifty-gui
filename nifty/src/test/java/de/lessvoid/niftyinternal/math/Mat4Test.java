@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Nifty GUI Community
+ * Copyright (c) 2016, Nifty GUI Community
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,54 +24,47 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.spi.node;
+package de.lessvoid.niftyinternal.math;
 
-import de.lessvoid.nifty.NiftyCanvas;
-import de.lessvoid.nifty.node.TransformationParameters;
+import org.junit.Test;
 
-import java.util.List;
+import static junit.framework.Assert.assertEquals;
 
 /**
- * NiftyNodeCanvasImpl is a renderable NiftyNode.
- *
- * Created by void on 08.08.15.
+ * Created by void on 16.01.16.
  */
-public interface NiftyNodeContentImpl<T extends NiftyNode> extends NiftyNodeImpl<T> {
+public class Mat4Test {
 
-  /**
-   * Convert the state of the implementing class into the NiftyCanvas given.
-   *
-   * @param niftyCanvas the niftyCanvas to draw to
-   */
-  void updateCanvas(NiftyCanvas niftyCanvas);
+  @Test
+  public void testSetTranslate() {
+    Mat4 mat4 = Mat4.createIdentity().setTranslate(1.0f, 2.0f, 3.0f);
+    assertEquals(
+        "1.0 0.0 0.0 1.0\n" +
+        "0.0 1.0 0.0 2.0\n" +
+        "0.0 0.0 1.0 3.0\n" +
+        "0.0 0.0 0.0 1.0\n",
+        mat4.toString());
+  }
 
-  /**
-   * Should return the width of the content.
-   * @return width
-   */
-  int getContentWidth();
+  @Test
+  public void testSetScale() {
+    Mat4 mat4 = Mat4.createIdentity().setScale(1.0f, 2.0f, 3.0f);
+    assertEquals(
+        "1.0 0.0 0.0 0.0\n" +
+        "0.0 2.0 0.0 0.0\n" +
+        "0.0 0.0 3.0 0.0\n" +
+        "0.0 0.0 0.0 1.0\n",
+        mat4.toString());
+  }
 
-  /**
-   * Should return the height of the content.
-   * @return height
-   */
-  int getContentHeight();
-
-  /**
-   * Get a Mat4 to transform points in local space for this node to screen space.
-   * @return the transformation matrix to transform local to screen space
-   */
-  List<TransformationParameters> getTransformations();
-
-  /**
-   * Get the x layout position for this content node.
-   * @return layoutPosX
-   */
-  float getLayoutPosX();
-
-  /**
-   * Get the y layout position for this content node.
-   * @return layoutPosY
-   */
-  float getLayoutPosY();
+  @Test
+  public void testSetRotate() {
+    Mat4 mat4 = Mat4.createIdentity().setRotate(10.f, 1.0f, 2.0f, 3.0f);
+    assertEquals(
+        "1.0 -0.49056 0.39287317 0.0\n" +
+        "0.5513291 1.0455768 -0.08249456 0.0\n" +
+        "-0.30171955 0.2648018 1.1215382 0.0\n" +
+        "0.0 0.0 0.0 1.0\n",
+        mat4.toString());
+  }
 }

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Nifty GUI - nifty">
+<project name="Nifty GUI">
   <bannerLeft>
-    <name>Nifty</name>
-    <href>http://nifty-gui.sourceforge.net/projects/nifty/</href>
+    <name>Nifty GUI</name>
+    <href>http://nifty-gui.github.io/nifty-gui/</href>
   </bannerLeft>
   <publishDate format="dd.MM.yyyy" position="left" />
   <version position="left" />
   <body>
     <links>
-      <item name="[Nifty Default Controls]" href="../nifty-default-controls/project-reports.html" />
-      <item name="[Blog]" href="http://nifty-gui.lessvoid.com"/>
+      <item name="[Blog]" href="http://void256.github.io/blog/"/>
     </links>
     <breadcrumbs>
       <item name="${project.name}" />
@@ -20,4 +19,9 @@
       <item name="Layout" href="layout.html" />
     </menu>
   </body>
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.4</version>
+  </skin>
 </project>

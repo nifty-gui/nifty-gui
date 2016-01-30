@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Nifty GUI Community
+ * Copyright (c) 2016, Nifty GUI Community
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,37 +26,19 @@
  */
 package de.lessvoid.niftyinternal.render;
 
-import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
-
-import java.util.HashMap;
-import java.util.Map;
+import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 
 /**
- * Created by void on 19.09.15.
+ * Created by void on 16.01.16.
  */
-public class RenderBucketRenderNodeFactory {
-  private Map<NiftyNodeContentImpl, RenderBucketRenderNode> registry = new HashMap<>();
+public interface NiftyRenderer {
 
-  public RenderBucketRenderNode create(final NiftyNodeContentImpl node, final NiftyRenderDevice renderDevice) {
-    RenderBucketRenderNode renderNode = registry.get(node);
-    if (renderNode != null) {
-      return renderNode;
-    }
-    renderNode = createRenderNode(node, renderDevice);
-    registry.put(node, renderNode);
-    return renderNode;
-  }
-
-  private RenderBucketRenderNode createRenderNode(
-      final NiftyNodeContentImpl node,
-      final NiftyRenderDevice renderDevice) {
-    return new RenderBucketRenderNode(
-        node.getContentWidth(),
-        node.getContentHeight(),
-        node.getLocalToScreen(),
-        node.getLocal(),
-        node.getLayoutPos(),
-        renderDevice);
-  }
+  /**
+   * Take the InternalNiftyTree and render it, updating the Statistics while doing so. Should return false if nothing
+   * has been changed or true when anything in the render output has changed.
+   *
+   * @param tree the InternalNiftyTree to render
+   * @return true when anything has been rendered and false when no change occured
+   */
+  boolean render(InternalNiftyTree tree);
 }

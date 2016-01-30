@@ -54,6 +54,15 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>3.4</version>
+        <executions>
+          <execution>
+            <id>stage-for-scm-publish</id>
+            <phase>post-site</phase>
+            <goals>
+              <goal>stage</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -77,6 +86,20 @@
         </configuration>
       </plugin>
        -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-publish-plugin</artifactId>
+        <version>1.1</version>
+        <executions>
+          <execution>
+            <id>scm-publish</id>
+            <phase>site-deploy</phase>
+            <goals>
+              <goal>publish-scm</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <reporting>
@@ -106,6 +129,11 @@
         <version>2.10.3</version>
         <configuration>
           <excludePackageNames>de.lessvoid.niftyinternal</excludePackageNames>
+          <show>public</show>
+          <nohelp>true</nohelp>
+          <header>Nifty-GUI, ${project.version}</header>
+          <footer>Nifty-GUI, ${project.version}</footer>
+          <doctitle>Nifty-GUI, ${project.version}</doctitle>
           <links>
             <link>http://docs.oracle.com/javase/6/docs/api/</link>
           </links>

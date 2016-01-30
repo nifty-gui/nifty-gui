@@ -33,6 +33,7 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
  * Created by void on 09.08.15.
  */
 public class NiftyContentNode implements NiftyNode {
+  private final StringBuilder builder = new StringBuilder();
   private final NiftyContentNodeImpl impl;
 
   public static NiftyContentNode contentNode() {
@@ -61,7 +62,14 @@ public class NiftyContentNode implements NiftyNode {
   }
 
   public String toString() {
-    return "(" + this.getClass().getSimpleName() + ") width [" + getWidth() + "] height [" + getHeight() + "]";
+    builder.setLength(0);
+    builder.append("(");
+    builder.append(this.getClass().getSimpleName());
+    builder.append(") ");
+    builder.append("width [").append(getWidth()).append("] ");
+    builder.append("height [").append(getHeight()).append("] ");
+    builder.append(impl.toString());
+    return builder.toString();
   }
 
   @Override

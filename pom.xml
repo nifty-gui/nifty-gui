@@ -83,11 +83,39 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.4</version>
+          <configuration>
+            <skipDeploy>true</skipDeploy>
+          </configuration>
+          <executions>
+            <execution>
+              <id>stage-for-scm-publish</id>
+              <phase>post-site</phase>
+              <goals>
+                <goal>stage</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <version>2.2.2</version>
           <configuration>
             <!-- required by gpg-plugin see here: https://docs.sonatype.org/display/Repository/How+To+Generate+PGP+Signatures+With+Maven -->
             <mavenExecutorId>forked-path</mavenExecutorId>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-scm-publish-plugin</artifactId>
+          <version>1.1</version>
+          <configuration>
+            <checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
+            <checkinComment>Publishing javadoc for ${project.artifactId}:${project.version}</checkinComment>
+            <skipDeletedFiles>true</skipDeletedFiles>
+            <scmBranch>gh-pages</scmBranch> <!-- branch with static site -->
           </configuration>
         </plugin>
       </plugins>
@@ -122,8 +150,8 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
     <site>
-      <id>nifty.sourceforge.net</id>
-      <url>scp://shell.sourceforge.net/home/project-web/nifty-gui/htdocs/projects/${project.version}/nifty</url>
+      <id>nifty.github</id>
+      <url>scm:git:git@github.com:nifty-gui/nifty-gui.git</url>
     </site>
   </distributionManagement>
   <repositories>

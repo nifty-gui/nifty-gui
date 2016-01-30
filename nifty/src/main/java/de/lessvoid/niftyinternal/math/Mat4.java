@@ -154,53 +154,133 @@ public class Mat4 implements Serializable {
 
 	public static Mat4 createTranslate(final float x, final float y, final float z) {
 	  Mat4 result = new Mat4();
-	  result.m30 = x;
-	  result.m31 = y;
-	  result.m32 = z;
+    result.m30 = x;
+    result.m31 = y;
+    result.m32 = z;
 	  return result;
 	}
 
-	public static Mat4 createScale(final float x, final float y, final float z) {
+  /**
+   * Modify the values responsible for translation in this Mat4.
+   * <p/>
+   * You would like to use this method for performance reasons since the existing Mat4 object is modified instead of
+   * a new one being allocated. Just make sure you know what you're doing in this case :)
+   * <p/>
+   * @param x
+   * @param y
+   * @param z
+   * @return this
+   */
+  public Mat4 setTranslate(final float x, final float y, final float z) {
+    m00 = 1.0f;
+    m01 = 0.0f;
+    m02 = 0.0f;
+    m03 = 0.0f;
+    m10 = 0.0f;
+    m11 = 1.0f;
+    m12 = 0.0f;
+    m13 = 0.0f;
+    m20 = 0.0f;
+    m21 = 0.0f;
+    m22 = 1.0f;
+    m23 = 0.0f;
+    m30 = x;
+    m31 = y;
+    m32 = z;
+    m33 = 1.0f;
+    return this;
+  }
+
+  public static Mat4 createScale(final float x, final float y, final float z) {
 	  Mat4 result = new Mat4();
-	  result.m00 = x;
-	  result.m11 = y;
-	  result.m22 = z;
+    result.m00 = x;
+    result.m11 = y;
+    result.m22 = z;
+    return result;
+	}
+
+  /**
+   * Modify the values responsible for scale in this Mat4.
+   * <p/>
+   * You would like to use this method for performance reasons since the existing Mat4 object is modified instead of
+   * a new one being allocated. Just make sure you know what you're doing in this case :)
+   * <p/>
+   * @param x
+   * @param y
+   * @param z
+   * @return this
+   */
+  public Mat4 setScale(final float x, final float y, final float z) {
+    m00 = x;
+    m01 = 0.0f;
+    m02 = 0.0f;
+    m03 = 0.0f;
+    m10 = 0.0f;
+    m11 = y;
+    m12 = 0.0f;
+    m13 = 0.0f;
+    m20 = 0.0f;
+    m21 = 0.0f;
+    m22 = z;
+    m23 = 0.0f;
+    m30 = 0.0f;
+    m31 = 0.0f;
+    m32 = 0.0f;
+    m33 = 1.0f;
+    return this;
+  }
+
+  public static Mat4 createRotate(final float angle, final float x, final float y, final float z) {
+	  Mat4 result = new Mat4();
+    result.setRotate(angle, x, y, z);
 	  return result;
 	}
 
-	public static Mat4 createRotate(final float angle, final float x, final float y, final float z) {
+  /**
+   * Modify the values responsible for rotation in this Mat4.
+   * <p/>
+   * You would like to use this method for performance reasons since the existing Mat4 object is modified instead of
+   * a new one being allocated. Just make sure you know what you're doing in this case :)
+   * <p/>
+   * @param angle
+   * @param x
+   * @param y
+   * @param z
+   * @return this
+   */
+  public Mat4 setRotate(final float angle, final float x, final float y, final float z) {
     double angleRad = angle*Math.PI/180.;
     float c = (float) Math.cos(angleRad);
     float s = (float) Math.sin(angleRad);
 
-	  Mat4 result = new Mat4();
-	  result.m00 = x*x*(1-c)+c;
-	  result.m10 = x*y*(1-c)-z*s;
-	  result.m20 = x*z*(1-c)+y*s;
-	  result.m30 = 0;
+    m00 = x*x*(1-c)+c;
+    m01 = y*x*(1-c)+z*s;
+    m02 = x*z*(1-c)-y*s;
+    m03 = 0.0f;
 
-	  result.m01 = y*x*(1-c)+z*s;
-    result.m11 = y*y*(1-c)+c;
-    result.m21 = y*z*(1-c)-x*s;
-    result.m31 = 0;
+    m10 = x*y*(1-c)-z*s;
+    m11 = y*y*(1-c)+c;
+    m12 = y*z*(1-c)+x*s;
+    m13 = 0.0f;
 
-    result.m02 = x*z*(1-c)-y*s;
-    result.m12 = y*z*(1-c)+x*s;
-    result.m22 = z*z*(1-c)+c;
-    result.m32 = 0;
+    m20 = x*z*(1-c)+y*s;
+    m21 = y*z*(1-c)-x*s;
+    m22 = z*z*(1-c)+c;
+    m23 = 0.0f;
 
-    result.m03 = 0;
-    result.m13 = 0;
-    result.m23 = 0;
-    result.m33 = 1;
-	  return result;
-	}
+    m30 = 0.0f;
+    m31 = 0.0f;
+    m32 = 0.0f;
+    m33 = 1;
 
-	/**
-	 * Load from another matrix4f
-	 * @param src The source matrix
-	 * @return this
-	 */
+    return this;
+  }
+
+    /**
+     * Load from another matrix4f
+     * @param src The source matrix
+     * @return this
+     */
 	public Mat4 load(Mat4 src) {
 		return load(src, this);
 	}

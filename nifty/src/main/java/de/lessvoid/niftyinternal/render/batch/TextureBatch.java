@@ -40,7 +40,7 @@ import de.lessvoid.nifty.spi.NiftyTexture;
  * A TextureBatch stores textured Quads with vertex colors.
  */
 public class TextureBatch implements Batch<NiftyTexture> {
-  private final static int NUM_PRIMITIVES = 1000;
+  private final static int NUM_PRIMITIVES = 1;
   public final static int PRIMITIVE_SIZE = 8 * 6;
 
   private final FloatBuffer b;

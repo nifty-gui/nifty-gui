@@ -26,18 +26,18 @@
  */
 package de.lessvoid.niftyinternal.common;
 
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import de.lessvoid.nifty.NiftyStatistics.FrameInfo;
 import de.lessvoid.nifty.spi.TimeProvider;
+
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Statistics {
   private static final int TIME_HISTORY = 10;
 
   private final TimeProvider timeProvider;
   private int frameCounter = 0;
-  private final Queue<FrameInfo> frameHistory = new LinkedBlockingQueue<FrameInfo>(TIME_HISTORY);
+  private final Queue<FrameInfo> frameHistory = new LinkedBlockingQueue<>(TIME_HISTORY);
   private final long[] times = new long[Type.values().length];
 
   private int fpsFrameCounter = 0;
@@ -45,14 +45,14 @@ public class Statistics {
   private int fpsFrames = -1;
 
   private enum Type {
-    /**
-     * Time spent synchronizing the Nifty scene graph with the render node scene graph.
-     */
-    Synchronize,
     Update,
     Render,
+    RenderStatePass,
+    RenderContentPass,
+    RenderPass,
     RenderBatchCount,
-    InputProcessing
+    InputProcessing,
+    TotalFrameTime
   }
 
   public Statistics(final TimeProvider timeProvider) {
@@ -65,6 +65,7 @@ public class Statistics {
       times[type.ordinal()] = -1;
     }
     times[Type.RenderBatchCount.ordinal()] = 0;
+    start(Type.TotalFrameTime);
   }
 
   /**
@@ -72,13 +73,17 @@ public class Statistics {
    * FrameInfo instance and will store it for later retrieval.
    */
   public void endFrame() {
+    stop(Type.TotalFrameTime);
     addSample(new FrameInfo(
         frameCounter++,
         times[Type.Render.ordinal()],
         times[Type.Update.ordinal()],
-        times[Type.Synchronize.ordinal()],
+        times[Type.RenderStatePass.ordinal()],
+        times[Type.RenderContentPass.ordinal()],
+        times[Type.RenderPass.ordinal()],
         times[Type.RenderBatchCount.ordinal()],
-        times[Type.InputProcessing.ordinal()]));
+        times[Type.InputProcessing.ordinal()],
+        times[Type.TotalFrameTime.ordinal()]));
   }
 
   /**
@@ -125,12 +130,32 @@ public class Statistics {
     }
   }
 
-  public void startSynchronize() {
-    start(Type.Synchronize);
+  public void startRenderStatePass() {
+    start(Type.RenderStatePass);
   }
 
-  public void stopSynchronize() {
-    stop(Type.Synchronize);
+  public void stopRenderStatePass() {
+    stop(Type.RenderStatePass);
+  }
+
+  public void startRenderContentPass() {
+    start(Type.RenderContentPass);
+  }
+
+  public void stopRenderContentPass() {
+    stop(Type.RenderContentPass);
+  }
+
+  public void startRenderPass() {
+    start(Type.RenderPass);
+  }
+
+  public void stopRenderPass() {
+    stop(Type.RenderPass);
+  }
+
+  public void incBatchCount(final int batchCount) {
+    times[Type.RenderBatchCount.ordinal()] += batchCount;
   }
 
   private void addSample(final FrameInfo frameInfo) {

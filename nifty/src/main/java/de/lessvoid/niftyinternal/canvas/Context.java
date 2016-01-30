@@ -26,9 +26,11 @@
  */
 package de.lessvoid.niftyinternal.canvas;
 
+import de.lessvoid.nifty.NiftyStatistics;
 import de.lessvoid.niftyinternal.InternalNiftyImage;
 import de.lessvoid.niftyinternal.accessor.NiftyFontAccessor;
 import de.lessvoid.niftyinternal.accessor.NiftyImageAccessor;
+import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 import de.lessvoid.niftyinternal.render.batch.ColorQuadBatch;
 import de.lessvoid.niftyinternal.render.batch.TextureBatch;
@@ -59,6 +61,7 @@ public class Context {
 
   // we'll use this ColorQuadBatch to clear the workingTexture
   private final ColorQuadBatch colorBatch;
+  private final Statistics stats;
 
   private NiftyColor fillColor;
   private NiftyLinearGradient linearGradient;
@@ -72,11 +75,12 @@ public class Context {
 
   private PathRenderer pathRenderer = new PathRenderer();
 
-  public Context(final NiftyTexture contentTexture, final NiftyTexture workingTexture) {
+  public Context(final NiftyTexture contentTexture, final NiftyTexture workingTexture, final Statistics stats) {
     this.contentTexture = contentTexture;
     this.workingTexture = workingTexture;
     this.textureBatch = textureBatch(workingTexture);
     this.colorBatch = colorBatch();
+    this.stats = stats;
   }
 
   public void bind(final NiftyRenderDevice renderDevice, final BatchManager batchManager) {
@@ -111,7 +115,7 @@ public class Context {
   }
 
   public void flush() {
-    batchManager.end(renderDevice);
+    stats.incBatchCount(batchManager.end(renderDevice));
     renderDevice.endRenderToTexture(workingTexture);
 
     // now render workingTexture into contentTexture
