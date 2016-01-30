@@ -86,7 +86,7 @@ public class StandardNiftyRenderer implements NiftyRenderer {
   private void nodeContentPass() {
     stats.startRenderContentPass();
     renderBucketManager.begin();
-    nodeContentPass(tree.getRootNode(), null);
+    nodeContentPass(tree.getRootNode());
     stats.stopRenderContentPass();
   }
 
@@ -114,14 +114,12 @@ public class StandardNiftyRenderer implements NiftyRenderer {
     }
   }
 
-  private void nodeContentPass(
-      final NiftyNodeImpl<? extends NiftyNode> parentNode,
-      final RenderBucketRenderNode parentRenderNode) {
+  private void nodeContentPass(final NiftyNodeImpl<? extends NiftyNode> parentNode) {
     for (NiftyNodeContentImpl child : getNiftyNodeContent(parentNode)) {
       RenderBucketRenderNode renderNode = renderNodeFactory.create(child, renderDevice);
-      renderNode.updateCanvas(child, renderDevice, parentNode, parentRenderNode);
+      renderNode.updateCanvas(child, renderDevice);
       renderBucketManager.update(renderNode);
-      nodeContentPass(child, renderNode);
+      nodeContentPass(child);
     }
   }
 

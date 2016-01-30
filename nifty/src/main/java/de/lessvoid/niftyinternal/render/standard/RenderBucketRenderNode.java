@@ -27,11 +27,8 @@
 package de.lessvoid.niftyinternal.render.standard;
 
 import de.lessvoid.nifty.NiftyCanvas;
-import de.lessvoid.nifty.node.TransformationParameters;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
-import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.*;
 import de.lessvoid.niftyinternal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.niftyinternal.canvas.Command;
@@ -54,14 +51,14 @@ import java.util.List;
 public class RenderBucketRenderNode {
   private final NiftyCanvas niftyCanvas = NiftyCanvasAccessor.getDefault().newNiftyCanvas();
   private final BatchManager batchManager = new BatchManager();
-  private final Mat4 local = Mat4.createIdentity();
+  private final Mat4 localToScreen = Mat4.createIdentity();
+  private final Mat4 localWithBucketTransformation = Mat4.createIdentity();
 
   // we'll set this to true when the content of this render node has been rendered
   private boolean changed;
 
   private int width;
   private int height;
-  private Mat4 localToScreen = Mat4.createIdentity();
   private Context context;
   @Nullable
   private NiftyRect screenSpace;
@@ -85,25 +82,11 @@ public class RenderBucketRenderNode {
     node.updateCanvas(niftyCanvas);
   }
 
-  public void updateCanvas(
-      final NiftyNodeContentImpl child,
-      final NiftyRenderDevice renderDevice,
-      final NiftyNodeImpl<? extends NiftyNode> parent,
-      final RenderBucketRenderNode parentRenderNode) {
-    float layoutPosX;
-    float layoutPosY;
-    if (parent instanceof NiftyNodeContentImpl) {
-      layoutPosX = child.getLayoutPosX() - ((NiftyNodeContentImpl) parent).getLayoutPosX();
-      layoutPosY = child.getLayoutPosY() - ((NiftyNodeContentImpl) parent).getLayoutPosY();
-    } else {
-      layoutPosX = child.getLayoutPosX();
-      layoutPosY = child.getLayoutPosY();
-    }
-
+  public void updateCanvas(final NiftyNodeContentImpl child, final NiftyRenderDevice renderDevice) {
     InternalNiftyCanvas canvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas);
     boolean canvasChanged = canvas.isChanged();
     boolean sizeChanged = updateSize(child.getContentWidth(), child.getContentHeight(), renderDevice);
-    boolean transformationChanged = updateTransformation(child.getTransformations(), layoutPosX, layoutPosY, parentRenderNode);
+    boolean transformationChanged = updateTransformation(child.getLocalToScreen());
     if (canvasChanged || sizeChanged) {
       context.bind(renderDevice, batchManager);
       context.prepare();
@@ -123,9 +106,9 @@ public class RenderBucketRenderNode {
   }
 
   public void render(final BatchManager batchManager, final Mat4 bucketTransformation) {
-    Mat4.mul(bucketTransformation, localToScreen, local);
+    Mat4.mul(bucketTransformation, localToScreen, localWithBucketTransformation);
     batchManager.addChangeCompositeOperation(NiftyCompositeOperation.SourceOver);
-    batchManager.addTextureQuad(context.getNiftyTexture(), local, NiftyColor.white());
+    batchManager.addTextureQuad(context.getNiftyTexture(), localWithBucketTransformation, NiftyColor.white());
   }
 
   public NiftyRect getScreenSpaceAABB() {
@@ -172,39 +155,11 @@ public class RenderBucketRenderNode {
     return true;
   }
 
-  private boolean updateTransformation(
-      final List<TransformationParameters> transformations,
-      final float layoutPosX,
-      final float layoutPosY,
-      final RenderBucketRenderNode parentRenderNode) {
-    Mat4 parentLocalToScreen = new Mat4();
-    if (parentRenderNode != null) {
-      parentLocalToScreen = parentRenderNode.getLocalToScreen();
-    }
-
-    Mat4 a = new Mat4(parentLocalToScreen);
-    Mat4 b = new Mat4();
-    Mat4 c = new Mat4();
-    Mat4 s;
-    if (transformations.isEmpty()) {
-      b = Mat4.createTranslate(layoutPosX, layoutPosY, 0.f);
-      Mat4.mul(a, b, c);
-      a = c;
-    } else {
-      for (int i = transformations.size() - 1; i >= 0; i--) {
-        TransformationParameters param = transformations.get(i);
-        param.buildTransformationMatrix(b, layoutPosX, layoutPosY, width, height);
-        Mat4.mul(a, b, c);
-        s = a;
-        a = c;
-        c = s;
-      }
-    }
-    Mat4 newLocalToScreen = a;
+  private boolean updateTransformation(final Mat4 newLocalToScreen) {
     if (newLocalToScreen.compare(localToScreen)) {
       return false;
     }
-    this.localToScreen = newLocalToScreen;
+    this.localToScreen.load(newLocalToScreen);
     this.screenSpace = null;
     return true;
   }
@@ -222,7 +177,7 @@ public class RenderBucketRenderNode {
     result.append("width: ").append(width).append(", ");
     result.append("height: ").append(height).append("\n");
     result.append("localToScreen:\n").append(localToScreen);
-    result.append("local:\n").append(local);
+    result.append("localWithBucketTransformation:\n").append(localWithBucketTransformation);
     return result.toString();
   }
 }

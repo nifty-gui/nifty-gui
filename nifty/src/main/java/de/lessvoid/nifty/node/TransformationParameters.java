@@ -51,7 +51,12 @@ public class TransformationParameters {
   private double posY = 0.0;
   private double posZ = 0.0;
 
-  public void buildTransformationMatrix(final Mat4 target, float layoutPosX, float layoutPosY, int layoutWidth, int layoutHeight) {
+  public void buildTransformationMatrix(
+      final Mat4 target,
+      final float layoutPosX,
+      final float layoutPosY,
+      final float layoutWidth,
+      final float layoutHeight) {
     a.setTranslate(layoutPosX, layoutPosY, 0.f);
     b.setTranslate((float) posX, (float) posY, 0.f);
     Mat4.mul(a, b, c);
@@ -183,6 +188,10 @@ public class TransformationParameters {
   public void setPosZ(final double posZ) {
     updateTransformationChanged(this.posZ, posZ);
     this.posZ = posZ;
+  }
+
+  public boolean isTransformationChanged() {
+    return transformationChanged;
   }
 
   private void updateTransformationChanged(final double oldValue, final double newValue) {
