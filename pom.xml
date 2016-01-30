@@ -81,6 +81,7 @@
             <target>1.7</target>
           </configuration>
         </plugin>
+        <!-- mvn clean site site:stage scm-publish:publish-scm -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
@@ -164,6 +165,25 @@
       <url>http://nifty-gui.sourceforge.net/nifty-maven-repo</url>
     </repository>
   </repositories>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.3.1</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>index</report>
+              <report>scm</report>
+              <report>project-team</report>
+              <report>dependencies</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
   <profiles>
     <!-- profile for release signing all artifacts -->
     <!-- remember to call with: mvn release:perform -Darguments=-Dgpg.passphrase=PASSPHRASE -->

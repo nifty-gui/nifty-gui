@@ -13,6 +13,7 @@
     <breadcrumbs>
       <item name="${project.name}" />
     </breadcrumbs>
+    <menu ref="parent"/>
     <menu ref="reports"/>
     <menu ref="modules" />
     <menu name="Manual">
