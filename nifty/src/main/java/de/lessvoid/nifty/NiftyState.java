@@ -39,6 +39,7 @@ import java.util.TreeMap;
  * Created by void on 16.08.15.
  */
 public class NiftyState {
+  private final Map<State, Object> stateMap = new HashMap<>();
 
   interface State {
     String name();
@@ -48,26 +49,15 @@ public class NiftyState {
   }
 
   NiftyState(final NiftyState niftyState) {
-    for (Map.Entry<State, Object> e : niftyState.stateMap.entrySet()) {
-      if (e.getValue() instanceof List) {
-        List<?> copy = new ArrayList<>();
-        copy.addAll((List) e.getValue());
-        stateMap.put(e.getKey(), copy);
-      } else {
-        stateMap.put(e.getKey(), e.getValue());
-      }
-    }
+    stateMap.putAll(niftyState.stateMap);
   }
 
   public enum NiftyStandardState implements State {
     NiftyStateBackgroundColor,
-    NiftyStateTransformationLocal,
-    NiftyStateTransformationLocalToScreen,
+    NiftyStateTransformation,
     NiftyStateTransformationChanged,
-    NiftyStateTransformation
+    NiftyStateTransformationLayoutRect
   }
-
-  private final Map<State, Object> stateMap = new HashMap<>();
 
   public <T> void setState(final State state, final T value) {
     stateMap.put(state, value);

@@ -89,20 +89,15 @@ public class UseCase_a05_RotatingChildNode {
                         .addNode(absoluteLayoutChildNode(NiftyPoint.newNiftyPoint(150.f, 150.f)))
                           .addNode(fixedSizeLayoutNode(100.f, 100.f))
                             .addNode(backgroundColorNode(NiftyColor.yellow()))
+                              //.addNode(transformationNode())
+                                .addNode(contentNode())
+                    .addAsChildOf("parent")
+                      .addNode(absoluteLayoutNode())
+                        .addNode(absoluteLayoutChildNode(NiftyPoint.newNiftyPoint(400.f, 400.f)))
+                          .addNode(fixedSizeLayoutNode(60.f, 60.f))
+                            .addNode(backgroundColorNode(NiftyColor.fuchsia()))
                               .addNode(transformationNode())
                                 .addNode(contentNode());
-    nifty.startAnimatedThreaded(0, 1000, new NiftyCallback<Float>() {
-      private final List<String> data = new ArrayList<>();
-
-      @Override
-      public void execute(final Float aFloat) {
-        nifty.getStatistics().getStatistics(data);
-        for (int i=0; i<data.size(); i++) {
-          System.out.print(data.get(i));
-        }
-      }
-    });
-
     nifty.startAnimated(0, 25, new NiftyCallback<Float>() {
       private float rot = 0;
 
@@ -116,6 +111,7 @@ public class UseCase_a05_RotatingChildNode {
 
         rootTransformation.setScaleX((Math.sin(rot/50.f) + 1.0f) / 2.f + 0.25f);
         rootTransformation.setScaleY((Math.sin(rot/50.f) + 1.0f) / 2.f + 0.25f);
+        rootTransformation.setAngleZ(rot);
       }
     });
   }
