@@ -47,7 +47,7 @@
   </contributors>
   <properties>
     <!-- The CoreGL version we currently use since this is required in multiple modules -->
-    <coregl-utils.version>2.0-SNAPSHOT</coregl-utils.version>
+    <coregl-utils.version>2.0.0</coregl-utils.version>
   </properties>
   <build>
     <plugins>
