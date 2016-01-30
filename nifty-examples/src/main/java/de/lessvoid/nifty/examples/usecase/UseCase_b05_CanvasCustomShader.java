@@ -31,7 +31,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_b05_CanvasCustomShader {
-/* FIXME
+/* FIXME: There's no equivalent of nifty.customShaderCanvasPainter method.
   public UseCase_b05_CanvasCustomShader(final Nifty nifty) throws IOException {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 

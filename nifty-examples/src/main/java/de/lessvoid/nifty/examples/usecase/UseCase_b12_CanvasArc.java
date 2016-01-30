@@ -31,7 +31,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_b12_CanvasArc {
-  /* FIXME
+  /* FIXME: star redraw method missing.
   private static NiftyFont font;
   private static float v = 1.99f;
 
