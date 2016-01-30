@@ -28,6 +28,7 @@ package de.lessvoid.nifty.spi.node;
 
 import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.node.TransformationParameters;
+import de.lessvoid.niftyinternal.math.Mat4;
 
 import java.util.List;
 
@@ -61,17 +62,6 @@ public interface NiftyNodeContentImpl<T extends NiftyNode> extends NiftyNodeImpl
    * Get a Mat4 to transform points in local space for this node to screen space.
    * @return the transformation matrix to transform local to screen space
    */
-  List<TransformationParameters> getTransformations();
+  Mat4 getLocalToScreen();
 
-  /**
-   * Get the x layout position for this content node.
-   * @return layoutPosX
-   */
-  float getLayoutPosX();
-
-  /**
-   * Get the y layout position for this content node.
-   * @return layoutPosY
-   */
-  float getLayoutPosY();
 }

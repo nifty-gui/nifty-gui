@@ -26,12 +26,15 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import de.lessvoid.coregl.spi.CoreGL;
 import de.lessvoid.coregl.spi.CoreSetup;
 import de.lessvoid.coregl.spi.CoreSetup.RenderLoopCallback;
 
+import de.lessvoid.nifty.NiftyCallback;
 import de.lessvoid.nifty.time.AccurateTimeProvider;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.input.lwjgl.NiftyInputDeviceLWJGL;
@@ -64,6 +67,19 @@ public class UseCaseRunnerAdapterOpenGL implements UseCaseRunnerAdapter {
     final Object useCase = useCaseClass.getConstructor(Nifty.class).newInstance(nifty);
     nifty.update();
     logScene(nifty);
+
+    nifty.startAnimatedThreaded(0, 1000, new NiftyCallback<Float>() {
+      private final List<String> data = new ArrayList<>();
+
+      @Override
+      public void execute(final Float aFloat) {
+        nifty.getStatistics().getStatistics(data);
+        for (int i=0; i<data.size(); i++) {
+          System.out.print(data.get(i));
+        }
+      }
+    });
+
 
     setup.renderLoop(new RenderLoopCallback() {
 
