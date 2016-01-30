@@ -317,15 +317,43 @@ public class NiftyLayout {
       @Nonnull final NiftyLayoutNodeImpl<? extends NiftyNode> node) {
     Iterable<NiftyNodeImpl<?>> itr = nodeTree.childNodes(nodeImplAny(), toNodeImpl(), onlyOneLevel(), node);
 
-    List<NiftyNodeImpl<? extends NiftyNode>> list = null;
-    NiftyNodeImpl<? extends NiftyNode> singleItem = null;
+    return toList(itr);
+  }
 
-    for (NiftyNodeImpl<?> impl : itr) {
+  public Iterable<NiftyLayoutNodeImpl> getChildLayoutNodes() {
+    return nodeTree.childNodes(
+        nodeImplClass(NiftyLayoutNodeImpl.class),
+        toNodeImplClass(NiftyLayoutNodeImpl.class),
+        downToFirstInstance(NiftyLayoutNodeImpl.class));
+  }
+
+  public List<NiftyLayoutNodeImpl> getChildLayoutNodesList() {
+    return toList(getChildLayoutNodes());
+  }
+
+  public Iterable<NiftyLayoutNodeImpl> getChildLayoutNodes(@Nonnull final NiftyNodeImpl<? extends NiftyNode> node) {
+    return nodeTree.childNodes(
+        nodeImplClass(NiftyLayoutNodeImpl.class),
+        toNodeImplClass(NiftyLayoutNodeImpl.class),
+        downToFirstInstance(NiftyLayoutNodeImpl.class),
+        node);
+  }
+
+  public List<NiftyLayoutNodeImpl> getChildLayoutNodesList(@Nonnull final NiftyNodeImpl<? extends NiftyNode> node) {
+    return toList(getChildLayoutNodes(node));
+  }
+
+  @Nonnull
+  private static <T> List<T> toList(@Nonnull final Iterable<T> input) {
+    List<T> list = null;
+    T singleItem = null;
+
+    for (T impl : input) {
       if (singleItem == null) {
         singleItem = impl;
       } else {
         if (list == null) {
-          list = new LinkedList<>();
+          list = new ArrayList<>(2);
           list.add(singleItem);
         }
         list.add(impl);
@@ -336,23 +364,8 @@ public class NiftyLayout {
       return Collections.emptyList();
     }
     if (list == null) {
-      return Collections.<NiftyNodeImpl<? extends NiftyNode>>singletonList(singleItem);
+      return Collections.singletonList(singleItem);
     }
     return list;
-  }
-
-  public Iterable<NiftyLayoutNodeImpl> getChildLayoutNodes() {
-    return nodeTree.childNodes(
-        nodeImplClass(NiftyLayoutNodeImpl.class),
-        toNodeImplClass(NiftyLayoutNodeImpl.class),
-        downToFirstInstance(NiftyLayoutNodeImpl.class));
-  }
-
-  public Iterable<NiftyLayoutNodeImpl> getChildLayoutNodes(@Nonnull final NiftyNodeImpl<? extends NiftyNode> node) {
-    return nodeTree.childNodes(
-        nodeImplClass(NiftyLayoutNodeImpl.class),
-        toNodeImplClass(NiftyLayoutNodeImpl.class),
-        downToFirstInstance(NiftyLayoutNodeImpl.class),
-        node);
   }
 }

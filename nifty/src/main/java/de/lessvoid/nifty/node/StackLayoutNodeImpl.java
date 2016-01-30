@@ -27,6 +27,7 @@
 
 package de.lessvoid.nifty.node;
 
+import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.types.NiftyPoint;
 import de.lessvoid.nifty.types.NiftyRect;
@@ -54,7 +55,7 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl<StackLayoutNode> 
   @Nonnull
   @Override
   protected NiftySize measureInternal(@Nonnull final NiftySize availableSize) {
-    Collection<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
+    Collection<NiftyLayoutNodeImpl> children = getLayout().getChildLayoutNodesList(this);
     if (children.isEmpty()) {
       /* No child elements, means that we do not require any size. */
       return NiftySize.ZERO;
@@ -84,7 +85,7 @@ final class StackLayoutNodeImpl extends AbstractLayoutNodeImpl<StackLayoutNode> 
 
   @Override
   protected void arrangeInternal(@Nonnull final NiftyRect area) {
-    List<NiftyNodeImpl<?>> children = getLayout().getDirectChildren(this);
+    List<NiftyLayoutNodeImpl> children = getLayout().getChildLayoutNodesList(this);
     if (children.isEmpty()) {
       /* No child elements -> We are all done. */
       return;
