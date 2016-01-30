@@ -31,7 +31,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_b16_Canvas {
-/* FIXME
+/* FIXME: Run this example causes a buffer overflow
   public UseCase_b16_Canvas(final Nifty nifty) {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 

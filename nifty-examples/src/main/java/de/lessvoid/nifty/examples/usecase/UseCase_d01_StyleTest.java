@@ -31,7 +31,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_d01_StyleTest {
-/* FIXME
+/* FIXME: No style implementation
   public UseCase_d01_StyleTest(final Nifty nifty) throws Exception {
     NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     niftyNode.setStyleClass("my");

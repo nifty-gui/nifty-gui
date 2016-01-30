@@ -31,7 +31,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_c01_LabelControlTextAlign {
-  /* FIXME
+  /* FIXME: No controls implementation
   private final NiftyNode niftyNode;
   private final NiftyFont font;
 

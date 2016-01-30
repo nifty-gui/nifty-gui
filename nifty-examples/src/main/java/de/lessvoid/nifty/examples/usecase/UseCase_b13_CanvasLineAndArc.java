@@ -31,7 +31,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_b13_CanvasLineAndArc {
-  /* FIXME
+  /* FIXME: startAnimatedRedraw
   public UseCase_b13_CanvasLineAndArc(final Nifty nifty) throws IOException {
     nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 

@@ -32,7 +32,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_c03_LabelControlAllStyles {
-/* FIXME
+/* FIXME: No controls&style implementation
   public UseCase_c03_LabelControlAllStyles(final Nifty nifty) throws Exception {
     NiftyNode niftyNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
     niftyNode.newControl(Label.class);

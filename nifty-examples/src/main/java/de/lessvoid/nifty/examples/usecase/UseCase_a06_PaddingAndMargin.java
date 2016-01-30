@@ -31,7 +31,7 @@ package de.lessvoid.nifty.examples.usecase;
  * @author void
  */
 public class UseCase_a06_PaddingAndMargin {
-  /* FIXME
+  /* FIXME: There's a new example with padding. This one should be deleted.
   private NiftyFont font;
 
   public UseCase_a06_PaddingAndMargin(final Nifty nifty) throws IOException {
