@@ -35,6 +35,7 @@ import de.lessvoid.niftyinternal.canvas.Command;
 import de.lessvoid.niftyinternal.canvas.Context;
 import de.lessvoid.niftyinternal.canvas.InternalNiftyCanvas;
 import de.lessvoid.niftyinternal.math.Mat4;
+import de.lessvoid.niftyinternal.math.Vec2;
 import de.lessvoid.niftyinternal.math.Vec4;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 
@@ -52,41 +53,54 @@ public class RenderBucketRenderNode implements Comparable<RenderBucketRenderNode
 
   private int width;
   private int height;
+  private Mat4 local;
   private Mat4 localToScreen;
+
   private Context context;
   private int renderOrder;
   @Nullable
   private NiftyRect screenSpace;
+  private boolean canvasChanged;
+  private boolean sizeChanged;
+  private boolean transformationChanged;
+  private boolean disableRender;
+  private Vec2 layoutPos;
 
   public RenderBucketRenderNode(
       final int width,
       final int height,
+      final Mat4 local,
       final Mat4 localToScreen,
+      final Vec2 layoutPos,
       final NiftyRenderDevice renderDevice) {
     this.width = width;
     this.height = height;
+    this.local = local;
     this.localToScreen = localToScreen;
+    this.layoutPos = layoutPos;
     this.context = createContext(renderDevice);
   }
 
-  public void updateRenderOrder(final int renderOrder) {
-    this.renderOrder = renderOrder;
-  }
-
-  public void updateCanvas(final NiftyNodeContentImpl child) {
-    NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas).reset();
-    child.updateCanvas(niftyCanvas);
-  }
-
-  public void updateContent(final int width, final int height, final Mat4 localToScreen, final NiftyRenderDevice renderDevice) {
+  public void prepare(
+      final NiftyNodeContentImpl child,
+      final int renderOrderValue,
+      final NiftyRenderDevice renderDevice) {
     InternalNiftyCanvas canvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas);
+    canvas.reset();
+    child.updateCanvas(niftyCanvas);
 
-    boolean canvasChanged = canvas.isChanged();
-    boolean sizeChanged = updateSize(width, height, renderDevice);
-    boolean transformationChanged = updateTransformation(localToScreen);
+    renderOrder = renderOrderValue;
+    canvasChanged = canvas.isChanged();
+    sizeChanged = updateSize(child.getContentWidth(), child.getContentHeight(), renderDevice);
+    transformationChanged = updateTransformation(child.getLocalToScreen(), child.getLocal());
+    layoutPos = child.getLayoutPos();
+  }
 
-    if (canvasChanged || sizeChanged || transformationChanged) {
-      context.bind(renderDevice, new BatchManager());
+  public void update(final NiftyRenderDevice renderDevice, final List<RenderBucketRenderNode> childRenderNodes) {
+    InternalNiftyCanvas canvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas);
+    if (canvasChanged || sizeChanged || transformationChanged || !childRenderNodes.isEmpty()) {
+      BatchManager batchManager = new BatchManager();
+      context.bind(renderDevice, batchManager);
       context.prepare();
 
       List<Command> commands = canvas.getCommands();
@@ -95,11 +109,27 @@ public class RenderBucketRenderNode implements Comparable<RenderBucketRenderNode
         command.execute(context);
       }
 
+      for (RenderBucketRenderNode childRenderNode : childRenderNodes) {
+        // FIXME talk with mkaring if layout can provide the layoutPos relative to the parent node too
+        Vec2 layoutPosRel = Vec2.sub(childRenderNode.layoutPos, layoutPos, null);
+        Mat4 childLayoutTranslate = Mat4.createTranslate(layoutPosRel.getX(), layoutPosRel.getY(), 0.f);
+        Mat4 childLocalWithLayout = Mat4.mul(childLayoutTranslate, childRenderNode.local);
+        batchManager.addTextureQuad(childRenderNode.context.getNiftyTexture(), childLocalWithLayout, NiftyColor.white());
+        childRenderNode.disableRender();
+      }
+
       context.flush();
     }
   }
 
+  private void disableRender() {
+    disableRender = true;
+  }
+
   public void render(final BatchManager batchManager, final Mat4 bucketTransformation) {
+    if (disableRender) {
+      return;
+    }
     Mat4 local = Mat4.mul(bucketTransformation, localToScreen);
     batchManager.addChangeCompositeOperation(NiftyCompositeOperation.SourceOver);
     batchManager.addTextureQuad(context.getNiftyTexture(), local, NiftyColor.white());
@@ -146,12 +176,13 @@ public class RenderBucketRenderNode implements Comparable<RenderBucketRenderNode
     return true;
   }
 
-  private boolean updateTransformation(final Mat4 newLocalToScreen) {
+  private boolean updateTransformation(final Mat4 newLocalToScreen, final Mat4 newLocal) {
     if (newLocalToScreen.compare(localToScreen)) {
       return false;
     }
     localToScreen = newLocalToScreen;
     this.screenSpace = null;
+    local = newLocal;
     return true;
   }
 
@@ -159,5 +190,17 @@ public class RenderBucketRenderNode implements Comparable<RenderBucketRenderNode
     return new Context(
         renderDevice.createTexture(width, height, NiftyRenderDevice.FilterMode.Linear),
         renderDevice.createTexture(width, height, NiftyRenderDevice.FilterMode.Linear));
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder result = new StringBuilder();
+    result.append("width: ").append(width).append(", ");
+    result.append("height: ").append(height).append("\n");
+    result.append("localToScreen:\n").append(localToScreen);
+    result.append("local:\n").append(local);
+    result.append("layoutPos:\n").append(layoutPos);
+    result.append("renderOrder: ").append(renderOrder);
+    return result.toString();
   }
 }

@@ -30,6 +30,7 @@ import de.lessvoid.niftyinternal.accessor.NiftyStateAccessor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -44,9 +45,14 @@ public class NiftyState {
   NiftyState() {
   }
 
+  NiftyState(final NiftyState niftyState) {
+    stateMap.putAll(niftyState.stateMap);
+  }
+
   public enum NiftyStandardState implements State {
     NiftyStateBackgroundColor,
-    NiftyStateTransformation,
+    NiftyStateTransformationLocal,
+    NiftyStateTransformationLocalToScreen,
     NiftyStateTransformationChanged
   }
 
@@ -66,6 +72,32 @@ public class NiftyState {
       return value;
     }
     return defaultValue;
+  }
+
+  @Override
+  public String toString() {
+    Map<State, Object> map = new TreeMap<>(stateMap);
+    StringBuilder b = new StringBuilder();
+    for (Map.Entry<State, Object> e : map.entrySet()) {
+      b.append("  ").append(e.getKey()).append(" [");
+
+      if (e.getValue() == null) {
+        b.append("    ").append(e.getValue());
+      } else {
+        boolean first = true;
+        for (String s : e.getValue().toString().split("\n")) {
+          if (!first) {
+            b.append(" ");
+          }
+          if (first) {
+            first = false;
+          }
+          b.append(s);
+        }
+      }
+      b.append("]\n");
+    }
+    return b.toString();
   }
 
   // Internal methods

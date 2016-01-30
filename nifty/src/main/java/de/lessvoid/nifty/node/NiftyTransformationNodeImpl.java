@@ -34,7 +34,8 @@ import de.lessvoid.niftyinternal.math.Mat4;
 
 import javax.annotation.Nonnull;
 
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformation;
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationLocal;
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationLocalToScreen;
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationChanged;
 
 /**
@@ -81,10 +82,11 @@ class NiftyTransformationNodeImpl
 
   @Override
   public void update(final NiftyState niftyState) {
-    Mat4 parentLocalToScreen = niftyState.getState(NiftyStateTransformation, Mat4.createIdentity());
+    Mat4 parentLocalToScreen = niftyState.getState(NiftyStateTransformationLocalToScreen, Mat4.createIdentity());
     boolean parentLocalToScreenChanged = niftyState.getState(NiftyStateTransformationChanged, false);
     boolean thisStateChanged = isTransformationChanged() || parentLocalToScreenChanged;
-    niftyState.setState(NiftyStateTransformation, updateTransformation(parentLocalToScreen, parentLocalToScreenChanged));
+    niftyState.setState(NiftyStateTransformationLocalToScreen, updateTransformation(parentLocalToScreen, parentLocalToScreenChanged));
+    niftyState.setState(NiftyStateTransformationLocal, localTransformation);
     niftyState.setState(NiftyStateTransformationChanged, thisStateChanged);
   }
 
