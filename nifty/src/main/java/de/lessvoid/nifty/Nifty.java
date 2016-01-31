@@ -70,6 +70,7 @@ import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplAny
 
 /**
  * The main control class of all things Nifty.
+ * <br/>
  * @author void
  */
 public class Nifty {
@@ -134,7 +135,9 @@ public class Nifty {
 
   /**
    * Create a new Nifty instance.
+   * <br/>
    * @param newRenderDevice the NiftyRenderDevice this instance will be using
+   * @param newInputDevice the NiftyInputDevice this instance will be using
    * @param newTimeProvider the TimeProvider implementation to use
    */
   public Nifty(
@@ -186,7 +189,7 @@ public class Nifty {
   }
 
   /**
-   * Update.
+   * The Nifty update method. This should be called each frame.
    */
   public void update() {
     stats.startFrame();
@@ -224,9 +227,9 @@ public class Nifty {
   }
 
   /**
-   * Calls back the given callback after delay ms every interval ms. This will call NiftyCallback on another thread
+   * Calls back the given NiftyCallback after delay ms every interval ms. This will call NiftyCallback on another thread
    * so be careful what you do there. Nifty 2.0 is not yet thread safe!
-   *
+   * <br/>
    * @param delay time to wait in ms
    * @param interval interval to call the callback in ms
    * @param callback the actual callback
@@ -245,10 +248,32 @@ public class Nifty {
     }));
   }
 
+  /**
+   * Calls back the given NiftyCallback after delay ms every interval ms.
+   * <br/>
+   * This will be called on Niftys update loop so the callback shouldn't do a lot of processing to not delay
+   * Niftys processing.
+   * <br/>
+   * @param delay time to wait in ms
+   * @param interval interval to call the callback in ms
+   * @param callback the actual callback
+   */
   public void startAnimated(final long delay, final long interval, final NiftyCallback<Float> callback) {
     animators.add(new IntervalAnimator(getTimeProvider(), delay, interval, callback));
   }
 
+  /**
+   * Calls back the given NiftyNodeCallback after delay ms every interval ms. This method take a NiftyNodeCallback
+   * which will be called with the NiftyNode you provide in this call as a service.
+   * <br/>
+   * This will be called on Niftys update loop so the callback shouldn't do a lot of processing to not delay
+   * Niftys processing.
+   * <br/>
+   * @param delay time to wait in ms
+   * @param interval interval to call the callback in ms
+   * @param node the node to call the NiftyCallback with
+   * @param callback the actual callback
+   */
   public <N extends NiftyNode> void startAnimated(final long delay, final long interval, final N node, final NiftyNodeCallback<Float, N> callback) {
     startAnimated(delay, interval, new NiftyCallback<Float>() {
       @Override
@@ -260,8 +285,8 @@ public class Nifty {
 
   /**
    * Create a new NiftyImage.
+   * <br/>
    * @param filename the filename to load
-   *
    * @return a new NiftyImage
    */
   public NiftyImage createNiftyImage(final String filename) {
