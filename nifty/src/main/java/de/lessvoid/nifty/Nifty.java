@@ -140,7 +140,14 @@ public class Nifty {
    * @param newInputDevice the NiftyInputDevice this instance will be using
    * @param newTimeProvider the TimeProvider implementation to use
    */
-  public Nifty(
+  public static Nifty createNifty(
+      final NiftyRenderDevice newRenderDevice,
+      final NiftyInputDevice newInputDevice,
+      final TimeProvider newTimeProvider) {
+    return new Nifty(newRenderDevice, newInputDevice, newTimeProvider);
+  }
+
+  private Nifty(
       final NiftyRenderDevice newRenderDevice,
       final NiftyInputDevice newInputDevice,
       final TimeProvider newTimeProvider) {

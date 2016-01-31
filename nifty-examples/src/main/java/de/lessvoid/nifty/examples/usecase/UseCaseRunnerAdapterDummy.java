@@ -33,6 +33,8 @@ import de.lessvoid.nifty.time.AccurateTimeProvider;
 
 import java.util.logging.Logger;
 
+import static de.lessvoid.nifty.Nifty.createNifty;
+
 /**
  * UseCaseRunnerAdapter for dummy devices. These devices do not render anything or generate any input.
  *
@@ -46,7 +48,7 @@ public class UseCaseRunnerAdapterDummy implements UseCaseRunnerAdapter {
   @Override
   public void run(final Class<?> useCaseClass, final String[] args) throws Exception {
     // create nifty instance
-    final Nifty nifty = new Nifty(
+    final Nifty nifty = createNifty(
         new DummyRenderDevice(1024, 786, 60),
         new DummyInputDevice(),
         new AccurateTimeProvider());

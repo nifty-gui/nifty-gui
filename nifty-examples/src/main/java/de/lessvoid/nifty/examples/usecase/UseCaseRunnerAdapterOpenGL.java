@@ -41,6 +41,8 @@ import de.lessvoid.nifty.input.lwjgl.NiftyInputDeviceLWJGL;
 import de.lessvoid.nifty.renderer.opengl.NiftyRenderDeviceOpenGL;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 
+import static de.lessvoid.nifty.Nifty.createNifty;
+
 /**
  * UseCaseRunnerAdapter for CoreGL based NiftyRenderDevice. This supports both
  * LWJGL and JOGL through the CoreGL project.
@@ -63,7 +65,7 @@ public class UseCaseRunnerAdapterOpenGL implements UseCaseRunnerAdapter {
     setup.enableVSync(false);
 
     // create nifty instance
-    final Nifty nifty = createNifty();
+    final Nifty nifty = createNifty(createRenderDevice(), createInputDevice(), new AccurateTimeProvider());
     final Object useCase = useCaseClass.getConstructor(Nifty.class).newInstance(nifty);
     nifty.update();
     logScene(nifty);
@@ -106,10 +108,6 @@ public class UseCaseRunnerAdapterOpenGL implements UseCaseRunnerAdapter {
 
   private void logScene(final Nifty nifty) {
     log.info(nifty.getSceneInfoLog());
-  }
-
-  private Nifty createNifty() throws Exception {
-    return new Nifty(createRenderDevice(), createInputDevice(), new AccurateTimeProvider());
   }
 
   private NiftyRenderDeviceOpenGL createRenderDevice() throws Exception {

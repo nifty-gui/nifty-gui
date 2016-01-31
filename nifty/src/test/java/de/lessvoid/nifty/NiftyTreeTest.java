@@ -36,6 +36,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static de.lessvoid.nifty.Nifty.createNifty;
 import static org.easymock.EasyMock.createNiceMock;
 import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
@@ -54,7 +55,7 @@ public class NiftyTreeTest {
     replay(a);
     replay(b);
     replay(c);
-    nifty = new Nifty(a, b, c);
+    nifty = createNifty(a, b, c);
   }
 
   @Test
