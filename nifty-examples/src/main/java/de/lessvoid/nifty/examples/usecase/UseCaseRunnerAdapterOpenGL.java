@@ -28,7 +28,8 @@ package de.lessvoid.nifty.examples.usecase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.lessvoid.coregl.spi.CoreGL;
 import de.lessvoid.coregl.spi.CoreSetup;
@@ -50,7 +51,7 @@ import static de.lessvoid.nifty.Nifty.createNifty;
  * @author void
  */
 public class UseCaseRunnerAdapterOpenGL implements UseCaseRunnerAdapter {
-  private static Logger log = Logger.getLogger(UseCaseRunnerAdapterOpenGL.class.getName());
+  private static Logger log = LoggerFactory.getLogger(UseCaseRunnerAdapterOpenGL.class.getName());
   private CoreSetup setup;
   private CoreGL coreGL;
 

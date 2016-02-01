@@ -26,7 +26,8 @@
  */
 package de.lessvoid.niftyinternal;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.lessvoid.nifty.input.NiftyPointerEvent;
 
@@ -35,7 +36,7 @@ import de.lessvoid.nifty.input.NiftyPointerEvent;
  * @author void
  */
 public class InternalNiftyNodeInputHandler {
-  private final Logger logger = Logger.getLogger(InternalNiftyNodeInputHandler.class.getName());
+  private final Logger logger = LoggerFactory.getLogger(InternalNiftyNodeInputHandler.class.getName());
   private boolean mouseOverNode = false;
   private boolean buttonDown[] = new boolean[NiftyPointerEvent.BUTTON_COUNT];
   private int lastPosX;
@@ -139,8 +140,8 @@ public class InternalNiftyNodeInputHandler {
     lastPosX = pointerEvent.getX();
     lastPosY = pointerEvent.getY();
 
-    if (logger.isLoggable(Level.FINE)) {
-      logger.fine("inside returned [" + wantsToCaptureEvents + "] for [" + internalNiftyNode.getId() + "]");
+    if (logger.isLoggable(Level.trace)) {
+      logger.trace("inside returned [" + wantsToCaptureEvents + "] for [" + internalNiftyNode.getId() + "]");
     }
 
     return wantsToCaptureEvents;
@@ -173,8 +174,8 @@ public class InternalNiftyNodeInputHandler {
   }
 
   private void logInside(final InternalNiftyNode internalNiftyNode, final NiftyPointerEvent pointerEvent) {
-    if (logger.isLoggable(Level.FINE)) {
-      logger.fine("HOVER [" + internalNiftyNode.getId() + "] (" + pointerEvent + ")");
+    if (logger.isLoggable(Level.trace)) {
+      logger.trace("HOVER [" + internalNiftyNode.getId() + "] (" + pointerEvent + ")");
     }
   }
 

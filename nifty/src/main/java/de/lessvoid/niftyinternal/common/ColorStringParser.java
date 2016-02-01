@@ -29,8 +29,10 @@ package de.lessvoid.niftyinternal.common;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.lessvoid.nifty.types.NiftyColor;
 
@@ -39,7 +41,7 @@ import de.lessvoid.nifty.types.NiftyColor;
  * @author void
  */
 public class ColorStringParser {
-  private static Logger log = Logger.getLogger(ColorStringParser.class.getName());
+  private static Logger log = LoggerFactory.getLogger(ColorStringParser.class.getName());
 
   /**
    * ColorValidator.
@@ -120,15 +122,15 @@ public class ColorStringParser {
       red = getRFromString(color);
       green = getGFromString(color);
       blue = getBFromString(color);
-      if (log.isLoggable(Level.FINE)) {
-        log.fine("found short mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#f]");
+      if (log.isDebugEnabled()) {
+        log.debug("found short mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#f]");
       }
     } else if (colorValidator.isLongModeWithoutAlpha(color)) {
       red = getRFromString(color);
       green = getGFromString(color);
       blue = getBFromString(color);
-      if (log.isLoggable(Level.FINE)) {
-        log.fine("found long mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#ff]");
+      if (log.isDebugEnabled()) {
+        log.debug("found long mode color [" + color + "] with missing alpha value automatically adjusted with alpha value of [#ff]");
       }
     } else if (colorValidator.isValid(color)) {
       red = getRFromString(color);
@@ -138,7 +140,7 @@ public class ColorStringParser {
     } else if (isColorConstant(color)) {
       return COLOR_MAP.get(color.toLowerCase());
     } else {
-      log.fine("error parsing color [" + color + "] automatically adjusted to white [#ffffffff]");
+      log.trace("error parsing color [" + color + "] automatically adjusted to white [#ffffffff]");
       red = green = blue = alpha = 1.0f;
     }
     return new NiftyColor(red, green, blue, alpha);

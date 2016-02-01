@@ -31,7 +31,8 @@ import de.lessvoid.nifty.examples.dummy.DummyInputDevice;
 import de.lessvoid.nifty.examples.dummy.DummyRenderDevice;
 import de.lessvoid.nifty.time.AccurateTimeProvider;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static de.lessvoid.nifty.Nifty.createNifty;
 
@@ -41,7 +42,7 @@ import static de.lessvoid.nifty.Nifty.createNifty;
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
 public class UseCaseRunnerAdapterDummy implements UseCaseRunnerAdapter {
-  private static Logger log = Logger.getLogger(UseCaseRunnerAdapterDummy.class.getName());
+  private static Logger log = LoggerFactory.getLogger(UseCaseRunnerAdapterDummy.class.getName());
 
   private boolean run = true;
 

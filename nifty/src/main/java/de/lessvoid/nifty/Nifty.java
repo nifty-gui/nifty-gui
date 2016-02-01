@@ -61,7 +61,8 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RunnableFuture;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNiftyNode;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNiftyNodeClass;
@@ -74,7 +75,7 @@ import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplAny
  * @author void
  */
 public class Nifty {
-  private final static Logger logger = Logger.getLogger(Nifty.class.getName());
+  private final static Logger logger = LoggerFactory.getLogger(Nifty.class.getName());
 
   // The resource loader.
   private final NiftyResourceLoader resourceLoader = new NiftyResourceLoader();
@@ -556,7 +557,7 @@ public class Nifty {
       str.append("]");
       str.append(" ");
     }
-    logger.fine(str.toString());
+    logger.trace(str.toString());
   }
 
   private void processInputEvents(final List<NiftyNode> inputReceivers) {

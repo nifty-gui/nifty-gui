@@ -32,7 +32,8 @@ package de.lessvoid.nifty.input.lwjgl;
  */
 import java.nio.IntBuffer;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 
@@ -49,7 +50,7 @@ import de.lessvoid.nifty.input.NiftyPointerEvent;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 
 public class NiftyInputDeviceLWJGL implements NiftyInputDevice {
-  private final Logger log = Logger.getLogger(NiftyInputDeviceLWJGL.class.getName());
+  private final Logger log = LoggerFactory.getLogger(NiftyInputDeviceLWJGL.class.getName());
   @Nonnull
   private final NiftyKeyboardInputEventFactory keyboardEventCreator = new NiftyKeyboardInputEventFactory();
   private final IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
@@ -173,20 +174,20 @@ public class NiftyInputDeviceLWJGL implements NiftyInputDevice {
 
       boolean mouseEventProcessedByNifty = inputEventConsumer.processPointerEvent(event);
       if (!mouseEventProcessedByNifty) {
-        log.fine("Nifty did not processed this mouse event. You can handle it.");
+        log.trace("Nifty did not processed this mouse event. You can handle it.");
 
         // nifty did not process this event, it did not hit any element
         mouseEventsOut.offer(new MouseInputEvent(mouseX, mouseY, mouseWheel, button, buttonDown));
         if (niftyTakesKeyboardFocusOnClick) {
-          log.fine("Nifty gave up the keyboard focus");
+          log.trace("Nifty gave up the keyboard focus");
           niftyHasKeyboardFocus = false; // give up focus if clicked outside nifty
         }
       } else {
-        log.fine("Nifty has processed this mouse event");
+        log.trace("Nifty has processed this mouse event");
 
         // nifty did handle that event. it hit an element and was processed by some GUI element
         if (niftyTakesKeyboardFocusOnClick) { // take focus if nifty element is clicked
-          log.fine("Nifty takes the keyboard focus back");
+          log.trace("Nifty takes the keyboard focus back");
           niftyHasKeyboardFocus = true;
         }
       }
@@ -225,9 +226,9 @@ public class NiftyInputDeviceLWJGL implements NiftyInputDevice {
     if ((caps & Cursor.CURSOR_ANIMATION) != 0) {
       add(out, "CURSOR_ANIMATION");
     }
-    log.fine("native cursor support (" + caps + ") -> [" + out.toString() + "]");
-    log.fine("native cursor min size: " + Cursor.getMinCursorSize());
-    log.fine("native cursor max size: " + Cursor.getMaxCursorSize());
+    log.trace("native cursor support (" + caps + ") -> [" + out.toString() + "]");
+    log.trace("native cursor min size: " + Cursor.getMinCursorSize());
+    log.trace("native cursor max size: " + Cursor.getMaxCursorSize());
   }
 
   private static void add(@Nonnull StringBuffer out, String text) {

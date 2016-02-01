@@ -26,6 +26,22 @@
  */
 package de.lessvoid.nifty.renderer.opengl;
 
+import static de.lessvoid.coregl.CoreVBO.DataType.FLOAT;
+import static de.lessvoid.coregl.CoreVBO.UsageType.STATIC_DRAW;
+import static de.lessvoid.coregl.CoreVBO.UsageType.STREAM_DRAW;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.nio.charset.Charset;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.lessvoid.coregl.CoreFBO;
 import de.lessvoid.coregl.CoreRender;
 import de.lessvoid.coregl.CoreShader;
@@ -52,22 +68,8 @@ import de.lessvoid.niftyinternal.render.batch.LinearGradientQuadBatch;
 import de.lessvoid.niftyinternal.render.batch.TextureBatch;
 import de.lessvoid.niftyinternal.render.batch.TriangleFanBatch;
 
-import javax.annotation.Nonnull;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.charset.Charset;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static de.lessvoid.coregl.CoreVBO.DataType.FLOAT;
-import static de.lessvoid.coregl.CoreVBO.UsageType.STATIC_DRAW;
-import static de.lessvoid.coregl.CoreVBO.UsageType.STREAM_DRAW;
-
 public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
-  private final static Logger log = Logger.getLogger(NiftyRenderDeviceOpenGL.class.getName());
+  private final static Logger log = LoggerFactory.getLogger(NiftyRenderDeviceOpenGL.class.getName());
 
   private static final int VERTEX_SIZE = 5*6;
   private static final int MAX_QUADS = 2000;
@@ -180,7 +182,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void beginRender() {
-    log.fine("beginRender()");
+    log.trace("beginRender()");
 
     if (clearScreenOnRender) {
       gl.glClearColor(0.f, 0.f, 0.f, 1.f);
@@ -192,7 +194,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void endRender() {
-    log.fine("endRender()");
+    log.trace("endRender()");
   }
 
   @Override
@@ -200,7 +202,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final int width,
       final int height,
       final FilterMode filterMode) {
-    log.fine("createTexture()");
+    log.trace("createTexture()");
     return NiftyTextureOpenGL.newTextureRGBA(gl, width, height, filterMode);
   }
 
@@ -210,7 +212,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final int height,
       final ByteBuffer data,
       final FilterMode filterMode) {
-    log.fine("createTexture()");
+    log.trace("createTexture()");
     return new NiftyTextureOpenGL(gl, width, height, data, filterMode);
   }
 
@@ -219,13 +221,13 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final String filename,
       final FilterMode filterMode,
       final PreMultipliedAlphaMode preMultipliedAlphaMode) {
-    log.fine("loadTexture()");
+    log.trace("loadTexture()");
     return new NiftyTextureOpenGL(gl, resourceLoader, filename, filterMode, preMultipliedAlphaMode);
   }
 
   @Override
   public void render(final NiftyTexture texture, final FloatBuffer vertices) {
-    log.fine("render()");
+    log.trace("render()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -257,7 +259,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void renderColorQuads(final FloatBuffer vertices) {
-    log.fine("renderColorQuads()");
+    log.trace("renderColorQuads()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -283,7 +285,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void renderLinearGradientQuads(final double x0, final double y0, final double x1, final double y1, final List<NiftyColorStop> colorStops, final FloatBuffer vertices) {
-    log.fine("renderLinearGradientQuads()");
+    log.trace("renderLinearGradientQuads()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -325,7 +327,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void beginRenderToTexture(final NiftyTexture texture) {
-    log.fine("beginRenderToTexture()");
+    log.trace("beginRenderToTexture()");
     fbo.bindFramebuffer();
     fbo.attachTexture(getTextureId(texture), 0);
     gl.glViewport(0, 0, texture.getWidth(), texture.getHeight());
@@ -335,7 +337,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void endRenderToTexture(final NiftyTexture texture) {
-    log.fine("endRenderToTexture()");
+    log.trace("endRenderToTexture()");
     fbo.disableAndResetViewport(getDisplayWidth(), getDisplayHeight());
     mvp(getDisplayWidth(), getDisplayHeight());
     currentFBO = null;
@@ -343,7 +345,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public String loadCustomShader(final String filename) {
-    log.fine("loadCustomShader()");
+    log.trace("loadCustomShader()");
     CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex");
     shader.vertexShader("de/lessvoid/nifty/renderer/lwjgl/custom.vs");
     shader.fragmentShader(filename);
@@ -356,7 +358,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void activateCustomShader(final String shaderId) {
-    log.fine("activateCustomShader()");
+    log.trace("activateCustomShader()");
     CoreShader shader = shaderManager.activate(shaderId);
     shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
     shader.setUniformf("time", (System.nanoTime() - beginTime) / NANO_TO_MS_CONVERSION / 1000.f);
@@ -376,8 +378,8 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void changeCompositeOperation(final NiftyCompositeOperation compositeOperation) {
-    if (log.isLoggable(Level.FINE)) {
-      log.fine("changeCompositeOperation(" + compositeOperation + ")");
+    if (log.isTraceEnabled()) {
+      log.trace("changeCompositeOperation(" + compositeOperation + ")");
     }
     switch (compositeOperation) {
       case Clear:
@@ -458,7 +460,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void pathBegin() {
-    log.fine("pathBegin()");
+    log.trace("pathBegin()");
     pathFBO.bindFramebuffer();
     pathFBO.attachTexture(getTextureId(pathTexture), 0);
     gl.glViewport(0, 0, pathTexture.getWidth(), pathTexture.getHeight());
@@ -474,7 +476,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final float lineWidth,
       final NiftyLineCapType lineCapType,
       final NiftyLineJoinType lineJoinType) {
-    log.fine("pathLines()");
+    log.trace("pathLines()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -525,7 +527,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final float lineWidth,
       final float radius,
       final double lineColorAlpha) {
-    log.fine("pathArcs()");
+    log.trace("pathArcs()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -556,7 +558,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void pathFill(final FloatBuffer vertices) {
-    log.fine("pathFill()");
+    log.trace("pathFill()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
@@ -586,7 +588,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void pathEnd(final NiftyColor lineColor) {
-    log.fine("pathEnd()");
+    log.trace("pathEnd()");
     // Second Pass
     //
     // Now render the actual lines using the FBO texture as the mask.

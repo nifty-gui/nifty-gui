@@ -28,7 +28,6 @@ package de.lessvoid.nifty.examples.usecase;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.LogManager;
 
 import de.lessvoid.coregl.jogl.CoreSetupJogl;
 import de.lessvoid.coregl.jogl.JoglCoreGL;
@@ -54,8 +53,6 @@ public class UseCaseRunner {
   }
 
   static void run(final Class<?> useCaseClass, final String[] args) throws Exception {
-    LogManager.getLogManager().readConfiguration(UseCaseRunner.class.getResourceAsStream("/logging.properties"));
-
     UseCaseRunnerAdapter adapter = initAdapters.get(provideAdapterName(args));
     adapter.run(useCaseClass, args);
   }

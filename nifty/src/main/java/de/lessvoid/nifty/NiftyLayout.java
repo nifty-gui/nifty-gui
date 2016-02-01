@@ -38,7 +38,8 @@ import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static de.lessvoid.nifty.types.NiftyPoint.ZERO;
 import static de.lessvoid.nifty.types.NiftyRect.newNiftyRect;
@@ -58,7 +59,7 @@ import static de.lessvoid.niftyinternal.tree.NiftyTreeNodePredicates.nodeImplCla
  */
 public class NiftyLayout {
   @Nonnull
-  private final static Logger logger = Logger.getLogger(NiftyLayout.class.getName());
+  private final static Logger logger = LoggerFactory.getLogger(NiftyLayout.class.getName());
 
   /**
    * The nodes that where reported to have a invalid measure.
@@ -213,7 +214,7 @@ public class NiftyLayout {
     if (node instanceof NiftyLayoutNodeImpl<?>) {
       NiftySize desiredSize =  ((NiftyLayoutNodeImpl<?>) node).measure(availableSize);
       if (desiredSize.isInfinite() || desiredSize.isInvalid()) {
-        logger.severe("Measuring node " + node.toString() + " gave a illegal result. Size must be finite.");
+        logger.error("Measuring node " + node.toString() + " gave a illegal result. Size must be finite.");
         desiredSize = NiftySize.ZERO;
       }
       return desiredSize;
