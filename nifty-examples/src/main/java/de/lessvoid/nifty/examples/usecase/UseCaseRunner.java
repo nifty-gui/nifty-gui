@@ -28,11 +28,15 @@ package de.lessvoid.nifty.examples.usecase;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import de.lessvoid.coregl.jogl.CoreSetupJogl;
 import de.lessvoid.coregl.jogl.JoglCoreGL;
 import de.lessvoid.coregl.lwjgl.CoreSetupLwjgl;
 import de.lessvoid.coregl.lwjgl.LwjglCoreGL;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
  * A helper class that initializes the rendering subsystem and the main Nifty instance. It will then instantiate
@@ -53,6 +57,12 @@ public class UseCaseRunner {
   }
 
   static void run(final Class<?> useCaseClass, final String[] args) throws Exception {
+    // This is only needed since we use the CoreGL lib that logs with java.util.logging
+    LogManager.getLogManager().reset();
+    SLF4JBridgeHandler.removeHandlersForRootLogger();
+    SLF4JBridgeHandler.install();
+    Logger.getLogger("global").setLevel(Level.FINEST);
+
     UseCaseRunnerAdapter adapter = initAdapters.get(provideAdapterName(args));
     adapter.run(useCaseClass, args);
   }

@@ -48,6 +48,7 @@
   <properties>
     <!-- The CoreGL version we currently use since this is required in multiple modules -->
     <coregl-utils.version>2.0.0</coregl-utils.version>
+    <slf4j.version>1.7.14</slf4j.version>
   </properties>
   <build>
     <plugins>
