@@ -21,5 +21,6 @@ Nifty? :smile:
 
 ---
 
+* [JavaDoc](http://nifty-gui.github.io/nifty-gui/nifty/apidocs/index.html)
 * [git commit comment guidelines](CONTRIBUTING.markdown)
 
