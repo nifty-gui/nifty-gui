@@ -36,6 +36,7 @@ import de.lessvoid.coregl.jogl.CoreSetupJogl;
 import de.lessvoid.coregl.jogl.JoglCoreGL;
 import de.lessvoid.coregl.lwjgl.CoreSetupLwjgl;
 import de.lessvoid.coregl.lwjgl.LwjglCoreGL;
+import de.lessvoid.nifty.NiftyConfiguration;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
@@ -57,6 +58,10 @@ public class UseCaseRunner {
   }
 
   static void run(final Class<?> useCaseClass, final String[] args) throws Exception {
+    run(useCaseClass, args, new NiftyConfiguration());
+  }
+
+  static void run(final Class<?> useCaseClass, final String[] args, final NiftyConfiguration niftyConfiguration) throws Exception {
     // This is only needed since we use the CoreGL lib that logs with java.util.logging
     LogManager.getLogManager().reset();
     SLF4JBridgeHandler.removeHandlersForRootLogger();
@@ -64,7 +69,7 @@ public class UseCaseRunner {
     Logger.getLogger("global").setLevel(Level.FINEST);
 
     UseCaseRunnerAdapter adapter = initAdapters.get(provideAdapterName(args));
-    adapter.run(useCaseClass, args);
+    adapter.run(useCaseClass, args, niftyConfiguration);
   }
 
   private static String provideAdapterName(final String[] args) {

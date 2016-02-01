@@ -26,10 +26,12 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.NiftyConfiguration;
+
 public class UseCaseRunnerAdapterJava2D implements UseCaseRunnerAdapter {
 
   @Override
-  public void run(final Class<?> useCaseClass, final String[] args) throws Exception {
+  public void run(final Class<?> useCaseClass, final String[] args, final NiftyConfiguration niftyConfiguration) throws Exception {
     // TODO Auto-generated method stub
   }
 }

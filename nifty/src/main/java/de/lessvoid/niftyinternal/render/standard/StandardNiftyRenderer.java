@@ -32,7 +32,7 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
-import de.lessvoid.niftyinternal.NiftyConfiguration;
+import de.lessvoid.nifty.NiftyConfiguration;
 import de.lessvoid.niftyinternal.accessor.NiftyStateAccessor;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.render.*;

@@ -28,6 +28,8 @@ package de.lessvoid.nifty.examples.usecase;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.lessvoid.nifty.NiftyConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,12 +63,12 @@ public class UseCaseRunnerAdapterOpenGL implements UseCaseRunnerAdapter {
   }
 
   @Override
-  public void run(final Class<?> useCaseClass, final String[] args) throws Exception {
+  public void run(final Class<?> useCaseClass, final String[] args, final NiftyConfiguration niftyConfiguration) throws Exception {
     setup.initialize(caption(useCaseClass.getSimpleName()), 1024, 768);
     setup.enableVSync(false);
 
     // create nifty instance
-    final Nifty nifty = createNifty(createRenderDevice(), createInputDevice(), new AccurateTimeProvider());
+    final Nifty nifty = createNifty(createRenderDevice(), createInputDevice(), new AccurateTimeProvider(), niftyConfiguration);
     final Object useCase = useCaseClass.getConstructor(Nifty.class).newInstance(nifty);
     nifty.update();
     logScene(nifty);

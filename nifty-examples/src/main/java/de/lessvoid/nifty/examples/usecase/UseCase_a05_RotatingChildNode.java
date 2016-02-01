@@ -28,13 +28,12 @@ package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyCallback;
+import de.lessvoid.nifty.NiftyConfiguration;
 import de.lessvoid.nifty.node.NiftyTransformationNode;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyPoint;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
 import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
@@ -51,8 +50,8 @@ import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
 public class UseCase_a05_RotatingChildNode {
 
   public UseCase_a05_RotatingChildNode(final Nifty nifty) throws IOException {
-    //nifty.setShowRenderBuckets(true);
-    //nifty.setShowRenderNodes(true);
+    //nifty.getConfiguration().setRenderShowBuckets(true);
+    //nifty.getConfiguration().setRenderShowNodes(true);
 
     final NiftyTransformationNode rootTransformation = transformationNode();
     final NiftyTransformationNode childTransformation = transformationNode();
@@ -63,7 +62,6 @@ public class UseCase_a05_RotatingChildNode {
     grandChildNodeTransformation.setPivotX(0.5);
     grandChildNodeTransformation.setPivotY(0.5);
 
-    nifty.clearScreenBeforeRender();
     nifty
         .addNode(absoluteLayoutNode())
           .addNode(absoluteLayoutChildNode(nifty.getScreenWidth() / 2 - 200, nifty.getScreenHeight() / 2 - 200))
@@ -117,6 +115,13 @@ public class UseCase_a05_RotatingChildNode {
   }
 
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_a05_RotatingChildNode.class, args);
+    UseCaseRunner.run(
+        UseCase_a05_RotatingChildNode.class,
+        args,
+        new NiftyConfiguration()
+          .clearScreen(true)
+          .renderBucketWidth(1024)
+          .renderBucketHeight(768)
+        );
   }
 }

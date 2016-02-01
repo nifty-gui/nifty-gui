@@ -26,13 +26,12 @@
  */
 package de.lessvoid.niftyinternal.render.standard;
 
-import de.lessvoid.nifty.NiftyStatistics;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.types.NiftyPoint;
 import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.nifty.types.NiftySize;
-import de.lessvoid.niftyinternal.NiftyConfiguration;
+import de.lessvoid.nifty.NiftyConfiguration;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 
@@ -78,8 +77,8 @@ class RenderBucketManager {
   }
 
   private List<RenderBucket> createBuckets(final NiftyRenderDevice renderDevice, NiftyConfiguration niftyConfiguration) {
-    int bucketHeight = niftyConfiguration.getBucketHeight();
-    int bucketWidth = niftyConfiguration.getBucketWidth();
+    int bucketHeight = niftyConfiguration.getRenderBucketHeight();
+    int bucketWidth = niftyConfiguration.getRenderBucketWidth();
     int numBucketsY = renderDevice.getDisplayHeight() / bucketHeight;
     int numBucketsX = renderDevice.getDisplayWidth() / bucketWidth;
 

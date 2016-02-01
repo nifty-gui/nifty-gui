@@ -26,6 +26,8 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.NiftyConfiguration;
+
 /**
  * An interface to use the UseCaseRunner and the Nifty examples with different
  * NiftyRenderDevices.
@@ -37,10 +39,10 @@ public interface UseCaseRunnerAdapter {
   /**
    * Initialize the RenderDevice, create a Nifty instance, create the given
    * useCaseClass and then run it.
-   *
-   * @param useCaseClass the class to instantiate using a constructor with a single
+   *  @param useCaseClass the class to instantiate using a constructor with a single
    * Nifty parameter and run it
    * @param args optional parameters
+   * @param niftyConfiguration the NiftyConfiguration to use
    */
-  void run(Class<?> useCaseClass, String[] args) throws Exception;
+  void run(Class<?> useCaseClass, String[] args, NiftyConfiguration niftyConfiguration) throws Exception;
 }

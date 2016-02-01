@@ -26,12 +26,10 @@
  */
 package de.lessvoid.niftyinternal.render.standard;
 
-import de.lessvoid.nifty.NiftyStatistics;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.types.NiftyColor;
-import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.types.NiftyRect;
-import de.lessvoid.niftyinternal.NiftyConfiguration;
+import de.lessvoid.nifty.NiftyConfiguration;
 import de.lessvoid.niftyinternal.canvas.Context;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.math.Mat4;
@@ -106,7 +104,7 @@ public class RenderBucket {
                 r.getOrigin().getY(),
                 r.getOrigin().getX() + r.getSize().getWidth(),
                 r.getOrigin().getY() + r.getSize().getHeight(),
-                config.getShowRenderNodeOverlayColor(),
+                config.getShowRenderNodesOverlayColor(),
                 bucketTransformInverse);
           }
         }

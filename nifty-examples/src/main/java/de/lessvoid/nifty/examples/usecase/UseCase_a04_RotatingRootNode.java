@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyConfiguration;
 import de.lessvoid.nifty.NiftyNodeCallback;
 import de.lessvoid.nifty.node.NiftyTransformationNode;
 import de.lessvoid.nifty.types.NiftyColor;
@@ -54,7 +55,6 @@ public class UseCase_a04_RotatingRootNode {
       }
     });
 
-    nifty.clearScreenBeforeRender();
     nifty
         .addNode(absoluteLayoutNode())
           .addNode(absoluteLayoutChildNode(nifty.getScreenWidth() / 2 - 50, nifty.getScreenHeight() / 2 - 50))
@@ -65,6 +65,6 @@ public class UseCase_a04_RotatingRootNode {
   }
 
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_a04_RotatingRootNode.class, args);
+    UseCaseRunner.run(UseCase_a04_RotatingRootNode.class, args, new NiftyConfiguration().clearScreen(true));
   }
 }

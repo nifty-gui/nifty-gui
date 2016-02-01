@@ -40,12 +40,10 @@ import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.niftyinternal.*;
 import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
 import de.lessvoid.niftyinternal.animate.IntervalAnimator;
 import de.lessvoid.niftyinternal.common.Statistics;
-import de.lessvoid.niftyinternal.common.StatisticsRendererFPS;
 import de.lessvoid.niftyinternal.render.NiftyRenderer;
 import de.lessvoid.niftyinternal.render.standard.StandardNiftyRenderer;
 import de.lessvoid.niftyinternal.render.font.FontRenderer;
@@ -60,7 +58,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.RunnableFuture;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,7 +127,7 @@ public class Nifty {
   private List<IntervalAnimator> animators = new ArrayList<>();
 
   // configuration
-  private NiftyConfigurationImpl configuration = new NiftyConfigurationImpl();
+  private NiftyConfiguration configuration;
 
   // ready for a whole new can of worms?
   private Executor executor = Executors.newSingleThreadExecutor();
@@ -137,21 +135,39 @@ public class Nifty {
   /**
    * Create a new Nifty instance.
    * <br/>
-   * @param newRenderDevice the NiftyRenderDevice this instance will be using
-   * @param newInputDevice the NiftyInputDevice this instance will be using
-   * @param newTimeProvider the TimeProvider implementation to use
+   * @param renderDevice the NiftyRenderDevice Nifty should use
+   * @param inputDevice the NiftyInputDevice Nifty should use
+   * @param timeProvider the TimeProvider Nifty should use
    */
   public static Nifty createNifty(
-      final NiftyRenderDevice newRenderDevice,
-      final NiftyInputDevice newInputDevice,
-      final TimeProvider newTimeProvider) {
-    return new Nifty(newRenderDevice, newInputDevice, newTimeProvider);
+      final NiftyRenderDevice renderDevice,
+      final NiftyInputDevice inputDevice,
+      final TimeProvider timeProvider) {
+    return new Nifty(renderDevice, inputDevice, timeProvider, new NiftyConfiguration());
+  }
+
+  /**
+   * Create a new Nifty instance with a NiftyConfiguration.
+   * <br/>
+   * @param renderDevice the NiftyRenderDevice Nifty should use
+   * @param inputDevice the NiftyInputDevice Nifty should use
+   * @param timeProvider the TimeProvider Nifty should use
+   * @param configuration the NiftyConfiguration Nifty should use
+   */
+  public static Nifty createNifty(
+      final NiftyRenderDevice renderDevice,
+      final NiftyInputDevice inputDevice,
+      final TimeProvider timeProvider,
+      final NiftyConfiguration configuration) {
+    return new Nifty(renderDevice, inputDevice, timeProvider, configuration);
   }
 
   private Nifty(
       final NiftyRenderDevice newRenderDevice,
       final NiftyInputDevice newInputDevice,
-      final TimeProvider newTimeProvider) {
+      final TimeProvider newTimeProvider,
+      final NiftyConfiguration newNiftyConfiguration) {
+    configuration = newNiftyConfiguration;
     nodeAccessorRegistry = new InternalNiftyNodeAccessorRegistry();
 
     renderDevice = newRenderDevice;
@@ -173,18 +189,6 @@ public class Nifty {
 
     if (rootNodeImpl instanceof NiftyLayoutNodeImpl) {
       ((NiftyLayoutNodeImpl) rootNodeImpl).onAttach(layout);
-    }
-  }
-
-  /**
-   * Set the NiftyStatisticsMode to display the statistics.
-   * @param mode the new NiftyStatisticsMode
-   */
-  public void showStatistics(final NiftyStatisticsMode mode) {
-    switch (mode) {
-      case ShowFPS:
-        new StatisticsRendererFPS(this);
-        break;
     }
   }
 
@@ -228,6 +232,7 @@ public class Nifty {
    */
   public boolean render() {
     stats.startRender();
+    renderDevice.clearScreenBeforeRender(configuration.isClearScreen());
     boolean frameChanged = renderer.render(tree);
     stats.stopRender();
     stats.endFrame();
@@ -359,14 +364,6 @@ public class Nifty {
   }
 
   /**
-   * Call this to let Nifty clear the screen when it renders the GUI. This might be useful when the only thing you're
-   * currently rendering is the GUI. If you render the GUI as an overlay you better not enable that :)
-   */
-  public void clearScreenBeforeRender() {
-    renderDevice.clearScreenBeforeRender(true);
-  }
-
-  /**
    * Load a NiftyFont with the given name.
    *
    * @param name the name of the NiftyFont
@@ -492,37 +489,6 @@ public class Nifty {
   @Nonnull
   private <T extends NiftyNode> NiftyNodeImpl<T> niftyNodeImpl(final T child) {
     return nodeAccessorRegistry.getImpl(child);
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-  // NiftyConfiguration
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * Set showRenderBuckets to true to overlay a random color quad above each
-   * updated RenderBucket.
-   * @param showRenderBuckets the value to set showRenderBuckets to
-   */
-  public void setShowRenderBuckets(final boolean showRenderBuckets) {
-    configuration.setShowRenderBuckets(showRenderBuckets);
-  }
-
-  /**
-   * Set showRenderNodes to true to overlay a quad in the color set
-   * to the showRenderNodeOverlayColor.
-   * @param showRenderNodes the value to set showRenderNodes to
-   */
-  public void setShowRenderNodes(final boolean showRenderNodes) {
-    configuration.setShowRenderNodes(showRenderNodes);
-  }
-
-  /**
-   * Set the showRenderNodeOverlayColor - the color used to overlay
-   * each renderNode when showRenderNodes is set to true.
-   * @param color the color to render showRenderNodes overlays with
-   */
-  public void setShowRenderNodeOverlayColor(final NiftyColor color) {
-    configuration.setShowRenderNodeOverlayColor(color);
   }
 
   /////////////////////////////////////////////////////////////////////////////

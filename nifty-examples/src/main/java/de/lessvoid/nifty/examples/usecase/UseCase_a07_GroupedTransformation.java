@@ -28,6 +28,7 @@ package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyCallback;
+import de.lessvoid.nifty.NiftyConfiguration;
 import de.lessvoid.nifty.node.AbsoluteLayoutChildNode;
 import de.lessvoid.nifty.node.AbsoluteLayoutNode;
 import de.lessvoid.nifty.node.Horizontal;
@@ -57,7 +58,6 @@ public class UseCase_a07_GroupedTransformation {
     transformationNode.setPivotX(0.5);
     transformationNode.setPivotY(0.5);
 
-    nifty.clearScreenBeforeRender();
     nifty
         .addNode(alignmentLayoutNode())
           .addNode(alignmentLayoutChildNode(Horizontal.Center, Vertical.Middle))
@@ -96,6 +96,6 @@ public class UseCase_a07_GroupedTransformation {
   }
 
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_a07_GroupedTransformation.class, args);
+    UseCaseRunner.run(UseCase_a07_GroupedTransformation.class, args, new NiftyConfiguration().clearScreen(true));
   }
 }

@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyConfiguration;
 import de.lessvoid.nifty.examples.dummy.DummyInputDevice;
 import de.lessvoid.nifty.examples.dummy.DummyRenderDevice;
 import de.lessvoid.nifty.time.AccurateTimeProvider;
@@ -47,12 +48,13 @@ public class UseCaseRunnerAdapterDummy implements UseCaseRunnerAdapter {
   private boolean run = true;
 
   @Override
-  public void run(final Class<?> useCaseClass, final String[] args) throws Exception {
+  public void run(final Class<?> useCaseClass, final String[] args, final NiftyConfiguration niftyConfiguration) throws Exception {
     // create nifty instance
     final Nifty nifty = createNifty(
         new DummyRenderDevice(1024, 786, 60),
         new DummyInputDevice(),
-        new AccurateTimeProvider());
+        new AccurateTimeProvider(),
+        niftyConfiguration);
 
     useCaseClass.getConstructor(Nifty.class).newInstance(nifty);
 

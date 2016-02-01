@@ -24,7 +24,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal;
+package de.lessvoid.nifty;
 
 import de.lessvoid.nifty.types.NiftyColor;
 import org.junit.Test;
@@ -37,39 +37,54 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by void on 13.09.15.
  */
-public class NiftyConfigurationImplTest {
+public class NiftyConfigurationTest {
+  private final NiftyConfiguration config = new NiftyConfiguration();
 
   @Test
   public void testDefaults() {
-    NiftyConfigurationImpl config = new NiftyConfigurationImpl();
-    assertEquals(256, config.getBucketWidth());
-    assertEquals(256, config.getBucketHeight());
+    assertEquals(256, config.getRenderBucketWidth());
+    assertEquals(256, config.getRenderBucketHeight());
     assertFalse(config.isShowRenderBuckets());
     assertFalse(config.isShowRenderNodes());
-    assertNotNull(config.getShowRenderNodeOverlayColor());
+    assertNotNull(config.getShowRenderNodesOverlayColor());
+  }
+
+  @Test
+  public void testClearScreen() {
+    config.clearScreen(true);
+    assertTrue(config.isClearScreen());
+  }
+
+  @Test
+  public void testSetRenderBucketWidth() {
+    config.renderBucketWidth(100);
+    assertEquals(100, config.getRenderBucketWidth());
+  }
+
+  @Test
+  public void testSetRenderBucketHeight() {
+    config.renderBucketHeight(100);
+    assertEquals(100, config.getRenderBucketHeight());
   }
 
   @Test
   public void testEnableShowRenderNodeOverlay() {
-    NiftyConfigurationImpl config = new NiftyConfigurationImpl();
-    config.setShowRenderNodes(true);
+    config.showRenderNodes(true);
     assertTrue(config.isShowRenderNodes());
-    assertNotNull(config.getShowRenderNodeOverlayColor());
+    assertNotNull(config.getShowRenderNodesOverlayColor());
   }
 
   @Test
   public void testEnableShowRenderNodeOverlayWithColor() {
-    NiftyConfigurationImpl config = new NiftyConfigurationImpl();
-    config.setShowRenderNodes(true);
-    config.setShowRenderNodeOverlayColor(NiftyColor.aqua());
+    config.showRenderNodes(true);
+    config.renderShowNodesOverlayColor(NiftyColor.aqua());
     assertTrue(config.isShowRenderNodes());
-    assertEquals(NiftyColor.aqua(), config.getShowRenderNodeOverlayColor());
+    assertEquals(NiftyColor.aqua(), config.getShowRenderNodesOverlayColor());
   }
 
   @Test
   public void testEnableShowRenderBuckets() {
-    NiftyConfigurationImpl config = new NiftyConfigurationImpl();
-    config.setShowRenderBuckets(true);
+    config.showRenderBuckets(true);
     assertTrue(config.isShowRenderBuckets());
   }
 }
