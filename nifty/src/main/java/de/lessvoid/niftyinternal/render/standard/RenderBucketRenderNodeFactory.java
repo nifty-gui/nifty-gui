@@ -28,8 +28,6 @@ package de.lessvoid.niftyinternal.render.standard;
 
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
-import de.lessvoid.niftyinternal.accessor.NiftyCanvasAccessor;
-import de.lessvoid.niftyinternal.canvas.InternalNiftyCanvas;
 import de.lessvoid.niftyinternal.common.Statistics;
 
 import java.util.HashMap;
@@ -53,7 +51,6 @@ public class RenderBucketRenderNodeFactory {
       return renderNode;
     }
     renderNode = createRenderNode(node, renderDevice);
-    renderNode.redrawCanvas(node);
     registry.put(node, renderNode);
     return renderNode;
   }

@@ -76,14 +76,10 @@ public class RenderBucketRenderNode {
     this.changed = false;
   }
 
-  public void redrawCanvas(final NiftyNodeContentImpl node) {
-    InternalNiftyCanvas canvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas);
-    canvas.reset();
-    node.updateCanvas(niftyCanvas);
-  }
-
   public void updateCanvas(final NiftyNodeContentImpl child, final NiftyRenderDevice renderDevice) {
     InternalNiftyCanvas canvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas);
+    child.updateCanvas(niftyCanvas);
+
     boolean canvasChanged = canvas.isChanged();
     boolean sizeChanged = updateSize(child.getContentWidth(), child.getContentHeight(), renderDevice);
     boolean transformationChanged = updateTransformation(child.getLocalToScreen());

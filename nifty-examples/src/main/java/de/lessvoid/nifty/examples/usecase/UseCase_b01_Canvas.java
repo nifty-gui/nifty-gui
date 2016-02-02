@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCallback;
 import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.NiftyCanvasPainter;
 import de.lessvoid.nifty.node.NiftyContentNode;
@@ -43,25 +44,36 @@ import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 public class UseCase_b01_Canvas {
 
   public UseCase_b01_Canvas(final Nifty nifty) {
+    final NiftyContentNode customContentNode = customContentNode();
     nifty
         .addNode(backgroundColorNode(NiftyColor.green()))
           .addNode(contentNode())
-            .addNode(contentNode().setCanvasPainter(new NiftyCanvasPainter() {
-              @Override
-              public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
-                // fill the whole node content with a plain white color
-                canvas.setFillStyle(NiftyColor.white());
-                canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+            .addNode(customContentNode);
+    nifty.startAnimated(0, 50, new NiftyCallback<Float>() {
+      @Override
+      public void execute(final Float aFloat) {
+        customContentNode.redraw();
+      }
+    });
+  }
 
-                // create a funky black rectangle inside the white
-                canvas.setFillStyle(NiftyColor.black());
-                canvas.fillRect(
-                    node.getWidth() / 2 - Math.random() * node.getWidth() / 2,
-                    node.getHeight() / 2 - Math.random() * node.getHeight() / 2,
-                    node.getWidth() - node.getWidth() / 2 + Math.random() * node.getWidth() / 2,
-                    node.getHeight() - node.getHeight() / 2 + Math.random() * node.getHeight() / 2);
-              }
-            }));
+  private NiftyContentNode customContentNode() {
+    return contentNode().setCanvasPainter(new NiftyCanvasPainter() {
+      @Override
+      public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
+        // fill the whole node content with a plain white color
+        canvas.setFillStyle(NiftyColor.white());
+        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+
+        // create a funky black rectangle inside the white
+        canvas.setFillStyle(NiftyColor.black());
+        canvas.fillRect(
+            node.getWidth() / 2 - Math.random() * node.getWidth() / 2,
+            node.getHeight() / 2 - Math.random() * node.getHeight() / 2,
+            node.getWidth() - node.getWidth() / 2 + Math.random() * node.getWidth() / 2,
+            node.getHeight() - node.getHeight() / 2 + Math.random() * node.getHeight() / 2);
+      }
+    });
   }
 
   public static void main(final String[] args) throws Exception {

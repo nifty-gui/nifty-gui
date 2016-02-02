@@ -36,6 +36,8 @@ import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyPoint;
 import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.nifty.types.NiftySize;
+import de.lessvoid.niftyinternal.accessor.NiftyCanvasAccessor;
+import de.lessvoid.niftyinternal.canvas.InternalNiftyCanvas;
 import de.lessvoid.niftyinternal.math.Mat4;
 
 import javax.annotation.Nonnull;
@@ -63,9 +65,14 @@ class NiftyContentNodeImpl
   private NiftyCanvasPainter canvasPainter = defaultNiftyCanvasPainter();
   private NiftyRect layoutRect = NiftyRect.newNiftyRect(NiftyPoint.ZERO, NiftySize.ZERO);
   private boolean layoutRectChanged = true;
+  private boolean redraw = true;
 
   public void setCanvasPainter(final NiftyCanvasPainter canvasPainter) {
     this.canvasPainter = canvasPainter;
+  }
+
+  public void redraw() {
+    redraw = true;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +111,12 @@ class NiftyContentNodeImpl
 
   @Override
   public void updateCanvas(final NiftyCanvas niftyCanvas) {
-    canvasPainter.paint(getNiftyNode(), niftyCanvas);
+    if (redraw) {
+      InternalNiftyCanvas canvas = NiftyCanvasAccessor.getDefault().getInternalNiftyCanvas(niftyCanvas);
+      canvas.reset();
+      canvasPainter.paint(getNiftyNode(), niftyCanvas);
+      redraw = false;
+    }
   }
 
   @Override
@@ -166,5 +178,4 @@ class NiftyContentNodeImpl
     builder.append("}");
     return builder.toString();
   }
-
 }

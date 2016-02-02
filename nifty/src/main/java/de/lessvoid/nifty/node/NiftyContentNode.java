@@ -61,6 +61,10 @@ public class NiftyContentNode implements NiftyNode {
     return this;
   }
 
+  public void redraw() {
+    impl.redraw();
+  }
+
   public String toString() {
     builder.setLength(0);
     builder.append("(");
