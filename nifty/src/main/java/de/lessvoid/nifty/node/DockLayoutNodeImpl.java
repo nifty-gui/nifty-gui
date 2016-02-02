@@ -27,13 +27,9 @@
 
 package de.lessvoid.nifty.node;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
-import de.lessvoid.nifty.types.NiftyPoint;
 import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.nifty.types.NiftySize;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.Nonnull;
 
@@ -110,7 +106,7 @@ final class DockLayoutNodeImpl extends AbstractLayoutNodeImpl<DockLayoutNode> {
                   Math.max(eastWestSize.getHeight(), nodeSize.getHeight()));
               break;
             default:
-              throw new NotImplementedException();
+              throw new IllegalStateException();
           }
         } else {
          /*
@@ -184,7 +180,7 @@ final class DockLayoutNodeImpl extends AbstractLayoutNodeImpl<DockLayoutNode> {
                   remainingRect.getSize().add(-childWidth, 0.f));
               break;
             default:
-              throw new NotImplementedException();
+              throw new IllegalStateException();
           }
           childLayoutNode.arrange(childRect);
         } else {
