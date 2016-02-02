@@ -43,7 +43,7 @@ import static de.lessvoid.nifty.types.NiftyPoint.newNiftyPoint;
  * available size. The size this node requests will match the maximum height and width of all child nodes.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
- * @see AbsoluteLayoutNode for additional documentation
+ * @see AbsoluteLayoutNode
  */
 public final class AbsoluteLayoutChildNode implements NiftyNode {
   @Nonnull

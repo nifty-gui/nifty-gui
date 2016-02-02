@@ -38,8 +38,19 @@ import javax.annotation.Nullable;
  * If a child has a different class, it will stretch it to the full size. This layout will align the nodes according
  * to the parameter set in the children. The node will not check for any overlapping. If you assign two objects to
  * the same alignment they will overlap.
- * <p />
- * This also means that this node will request the size of the largest child node as desired size.
+ * <p>
+ *   This also means that this node will request the size of the largest child node as desired size. The size of the
+ *   child nodes will be set to the desired size of the child nodes unless theW
+ *   {@link Horizontal#Stretch} or the {@link Vertical#Stretch} alignment is used.
+ * </p>
+ * <h3>Layout Concept</h3>
+ * <p>
+ *   This layout works based on anchor points as illustrated by the image blow. The anchor point of the parent and
+ *   the child node is placed on the same corner and put at the same location when the children are arranged.
+ * </p>
+ * <p>
+ *   <img src="doc-files/AlignmentLayoutNode-1.svg" alt="Anchor points" />
+ * </p>
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */

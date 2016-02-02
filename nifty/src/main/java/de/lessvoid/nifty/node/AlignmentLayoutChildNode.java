@@ -34,16 +34,39 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * This is the child node for {@link AlignmentLayoutNode}. It allows setting the alignment that is supposed to be
- * applied to this node. In both orientations there is a special "stretch" alignment that will expand the node to the
- * full size of the parent. All other alignment options will honor the desired sizes of the children.
+ * This is a child layout node for the {@link AlignmentLayoutNode}.
+ *
+ * This node allows setting the horizontal and vertical alignment that is applied to this node. Aside from the
+ * additional information applied, acts in the same way as a {@link SimpleLayoutNode}. So it just arranges any child
+ * item to it's full available size. The size this node requests will match the maximum height and width of all child
+ * nodes.
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
+ * @see AlignmentLayoutNode
  */
 public final class AlignmentLayoutChildNode implements NiftyNode {
   @Nonnull
   private final AlignmentLayoutChildNodeImpl implementation;
 
+  /**
+   * Create a new node that will be aligned in the top left corner of the parent node.
+   * <p />
+   * Equals: {@code alignmentLayoutChildNode(Horizontal.Left, Vertical.Top)}
+   *
+   * @return the new node
+   */
+  @Nonnull
+  public static AlignmentLayoutChildNode alignmentLayoutChildNode() {
+    return alignmentLayoutChildNode(Horizontal.Left, Vertical.Top);
+  }
+
+  /**
+   * Create a new node with specific alignment values.
+   *
+   * @param horizontal the horizontal alignment
+   * @param vertical the vertical alignment
+   * @return the new node
+   */
   @Nonnull
   public static AlignmentLayoutChildNode alignmentLayoutChildNode(
       @Nonnull final Horizontal horizontal, @Nonnull final Vertical vertical) {
@@ -58,20 +81,44 @@ public final class AlignmentLayoutChildNode implements NiftyNode {
     this.implementation = implementation;
   }
 
+  /**
+   * Get the horizontal alignment that is applied to this node.
+   *
+   * @return the horizontal alignment
+   */
   @Nonnull
   public Horizontal getHorizontal() {
     return implementation.getHorizontal();
   }
 
+  /**
+   * Set the horizontal alignment that is applied to this node.
+   * <p />
+   * Changing this value will trigger the a update of the layout.
+   *
+   * @param horizontal the new alignment value
+   */
   public void setHorizontal(@Nonnull final Horizontal horizontal) {
     implementation.setHorizontal(horizontal);
   }
 
+  /**
+   * Get the vertical alignment that is applied to this node.
+   *
+   * @return the vertical alignment
+   */
   @Nonnull
   public Vertical getVertical() {
     return implementation.getVertical();
   }
 
+  /**
+   * Set the vertical alignment that is applied to this node.
+   * <p />
+   * Changing this value will trigger the a update of the layout.
+   *
+   * @param vertical the new alignment value
+   */
   public void setVertical(@Nonnull final Vertical vertical) {
     implementation.setVertical(vertical);
   }
@@ -98,6 +145,7 @@ public final class AlignmentLayoutChildNode implements NiftyNode {
   @Nonnull
   @Override
   public String toString() {
-    return "(AlignmentLayoutChildNode) [" + getHorizontal().name() + "] [" + getVertical().name()+ ']';
+    return "(AlignmentLayoutChildNode) horizontal [" + getHorizontal().name() +
+        "] vertical [" + getVertical().name()+ ']';
   }
 }
