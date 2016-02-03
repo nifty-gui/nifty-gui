@@ -26,22 +26,33 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCallback;
+import de.lessvoid.nifty.node.NiftyContentNode;
+
+import java.io.IOException;
+
+import static de.lessvoid.nifty.NiftyCanvasPainterShader.canvasPainterShader;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+
 /**
- * custom canvas painter using a custom fragment shader ... read that last sentence again! =D
+ * Custom canvas painter using a custom fragment shader ... read that last sentence again! =D
  * @author void
  */
 public class UseCase_b05_CanvasCustomShader {
-/* FIXME: There's no equivalent of nifty.customShaderCanvasPainter method.
-  public UseCase_b05_CanvasCustomShader(final Nifty nifty) throws IOException {
-    nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
 
-    NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
-    rootNode.setCanvasPainter(nifty.customShaderCanvasPainter("shaders/custom.fs"));
-    rootNode.startAnimatedRedraw(0, 10);
+  public UseCase_b05_CanvasCustomShader(final Nifty nifty) throws IOException {
+    final NiftyContentNode contentNode = contentNode().setCanvasPainter(canvasPainterShader(nifty, "shaders/custom.fs"));
+    nifty.addNode(contentNode);
+    nifty.startAnimated(0, 10, new NiftyCallback<Float>() {
+      @Override
+      public void execute(final Float aFloat) {
+        contentNode.redraw();
+      }
+    });
   }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b05_CanvasCustomShader.class, args);
   }
-  */
 }
