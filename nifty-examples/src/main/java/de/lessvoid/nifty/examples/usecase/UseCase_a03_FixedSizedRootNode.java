@@ -44,11 +44,11 @@ public class UseCase_a03_FixedSizedRootNode {
 
   public UseCase_a03_FixedSizedRootNode(final Nifty nifty) {
     nifty
-        .addNode(backgroundColorNode(NiftyColor.blue()))
+      .addNode(backgroundColorNode(NiftyColor.blue()))
         .addNode(absoluteLayoutNode())
-        .addNode(absoluteLayoutChildNode(10, 10))
-        .addNode(fixedSizeLayoutNode(100.f, 100.f))
-        .addNode(contentNode());
+          .addNode(absoluteLayoutChildNode(10, 10))
+            .addNode(fixedSizeLayoutNode(100.f, 100.f))
+              .addNode(contentNode());
   }
 
   public static void main(final String[] args) throws Exception {

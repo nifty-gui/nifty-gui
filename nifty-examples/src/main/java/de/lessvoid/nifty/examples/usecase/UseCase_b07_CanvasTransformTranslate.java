@@ -26,35 +26,48 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCanvas;
+import de.lessvoid.nifty.NiftyCanvasPainter;
+import de.lessvoid.nifty.node.NiftyContentNode;
+import de.lessvoid.nifty.types.NiftyColor;
+
+import java.io.IOException;
+
+import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
+import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
+import static de.lessvoid.nifty.node.Horizontal.Center;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.Vertical.Middle;
+
 /**
  * Demonstrate the translate transform of the NiftyCanvas.
  * @author void
  */
 public class UseCase_b07_CanvasTransformTranslate {
-/* FIXME: Find a way to express size in percentages.  
   public UseCase_b07_CanvasTransformTranslate(final Nifty nifty) throws IOException {
-    NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
+    nifty
+      .addNode(alignmentLayoutNode())
+        .addNode(alignmentLayoutChildNode(Center, Middle))
+          .addNode(fixedSizeLayoutNode(512.f, 384.f))
+            .addNode(contentNode().setCanvasPainter(new NiftyCanvasPainter() {
+              @Override
+              public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
+                canvas.setFillStyle(NiftyColor.white());
+                canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-    NiftyNode child = rootNode.newChildNode(UnitValue.percent(50), UnitValue.percent(50));
-    child.setCanvasPainter(new NiftyCanvasPainter() {
-      @Override
-      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        // fill the whole node content with a plain white color
-        canvas.setFillStyle(NiftyColor.white());
-        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+                canvas.setFillStyle(NiftyColor.black());
+                canvas.fillRect(10, 10, 50, 50);
 
-        canvas.setFillStyle(NiftyColor.black());
-        canvas.fillRect(10, 10, 50, 50);
-
-        canvas.translate(60.f, 60.f);
-        canvas.setFillStyle(NiftyColor.red());
-        canvas.fillRect(10, 10, 50, 50);
-      }
-    });
+                canvas.translate(60.f, 60.f);
+                canvas.setFillStyle(NiftyColor.red());
+                canvas.fillRect(10, 10, 50, 50);
+              }
+            }));
   }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b07_CanvasTransformTranslate.class, args);
   }
-  */
 }

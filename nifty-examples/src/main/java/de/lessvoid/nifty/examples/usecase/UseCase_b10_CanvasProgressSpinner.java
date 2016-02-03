@@ -26,25 +26,55 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCallback;
+import de.lessvoid.nifty.NiftyCanvas;
+import de.lessvoid.nifty.NiftyCanvasPainter;
+import de.lessvoid.nifty.node.NiftyContentNode;
+import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.types.NiftyMutableColor;
+
+import java.io.IOException;
+
+import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
+import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
+import static de.lessvoid.nifty.node.Horizontal.Center;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.Vertical.Middle;
+
 /**
  * An example how to use an animated NiftyCanvas for a custom progress spinner animation.
  * @author void
  */
 public class UseCase_b10_CanvasProgressSpinner {
-  /* FIXME: There's no start redraw method. 
   private int pos = 0;
 
   public UseCase_b10_CanvasProgressSpinner(final Nifty nifty) throws IOException {
-    NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
-    rootNode.setBackgroundColor(NiftyColor.black());
-
-    NiftyNode spinner = rootNode.newChildNode(UnitValue.px(128), UnitValue.px(128));
-    spinner.addCanvasPainter(new NiftyCanvasPainter() {
+    final NiftyContentNode spinnerNode = createSpinnerNode();
+    nifty
+      .addNode(alignmentLayoutNode())
+        .addNode(alignmentLayoutChildNode(Center, Middle))
+          .addNode(fixedSizeLayoutNode(128.f, 128.f))
+            .addNode(spinnerNode);
+    nifty.startAnimated(0, 50, new NiftyCallback<Float>() {
       @Override
-      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        canvas.setTransform();
+      public void execute(final Float aFloat) {
+        spinnerNode.redraw();
+      }
+    });
+  }
 
-        NiftyMutableColor color = NiftyMutableColor.fromColor(NiftyColor.fromString("#f00"));
+  private NiftyContentNode createSpinnerNode() {
+    return contentNode().setCanvasPainter(new NiftyCanvasPainter() {
+      NiftyMutableColor color = NiftyMutableColor.fromColor(NiftyColor.fromString("#f000"));
+
+      @Override
+      public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
+        canvas.setTransform();
+        canvas.setFillStyle(NiftyColor.black());
+        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+
         int max = 24;
         for (int i=0; i<max; i++) {
           int index = i + pos;
@@ -60,20 +90,14 @@ public class UseCase_b10_CanvasProgressSpinner {
           canvas.fillRect(0, -2.5, node.getWidth() * 0.3, 2.5);
         }
 
-        pos--;
-        if (pos <= -max) {
-          pos = 0;
-        }
+      pos--;
+      if (pos <= -max) {
+        pos = 0;
       }
-    });
-    spinner.startAnimatedRedraw(0, 50);
-
-    nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
-
+    }});
   }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b10_CanvasProgressSpinner.class, args);
   }
-  */
 }

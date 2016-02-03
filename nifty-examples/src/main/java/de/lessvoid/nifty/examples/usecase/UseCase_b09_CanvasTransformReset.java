@@ -26,41 +26,54 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCanvas;
+import de.lessvoid.nifty.NiftyCanvasPainter;
+import de.lessvoid.nifty.node.NiftyContentNode;
+import de.lessvoid.nifty.types.NiftyColor;
+
+import java.io.IOException;
+
+import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
+import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
+import static de.lessvoid.nifty.node.Horizontal.Center;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.Vertical.Middle;
+
 /**
  * Demonstrate the reset transform of the NiftyCanvas.
  * @author void
  */
 public class UseCase_b09_CanvasTransformReset {
-/* FIXME: Find a way to express size in percentages. 
   public UseCase_b09_CanvasTransformReset(final Nifty nifty) throws IOException {
-    NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
+    nifty
+      .addNode(alignmentLayoutNode())
+        .addNode(alignmentLayoutChildNode(Center, Middle))
+          .addNode(fixedSizeLayoutNode(512.f, 384.f))
+            .addNode(contentNode().setCanvasPainter(new NiftyCanvasPainter() {
+              @Override
+              public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
+                canvas.setFillStyle(NiftyColor.white());
+                canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-    NiftyNode child = rootNode.newChildNode(UnitValue.percent(50), UnitValue.percent(50));
-    child.setCanvasPainter(new NiftyCanvasPainter() {
-      @Override
-      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
-        // fill the whole node content with a plain white color
-        canvas.setFillStyle(NiftyColor.white());
-        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+                canvas.setFillStyle(NiftyColor.black());
+                canvas.fillRect(10, 10, 50, 50);
 
-        canvas.setFillStyle(NiftyColor.black());
-        canvas.fillRect(10, 10, 50, 50);
+                canvas.setFillStyle(NiftyColor.red());
 
-        canvas.setFillStyle(NiftyColor.red());
+                // change lots of transforms
+                canvas.rotateDegrees(20.f);
+                canvas.scale(2.4f, 5.f);
 
-        // change lots of transforms
-        canvas.rotateDegrees(20.f);
-        canvas.scale(2.4f, 5.f);
-
-        // reset transforms which will render the original rectangle
-        canvas.setTransform();
-        canvas.fillRect(10, 10, 50, 50);
-      }
-    });
+                // reset transforms which will render the original rectangle
+                canvas.setTransform();
+                canvas.fillRect(10, 10, 50, 50);
+              }
+            }));
   }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b09_CanvasTransformReset.class, args);
   }
-  */
 }
