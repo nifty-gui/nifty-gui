@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://nifty-gui.sourceforge.net/webstart/" href="nifty-examples-0.0.2.jnlp">
+	<information>
+		<title>nifty-examples</title>
+		<vendor>void</vendor>
+		<homepage href="http://nifty-gui.sourceforge.net"/>
+		<description>nifty-examples</description>
+		<description kind="short">nifty-examples</description>
+		<offline-allowed/>
+	</information>
+	<security>
+		<all-permissions/>
+	</security>
+	<resources>
+		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+		<jar href="nifty-examples-0.0.2-complete-with-dependencies.jar" main="true"/>
+	</resources>
+	<resources os="Windows">
+		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+	    <nativelib href="lib/lwjgl/native/lwjgl-win32-native.jar" />
+	</resources>
+	<resources os="Linux">
+		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+		<nativelib href="lib/lwjgl/native/lwjgl-linux-native.jar" />
+	</resources>
+	<resources os="Mac OS">
+		<j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+"/>
+		<nativelib href="lib/lwjgl/native/lwjgl-macosx-native.jar" />
+	</resources>
+	<application-desc/>
+</jnlp>

@@ -14,6 +14,7 @@
     <module>nifty-renderer-jogl</module>
     <module>nifty-renderer-libgdx</module>
     <module>nifty-renderer-lwjgl</module>
+    <module>nifty-renderer-lwjgl3</module>
     <module>nifty-renderer-slick2d</module>
     <module>nifty-soundsystem-openal</module>
     <module>nifty-soundsystem-pauls-sound</module>
