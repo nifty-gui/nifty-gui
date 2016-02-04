@@ -26,26 +26,35 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCallback;
+import de.lessvoid.nifty.NiftyCanvas;
+import de.lessvoid.nifty.NiftyCanvasPainter;
+import de.lessvoid.nifty.node.NiftyContentNode;
+import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.types.NiftyLineCapType;
+import de.lessvoid.nifty.types.NiftyLineJoinType;
+
+import java.io.IOException;
+
+import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
+import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
+import static de.lessvoid.nifty.node.Horizontal.Center;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.Vertical.Middle;
+
 /**
  * An example how to draw lines into a NiftyCanvas.
  * @author void
  */
 public class UseCase_b11_CanvasLines {
-  /* FIXME: star redraw method not implemented.
   private static final float Y_POS = 60.f;
 
   public UseCase_b11_CanvasLines(final Nifty nifty) throws IOException {
-    nifty.showStatistics(NiftyStatisticsMode.ShowFPS);
-
-    NiftyNode rootNode = nifty.createRootNodeFullscreen(ChildLayout.Center);
-    rootNode.setBackgroundColor(NiftyColor.black());
-
-    NiftyNode childNode = rootNode.newChildNode(UnitValue.px(512), UnitValue.px(512));
-    childNode.startAnimatedRedraw(0, 16);
-    childNode.addCanvasPainter(new NiftyCanvasPainter() {
-
+    final NiftyContentNode contentNode = contentNode().setCanvasPainter(new NiftyCanvasPainter() {
       @Override
-      public void paint(final NiftyNode node, final NiftyCanvas canvas) {
+      public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
         long time = nifty.getTimeProvider().getMsTime();
 
         canvas.setFillStyle(NiftyColor.blue());
@@ -79,7 +88,7 @@ public class UseCase_b11_CanvasLines {
       }
 
       private void addPath(final NiftyCanvas canvas, long time, final float y) {
-        canvas.moveTo( 10.f, y);
+        canvas.moveTo(10.f, y);
         canvas.lineTo(100.f, y + 50.f * (float) Math.sin(time / 900.));
         canvas.lineTo(200.f, y);
         canvas.lineTo(300.f, y + 50.f * (float) Math.sin(time / 750.));
@@ -87,10 +96,20 @@ public class UseCase_b11_CanvasLines {
         canvas.lineTo(500.f, y + 50.f * (float) Math.sin(time / 650.));
       }
     });
+    nifty
+      .addNode(alignmentLayoutNode())
+        .addNode(alignmentLayoutChildNode(Center, Middle))
+          .addNode(fixedSizeLayoutNode(512, 512))
+            .addNode(contentNode);
+    nifty.startAnimated(0, 16, new NiftyCallback<Float>() {
+      @Override
+      public void execute(final Float aFloat) {
+        contentNode.redraw();
+      }
+    });
   }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b11_CanvasLines.class, args);
   }
-  */
 }
