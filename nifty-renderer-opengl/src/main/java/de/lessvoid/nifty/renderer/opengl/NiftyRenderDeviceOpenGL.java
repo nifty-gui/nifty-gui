@@ -26,10 +26,21 @@
  */
 package de.lessvoid.nifty.renderer.opengl;
 
-import static de.lessvoid.coregl.CoreVBO.DataType.FLOAT;
-import static de.lessvoid.coregl.CoreVBO.UsageType.STATIC_DRAW;
-import static de.lessvoid.coregl.CoreVBO.UsageType.STREAM_DRAW;
+import de.lessvoid.coregl.*;
+import de.lessvoid.coregl.CoreVAO.FloatType;
+import de.lessvoid.coregl.spi.CoreGL;
+import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyTexture;
+import de.lessvoid.nifty.types.*;
+import de.lessvoid.niftyinternal.NiftyResourceLoader;
+import de.lessvoid.niftyinternal.common.IdGenerator;
+import de.lessvoid.niftyinternal.math.Mat4;
+import de.lessvoid.niftyinternal.math.MatrixFactory;
+import de.lessvoid.niftyinternal.render.batch.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -37,36 +48,9 @@ import java.nio.FloatBuffer;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import de.lessvoid.coregl.CoreFBO;
-import de.lessvoid.coregl.CoreRender;
-import de.lessvoid.coregl.CoreShader;
-import de.lessvoid.coregl.CoreShaderManager;
-import de.lessvoid.coregl.CoreVAO;
-import de.lessvoid.coregl.CoreVAO.FloatType;
-import de.lessvoid.coregl.CoreVBO;
-import de.lessvoid.coregl.spi.CoreGL;
-import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyTexture;
-import de.lessvoid.nifty.types.NiftyColor;
-import de.lessvoid.nifty.types.NiftyColorStop;
-import de.lessvoid.nifty.types.NiftyCompositeOperation;
-import de.lessvoid.nifty.types.NiftyLineCapType;
-import de.lessvoid.nifty.types.NiftyLineJoinType;
-import de.lessvoid.niftyinternal.NiftyResourceLoader;
-import de.lessvoid.niftyinternal.common.IdGenerator;
-import de.lessvoid.niftyinternal.math.Mat4;
-import de.lessvoid.niftyinternal.math.MatrixFactory;
-import de.lessvoid.niftyinternal.render.batch.ArcBatch;
-import de.lessvoid.niftyinternal.render.batch.ColorQuadBatch;
-import de.lessvoid.niftyinternal.render.batch.LineBatch;
-import de.lessvoid.niftyinternal.render.batch.LinearGradientQuadBatch;
-import de.lessvoid.niftyinternal.render.batch.TextureBatch;
-import de.lessvoid.niftyinternal.render.batch.TriangleFanBatch;
+import static de.lessvoid.coregl.CoreVBO.DataType.FLOAT;
+import static de.lessvoid.coregl.CoreVBO.UsageType.STATIC_DRAW;
+import static de.lessvoid.coregl.CoreVBO.UsageType.STREAM_DRAW;
 
 public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   private final static Logger log = LoggerFactory.getLogger(NiftyRenderDeviceOpenGL.class.getName());
@@ -589,6 +573,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   @Override
   public void pathEnd(final NiftyColor lineColor) {
     log.trace("pathEnd()");
+
     // Second Pass
     //
     // Now render the actual lines using the FBO texture as the mask.
@@ -646,7 +631,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     if (currentFBO != null) {
       currentFBO.bindFramebuffer();
     }
-
+    vbo.getBuffer().clear();
     quad = vbo.getBuffer();
     quad.put(0.f);
     quad.put(0.f);
