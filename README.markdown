@@ -23,4 +23,5 @@ Nifty? :smile:
 
 * [JavaDoc](http://nifty-gui.github.io/nifty-gui/nifty/apidocs/index.html)
 * [git commit comment guidelines](CONTRIBUTING.markdown)
+* [Roadmap](https://github.com/nifty-gui/nifty-gui/wiki/Nifty-2.x-Roadmap)
 
