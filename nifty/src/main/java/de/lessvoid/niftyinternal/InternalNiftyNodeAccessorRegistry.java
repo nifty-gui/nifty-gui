@@ -1,5 +1,8 @@
 package de.lessvoid.niftyinternal;
 
+import de.lessvoid.nifty.spi.node.NiftyControlBuilder;
+import de.lessvoid.nifty.spi.node.NiftyControlNode;
+import de.lessvoid.nifty.spi.node.NiftyControlNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeAccessor;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
@@ -42,5 +45,12 @@ public class InternalNiftyNodeAccessorRegistry {
     }
 
     return niftyNodeAccessor.getImplementation(niftyNode);
+  }
+
+  @Nonnull
+  public <T extends NiftyControlNode, B extends NiftyControlBuilder> NiftyControlNodeImpl<T, B> getControlNodeImpl(@Nonnull final T niftyNode) {
+    NiftyNodeImpl<T> result = getImpl(niftyNode);
+    // TODO does this need more checks? we kinda assume the caller will actually call that for a NiftyControlNodeImpl
+    return (NiftyControlNodeImpl<T, B>) result;
   }
 }

@@ -50,9 +50,6 @@ import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
 public class UseCase_a05_RotatingChildNode {
 
   public UseCase_a05_RotatingChildNode(final Nifty nifty) throws IOException {
-    //nifty.getConfiguration().setRenderShowBuckets(true);
-    //nifty.getConfiguration().setRenderShowNodes(true);
-
     final NiftyTransformationNode rootTransformation = transformationNode();
     final NiftyTransformationNode childTransformation = transformationNode();
     childTransformation.setPivotX(0.5);

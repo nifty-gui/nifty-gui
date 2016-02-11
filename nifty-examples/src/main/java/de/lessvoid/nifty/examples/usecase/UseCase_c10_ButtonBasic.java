@@ -26,11 +26,39 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyFont;
+import de.lessvoid.nifty.types.NiftyColor;
+
+import java.io.IOException;
+
+import static de.lessvoid.nifty.control.ButtonNode.button;
+import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
+import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
+import static de.lessvoid.nifty.node.Horizontal.Center;
+import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.Vertical.Middle;
+
 /**
  * Display some simple Button - with style ;)
  * @author void
  */
 public class UseCase_c10_ButtonBasic {
+  public UseCase_c10_ButtonBasic(final Nifty nifty) throws IOException {
+    final NiftyFont font = nifty.createFont("fonts/aurulent-sans-16.fnt");
+    nifty
+      .addNode(backgroundColorNode(NiftyColor.fromString("#112")))
+        .addNode(contentNode())
+          .addNode(alignmentLayoutNode())
+            .addNode(alignmentLayoutChildNode(Center, Middle))
+              .addNode(button(font, "Hello"));
+  }
+
+  public static void main(final String[] args) throws Exception {
+    UseCaseRunner.run(UseCase_c10_ButtonBasic.class, args);
+  }
+
   /* FIXME: No controls implementation
   private final NiftyNode niftyNode;
   private final Label statusLabel;

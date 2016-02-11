@@ -27,6 +27,8 @@
 package de.lessvoid.nifty;
 
 import de.lessvoid.nifty.node.NiftyReferenceNode;
+import de.lessvoid.nifty.spi.node.NiftyControlBuilder;
+import de.lessvoid.nifty.spi.node.NiftyControlNode;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 
 /**
@@ -77,6 +79,10 @@ public class NiftyNodeBuilder {
    */
   public NiftyNodeBuilder addNode(final NiftyNode child) {
     return nifty.addNode(this.node, child);
+  }
+
+  public <T extends NiftyControlBuilder> T addNode(final NiftyControlNode child) {
+    return nifty.addControlNode(this.node, child);
   }
 
   /**

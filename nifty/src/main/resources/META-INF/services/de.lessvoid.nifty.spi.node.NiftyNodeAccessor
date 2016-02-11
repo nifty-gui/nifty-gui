@@ -44,3 +44,6 @@ de.lessvoid.nifty.node.SimpleLayoutNodeAccessor
 de.lessvoid.nifty.node.SizeLayoutNodeAccessor
 de.lessvoid.nifty.node.StackLayoutNodeAccessor
 de.lessvoid.nifty.node.UniformStackLayoutNodeAccessor
+
+# Control Nodes
+de.lessvoid.nifty.control.ButtonNodeAccessor

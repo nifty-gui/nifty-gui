@@ -25,7 +25,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- * Nifty Control API (wip).
+ * Nifty Controls.
  *
  * @since 2.0
  */

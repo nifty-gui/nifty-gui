@@ -24,69 +24,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty.control;
+package de.lessvoid.nifty.spi.node;
 
 import de.lessvoid.nifty.spi.node.NiftyNode;
 
 /**
- * This abstract class already implements a couple of NiftyControl method. Use this class as the base class for
- * custom controls.
+ * Interface for all Nifty Controls.
  *
  * @author void
  */
-public abstract class NiftyAbstractControl implements NiftyControl {
-  protected NiftyNode niftyNode;
+public interface NiftyControlNode extends NiftyNode {
 
-  @Override
-  public void init(final NiftyNode niftyNode) {
-    this.niftyNode = niftyNode;
-    // FIXME NiftyNodeAccessor.getDefault().getInternalNiftyNode(niftyNode).setControl(this);
-  }
+  /**
+   * Set the enabled state from the given boolean.
+   *
+   * @param enabled the new enabled state
+   */
+  void setEnabled(boolean enabled);
 
-  @Override
-  public NiftyNode getNode() {
-    return niftyNode;
-  }
-
-  @Override
-  public void enable() {
-    // TODO
-  }
-
-  @Override
-  public void disable() {
-    // TODO
-  }
-
-  @Override
-  public void setEnabled(final boolean enabled) {
-    // TODO
-  }
-
-  @Override
-  public boolean isEnabled() {
-    // TODO
-    return false;
-  }
-
-  @Override
-  public void setFocus() {
-    // TODO
-  }
-
-  @Override
-  public void setFocusable(boolean focusable) {
-    // TODO
-  }
-
-  @Override
-  public boolean hasFocus() {
-    // TODO
-    return false;
-  }
-
-  @Override
-  public String toString() {
-    return this.getClass().getSimpleName() + niftyNode.toString();
-  }
+  /**
+   * Get the current enabled state of the control.
+   *
+   * @return {@code true} in case the element is enabled
+   */
+  boolean isEnabled();
 }

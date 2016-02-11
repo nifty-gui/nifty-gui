@@ -28,6 +28,7 @@ package de.lessvoid.niftyinternal.render.standard;
 
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.nifty.NiftyConfiguration;
 import de.lessvoid.niftyinternal.canvas.Context;

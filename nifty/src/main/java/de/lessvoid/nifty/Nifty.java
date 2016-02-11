@@ -36,6 +36,9 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
 import de.lessvoid.nifty.spi.TimeProvider;
+import de.lessvoid.nifty.spi.node.NiftyControlBuilder;
+import de.lessvoid.nifty.spi.node.NiftyControlNode;
+import de.lessvoid.nifty.spi.node.NiftyControlNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNode;
@@ -392,6 +395,16 @@ public class Nifty {
   }
 
   /**
+   * Add the given NiftyControlNode to the root node.
+   *
+   * @param child the child NiftyControlNode to add as well
+   * @return NiftyControlBuilder
+   */
+  public <T extends NiftyControlBuilder> T addNode(final NiftyControlNode child) {
+    return addControlNode(tree.getRootNode().getNiftyNode(), child);
+  }
+
+  /**
    * Add the given child(s) NiftyNode(s) to the given parent NiftyNode.
    *
    * @param parent the NiftyNode parent to add the child to
@@ -411,6 +424,31 @@ public class Nifty {
     }
 
     return new NiftyNodeBuilder(this, parent, child);
+  }
+
+  /**
+   * Add the given child NiftyControlNode to the given parent NiftyNode.
+   *
+   * @param parent the NiftyNode parent to add the child to
+   * @param child the child NiftyNode to add to the parent
+   * @return a NiftyControlBuilder to customize the NiftyControlNode more
+   */
+  public <T extends NiftyControlBuilder> T addControlNode(
+      @Nonnull final NiftyNode parent,
+      @Nonnull final NiftyControlNode child) {
+    NiftyControlNodeImpl<? extends NiftyControlNode, ? extends NiftyControlBuilder> childImpl = niftyControlNodeImpl(child);
+
+    processNodeAdding(childImpl);
+    tree.addChild(niftyNodeImpl(parent), childImpl);
+
+    if (child instanceof NiftyReferenceNode) {
+      NiftyReferenceNode referenceNode = (NiftyReferenceNode) child;
+      referenceNodeLookup.put(referenceNode.getId(), referenceNode);
+    }
+
+    childImpl.explode(new NiftyNodeBuilder(this, parent, child));
+
+    return (T) childImpl.getBuilder();
   }
 
   /**
@@ -485,15 +523,24 @@ public class Nifty {
     }
     return parent.getNiftyNode();
   }
+/*
+  public <T> addControlNode(final ) {
+
+  }
+*/
+  /////////////////////////////////////////////////////////////////////////////
+  // Private methods
+  /////////////////////////////////////////////////////////////////////////////
 
   @Nonnull
   private <T extends NiftyNode> NiftyNodeImpl<T> niftyNodeImpl(final T child) {
     return nodeAccessorRegistry.getImpl(child);
   }
 
-  /////////////////////////////////////////////////////////////////////////////
-  // Private methods
-  /////////////////////////////////////////////////////////////////////////////
+  @Nonnull
+  private <T extends NiftyControlNode, B extends NiftyControlBuilder> NiftyControlNodeImpl<T, B> niftyControlNodeImpl(final T child) {
+    return nodeAccessorRegistry.getControlNodeImpl(child);
+  }
 
   private List<NiftyNode> collectInputReceivers() {
     /* FIXME
