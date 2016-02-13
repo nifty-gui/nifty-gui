@@ -31,7 +31,7 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
 /**
  * Created by void on 12.09.15.
  */
-public class NiftyReferenceNode implements NiftyNode {
+public final class NiftyReferenceNode implements NiftyNode {
   private final NiftyReferenceNodeImpl impl;
 
   public static NiftyReferenceNode referenceNode(final String id) {

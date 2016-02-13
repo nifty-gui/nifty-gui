@@ -33,7 +33,7 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
  * The API for the NiftyBackgroundColorNode.
  * Created by void on 09.08.15.
  */
-public class NiftyBackgroundColorNode implements NiftyNode {
+public final class NiftyBackgroundColorNode implements NiftyNode {
   private NiftyBackgroundColorNodeImpl impl;
 
   public static NiftyBackgroundColorNode backgroundColorNode(final NiftyColor backgroundColor) {

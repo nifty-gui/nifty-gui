@@ -32,7 +32,7 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
 /**
  * Created by void on 09.08.15.
  */
-public class NiftyContentNode implements NiftyNode {
+public final class NiftyContentNode implements NiftyNode {
   private final StringBuilder builder = new StringBuilder();
   private final NiftyContentNodeImpl impl;
 

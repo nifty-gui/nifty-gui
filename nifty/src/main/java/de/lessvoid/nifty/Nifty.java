@@ -441,11 +441,6 @@ public class Nifty {
     processNodeAdding(childImpl);
     tree.addChild(niftyNodeImpl(parent), childImpl);
 
-    if (child instanceof NiftyReferenceNode) {
-      NiftyReferenceNode referenceNode = (NiftyReferenceNode) child;
-      referenceNodeLookup.put(referenceNode.getId(), referenceNode);
-    }
-
     childImpl.explode(new NiftyNodeBuilder(this, parent, child));
 
     return (T) childImpl.getBuilder();

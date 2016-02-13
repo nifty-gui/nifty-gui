@@ -32,7 +32,7 @@ import de.lessvoid.nifty.spi.node.NiftyNode;
  * The API for the NiftyTransformationNode node.
  * Created by void on 09.08.15.
  */
-public class NiftyTransformationNode implements NiftyNode {
+public final class NiftyTransformationNode implements NiftyNode {
   private final NiftyTransformationNodeImpl impl;
 
   public static NiftyTransformationNode transformationNode() {

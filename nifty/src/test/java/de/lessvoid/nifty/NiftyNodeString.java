@@ -29,7 +29,7 @@ package de.lessvoid.nifty;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 
-public class NiftyNodeString implements NiftyNode {
+public final class NiftyNodeString implements NiftyNode {
   private NiftyNodeStringImpl impl;
 
   public NiftyNodeString(final String value) {
