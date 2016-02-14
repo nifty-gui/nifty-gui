@@ -7,7 +7,7 @@
   </parent>
   <artifactId>nifty-examples-jogl</artifactId>
   <properties>
-    <jogamp.version>2.1.4</jogamp.version>
+    <jogamp.version>2.3.2</jogamp.version>
   </properties>
   <name>Nifty Examples for JOGL</name>
   <dependencies>

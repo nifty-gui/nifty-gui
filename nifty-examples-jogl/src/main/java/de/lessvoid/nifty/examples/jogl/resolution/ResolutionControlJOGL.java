@@ -1,17 +1,18 @@
 package de.lessvoid.nifty.examples.jogl.resolution;
 
-import com.jogamp.newt.opengl.GLWindow;
-
-import de.lessvoid.nifty.examples.jogl.resolution.ResolutionControlJOGL.Resolution;
-import de.lessvoid.nifty.examples.resolution.ResolutionControl;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
+
+import com.jogamp.newt.opengl.GLWindow;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+
+import de.lessvoid.nifty.examples.jogl.resolution.ResolutionControlJOGL.Resolution;
+import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 
 public class ResolutionControlJOGL implements ResolutionControl<Resolution> {
   private GLWindow window;

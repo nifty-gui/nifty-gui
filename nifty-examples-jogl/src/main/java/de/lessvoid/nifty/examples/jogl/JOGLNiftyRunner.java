@@ -5,12 +5,14 @@ import java.util.logging.LogManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.media.opengl.*;
-
-import paulscode.sound.SoundSystemException;
-import paulscode.sound.libraries.LibraryJavaSound;
 
 import com.jogamp.newt.opengl.GLWindow;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLEventListener;
+import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import de.lessvoid.nifty.Nifty;
@@ -26,6 +28,8 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+import paulscode.sound.SoundSystemException;
+import paulscode.sound.libraries.LibraryJavaSound;
 
 /**
  * Takes care of JOGL initialization.
