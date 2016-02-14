@@ -106,21 +106,34 @@ public class MouseOverHandler {
       element.mouseEventHoverPreprocess(mouseEvent, eventTime);
     }
 
+    // last step is to process all other elements.
+    //
+    // Note: This was originally executed after the mouseOverElements processing below. However, that made the testcase
+    //       provided in issue #412 to not work correctly. In the test case we want that onEndHover effects are executed
+    //       first. Especially before the onStartHover effect of the new elements that are mouse over now. Since the
+    //       mouseOverElements list will only hit elements that are mouse over elements in the current frame, we would
+    //       not execute any effects processing for elements that have lost the mouse over state. Doing the processing
+    //       of the regular mouseElements here first allows these elements to do their onEndHover processing first.
+    //
+    //       That being said, I'm not sure if this is actually correct and if any other use cases break now. Since
+    //       all the mouseEvent() processing does check the position of the mouse cursor again (if it is inside of the
+    //       element) I'm confident that it should work in most cases. However, there might be situations where the
+    //       changed order of effect processing and/or event handling has unwanted side effects.
+    for (int i = mouseElements.size() - 1; i >= 0; i--) {
+      Element element = mouseElements.get(i);
+      if (element.mouseEvent(mouseEvent, eventTime)) {
+        break;
+      }
+    }
+
     // second step is to process mouse over elements first
     for (int i = mouseOverElements.size() - 1; i >= 0; i--) {
       Element element = mouseOverElements.get(i);
       if (element.mouseEvent(mouseEvent, eventTime)) {
-        return;
+        break;
       }
     }
 
-    // last step is to process all other elements.
-    for (int i = mouseElements.size() - 1; i >= 0; i--) {
-      Element element = mouseElements.get(i);
-      if (element.mouseEvent(mouseEvent, eventTime)) {
-        return;
-      }
-    }
   }
 
   /**
