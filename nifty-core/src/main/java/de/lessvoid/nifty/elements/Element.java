@@ -1758,18 +1758,18 @@ public class Element implements NiftyEvent, EffectManager.Notify {
       if (isInsideParentClipArea(mouseX, mouseY)) {
         return
             mouseX >= getX() &&
-                mouseX <= (getX() + getWidth()) &&
-                mouseY > (getY()) &&
-                mouseY < (getY() + getHeight());
+            mouseX < (getX() + getWidth()) &&
+            mouseY >= (getY()) &&
+            mouseY < (getY() + getHeight());
       } else {
         return false;
       }
     } else {
       return
           mouseX >= getX() &&
-              mouseX <= (getX() + getWidth()) &&
-              mouseY > (getY()) &&
-              mouseY < (getY() + getHeight());
+          mouseX < (getX() + getWidth()) &&
+          mouseY >= (getY()) &&
+          mouseY < (getY() + getHeight());
     }
   }
 
