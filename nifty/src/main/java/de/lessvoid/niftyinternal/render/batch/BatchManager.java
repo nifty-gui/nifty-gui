@@ -151,19 +151,8 @@ public class BatchManager {
     batch.add(x, y, arcParameters.getRadius(), mat);
   }
 
-  public void addTriangleFanVertex(final float x, final float y, final Mat4 mat, final boolean forceNewBatch, final boolean last) {
-    TriangleFanBatch batch;
-    if (forceNewBatch) {
-      batch = addBatch(TriangleFanBatchFactory.Instance, null);
-    } else {
-      batch = requestBatch(TriangleFanBatch.class, null, TriangleFanBatchFactory.Instance);
-    }
-    if (forceNewBatch) {
-      batch.enableStartPathBatch();
-    }
-    if (last) {
-      batch.enableEndPathBatch();
-    }
+  public void addTriangleFanVertex(final float x, final float y, final Mat4 mat) {
+    TriangleFanBatch batch = requestBatch(TriangleFanBatch.class, null, TriangleFanBatchFactory.Instance);
     batch.add(x, y, mat);
   }
 

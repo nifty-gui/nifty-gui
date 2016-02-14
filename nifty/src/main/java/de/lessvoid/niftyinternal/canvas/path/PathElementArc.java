@@ -68,7 +68,7 @@ public class PathElementArc implements PathElement {
       double angle = startAngle + t * (endAngle - startAngle);
       double cx = x + r * Math.cos(angle);
       double cy = y + r * Math.sin(angle);
-      batchManager.addTriangleFanVertex((float) cx, (float) cy, transform, i==0, i==32-1);
+      batchManager.addTriangleFanVertex((float) cx, (float) cy, transform);
     }
   }
 }

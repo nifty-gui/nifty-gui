@@ -543,12 +543,20 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   @Override
   public void pathFill(final FloatBuffer vertices) {
     log.trace("pathFill()");
+    /*
+    gl.glClear(gl.GL_STENCIL_BUFFER_BIT());
+    gl.glColorMask(gl.GL_FALSE, gl.GL_FALSE, gl.GL_FALSE, gl.GL_FALSE);
+    gl.glDepthMask(gl.GL_FALSE);
+    */
+
+
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
     vertices.flip();
 
     // put all the vertices into the buffer
     b.put(vertices);
+    b.flip();
 
     // set up the shader
     CoreShader shader = shaderManager.activate(FILL_ALPHA_SHADER);
@@ -557,7 +565,6 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     vao.bind();
     vbo.bind();
-    vbo.getBuffer().flip();
     vbo.send();
 
     vao.enableVertexAttribute(0);
@@ -565,13 +572,13 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     vao.disableVertexAttribute(1);
 
     changeCompositeOperation(NiftyCompositeOperation.Max);
-    coreRender.renderTriangleFan(vertices.limit() / TriangleFanBatch.PRIMITIVE_SIZE + 1);
+    coreRender.renderTriangleFan(vertices.limit() / TriangleFanBatch.PRIMITIVE_SIZE);
 
     vbo.getBuffer().clear();
   }
 
   @Override
-  public void pathEnd(final NiftyColor lineColor) {
+  public void pathEnd(final NiftyColor color) {
     log.trace("pathEnd()");
 
     // Second Pass
@@ -580,31 +587,31 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     FloatBuffer quad = vbo.getBuffer();
     quad.put(0.f);
     quad.put(0.f);
-    quad.put((float) lineColor.getRed());
-    quad.put((float) lineColor.getGreen());
-    quad.put((float) lineColor.getBlue());
-    quad.put((float) lineColor.getAlpha());
+    quad.put((float) color.getRed());
+    quad.put((float) color.getGreen());
+    quad.put((float) color.getBlue());
+    quad.put((float) color.getAlpha());
 
     quad.put(0.f);
     quad.put(0.f + getDisplayHeight());
-    quad.put((float) lineColor.getRed());
-    quad.put((float) lineColor.getGreen());
-    quad.put((float) lineColor.getBlue());
-    quad.put((float) lineColor.getAlpha());
+    quad.put((float) color.getRed());
+    quad.put((float) color.getGreen());
+    quad.put((float) color.getBlue());
+    quad.put((float) color.getAlpha());
 
     quad.put(0.f + getDisplayWidth());
     quad.put(0.f);
-    quad.put((float) lineColor.getRed());
-    quad.put((float) lineColor.getGreen());
-    quad.put((float) lineColor.getBlue());
-    quad.put((float) lineColor.getAlpha());
+    quad.put((float) color.getRed());
+    quad.put((float) color.getGreen());
+    quad.put((float) color.getBlue());
+    quad.put((float) color.getAlpha());
 
     quad.put(0.f + getDisplayWidth());
     quad.put(0.f + getDisplayHeight());
-    quad.put((float) lineColor.getRed());
-    quad.put((float) lineColor.getGreen());
-    quad.put((float) lineColor.getBlue());
-    quad.put((float) lineColor.getAlpha());
+    quad.put((float) color.getRed());
+    quad.put((float) color.getGreen());
+    quad.put((float) color.getBlue());
+    quad.put((float) color.getAlpha());
     quad.flip();
 
     vao.bind();

@@ -47,8 +47,6 @@ public class TriangleFanBatch implements Batch<Void> {
   // Vec4 buffer data
   private final Vec4 vsrc = new Vec4();
   private final Vec4 vdst = new Vec4();
-  private boolean isStartPathBatch;
-  private boolean isEndPathBatch;
 
   public TriangleFanBatch() {
     this.b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
@@ -56,15 +54,7 @@ public class TriangleFanBatch implements Batch<Void> {
 
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    if (isStartPathBatch) {
-      renderDevice.pathBegin();
-    }
-
     renderDevice.pathFill(b);
-
-    if (isEndPathBatch) {
-      renderDevice.pathEnd(NiftyColor.red());
-    }
   }
 
   @Override
@@ -88,13 +78,5 @@ public class TriangleFanBatch implements Batch<Void> {
 
   private FloatBuffer createBuffer(final int size) {
     return ByteBuffer.allocateDirect(size << 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
-  }
-
-  public void enableStartPathBatch() {
-    isStartPathBatch = true;
-  }
-
-  public void enableEndPathBatch() {
-    isEndPathBatch = true;
   }
 }
