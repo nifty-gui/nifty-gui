@@ -14,7 +14,7 @@
     <module>nifty-examples</module>
   </modules>
   <properties>
-    <coregl-utils.version>2.0.1-SNAPSHOT</coregl-utils.version>
+    <coregl-utils.version>2.1.0-SNAPSHOT</coregl-utils.version>
     <slf4j.version>1.7.14</slf4j.version>
   </properties>
   <url>https://github.com/nifty-gui/nifty-gui</url>

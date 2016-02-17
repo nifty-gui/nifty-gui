@@ -27,6 +27,7 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCallback;
 import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.NiftyCanvasPainter;
 import de.lessvoid.nifty.UnitValue;
@@ -46,27 +47,41 @@ import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
  */
 public class UseCase_b16_CanvasFillPath {
   public UseCase_b16_CanvasFillPath(final Nifty nifty) {
+    final NiftyContentNode contentNode = contentNode().setCanvasPainter(new NiftyCanvasPainter() {
+      @Override
+      public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
+        canvas.setFillStyle(NiftyColor.blue());
+        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+
+        canvas.beginPath();
+        canvas.arc(200, 200, 100, 0., 2 * Math.PI - .5 * Math.PI);
+        canvas.lineTo(200, 200);
+        /*
+        canvas.moveTo(100, 100);
+        canvas.lineTo(200, 100);
+        canvas.lineTo(120, 120);
+        canvas.lineTo(100, 200);
+        canvas.lineTo(100, 100);
+        */
+
+        canvas.setFillStyle(NiftyColor.red());
+        canvas.fill();
+
+        canvas.setStrokeColor(NiftyColor.white());
+        canvas.stroke();
+      }
+    });
     nifty
       .addNode(absoluteLayoutNode())
         .addNode(absoluteLayoutChildNode((nifty.getScreenWidth() - 512) / 2, (nifty.getScreenHeight() - 512) / 2))
           .addNode(fixedSizeLayoutNode(512.f, 512.f))
-            .addNode(contentNode().setCanvasPainter(new NiftyCanvasPainter() {
-              @Override
-              public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
-                canvas.setFillStyle(NiftyColor.blue());
-                canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
-
-                canvas.beginPath();
-                canvas.arc(200, 200, 100, 0., 2 * Math.PI - .5 * Math.PI);
-                canvas.lineTo(200, 200);
-
-                canvas.setFillStyle(NiftyColor.red());
-                canvas.fill();
-
-                //canvas.setStrokeColor(NiftyColor.black());
-                //canvas.stroke();
-              }
-            }));
+            .addNode(contentNode);
+    nifty.startAnimated(0, 100, new NiftyCallback<Float>() {
+      @Override
+      public void execute(Float aFloat) {
+        contentNode.redraw();
+      }
+    });
   }
 
   public static void main(final String[] args) throws Exception {

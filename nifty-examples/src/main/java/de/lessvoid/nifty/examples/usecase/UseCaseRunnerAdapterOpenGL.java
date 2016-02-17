@@ -33,9 +33,9 @@ import de.lessvoid.nifty.NiftyConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.lessvoid.coregl.spi.CoreGL;
-import de.lessvoid.coregl.spi.CoreSetup;
-import de.lessvoid.coregl.spi.CoreSetup.RenderLoopCallback;
+import com.lessvoid.coregl.spi.CoreGL;
+import com.lessvoid.coregl.spi.CoreSetup;
+import com.lessvoid.coregl.spi.CoreSetup.RenderLoopCallback;
 
 import de.lessvoid.nifty.NiftyCallback;
 import de.lessvoid.nifty.time.AccurateTimeProvider;

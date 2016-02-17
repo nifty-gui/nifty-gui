@@ -133,9 +133,21 @@ public class PathRenderer {
       final BatchManager batchManager) {
     assertPath();
 
+    // TODO is this actual a correct way to do it?
+    // we need to close an eventual open path but only for the fill
+    // so we kinda try to save the current path here to restore it later
+    Vec2 save = new Vec2(pathStartVertex);
+    List<PathElement> backup = new ArrayList<>(path);
+
+    closePath();
+
     for (int i=0; i<path.size(); i++) {
       path.get(i).fill(transform, batchManager);
     }
+
+    // restore the path
+    pathStartVertex = new Vec2(save);
+    path = new ArrayList<>(backup);
   }
 
   private boolean isLastPathElementMoveTo() {

@@ -28,11 +28,11 @@ package de.lessvoid.nifty.renderer.opengl;
 
 import java.nio.ByteBuffer;
 
-import de.lessvoid.coregl.ColorFormat;
-import de.lessvoid.coregl.CoreTexture2D;
-import de.lessvoid.coregl.ResizeFilter;
-import de.lessvoid.coregl.Type;
-import de.lessvoid.coregl.spi.CoreGL;
+import com.lessvoid.coregl.ColorFormat;
+import com.lessvoid.coregl.CoreTexture2D;
+import com.lessvoid.coregl.ResizeFilter;
+import com.lessvoid.coregl.Type;
+import com.lessvoid.coregl.spi.CoreGL;
 import de.lessvoid.niftyinternal.NiftyResourceLoader;
 import de.lessvoid.niftyinternal.render.io.ImageLoader;
 import de.lessvoid.niftyinternal.render.io.ImageLoaderFactory;

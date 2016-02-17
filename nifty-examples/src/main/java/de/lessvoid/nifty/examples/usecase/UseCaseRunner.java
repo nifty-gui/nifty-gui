@@ -32,10 +32,10 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import de.lessvoid.coregl.jogl.CoreSetupJogl;
-import de.lessvoid.coregl.jogl.JoglCoreGL;
-import de.lessvoid.coregl.lwjgl.CoreSetupLwjgl;
-import de.lessvoid.coregl.lwjgl.LwjglCoreGL;
+import com.lessvoid.coregl.jogl.CoreSetupJogl;
+import com.lessvoid.coregl.jogl.JoglCoreGL;
+import com.lessvoid.coregl.lwjgl.CoreSetupLwjgl;
+import com.lessvoid.coregl.lwjgl.LwjglCoreGL;
 import de.lessvoid.nifty.NiftyConfiguration;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 

@@ -31,7 +31,6 @@ public class CommandFillPath implements Command {
 
   @Override
   public void execute(final Context context) {
-    //context.closePath();
     context.fillPath();
   }
 }
