@@ -48,6 +48,9 @@ import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
+import static de.lessvoid.nifty.types.NiftyLineCapType.*;
+import static de.lessvoid.nifty.types.NiftyLineJoinType.*;
+
 public class Context {
   // contentTexture is the final content this Context draws to - what you think of when you think the content
   private final NiftyTexture contentTexture;
@@ -62,6 +65,7 @@ public class Context {
   // we'll use this ColorQuadBatch to clear the workingTexture
   private final ColorQuadBatch colorBatch;
   private final Statistics stats;
+  private final LineParameters fillOutlineParameters;
 
   private NiftyColor fillColor;
   private NiftyLinearGradient linearGradient;
@@ -81,6 +85,10 @@ public class Context {
     this.textureBatch = textureBatch(workingTexture);
     this.colorBatch = colorBatch();
     this.stats = stats;
+    this.fillOutlineParameters = new LineParameters();
+    this.fillOutlineParameters.setLineWidth(2.f);
+    this.fillOutlineParameters.setLineCapType(Square);
+    this.fillOutlineParameters.setLineJoinType(Miter);
   }
 
   public void bind(final NiftyRenderDevice renderDevice, final BatchManager batchManager) {
@@ -234,7 +242,7 @@ public class Context {
 
   public void fillPath() {
     batchManager.addBeginPath();
-    pathRenderer.fillPath(transform, batchManager);
+    pathRenderer.fillPath(transform, batchManager, fillOutlineParameters);
     batchManager.addEndPath(fillColor);
   }
 

@@ -495,7 +495,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     // line parameters
     float w = lineWidth;
-    float r = 2.f;
+    float r = 1.f;
 
     // set up the shader
     CoreShader shader = shaderManager.activate(getLineShaderKey(lineCapType, lineJoinType));
@@ -560,73 +560,11 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   @Override
   public void pathFill(final FloatBuffer vertices) {
     log.trace("pathFill()");
-/*
-    System.out.println("start");
-    for (int i=0; i<vertices.position(); i++) {
-      System.out.println(vertices.get(i));
-    }
-    System.out.println("end");
-*/
+
     // set up the shader
     CoreShader shader = shaderManager.activate(FILL_ALPHA_SHADER);
     Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
     shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-/*
-    gl.glEnable(gl.GL_STENCIL_TEST());
-
-    gl.glStencilMask(0xFF);
-    gl.glClear(gl.GL_STENCIL_BUFFER_BIT());
-
-    gl.glColorMask(false, false, false, false);
-    gl.glDepthMask(false);
-    gl.glStencilFunc(gl.GL_NEVER(), 1, 0xFF);
-    gl.glStencilOp(gl.GL_REPLACE(), gl.GL_KEEP(), gl.GL_KEEP());
-
-    FloatBuffer quad = vbo.getBuffer();
-    quad.put(120.f);
-    quad.put(120.f);
-    quad.put(120.f);
-    quad.put(180.f);
-    quad.put(180.f);
-    quad.put(120.f);
-    quad.put(180.f);
-    quad.put(180.f);
-    quad.flip();
-    vao.bind();
-    vbo.bind();
-    vbo.send();
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
-    vao.disableVertexAttribute(1);
-    coreRender.renderTriangleStrip(4);
-    vbo.getBuffer().clear();
-
-    gl.glColorMask(true, true, true, true);
-    gl.glDepthMask(true);
-    gl.glStencilMask(0x00);
-    gl.glStencilFunc(gl.GL_EQUAL(), 1, 0xFF);
-    gl.checkGLError();
-
-    quad = vbo.getBuffer();
-    quad.put(100.f);
-    quad.put(100.f);
-    quad.put(100.f);
-    quad.put(200.f);
-    quad.put(200.f);
-    quad.put(100.f);
-    quad.put(200.f);
-    quad.put(200.f);
-    quad.flip();
-    vao.bind();
-    vbo.bind();
-    vbo.send();
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
-    vao.disableVertexAttribute(1);
-    coreRender.renderTriangleStrip(4);
-    vbo.getBuffer().clear();
-*/
-// LA
 
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
@@ -650,7 +588,6 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     gl.glStencilFunc(gl.GL_NEVER(), 0, 0xFF);
     gl.glStencilOp(gl.GL_INVERT(), gl.GL_KEEP(), gl.GL_KEEP());
 
-    changeCompositeOperation(NiftyCompositeOperation.Max);
     coreRender.renderTriangleFan(vertices.limit() / TriangleFanBatch.PRIMITIVE_SIZE);
 
     gl.glColorMask(true, true, true, true);
@@ -658,7 +595,6 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     gl.glStencilMask(0x00);
     gl.glStencilFunc(gl.GL_NOTEQUAL(), 0, 0xFF);
 
-    changeCompositeOperation(NiftyCompositeOperation.SourceOver);
     coreRender.renderTriangleFan(vertices.limit() / TriangleFanBatch.PRIMITIVE_SIZE);
     vbo.getBuffer().clear();
 

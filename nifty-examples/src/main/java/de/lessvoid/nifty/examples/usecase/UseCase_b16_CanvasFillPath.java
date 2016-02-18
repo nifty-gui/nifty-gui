@@ -53,22 +53,15 @@ public class UseCase_b16_CanvasFillPath {
         canvas.setFillStyle(NiftyColor.blue());
         canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
+        canvas.setFillStyle(NiftyColor.green());
+        canvas.fillRect(100, 100, 200, 200);
+
         canvas.beginPath();
         canvas.arc(200, 200, 100, 0., 2 * Math.PI - .5 * Math.PI);
         canvas.lineTo(200, 200);
-        /*
-        canvas.moveTo(100, 100);
-        canvas.lineTo(200, 100);
-        canvas.lineTo(120, 120);
-        canvas.lineTo(100, 200);
-        canvas.lineTo(100, 100);
-        */
 
         canvas.setFillStyle(NiftyColor.red());
         canvas.fill();
-
-        canvas.setStrokeColor(NiftyColor.white());
-        canvas.stroke();
       }
     });
     nifty

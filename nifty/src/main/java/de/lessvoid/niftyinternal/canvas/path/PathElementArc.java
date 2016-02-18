@@ -38,13 +38,15 @@ public class PathElementArc implements PathElement {
   private double r;
   private double startAngle;
   private double endAngle;
+  private final boolean hasPrecedingMoveTo;
 
-  public PathElementArc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
+  public PathElementArc(final double x, final double y, final double r, final double startAngle, final double endAngle, final boolean hasPrecedingMoveTo) {
     this.x = x;
     this.y = y;
     this.r = r;
     this.startAngle = startAngle;
     this.endAngle = endAngle;
+    this.hasPrecedingMoveTo = hasPrecedingMoveTo;
   }
 
   @Override
@@ -53,17 +55,28 @@ public class PathElementArc implements PathElement {
       final Mat4 transform,
       final BatchManager batchManager,
       final Vec2 currentPos) {
-    batchManager.addArc(x, y, transform, new ArcParameters(lineParameters, (float) startAngle, (float) endAngle, (float) r));
+    if (hasPrecedingMoveTo) {
+      batchManager.addFirstLineVertex(currentPos.getX(), currentPos.getY(), transform, lineParameters);
+    }
 
-    float endX = (float) (Math.cos(endAngle) * r + x);
-    float endY = (float) (Math.sin(endAngle) * r + y);
-    return new Vec2(endX, endY);
+    double cx = 0.0;
+    double cy = 0.0;
+    for (int i=0; i<64; i++) {
+      double t = i / (double) (64 - 1);
+
+      double angle = startAngle + t * (endAngle - startAngle);
+      cx = x + r * Math.cos(angle);
+      cy = y + r * Math.sin(angle);
+      batchManager.addLineVertex((float) cx, (float) cy, transform, lineParameters);
+    }
+
+    return new Vec2((float) cx, (float) cy);
   }
 
   @Override
   public void fill(final Mat4 transform, final BatchManager batchManager) {
-    for (int i=0; i<32; i++) {
-      double t = i / (double) (32 - 1);
+    for (int i=0; i<64; i++) {
+      double t = i / (double) (64 - 1);
 
       double angle = startAngle + t * (endAngle - startAngle);
       double cx = x + r * Math.cos(angle);

@@ -92,7 +92,7 @@ public class PathRenderer {
     if (!path.isEmpty()) {
       lineTo(startX, startY);
     }
-    path.add(new PathElementArc(x, y, r, startAngle, endAngle));
+    path.add(new PathElementArc(x, y, r, startAngle, endAngle, isLastPathElementMoveTo()));
 
     willProduceOutput = true;
 
@@ -130,7 +130,8 @@ public class PathRenderer {
 
   public void fillPath(
       final Mat4 transform,
-      final BatchManager batchManager) {
+      final BatchManager batchManager,
+      final LineParameters fillOutlineParameters) {
     assertPath();
 
     // TODO is this actual a correct way to do it?
@@ -143,6 +144,11 @@ public class PathRenderer {
 
     for (int i=0; i<path.size(); i++) {
       path.get(i).fill(transform, batchManager);
+    }
+
+    Vec2 currentPathPos = null;
+    for (int i=0; i<path.size(); i++) {
+      currentPathPos = path.get(i).stroke(fillOutlineParameters, transform, batchManager, currentPathPos);
     }
 
     // restore the path

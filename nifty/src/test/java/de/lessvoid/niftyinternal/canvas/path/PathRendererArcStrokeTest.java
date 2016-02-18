@@ -50,41 +50,32 @@ public class PathRendererArcStrokeTest {
 
   @Test
   public void testStrokeSingleArc() {
-    Capture<ArcParameters> capture = newCapture();
+    expectArc(batchManager, 100., 75., 50., 0., 2 * Math.PI);
 
-    batchManager.addArc(eq(100.), eq(75.), eq(transform), capture(capture));
     replay(batchManager);
 
     pathRenderer.beginPath();
     pathRenderer.arc(100, 75, 50, 0, 2 * Math.PI);
     pathRenderer.strokePath(lineParameters, transform, batchManager);
-
-    assertArcParameters(capture.getValue(), 0.f, (float)(2 * Math.PI), 50.f);
   }
 
   @Test
   public void testStrokeConnectedArcs() {
-    Capture<ArcParameters> capture = newCapture();
-
-    batchManager.addArc(eq(100.), eq(100.), eq(transform), capture(capture));
+    expectArc(batchManager, 100., 100., 50., 0., 2 * Math.PI);
+    expectArc(batchManager, 412., 284., 50., 0., 2 * Math.PI);
     batchManager.addFirstLineVertex(eq(150.f), eq(100.f), eq(transform), eq(lineParameters));
     batchManager.addLineVertex(eq(462.f), eq(284.f), eq(transform), eq(lineParameters));
-    batchManager.addArc(eq(412.), eq(284.), eq(transform), capture(capture));
     replay(batchManager);
 
     pathRenderer.beginPath();
     pathRenderer.arc(100., 100., 50., 0., 2 * Math.PI);
     pathRenderer.arc(412., 284., 50., 0., 2 * Math.PI);
     pathRenderer.strokePath(lineParameters, transform, batchManager);
-
-    assertArcParameters(capture.getValue(), 0.f, (float)(2 * Math.PI), 50.f);
   }
 
   @Test
   public void testStrokeWithClosePath() {
-    Capture<ArcParameters> capture = newCapture();
-
-    batchManager.addArc(eq(100.), eq(75.), eq(transform), capture(capture));
+    expectArc(batchManager, 100., 75., 50., 0., Math.PI);
     batchManager.addFirstLineVertex(50.f, 75.f, transform, lineParameters);
     batchManager.addLineVertex(150.f, 75.f, transform, lineParameters);
     replay(batchManager);
@@ -93,18 +84,22 @@ public class PathRendererArcStrokeTest {
     pathRenderer.arc(100, 75, 50, 0, Math.PI);
     pathRenderer.closePath();
     pathRenderer.strokePath(lineParameters, transform, batchManager);
-
-    assertArcParameters(capture.getValue(), 0.f, (float)(Math.PI), 50.f);
   }
 
-  private void assertArcParameters(
-      final ArcParameters arcParameters,
-      final float startAngle,
-      final float endAngle,
-      final float radius) {
-    assertEquals(lineParameters, arcParameters.getLineParameters());
-    assertEquals(startAngle, arcParameters.getStartAngle(), 0.01);
-    assertEquals(endAngle, arcParameters.getEndAngle(), 0.01);
-    assertEquals(radius, arcParameters.getRadius(), 0.001);
+  private void expectArc(
+      final BatchManager batchManager,
+      final double x,
+      final double y,
+      final double r,
+      final double startAngle,
+      final double endAngle) {
+    for (int i=0; i<64; i++) {
+      double t = i / (double) (64 - 1);
+
+      double angle = startAngle + t * (endAngle - startAngle);
+      double cx = x + r * Math.cos(angle);
+      double cy = y + r * Math.sin(angle);
+      batchManager.addLineVertex((float) cx, (float) cy, transform, lineParameters);
+    }
   }
 }
