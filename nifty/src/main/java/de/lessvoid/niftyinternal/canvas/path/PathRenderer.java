@@ -52,7 +52,7 @@ public class PathRenderer {
   private boolean willProduceOutput;
 
   public void beginPath() {
-    path = new ArrayList<PathElement>();
+    path = new ArrayList<>();
     pathStartVertex = null;
     willProduceOutput = false;
   }
@@ -73,9 +73,7 @@ public class PathRenderer {
 
     // if we don't have a pathStartVertex yet (nobody called moveTo) then we start the current
     // vertex as the new pathStartVertex so that we can close the path later (if requested).
-    if (pathStartVertex == null) {
-      pathStartVertex = new Vec2((float) x, (float) y);
-    }
+    assertPathStartVertex((float) x, (float) y);
 
     willProduceOutput = true;
   }
@@ -85,9 +83,7 @@ public class PathRenderer {
 
     float startX = (float) (Math.cos(startAngle) * r + x);
     float startY = (float) (Math.sin(startAngle) * r + y);
-    if (pathStartVertex == null) {
-      pathStartVertex = new Vec2(startX, startY);
-    }
+    assertPathStartVertex(startX, startY);
 
     if (!path.isEmpty()) {
       lineTo(startX, startY);
@@ -99,6 +95,27 @@ public class PathRenderer {
     float endX = (float) (Math.cos(endAngle) * r + x);
     float endY = (float) (Math.sin(endAngle) * r + y);
     path.add(new PathElementMoveTo(endX, endY));
+  }
+
+  public void arcTo(final double x1, final double y1, final double x2, final double y2, final double r) {
+    assertPath();
+    assertValidRadius(r);
+    assertPathStartVertex((float) x1, (float) y1);
+
+    // TODO
+    // If the point (x0, y0) is equal to the point (x1, y1),
+    // or if the point (x1, y1) is equal to the point (x2, y2),
+    // or if the radius radius is zero,
+    // then the method must add the point (x1, y1) to the subpath,
+    // and connect that point to the previous point (x0, y0) by a straight line.
+
+    // TODO
+    // Otherwise, if the points (x0, y0), (x1, y1), and (x2, y2) all lie on a single straight line,
+    // then the method must add the point (x1, y1) to the subpath,
+    // and connect that point to the previous point (x0, y0) by a straight line.
+
+    // calc arc
+
   }
 
   public void bezierCurveTo(double cp1x, double cp1y, double cp2x, double cp2y, double x, double y) {
@@ -167,6 +184,18 @@ public class PathRenderer {
   private void assertPath() {
     if (path == null) {
       throw new NiftyRuntimeException("no active path - did you forget to call beginPath()?");
+    }
+  }
+
+  private void assertValidRadius(final double r) {
+    if (r < 0) {
+      throw new NiftyRuntimeException("radius for arcTo must not be negative");
+    }
+  }
+
+  private void assertPathStartVertex(final float x, final float y) {
+    if (pathStartVertex == null) {
+      pathStartVertex = new Vec2(x, y);
     }
   }
 }

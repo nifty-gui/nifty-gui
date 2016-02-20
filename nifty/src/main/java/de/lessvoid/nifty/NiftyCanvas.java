@@ -189,9 +189,17 @@ public class NiftyCanvas {
     impl.arc(x, y, r, startAngle, endAngle);
   }
 
+  /**
+   * The arcTo() method creates an arc/curve between two tangents on the canvas.
+   *
+   * @param x1 The x-coordinate of the first tangent
+   * @param y1 The y-coordinate of the first tangent
+   * @param x2 The x-coordinate of the second tangent
+   * @param y2 The y-coordinate of the second tangent
+   * @param r The radius of the arc
+   */
   public void arcTo(final double x1, final double y1, final double x2, final double y2, final double r) {
-    // TODO
-    throw new UnsupportedOperationException();    
+    impl.arcTo(x1, y1, x2, y2, r);
   }
 
   public boolean isPointInPath() {

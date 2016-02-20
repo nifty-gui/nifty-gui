@@ -161,6 +161,11 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
+  public void arcTo(final double x1, final double y1, final double x2, final double y2, final double r) {
+    commands.add(new CommandArcTo(x1, y1, x2, y2, r));
+    changed = true;
+  }
+
   public boolean isChanged() {
     return changed;
   }

@@ -230,6 +230,10 @@ public class Context {
     pathRenderer.arc(x, y, r, startAngle, endAngle);
   }
 
+  public void arcTo(final double x1, final double y1, final double x2, final double y2, final double r) {
+    pathRenderer.arcTo(x1, y1, x2, y2, r);
+  }
+
   public void closePath() {
     pathRenderer.closePath();
   }
