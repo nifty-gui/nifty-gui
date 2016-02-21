@@ -46,7 +46,6 @@ import de.lessvoid.niftyinternal.NiftyResourceLoader;
 import de.lessvoid.niftyinternal.common.IdGenerator;
 import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.math.MatrixFactory;
-import de.lessvoid.niftyinternal.render.batch.ArcBatch;
 import de.lessvoid.niftyinternal.render.batch.ColorQuadBatch;
 import de.lessvoid.niftyinternal.render.batch.LineBatch;
 import de.lessvoid.niftyinternal.render.batch.LinearGradientQuadBatch;
@@ -517,44 +516,6 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     coreRender.renderLinesAdjacent(vertices.limit() / LineBatch.PRIMITIVE_SIZE + 2);
 
     vbo.getBuffer().clear();
-  }
-
-  @Override
-  public void pathArcs(
-      final FloatBuffer vertices,
-      final NiftyLineCapType lineCapType,
-      final float startAngle,
-      final float endAngle,
-      final float lineWidth,
-      final float radius,
-      final double lineColorAlpha) {
-    log.trace("pathArcs()");
-    vbo.getBuffer().clear();
-    FloatBuffer b = vbo.getBuffer();
-    vertices.flip();
-    b.put(vertices);
-
-    // set up the shader
-    CoreShader shader = shaderManager.activate(getArcShaderKey(lineCapType));
-    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
-    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-    shader.setUniformf("param", startAngle, endAngle, lineWidth / radius / 2.f, (float) lineColorAlpha);
-
-    vao.bind();
-    vbo.bind();
-    vbo.getBuffer().flip();
-    vbo.send();
-
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 4, 0);
-    vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 4, 2);
-
-    changeCompositeOperation(NiftyCompositeOperation.Max);
-    coreRender.renderTriangleStrip(vertices.limit() / ArcBatch.PRIMITIVE_SIZE);
-
-    vbo.getBuffer().clear();
-    vao.unbind();
   }
 
   @Override

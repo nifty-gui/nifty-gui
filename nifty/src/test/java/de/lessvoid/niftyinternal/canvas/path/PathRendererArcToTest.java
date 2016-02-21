@@ -30,7 +30,7 @@ public class PathRendererArcToTest {
     verify(batchManager);
   }
 
-  @Test(expected = NiftyRuntimeException.class)
+  @Test
   public void testWithoutBeginPath() {
     replay(batchManager);
 

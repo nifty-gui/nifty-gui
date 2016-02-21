@@ -101,13 +101,12 @@ public class NiftyCanvas {
 
   // rectangles
 
-  public void rect(final double x0, final double y0, final double x1, final double y1) {
-    // TODO
-    throw new UnsupportedOperationException();    
+  public void rect(final double x, final double y, final double width, final double height) {
+    impl.rect(x, y, width, height);
   }
 
   public void fillRect(final double x, final double y, final double width, final double height) {
-    impl.filledRect(x, y, width, height);
+    impl.fillRect(x, y, width, height);
   }
 
   public void strokeRect(final double x0, final double y0, final double x1, final double y1) {

@@ -26,10 +26,10 @@
  */
 package de.lessvoid.niftyinternal.canvas.path;
 
+import de.lessvoid.nifty.NiftyRuntimeException;
 import de.lessvoid.niftyinternal.canvas.LineParameters;
 import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.math.Vec2;
-import de.lessvoid.niftyinternal.render.batch.ArcParameters;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 
 public class PathElementArc implements PathElement {
@@ -38,30 +38,43 @@ public class PathElementArc implements PathElement {
   private double r;
   private double startAngle;
   private double endAngle;
-  private final boolean hasPrecedingMoveTo;
+  private final boolean startNewLine;
+  private Vec2 pathLastPoint;
 
-  public PathElementArc(final double x, final double y, final double r, final double startAngle, final double endAngle, final boolean hasPrecedingMoveTo) {
+  public PathElementArc(final double x, final double y, final double r, final double startAngle, final double endAngle, final boolean startNewLine) {
     this.x = x;
     this.y = y;
     this.r = r;
     this.startAngle = startAngle;
     this.endAngle = endAngle;
-    this.hasPrecedingMoveTo = hasPrecedingMoveTo;
+    this.startNewLine = startNewLine;
   }
 
   @Override
-  public Vec2 stroke(
-      final LineParameters lineParameters,
-      final Mat4 transform,
-      final BatchManager batchManager,
-      final Vec2 currentPos) {
-    if (hasPrecedingMoveTo) {
-      batchManager.addFirstLineVertex(currentPos.getX(), currentPos.getY(), transform, lineParameters);
+  public Vec2 getPathPoint(final Vec2 pathLastPoint) {
+    if (this.startNewLine) {
+      if (pathLastPoint == null) {
+        throw new NiftyRuntimeException("lineTo with startNewLine (preceding element is moveTo) but no pathLastPoint");
+      }
+      this.pathLastPoint = new Vec2(pathLastPoint);
+    }
+
+    float endX = (float) (Math.cos(endAngle) * r + x);
+    float endY = (float) (Math.sin(endAngle) * r + y);
+    return new Vec2(endX, endY);
+  }
+
+  @Override
+  public void stroke(final LineParameters lineParameters, final Mat4 transform, final BatchManager batchManager) {
+    int i = 0;
+    if (startNewLine) {
+      batchManager.addFirstLineVertex(pathLastPoint.getX(), pathLastPoint.getY(), transform, lineParameters);
+      i = 1;
     }
 
     double cx = 0.0;
     double cy = 0.0;
-    for (int i=0; i<64; i++) {
+    for (; i<64; i++) {
       double t = i / (double) (64 - 1);
 
       double angle = startAngle + t * (endAngle - startAngle);
@@ -69,8 +82,6 @@ public class PathElementArc implements PathElement {
       cy = y + r * Math.sin(angle);
       batchManager.addLineVertex((float) cx, (float) cy, transform, lineParameters);
     }
-
-    return new Vec2((float) cx, (float) cy);
   }
 
   @Override

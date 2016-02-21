@@ -24,32 +24,24 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.canvas.path;
+package de.lessvoid.niftyinternal.canvas;
 
-import de.lessvoid.niftyinternal.canvas.LineParameters;
-import de.lessvoid.niftyinternal.math.Mat4;
-import de.lessvoid.niftyinternal.math.Vec2;
-import de.lessvoid.niftyinternal.render.batch.BatchManager;
 
-public class PathElementMoveTo implements PathElement {
-  private float x;
-  private float y;
+public class CommandRect implements Command {
+  private final double x;
+  private final double y;
+  private final double width;
+  private final double height;
 
-  public PathElementMoveTo(final float x, final float y) {
+  public CommandRect(final double x, final double y, final double width, final double height) {
     this.x = x;
     this.y = y;
+    this.width = width;
+    this.height = height;
   }
 
   @Override
-  public Vec2 getPathPoint(final Vec2 pathLastPoint) {
-    return new Vec2(x, y);
-  }
-
-  @Override
-  public void stroke(final LineParameters lineParameters, final Mat4 transform, final BatchManager batchManager) {
-  }
-
-  @Override
-  public void fill(final Mat4 transform, final BatchManager batchManager) {
+  public void execute(final Context context) {
+    context.rect(x, y, width, height);
   }
 }

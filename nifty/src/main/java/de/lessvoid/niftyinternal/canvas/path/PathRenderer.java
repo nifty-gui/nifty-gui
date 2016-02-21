@@ -26,81 +26,135 @@
  */
 package de.lessvoid.niftyinternal.canvas.path;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.lessvoid.nifty.NiftyRuntimeException;
 import de.lessvoid.niftyinternal.canvas.LineParameters;
 import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.math.Vec2;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * This class receives all path related calls from the Context class and takes care of rendering
+ * This class receives all elements related calls from the Context class and takes care of rendering
  * stroked or filled paths.
  *
  * @author void
  */
 public class PathRenderer {
-  // we keep all added PathElements in this list
-  private List<PathElement> path;
+  private List<SubPath> path = new ArrayList<>();
 
-  // we keep the very first vertex added to the path around (in case someone calls closePath)
-  private Vec2 pathStartVertex;
+  private static class SubPath {
+    private List<PathElement> elements = new ArrayList<>();
+    private boolean isClosed;
+    private Vec2 lastPoint;
 
-  // additionally when we actually produce output we remember here (for closePath later)
-  private boolean willProduceOutput;
+    SubPath() {
+    }
+
+    SubPath(final SubPath src) {
+      this.elements = new ArrayList<>(src.elements);
+      this.isClosed = src.isClosed;
+      this.lastPoint = new Vec2(src.lastPoint);
+    }
+
+    void add(final PathElement pathElement) {
+      elements.add(pathElement);
+      lastPoint = pathElement.getPathPoint(lastPoint);
+    }
+
+    void markAsClosed() {
+      isClosed = true;
+    }
+
+    PathElement getFirstPathElement() {
+      return elements.get(0);
+    }
+
+    Vec2 getLastPoint() {
+      return lastPoint;
+    }
+
+    void stroke(final LineParameters lineParameters, final Mat4 transform, final BatchManager batchManager) {
+      if (elements.isEmpty()) {
+        return;
+      }
+      if (elements.size() < 2) {
+        return;
+      }
+      for (int i = 0; i< elements.size(); i++) {
+        elements.get(i).stroke(lineParameters, transform, batchManager);
+      }
+      if (isClosed) {
+        Vec2 startPoint = elements.get(0).getPathPoint(null);
+        new PathElementLineTo(startPoint.getX(), startPoint.getY(), false).stroke(lineParameters, transform, batchManager);
+      }
+    }
+
+    void fill(final Mat4 transform, final BatchManager batchManager) {
+      for (int i = 0; i< elements.size(); i++) {
+        elements.get(i).fill(transform, batchManager);
+      }
+    }
+
+    boolean isLastElementMoveTo() {
+      if (elements.isEmpty()) {
+        return false;
+      }
+      return elements.get(elements.size() - 1) instanceof PathElementMoveTo;
+    }
+  }
 
   public void beginPath() {
-    path = new ArrayList<>();
-    pathStartVertex = null;
-    willProduceOutput = false;
+    path.clear();
   }
 
   public void moveTo(final double x, final double y) {
-    assertPath();
-    path.add(new PathElementMoveTo(x, y));
-    pathStartVertex = new Vec2((float) x, (float) y);
-    willProduceOutput = false;
+    SubPath subPath = newSubPath();
+    subPath.add(new PathElementMoveTo((float) x, (float) y));
+    path.add(subPath);
+  }
+
+  public void closePath() {
+    if (path.isEmpty()) {
+      return;
+    }
+
+    SubPath lastSubPath = getLastSubPath();
+    lastSubPath.markAsClosed();
+
+    SubPath subPath = newSubPath();
+    subPath.add(lastSubPath.getFirstPathElement());
+    path.add(subPath);
   }
 
   public void lineTo(final double x, final double y) {
-    assertPath();
+    if (ensureSubPath((float) x, (float) y)) {
+      return;
+    }
 
-    // When the preceding path element is a moveTo command then we need to start a new line.
-    // So here we provide the information to PathElementLineTo so that it can start a new batch.
-    path.add(new PathElementLineTo(x, y, isLastPathElementMoveTo()));
-
-    // if we don't have a pathStartVertex yet (nobody called moveTo) then we start the current
-    // vertex as the new pathStartVertex so that we can close the path later (if requested).
-    assertPathStartVertex((float) x, (float) y);
-
-    willProduceOutput = true;
+    SubPath lastSubPath = getLastSubPath();
+    lastSubPath.add(new PathElementLineTo((float) x, (float) y, lastSubPath.isLastElementMoveTo()));
   }
 
-  public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
-    assertPath();
+  public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
+    ensureSubPath((float) cp1x, (float) cp1y);
 
-    float startX = (float) (Math.cos(startAngle) * r + x);
-    float startY = (float) (Math.sin(startAngle) * r + y);
-    assertPathStartVertex(startX, startY);
-
-    if (!path.isEmpty()) {
-      lineTo(startX, startY);
-    }
-    path.add(new PathElementArc(x, y, r, startAngle, endAngle, isLastPathElementMoveTo()));
-
-    willProduceOutput = true;
-
-    float endX = (float) (Math.cos(endAngle) * r + x);
-    float endY = (float) (Math.sin(endAngle) * r + y);
-    path.add(new PathElementMoveTo(endX, endY));
+    SubPath lastSubPath = getLastSubPath();
+    lastSubPath.add(new PathElementCubicBezier((float) cp1x, (float) cp1y, (float) cp2x, (float) cp2y, (float) x, (float) y, lastSubPath.isLastElementMoveTo()));
   }
 
   public void arcTo(final double x1, final double y1, final double x2, final double y2, final double r) {
-    assertPath();
-    assertValidRadius(r);
-    assertPathStartVertex((float) x1, (float) y1);
+    ensureSubPath((float) x1, (float) y1);
+
+    SubPath lastSubPath = getLastSubPath();
+    Vec2 lastPoint = lastSubPath.getLastPoint();
+    float x0 = lastPoint.getX();
+    float y0 = lastPoint.getY();
+
+    if (r < 0) {
+      throw new NiftyRuntimeException("arcTo radius must not be negative");
+    }
 
     // TODO
     // If the point (x0, y0) is equal to the point (x1, y1),
@@ -115,87 +169,68 @@ public class PathRenderer {
     // and connect that point to the previous point (x0, y0) by a straight line.
 
     // calc arc
-
   }
 
-  public void bezierCurveTo(double cp1x, double cp1y, double cp2x, double cp2y, double x, double y) {
-    assertPath();
+  public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
+    float startX = (float) (Math.cos(startAngle) * r + x);
+    float startY = (float) (Math.sin(startAngle) * r + y);
 
-    path.add(new PathElementCubicBezier(cp1x, cp1y, cp2x, cp2y, x, y, isLastPathElementMoveTo()));
-    path.add(new PathElementMoveTo(x, y));
-
-    willProduceOutput = true;
-  }
-
-  public void closePath() {
-    if (pathStartVertex != null && willProduceOutput) {
-      lineTo(pathStartVertex.getX(), pathStartVertex.getY());
+    if (!path.isEmpty()) {
+      lineTo(startX, startY);
     }
+
+    ensureSubPath(startX, startY);
+
+    SubPath lastSubPath = getLastSubPath();
+    lastSubPath.add(new PathElementArc(x, y, r, startAngle, endAngle, lastSubPath.isLastElementMoveTo()));
   }
 
-  public void strokePath(
-      final LineParameters lineParameters,
-      final Mat4 transform,
-      final BatchManager batchManager) {
-    assertPath();
-
-    Vec2 currentPathPos = null;
-    for (int i=0; i<path.size(); i++) {
-      currentPathPos = path.get(i).stroke(lineParameters, transform, batchManager, currentPathPos);
-    }
-  }
-
-  public void fillPath(
-      final Mat4 transform,
-      final BatchManager batchManager,
-      final LineParameters fillOutlineParameters) {
-    assertPath();
-
-    // TODO is this actual a correct way to do it?
-    // we need to close an eventual open path but only for the fill
-    // so we kinda try to save the current path here to restore it later
-    Vec2 save = new Vec2(pathStartVertex);
-    List<PathElement> backup = new ArrayList<>(path);
-
+  public void rect(final double x, final double y, final double width, final double height) {
+    moveTo(x, y);
+    lineTo(x + width, y);
+    lineTo(x + width, y + height);
+    lineTo(x, y + height);
     closePath();
-
-    for (int i=0; i<path.size(); i++) {
-      path.get(i).fill(transform, batchManager);
-    }
-
-    Vec2 currentPathPos = null;
-    for (int i=0; i<path.size(); i++) {
-      currentPathPos = path.get(i).stroke(fillOutlineParameters, transform, batchManager, currentPathPos);
-    }
-
-    // restore the path
-    pathStartVertex = new Vec2(save);
-    path = new ArrayList<>(backup);
   }
 
-  private boolean isLastPathElementMoveTo() {
+  public void strokePath(final LineParameters lineParameters, final Mat4 transform, final BatchManager batchManager) {
+    for (int i=0; i<path.size(); i++) {
+      path.get(i).stroke(lineParameters, transform, batchManager);
+    }
+  }
+
+  public void fillPath(final Mat4 transform, final BatchManager batchManager, final LineParameters fillOutlineParameters) {
+    List<SubPath> copy = pathCopy();
+    for (int i=0; i<copy.size(); i++) {
+      copy.get(i).markAsClosed();
+      copy.get(i).fill(transform, batchManager);
+    }
+    for (int i=0; i<copy.size(); i++) {
+      copy.get(i).stroke(fillOutlineParameters, transform, batchManager);
+    }
+  }
+
+  private SubPath newSubPath() {
+    return new SubPath();
+  }
+
+  private boolean ensureSubPath(final float x, final float y) {
     if (path.isEmpty()) {
-      return false;
+      moveTo(x, y);
+      return true;
     }
-    PathElement element = path.get(path.size() - 1);
-    return element instanceof PathElementMoveTo;
+    return false;
   }
 
-  private void assertPath() {
-    if (path == null) {
-      throw new NiftyRuntimeException("no active path - did you forget to call beginPath()?");
-    }
+  private SubPath getLastSubPath() {
+    return path.get(path.size() - 1);
   }
 
-  private void assertValidRadius(final double r) {
-    if (r < 0) {
-      throw new NiftyRuntimeException("radius for arcTo must not be negative");
+  private List<SubPath> pathCopy() {
+    List<SubPath> result = new ArrayList<>();
+    for (int i=0; i<path.size(); i++) {
+      result.add(new SubPath(path.get(i)));
     }
-  }
-
-  private void assertPathStartVertex(final float x, final float y) {
-    if (pathStartVertex == null) {
-      pathStartVertex = new Vec2(x, y);
-    }
+    return result;
   }
 }

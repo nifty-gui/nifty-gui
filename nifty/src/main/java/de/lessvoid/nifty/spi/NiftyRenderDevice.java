@@ -190,34 +190,6 @@ public interface NiftyRenderDevice {
   void pathLines(FloatBuffer b, float lineWidth, NiftyLineCapType lineCapType, NiftyLineJoinType lineJoinType);
 
   /**
-   * Render arcs using the information given. You'll get a quad the size of the full arc with the following coordinates
-   *
-   *  (-1, -1)        ( 1, -1)
-   *     +---------------+
-   *     |               |
-   *     |               |
-   *     |       +       |
-   *     |               |
-   *     |               |
-   *     +---------------+
-   *  (-1, 1)         ( 1,  1)
-   *
-   * The quad will be the the size of the circle centered around the center of the circle. You'll get the following
-   * per vertex informations for each circle / quad (4 vertices per quad): 
-   * - 2 floats x and y vertex position
-   * - 2 floats u and v "texture" coordinates with the coordinates given in the diagram above
-   *
-   * @param vertices the vertex data to render
-   * @param lineCapType the line cap type
-   * @param startAngle the start angle
-   * @param endAngle the end angle
-   * @param lineWidth the line width
-   * @param radius the radius
-   * @param lineColorAlpha the line color alpha
-   */
-  void pathArcs(FloatBuffer vertices, NiftyLineCapType lineCapType, float startAngle, float endAngle, float lineWidth, float radius, double lineColorAlpha);
-
-  /**
    * FIXME
    *
    * @param vertices the vertex data to render

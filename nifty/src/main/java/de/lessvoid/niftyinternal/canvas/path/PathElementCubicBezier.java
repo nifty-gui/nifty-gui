@@ -26,6 +26,7 @@
  */
 package de.lessvoid.niftyinternal.canvas.path;
 
+import de.lessvoid.nifty.NiftyRuntimeException;
 import de.lessvoid.niftyinternal.canvas.LineParameters;
 import de.lessvoid.niftyinternal.canvas.path.CubicBezier.Renderer;
 import de.lessvoid.niftyinternal.math.Mat4;
@@ -33,56 +34,64 @@ import de.lessvoid.niftyinternal.math.Vec2;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 
 public class PathElementCubicBezier implements PathElement {
-  private final double cp1x;
-  private final double cp1y;
-  private final double cp2x;
-  private final double cp2y;
-  private final double x;
-  private final double y;
-  private final boolean hasPrecedingMoveTo;
+  private final float cp1x;
+  private final float cp1y;
+  private final float cp2x;
+  private final float cp2y;
+  private final float x;
+  private final float y;
+  private final boolean startNewLine;
+  private Vec2 pathLastPoint;
 
   public PathElementCubicBezier(
-      final double cp1x,
-      final double cp1y,
-      final double cp2x,
-      final double cp2y,
-      final double x,
-      final double y,
-      final boolean hasPrecedingMoveTo) {
+      final float cp1x,
+      final float cp1y,
+      final float cp2x,
+      final float cp2y,
+      final float x,
+      final float y,
+      final boolean startNewLine) {
     this.cp1x = cp1x;
     this.cp1y = cp1y;
     this.cp2x = cp2x;
     this.cp2y = cp2y;
     this.x = x;
     this.y = y;
-    this.hasPrecedingMoveTo = hasPrecedingMoveTo;
+    this.startNewLine = startNewLine;
   }
 
   @Override
-  public Vec2 stroke(
-      final LineParameters lineParameters,
-      final Mat4 transform,
-      final BatchManager batchManager,
-      final Vec2 currentPos) {
-    if (hasPrecedingMoveTo) {
-      batchManager.addFirstLineVertex(currentPos.getX(), currentPos.getY(), transform, lineParameters);
+  public Vec2 getPathPoint(final Vec2 pathLastPoint) {
+    if (this.startNewLine) {
+      if (pathLastPoint == null) {
+        throw new NiftyRuntimeException("lineTo with startNewLine (preceding element is moveTo) but no pathLastPoint");
+      }
+      this.pathLastPoint = new Vec2(pathLastPoint);
+    }
+    return new Vec2(x, y);
+  }
+
+  @Override
+  public void stroke(final LineParameters lineParameters, final Mat4 transform, final BatchManager batchManager) {
+    if (startNewLine) {
+      batchManager.addFirstLineVertex(pathLastPoint.getX(), pathLastPoint.getY(), transform, lineParameters);
     }
 
     CubicBezier curve = new CubicBezier(
-        currentPos,
-        new Vec2((float) cp1x, (float) cp1y),
-        new Vec2((float) cp2x, (float) cp2y),
-        new Vec2((float) x, (float) y));
+        pathLastPoint,
+        new Vec2(cp1x, cp1y),
+        new Vec2(cp2x, cp2y),
+        new Vec2(x, y));
     curve.renderCurve(new Renderer() {
       @Override
       public void addLineVertex(float x, float y) {
-        batchManager.addLineVertex((float) x, (float) y, transform, lineParameters);    
+        batchManager.addLineVertex(x, y, transform, lineParameters);
       }
     });
-    return new Vec2((float) x, (float) y);
-  } 
+  }
 
   @Override
-  public void fill(Mat4 transform, BatchManager batchManager) {
+  public void fill(final Mat4 transform, final BatchManager batchManager) {
+    // TODO
   }
 }

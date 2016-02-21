@@ -42,7 +42,6 @@ public class PathRendererClosePathTest {
     pathRenderer.moveTo(10, 10);
     pathRenderer.lineTo(100, 100);
     pathRenderer.closePath();
-
     pathRenderer.strokePath(lineParameters, transform, batchManager);
   }
 
@@ -57,7 +56,6 @@ public class PathRendererClosePathTest {
     pathRenderer.lineTo(100, 100);
     pathRenderer.moveTo(200, 200);
     pathRenderer.closePath();
-
     pathRenderer.strokePath(lineParameters, transform, batchManager);
   }
 
@@ -78,7 +76,6 @@ public class PathRendererClosePathTest {
     pathRenderer.lineTo(200, 300);
     pathRenderer.lineTo(300, 300);
     pathRenderer.closePath();
-
     pathRenderer.strokePath(lineParameters, transform, batchManager);
   }
 
@@ -89,7 +86,6 @@ public class PathRendererClosePathTest {
     pathRenderer.beginPath();
     pathRenderer.moveTo(10, 10);
     pathRenderer.closePath();
-
     pathRenderer.strokePath(lineParameters, transform, batchManager);
   }
 }

@@ -26,37 +26,45 @@
  */
 package de.lessvoid.niftyinternal.canvas.path;
 
+import de.lessvoid.nifty.NiftyRuntimeException;
 import de.lessvoid.niftyinternal.canvas.LineParameters;
 import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.math.Vec2;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 
 public class PathElementLineTo implements PathElement {
-  private final double x;
-  private final double y;
-  private final boolean hasPrecedingMoveTo;
+  private final float x;
+  private final float y;
+  private final boolean startNewLine;
+  private Vec2 pathLastPoint;
 
-  public PathElementLineTo(final double x, final double y, final boolean hasPrecedingMoveTo) {
+  public PathElementLineTo(final float x, final float y, final boolean startNewLine) {
     this.x = x;
     this.y = y;
-    this.hasPrecedingMoveTo = hasPrecedingMoveTo;
+    this.startNewLine = startNewLine;
   }
 
   @Override
-  public Vec2 stroke(
-      final LineParameters lineParameters,
-      final Mat4 transform,
-      final BatchManager batchManager,
-      final Vec2 currentPos) {
-    if (hasPrecedingMoveTo) {
-      batchManager.addFirstLineVertex(currentPos.getX(), currentPos.getY(), transform, lineParameters);
+  public Vec2 getPathPoint(final Vec2 pathLastPoint) {
+    if (this.startNewLine) {
+      if (pathLastPoint == null) {
+        throw new NiftyRuntimeException("lineTo with startNewLine (preceding element is moveTo) but no pathLastPoint");
+      }
+      this.pathLastPoint = new Vec2(pathLastPoint);
     }
-    batchManager.addLineVertex((float) x, (float) y, transform, lineParameters);
-    return new Vec2((float) x, (float) y);
+    return new Vec2(x, y);
+  }
+
+  @Override
+  public void stroke(final LineParameters lineParameters, final Mat4 transform, final BatchManager batchManager) {
+    if (startNewLine) {
+      batchManager.addFirstLineVertex(pathLastPoint.getX(), pathLastPoint.getY(), transform, lineParameters);
+    }
+    batchManager.addLineVertex(x, y, transform, lineParameters);
   }
 
   @Override
   public void fill(final Mat4 transform, final BatchManager batchManager) {
-    batchManager.addTriangleFanVertex((float) x, (float) y, transform);
+    batchManager.addTriangleFanVertex(x, y, transform);
   }
 }

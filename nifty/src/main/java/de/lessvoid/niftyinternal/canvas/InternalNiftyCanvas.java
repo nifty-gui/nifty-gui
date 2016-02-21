@@ -84,11 +84,6 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
-  public void filledRect(final double x, final double y, final double width, final double height) {
-    commands.add(new CommandFilledRect(x, y, width, height));
-    changed = true;
-  }
-
   public void text(final NiftyFont niftyFont, final int x, final int y, final String text) {
     commands.add(new CommandText(niftyFont, x, y, text));
     changed = true;
@@ -131,18 +126,38 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
-  public void closePath() {
-    commands.add(new CommandClosePath());
-    changed = true;
-  }
-
   public void moveTo(final double x, final double y) {
     commands.add(new CommandMoveTo(x, y));
     changed = true;
   }
 
+  public void closePath() {
+    commands.add(new CommandClosePath());
+    changed = true;
+  }
+
   public void lineTo(final double x, final double y) {
     commands.add(new CommandLineTo(x, y));
+    changed = true;
+  }
+
+  public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
+    commands.add(new CommandBezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y));
+    changed = true;
+  }
+
+  public void arcTo(final double x1, final double y1, final double x2, final double y2, final double r) {
+    commands.add(new CommandArcTo(x1, y1, x2, y2, r));
+    changed = true;
+  }
+
+  public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
+    commands.add(new CommandArc(x, y, r, startAngle, endAngle));
+    changed = true;
+  }
+
+  public void rect(final double x, final double y, final double width, final double height) {
+    commands.add(new CommandRect(x, y, width, height));
     changed = true;
   }
 
@@ -156,13 +171,8 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
-  public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
-    commands.add(new CommandArc(x, y, r, startAngle, endAngle));
-    changed = true;
-  }
-
-  public void arcTo(final double x1, final double y1, final double x2, final double y2, final double r) {
-    commands.add(new CommandArcTo(x1, y1, x2, y2, r));
+  public void fillRect(final double x, final double y, final double width, final double height) {
+    commands.add(new CommandFillRect(x, y, width, height));
     changed = true;
   }
 
@@ -175,14 +185,9 @@ public class InternalNiftyCanvas {
     return new ArrayList<>(commands);
   }
 
-  public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
-    commands.add(new CommandBezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y));
-    changed = true;
-  }
-
   public void setGlobalCompositeOperation(final NiftyCompositeOperation compositeOperation) {
     commands.add(new CommandGlobalCompositeOperation(compositeOperation));
-    changed = true;    
+    changed = true;
   }
 
   public void reset() {

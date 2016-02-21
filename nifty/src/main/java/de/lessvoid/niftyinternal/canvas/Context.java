@@ -222,20 +222,28 @@ public class Context {
     pathRenderer.moveTo(x, y);
   }
 
+  public void closePath() {
+    pathRenderer.closePath();
+  }
+
   public void lineTo(final double x, final double y) {
     pathRenderer.lineTo(x, y);
   }
 
-  public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
-    pathRenderer.arc(x, y, r, startAngle, endAngle);
+  public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
+    pathRenderer.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
   }
 
   public void arcTo(final double x1, final double y1, final double x2, final double y2, final double r) {
     pathRenderer.arcTo(x1, y1, x2, y2, r);
   }
 
-  public void closePath() {
-    pathRenderer.closePath();
+  public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
+    pathRenderer.arc(x, y, r, startAngle, endAngle);
+  }
+
+  public void rect(final double x, final double y, final double width, final double height) {
+    pathRenderer.rect(x, y, width, height);
   }
 
   public void strokePath() {
@@ -250,12 +258,7 @@ public class Context {
     batchManager.addEndPath(fillColor);
   }
 
-  public void bezierCurveTo(final double cp1x, final double cp1y, final double cp2x, final double cp2y, final double x, final double y) {
-    pathRenderer.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
-  }
-
-  // This is not path related at all and is executed without the pathRenderer directly
-  public void filledRect(final double x, final double y, final double width, final double height) {
+  public void fillRect(final double x, final double y, final double width, final double height) {
     if (getFillLinearGradient() != null) {
       batchManager.addLinearGradientQuad(x, y, x + width, y + height, getTransform(), getFillLinearGradient());
       return;
@@ -293,10 +296,6 @@ public class Context {
   public void free() {
     contentTexture.dispose();
     workingTexture.dispose();
-  }
-
-  public int getArcSteps() {
-    return 32;
   }
 
   private TextureBatch textureBatch(final NiftyTexture texture) {

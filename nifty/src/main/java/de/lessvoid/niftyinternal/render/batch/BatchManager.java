@@ -142,15 +142,6 @@ public class BatchManager {
     batch.add(x, y, mat);
   }
 
-  public void addArc(
-      final double x,
-      final double y,
-      final Mat4 mat,
-      final ArcParameters arcParameters) {
-    ArcBatch batch = requestBatch(ArcBatch.class, arcParameters, ArcBatchFactory.Instance);
-    batch.add(x, y, arcParameters.getRadius(), mat);
-  }
-
   public void addTriangleFanVertex(final float x, final float y, final Mat4 mat) {
     TriangleFanBatch batch = requestBatch(TriangleFanBatch.class, null, TriangleFanBatchFactory.Instance);
     batch.add(x, y, mat);
@@ -183,15 +174,6 @@ public class BatchManager {
   private interface BatchFactory<T extends Batch<P>, P> {
     @Nonnull
     T createBatch(P param);
-  }
-
-  private enum ArcBatchFactory implements BatchFactory<ArcBatch, ArcParameters> {
-    Instance;
-    @Nonnull
-    @Override
-    public ArcBatch createBatch(final ArcParameters param) {
-      return new ArcBatch(param);
-    }
   }
 
   private enum BeginPathBatchFactory implements BatchFactory<BeginPathBatch, Void> {

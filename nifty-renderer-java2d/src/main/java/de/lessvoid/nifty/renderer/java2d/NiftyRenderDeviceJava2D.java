@@ -164,19 +164,6 @@ public class NiftyRenderDeviceJava2D implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathArcs(
-      FloatBuffer vertices,
-      NiftyLineCapType lineCapType,
-      float startAngle,
-      float endAngle,
-      float lineWidth,
-      float radius,
-      double lineColorAlpha) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  @Override
   public void pathFill(FloatBuffer vertices) {
     // TODO Auto-generated method stub
     

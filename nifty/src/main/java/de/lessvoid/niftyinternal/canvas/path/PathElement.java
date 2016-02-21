@@ -38,20 +38,21 @@ import de.lessvoid.niftyinternal.render.batch.BatchManager;
 public interface PathElement {
 
   /**
+   * Return the point on the path AFTER this PathElement has been applied.
+   *
+   * @param pathLastPoint The current pathLastPoint. Please note that this can be null.
+   * @return the new pathLastPoint after this PathElement has been added to the path
+   */
+  Vec2 getPathPoint(Vec2 pathLastPoint);
+
+  /**
    * Render this path element as a stroke to the batchManager using data from the Context and the parameters given.
    *
    * @param lineParameters the LineParameters to use when stroking the path
+   * @param transform the Transformation to applied when adding this to the batchManager
    * @param batchManager the BatchManager
-   * @param currentPos the current position on the path
-   * @return the new current position
    */
-  Vec2 stroke(
-      LineParameters lineParameters,
-      Mat4 transform,
-      BatchManager batchManager,
-      Vec2 currentPos);
-
-  
+  void stroke(LineParameters lineParameters, Mat4 transform, BatchManager batchManager);
 
   /**
    * Render this path element as a fill to the batchManager using data from the Context and the parameters given.
@@ -59,7 +60,5 @@ public interface PathElement {
    * @param transform the Context
    * @param batchManager the BatchManager
    */
-  void fill(
-      Mat4 transform,
-      BatchManager batchManager);
+  void fill(Mat4 transform, BatchManager batchManager);
 }

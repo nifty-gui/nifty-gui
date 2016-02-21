@@ -27,13 +27,13 @@
 package de.lessvoid.niftyinternal.canvas;
 
 
-public class CommandFilledRect implements Command {
+public class CommandFillRect implements Command {
   private final double x;
   private final double y;
   private final double width;
   private final double height;
 
-  public CommandFilledRect(final double x, final double y, final double width, final double height) {
+  public CommandFillRect(final double x, final double y, final double width, final double height) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -42,6 +42,6 @@ public class CommandFilledRect implements Command {
 
   @Override
   public void execute(final Context context) {
-    context.filledRect(x, y, width, height);
+    context.fillRect(x, y, width, height);
   }
 }

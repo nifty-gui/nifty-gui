@@ -33,7 +33,7 @@ public class PathRendererArcStrokeTest {
     verify(batchManager);
   }
 
-  @Test(expected = NiftyRuntimeException.class)
+  @Test
   public void testWithoutBeginPath() {
     replay(batchManager);
 
@@ -50,8 +50,10 @@ public class PathRendererArcStrokeTest {
 
   @Test
   public void testStrokeSingleArc() {
+    double cx = 100. + 50. * Math.cos(0);
+    double cy = 75. + 50. * Math.sin(0);
+    batchManager.addFirstLineVertex((float) cx, (float) cy, transform, lineParameters);
     expectArc(batchManager, 100., 75., 50., 0., 2 * Math.PI);
-
     replay(batchManager);
 
     pathRenderer.beginPath();
@@ -61,10 +63,16 @@ public class PathRendererArcStrokeTest {
 
   @Test
   public void testStrokeConnectedArcs() {
+    double cx = 100. + 50. * Math.cos(0);
+    double cy = 100. + 50. * Math.sin(0);
+    batchManager.addFirstLineVertex((float) cx, (float) cy, transform, lineParameters);
     expectArc(batchManager, 100., 100., 50., 0., 2 * Math.PI);
+
+    double cx2 = 412. + 50. * Math.cos(0);
+    double cy2 = 284. + 50. * Math.sin(0);
+    batchManager.addLineVertex((float) cx2, (float) cy2, transform, lineParameters);
+    batchManager.addLineVertex((float) cx2, (float) cy2, transform, lineParameters);
     expectArc(batchManager, 412., 284., 50., 0., 2 * Math.PI);
-    batchManager.addFirstLineVertex(eq(150.f), eq(100.f), eq(transform), eq(lineParameters));
-    batchManager.addLineVertex(eq(462.f), eq(284.f), eq(transform), eq(lineParameters));
     replay(batchManager);
 
     pathRenderer.beginPath();
@@ -75,9 +83,11 @@ public class PathRendererArcStrokeTest {
 
   @Test
   public void testStrokeWithClosePath() {
+    double cx = 100. + 50. * Math.cos(0);
+    double cy = 75. + 50. * Math.sin(0);
+    batchManager.addFirstLineVertex((float) cx, (float) cy, transform, lineParameters);
     expectArc(batchManager, 100., 75., 50., 0., Math.PI);
-    batchManager.addFirstLineVertex(50.f, 75.f, transform, lineParameters);
-    batchManager.addLineVertex(150.f, 75.f, transform, lineParameters);
+    batchManager.addLineVertex((float) cx, (float) cy, transform, lineParameters);
     replay(batchManager);
 
     pathRenderer.beginPath();
@@ -93,7 +103,7 @@ public class PathRendererArcStrokeTest {
       final double r,
       final double startAngle,
       final double endAngle) {
-    for (int i=0; i<64; i++) {
+    for (int i=1; i<64; i++) {
       double t = i / (double) (64 - 1);
 
       double angle = startAngle + t * (endAngle - startAngle);

@@ -39,8 +39,8 @@ public class PathRendererLineStrokeTest {
     pathRenderer.beginPath();
   }
 
-  @Test(expected = NiftyRuntimeException.class)
-  public void testMoveToWithoutPath() {
+  @Test
+  public void testMoveToWithoutBeginPath() {
     replayBatchManager();
 
     pathRenderer.moveTo(10, 10);
@@ -54,7 +54,7 @@ public class PathRendererLineStrokeTest {
     pathRenderer.moveTo(10, 10);
   }
 
-  @Test(expected = NiftyRuntimeException.class)
+  @Test
   public void testLineToWithoutPath() {
     replayBatchManager();
 
@@ -78,8 +78,8 @@ public class PathRendererLineStrokeTest {
     pathRenderer.lineTo(100, 100);
   }
 
-  @Test(expected = NiftyRuntimeException.class)
-  public void testStrokePathWithoutPath() {
+  @Test
+  public void testStrokePathWithoutBeginPath() {
     replayBatchManager();
 
     pathRenderer.strokePath(null, null, null);
@@ -94,7 +94,6 @@ public class PathRendererLineStrokeTest {
     pathRenderer.beginPath();
     pathRenderer.moveTo(10, 10);
     pathRenderer.lineTo(100, 100);
-
     pathRenderer.strokePath(lineParameters, transform, batchManager);
   }
 
@@ -109,7 +108,6 @@ public class PathRendererLineStrokeTest {
     pathRenderer.moveTo(10, 10);
     pathRenderer.lineTo(100, 100);
     pathRenderer.lineTo(100, 200);
-
     pathRenderer.strokePath(lineParameters, transform, batchManager);
   }
 
@@ -126,31 +124,27 @@ public class PathRendererLineStrokeTest {
     pathRenderer.lineTo(100, 100);
     pathRenderer.moveTo(150, 150);
     pathRenderer.lineTo(100, 200);
-
     pathRenderer.strokePath(lineParameters, transform, batchManager);
   }
 
   @Test
   public void testStrokeOfLineWithoutMoveTo() {
-    batchManager.addLineVertex(100.f, 100.f, transform, lineParameters);
     replayBatchManager();
 
     pathRenderer.beginPath();
     pathRenderer.lineTo(100, 100);
-
     pathRenderer.strokePath(lineParameters, transform, batchManager);
   }
 
   @Test
   public void testStrokeOfLineWithoutMoveToActualLine() {
-    batchManager.addLineVertex(100.f, 100.f, transform, lineParameters);
+    batchManager.addFirstLineVertex(100.f, 100.f, transform, lineParameters);
     batchManager.addLineVertex(150.f, 150.f, transform, lineParameters);
     replayBatchManager();
 
     pathRenderer.beginPath();
     pathRenderer.lineTo(100, 100);
     pathRenderer.lineTo(150, 150);
-
     pathRenderer.strokePath(lineParameters, transform, batchManager);
   }
 
