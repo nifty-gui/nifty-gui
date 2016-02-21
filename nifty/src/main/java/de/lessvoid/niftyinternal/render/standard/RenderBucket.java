@@ -112,7 +112,7 @@ public class RenderBucket {
 
         if (config.isShowRenderBuckets()) {
           context.setFillColor(debugOverlayColor);
-          context.filledRect(0., 0., rect.getSize().getWidth(), rect.getSize().getHeight());
+          context.fillRect(0., 0., rect.getSize().getWidth(), rect.getSize().getHeight());
         }
 
         context.flush();
@@ -159,7 +159,7 @@ public class RenderBucket {
     context.bind(renderDevice, localBatchManager);
     context.prepare();
     context.setFillColor(NiftyColor.transparent());
-    context.filledRect(0., 0., rect.getSize().getWidth(), rect.getSize().getHeight());
+    context.fillRect(0., 0., rect.getSize().getWidth(), rect.getSize().getHeight());
     context.flush();
   }
 
