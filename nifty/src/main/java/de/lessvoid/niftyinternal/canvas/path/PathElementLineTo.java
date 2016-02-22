@@ -65,6 +65,9 @@ public class PathElementLineTo implements PathElement {
 
   @Override
   public void fill(final Mat4 transform, final BatchManager batchManager) {
+    if (startNewLine) {
+      batchManager.addTriangleFanVertex(pathLastPoint.getX(), pathLastPoint.getY(), transform);
+    }
     batchManager.addTriangleFanVertex(x, y, transform);
   }
 }

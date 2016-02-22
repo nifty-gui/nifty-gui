@@ -4,6 +4,8 @@ import de.lessvoid.nifty.NiftyRuntimeException;
 import de.lessvoid.niftyinternal.canvas.LineParameters;
 import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
+import org.easymock.EasyMock;
+import org.easymock.IArgumentMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,6 +66,8 @@ public class PathRendererArcToTest {
 
   @Test
   public void testWithoutMoveToStroke() {
+    batchManager.addFirstLineVertex(300, 25, transform, lineParameters);
+    batchManager.addLineVertex(300, 25, transform, lineParameters);
     replay(batchManager);
 
     pathRenderer.beginPath();
@@ -83,6 +87,11 @@ public class PathRendererArcToTest {
 
   @Test
   public void testWithMoveToStroke() {
+    batchManager.addFirstLineVertex(100.f, 225.f, transform, lineParameters);
+    float cx = (float) (Math.cos(3.9269908169872414) * 75.0 + 300.0);
+    float cy = (float) (Math.sin(3.9269908169872414) * 75.0 + 131.06600952148438);
+    batchManager.addLineVertex(cx, cy, transform, lineParameters);
+    expectArc(batchManager, 300.0, 131.06600952148438, 75.0, 3.9269908169872414, 5.497787143782138);
     replay(batchManager);
 
     pathRenderer.beginPath();
@@ -90,18 +99,24 @@ public class PathRendererArcToTest {
     pathRenderer.arcTo(300, 25, 500, 225, 75);
     pathRenderer.strokePath(lineParameters, transform, batchManager);
   }
-  /*
-    @Test
-    public void testWithMoveToAndLineToStroke() {
-      replay(batchManager);
 
-      pathRenderer.beginPath();
-      pathRenderer.moveTo(100, 225);
-      pathRenderer.arcTo(300, 25, 500, 225, 75);
-      pathRenderer.lineTo(500, 225);
-      pathRenderer.strokePath(lineParameters, transform, batchManager);
-    }
-  */
+  @Test
+  public void testWithMoveToAndLineToStroke() {
+    batchManager.addFirstLineVertex(100.f, 225.f, transform, lineParameters);
+    float cx = (float) (Math.cos(3.9269908169872414) * 75.0 + 300.0);
+    float cy = (float) (Math.sin(3.9269908169872414) * 75.0 + 131.06600952148438);
+    batchManager.addLineVertex(cx, cy, transform, lineParameters);
+    expectArc(batchManager, 300.0, 131.06600952148438, 75.0, 3.9269908169872414, 5.497787143782138);
+    batchManager.addLineVertex(500.f, 225.f, transform, lineParameters);
+    replay(batchManager);
+
+    pathRenderer.beginPath();
+    pathRenderer.moveTo(100, 225);
+    pathRenderer.arcTo(300, 25, 500, 225, 75);
+    pathRenderer.lineTo(500, 225);
+    pathRenderer.strokePath(lineParameters, transform, batchManager);
+  }
+
   private void expectArc(
       final BatchManager batchManager,
       final double x,
@@ -115,7 +130,7 @@ public class PathRendererArcToTest {
       double angle = startAngle + t * (endAngle - startAngle);
       double cx = x + r * Math.cos(angle);
       double cy = y + r * Math.sin(angle);
-      batchManager.addLineVertex((float) cx, (float) cy, transform, lineParameters);
+      batchManager.addLineVertex(eq((float) cx), eq((float) cy), eq(transform), eq(lineParameters));
     }
   }
 }

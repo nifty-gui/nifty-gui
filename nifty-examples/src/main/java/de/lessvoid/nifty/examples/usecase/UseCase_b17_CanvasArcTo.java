@@ -31,14 +31,12 @@ import de.lessvoid.nifty.NiftyCallback;
 import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.NiftyCanvasPainter;
 import de.lessvoid.nifty.node.NiftyContentNode;
+import de.lessvoid.nifty.types.NiftyColor;
 
 import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
 import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
-import static de.lessvoid.nifty.types.NiftyColor.blue;
-import static de.lessvoid.nifty.types.NiftyColor.green;
-import static de.lessvoid.nifty.types.NiftyColor.red;
 
 /**
  * Demonstrate the arcTo canvas method.
@@ -50,10 +48,23 @@ public class UseCase_b17_CanvasArcTo {
     final NiftyContentNode contentNode = contentNode().setCanvasPainter(new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
+        canvas.setFillStyle(NiftyColor.black());
+        canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+
+        canvas.setStrokeColor(NiftyColor.white());
+
         canvas.beginPath();
         canvas.moveTo(100, 225); // PO
-        canvas.arcTo(300, 25, 500, 225, 75); // P1, P2 and radius
+        canvas.arcTo(100, 25, 500, 225, 75); // P1, P2 and radius
         canvas.lineTo(500, 225); // P2
+        canvas.setFillStyle(NiftyColor.red());
+        canvas.fill();
+
+        canvas.beginPath();
+        canvas.moveTo(100, 225);
+        canvas.lineTo(100, 25);
+        canvas.lineTo(500, 225);
+        canvas.closePath();
         canvas.stroke();
       }
     });

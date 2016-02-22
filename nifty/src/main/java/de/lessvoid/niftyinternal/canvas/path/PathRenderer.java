@@ -145,6 +145,10 @@ public class PathRenderer {
   }
 
   public void arcTo(final double x1, final double y1, final double x2, final double y2, final double r) {
+    if (r < 0) {
+      throw new NiftyRuntimeException("arcTo radius must not be negative");
+    }
+
     ensureSubPath((float) x1, (float) y1);
 
     SubPath lastSubPath = getLastSubPath();
@@ -152,16 +156,17 @@ public class PathRenderer {
     float x0 = lastPoint.getX();
     float y0 = lastPoint.getY();
 
-    if (r < 0) {
-      throw new NiftyRuntimeException("arcTo radius must not be negative");
-    }
-
-    // TODO
     // If the point (x0, y0) is equal to the point (x1, y1),
     // or if the point (x1, y1) is equal to the point (x2, y2),
     // or if the radius radius is zero,
-    // then the method must add the point (x1, y1) to the subpath,
-    // and connect that point to the previous point (x0, y0) by a straight line.
+    if ((x0 == x1 && y0 == y1) ||
+        (x1 == x2 && y1 == y2) ||
+        (r == 0)) {
+        // then the method must add the point (x1, y1) to the subpath,
+        // and connect that point to the previous point (x0, y0) by a straight line.
+        lineTo(x1, y1);
+        return;
+      }
 
     // TODO
     // Otherwise, if the points (x0, y0), (x1, y1), and (x2, y2) all lie on a single straight line,
@@ -169,6 +174,42 @@ public class PathRenderer {
     // and connect that point to the previous point (x0, y0) by a straight line.
 
     // calc arc
+    // 1. get all points
+    Vec2 p0 = new Vec2(x0, y0);
+    Vec2 p1 = new Vec2((float) x1, (float) y1);
+    Vec2 p2 = new Vec2((float) x2, (float) y2);
+
+    // 2. calc tangent vectors from p1 to p0 and to p2
+    Vec2 t0 = Vec2.sub(p0, p1, null);
+    Vec2 t1 = Vec2.sub(p2, p1, null);
+    t0.normalise(t0);
+    t1.normalise(t1);
+
+    // 3. calc angle between tangents
+    double angle = Math.acos(Vec2.dot(t0, t1));
+
+    // 4. calc middle vector
+    Vec2 tm = Vec2.add(t0, t1, null);
+    tm.normalise(tm);
+
+    // 5. calc circle center point
+    double d = r / Math.sin(angle / 2);
+    Vec2 circleCenter = Vec2.add(p1, new Vec2(tm).scale((float) d), null);
+
+    // 6. calc vector from circle center point back to p1
+    Vec2 back = Vec2.sub(p1, circleCenter, null);
+    back.normalise(back);
+
+    double backAngle = Math.atan2(back.getY(), back.getX());
+    if (backAngle < 0) {
+      backAngle += Math.PI * 2;
+    }
+
+    // 7. get new vector pointing to the tangents by rotating the back vector
+    double arcAngle = Math.PI - Math.PI / 2 - angle / 2;
+    double arcStart = backAngle - arcAngle;
+    double arcEnd = backAngle + arcAngle;
+    arc(circleCenter.getX(), circleCenter.getY(), r, arcStart, arcEnd);
   }
 
   public void arc(final double x, final double y, final double r, final double startAngle, final double endAngle) {
