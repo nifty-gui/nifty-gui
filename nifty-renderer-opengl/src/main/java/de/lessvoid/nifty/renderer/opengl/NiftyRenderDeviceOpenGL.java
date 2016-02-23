@@ -549,14 +549,14 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     gl.glStencilFunc(gl.GL_NEVER(), 0, 0xFF);
     gl.glStencilOp(gl.GL_INVERT(), gl.GL_KEEP(), gl.GL_KEEP());
 
-    coreRender.renderTriangleFan(vertices.limit() / TriangleFanBatch.PRIMITIVE_SIZE);
+    coreRender.renderTriangleFan(vertices.limit() / 2);
 
     gl.glColorMask(true, true, true, true);
     gl.glDepthMask(true);
     gl.glStencilMask(0x00);
     gl.glStencilFunc(gl.GL_NOTEQUAL(), 0, 0xFF);
 
-    coreRender.renderTriangleFan(vertices.limit() / TriangleFanBatch.PRIMITIVE_SIZE);
+    coreRender.renderTriangleFan(vertices.limit() / 2);
     vbo.getBuffer().clear();
 
     gl.glDisable(gl.GL_STENCIL_TEST());

@@ -29,6 +29,8 @@ package de.lessvoid.niftyinternal.render.batch;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.niftyinternal.math.Mat4;
@@ -39,27 +41,25 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice;
  * A triangle fan batch.
  */
 public class TriangleFanBatch implements Batch<Void> {
-  private final static int NUM_PRIMITIVES = 100;
-  public final static int PRIMITIVE_SIZE = 2;
+  // the actual vertex data this batch stores
+  private final List<Float> vertices = new ArrayList<>();
 
-  private final FloatBuffer b;
-
-  // Vec4 buffer data
+  // Vec4 buffer data so that we don't allocate new Vec4 instances all the time (these are being reused)
   private final Vec4 vsrc = new Vec4();
   private final Vec4 vdst = new Vec4();
 
-  public TriangleFanBatch() {
-    this.b = createBuffer(NUM_PRIMITIVES * PRIMITIVE_SIZE);
-  }
-
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.pathFill(b);
+    FloatBuffer buffer = createBuffer(vertices.size());
+    for (int i=0; i<vertices.size(); i++) {
+      buffer.put(vertices.get(i));
+    }
+    renderDevice.pathFill(buffer);
   }
 
   @Override
   public boolean requiresNewBatch(final Void params) {
-    return (b.remaining() < PRIMITIVE_SIZE);
+    return false;
   }
 
   public boolean add(final float x, final float y, final Mat4 mat) {
@@ -68,12 +68,12 @@ public class TriangleFanBatch implements Batch<Void> {
   }
 
   private void addTransformed(final float x, final float y, final Mat4 mat) {
-    vsrc.x = (float) x;
-    vsrc.y = (float) y;
+    vsrc.x = x;
+    vsrc.y = y;
     vsrc.z = 0.0f;
     Mat4.transform(mat, vsrc, vdst);
-    b.put(vdst.x);
-    b.put(vdst.y);
+    vertices.add(vdst.x);
+    vertices.add(vdst.y);
   }
 
   private FloatBuffer createBuffer(final int size) {
