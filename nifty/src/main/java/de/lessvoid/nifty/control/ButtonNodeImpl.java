@@ -94,7 +94,7 @@ final class ButtonNodeImpl implements NiftyControlNodeImpl<ButtonNode, ButtonNod
   public void explode(final NiftyNodeBuilder nodeBuilder) {
     nodeBuilder
         .addNode(absoluteLayoutNode())
-            .addNode(fixedSizeLayoutNode(100.f, 32.f))
+            .addNode(fixedSizeLayoutNode(140.f, 30.f))
               .addNode(content);
   }
 
@@ -108,6 +108,27 @@ final class ButtonNodeImpl implements NiftyControlNodeImpl<ButtonNode, ButtonNod
 
     @Override
     public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
+      //canvas.setFillStyle(NiftyColor.white());
+      //canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
+
+      double radius = 8.0;
+      double inset = 4.0;
+      double width = node.getWidth();
+      canvas.beginPath();
+      canvas.moveTo(        10.0 + inset, 0.0 + inset);
+      canvas.lineTo(width - 10.0 - inset, 0.0 + inset);
+      canvas.arcTo(        width - inset, 0.0 + inset, width - inset, 10.0 + inset, radius);
+      canvas.lineTo(       width - inset, node.getHeight() - 10.0 - inset);
+      canvas.arcTo(        width - inset, node.getHeight() - inset, width - 10.0 - inset, node.getHeight() - inset, radius);
+      canvas.lineTo(        10.0 + inset, node.getHeight() - inset);
+      canvas.arcTo(          0.0 + inset, node.getHeight() - inset, 0.0 + inset, node.getHeight() - 10.0 - inset, radius);
+      canvas.lineTo(         0.0 + inset, 10.0 + inset);
+      canvas.arcTo(          0.0 + inset, 0.0 + inset, 10.0 + inset, 0.0 + inset, radius);
+
+      /*
+        this doesn't work yet - need to rethink if we should make the mask through fillPath explicit to allow
+        custom fills like with a gradient
+
       NiftyLinearGradient gradient = NiftyLinearGradient.createFromAngleInDeg(0.);
       gradient.addColorStop( 0.0,   NiftyColor.fromString("#703434"));
       gradient.addColorStop( 0.458, NiftyColor.fromString("#211"));
@@ -115,30 +136,16 @@ final class ButtonNodeImpl implements NiftyControlNodeImpl<ButtonNode, ButtonNod
       gradient.addColorStop( 0.545, NiftyColor.fromString("#343434"));
       gradient.addColorStop( 1.0,   NiftyColor.fromString("#737373"));
       canvas.setFillStyle(gradient);
-      canvas.fillRect(0., 0., node.getWidth(), node.getHeight());
+      */
+      canvas.setStrokeColor(NiftyColor.black());
+      canvas.setLineWidth(4.0);
+      canvas.stroke();
 
-      canvas.setGlobalCompositeOperation(NiftyCompositeOperation.DestinationOut);
-      canvas.setStrokeColor(NiftyColor.red());
-      canvas.setLineWidth(5.0);
-      roundedRectWorkaround(node, canvas);
+      canvas.setFillStyle(NiftyColor.red());
+      canvas.fill();
 
-      canvas.setGlobalCompositeOperation(NiftyCompositeOperation.SourceOver);
       canvas.setTextColor(NiftyColor.white());
       canvas.text(font, node.getWidth()/2 - font.getWidth(text)/2, node.getHeight()/2 - font.getHeight()/2, text);
-    }
-
-    private void roundedRectWorkaround(final NiftyContentNode node, final NiftyCanvas canvas) {
-      canvas.beginPath();
-      canvas.moveTo(0, 8);
-      canvas.arc(4, 4, 4, Math.PI, 1.5*Math.PI);
-      canvas.lineTo(node.getWidth() - 8, 0);
-      canvas.arc(node.getWidth() - 4, 4, 4, 1.5*Math.PI, 2*Math.PI);
-      canvas.lineTo(node.getWidth(), node.getHeight() - 8);
-      canvas.arc(node.getWidth() - 4, node.getHeight() - 4, 4, 0*Math.PI, 0.5*Math.PI);
-      canvas.lineTo(8, node.getHeight());
-      canvas.arc(4, node.getHeight() - 4, 4, 0.5*Math.PI, Math.PI);
-      canvas.lineTo(0, 8);
-      canvas.stroke();
     }
   }
 }

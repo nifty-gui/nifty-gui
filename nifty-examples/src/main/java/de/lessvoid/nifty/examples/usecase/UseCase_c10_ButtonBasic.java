@@ -48,11 +48,11 @@ public class UseCase_c10_ButtonBasic {
   public UseCase_c10_ButtonBasic(final Nifty nifty) throws IOException {
     final NiftyFont font = nifty.createFont("fonts/aurulent-sans-16.fnt");
     nifty
-      .addNode(backgroundColorNode(NiftyColor.fromString("#112")))
+      .addNode(backgroundColorNode(NiftyColor.fromString("#ccc")))
         .addNode(contentNode())
           .addNode(alignmentLayoutNode())
             .addNode(alignmentLayoutChildNode(Center, Middle))
-              .addNode(button(font, "Hello"));
+              .addNode(button(font, "Hello Nifty GUI"));
   }
 
   public static void main(final String[] args) throws Exception {
