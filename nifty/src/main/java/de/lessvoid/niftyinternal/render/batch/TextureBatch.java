@@ -59,7 +59,7 @@ public class TextureBatch implements Batch<NiftyTexture> {
 
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.render(texture, b);
+    renderDevice.renderTexturedQuads(texture, b);
   }
 
   @Override

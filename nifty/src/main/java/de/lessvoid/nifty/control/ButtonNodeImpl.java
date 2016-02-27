@@ -125,10 +125,8 @@ final class ButtonNodeImpl implements NiftyControlNodeImpl<ButtonNode, ButtonNod
       canvas.lineTo(         0.0 + inset, 10.0 + inset);
       canvas.arcTo(          0.0 + inset, 0.0 + inset, 10.0 + inset, 0.0 + inset, radius);
 
-      /*
-        this doesn't work yet - need to rethink if we should make the mask through fillPath explicit to allow
-        custom fills like with a gradient
-
+      // TODO this does not yet work because the gradient is currently rendered fullscreen and we don't support yet
+      // TODO to restrict it to some area - which we should add next
       NiftyLinearGradient gradient = NiftyLinearGradient.createFromAngleInDeg(0.);
       gradient.addColorStop( 0.0,   NiftyColor.fromString("#703434"));
       gradient.addColorStop( 0.458, NiftyColor.fromString("#211"));
@@ -136,12 +134,11 @@ final class ButtonNodeImpl implements NiftyControlNodeImpl<ButtonNode, ButtonNod
       gradient.addColorStop( 0.545, NiftyColor.fromString("#343434"));
       gradient.addColorStop( 1.0,   NiftyColor.fromString("#737373"));
       canvas.setFillStyle(gradient);
-      */
+
       canvas.setStrokeColor(NiftyColor.black());
       canvas.setLineWidth(4.0);
       canvas.stroke();
 
-      canvas.setFillStyle(NiftyColor.red());
       canvas.fill();
 
       canvas.setTextColor(NiftyColor.white());

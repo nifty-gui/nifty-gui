@@ -28,21 +28,21 @@ package de.lessvoid.niftyinternal.render.batch;
 
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.types.NiftyCompositeOperation;
 
-public class EndPathBatch implements Batch<NiftyColor> {
-  private final NiftyColor lineColor;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
-  public EndPathBatch(final NiftyColor lineColor) {
-    this.lineColor = lineColor;
-  }
+public class MaskEndBatch implements Batch<Void> {
 
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.pathEnd(lineColor);
+    renderDevice.maskEnd();
   }
 
   @Override
-  public boolean requiresNewBatch(final NiftyColor param) {
+  public boolean requiresNewBatch(final Void param) {
     return true;
   }
 }

@@ -57,7 +57,7 @@ public class LineBatch implements Batch<LineParameters> {
 
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.pathLines(b, lineParameters.getLineWidth(), lineParameters.getLineCapType(), lineParameters.getLineJoinType());
+    renderDevice.maskRenderLines(b, lineParameters.getLineWidth(), lineParameters.getLineCapType(), lineParameters.getLineJoinType());
   }
 
   @Override

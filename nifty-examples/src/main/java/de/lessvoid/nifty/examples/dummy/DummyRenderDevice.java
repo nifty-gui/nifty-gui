@@ -101,7 +101,7 @@ public class DummyRenderDevice implements NiftyRenderDevice {
   }
 
   @Override
-  public void render(NiftyTexture texture, FloatBuffer vertices) {
+  public void renderTexturedQuads(NiftyTexture texture, FloatBuffer vertices) {
   }
 
   @Override
@@ -125,7 +125,17 @@ public class DummyRenderDevice implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathBegin() {
+  public void maskBegin() {
+
+  }
+
+  @Override
+  public void maskEnd() {
+
+  }
+
+  @Override
+  public void maskClear() {
   }
 
   @Override
@@ -142,14 +152,11 @@ public class DummyRenderDevice implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathLines(FloatBuffer b, float lineWidth, NiftyLineCapType lineCapType, NiftyLineJoinType lineJoinType) {
+  public void maskRenderLines(FloatBuffer b, float lineWidth, NiftyLineCapType lineCapType, NiftyLineJoinType lineJoinType) {
   }
 
   @Override
-  public void pathFill(FloatBuffer vertices) {
+  public void maskRenderFill(FloatBuffer vertices) {
   }
 
-  @Override
-  public void pathEnd(NiftyColor lineColor) {
-  }
 }

@@ -37,7 +37,6 @@ import com.lessvoid.coregl.CoreVBO;
 import com.lessvoid.coregl.spi.CoreGL;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
-import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyColorStop;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.types.NiftyLineCapType;
@@ -50,7 +49,6 @@ import de.lessvoid.niftyinternal.render.batch.ColorQuadBatch;
 import de.lessvoid.niftyinternal.render.batch.LineBatch;
 import de.lessvoid.niftyinternal.render.batch.LinearGradientQuadBatch;
 import de.lessvoid.niftyinternal.render.batch.TextureBatch;
-import de.lessvoid.niftyinternal.render.batch.TriangleFanBatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,10 +129,6 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     fbo.bindFramebuffer();
     fbo.disable();
 
-    pathFBO = CoreFBO.createCoreFBO(gl);
-    pathFBO.bindFramebuffer();
-    pathFBO.disable();
-
     vao = CoreVAO.createCoreVAO(gl);
     vao.bind();
 
@@ -155,6 +149,12 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     vao.unbind();
 
     pathTexture = NiftyTextureOpenGL.newTextureRGBA(gl, getDisplayWidth(), getDisplayHeight(), FilterMode.Nearest);
+
+    pathFBO = CoreFBO.createCoreFBO(gl);
+    pathFBO.bindFramebuffer();
+    pathFBO.attachTexture(getTextureId(pathTexture), 0);
+    pathFBO.attachStencil(pathTexture.getWidth(), pathTexture.getHeight());
+    pathFBO.disable();
 
     beginTime = System.nanoTime();
   }
@@ -225,7 +225,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void render(final NiftyTexture texture, final FloatBuffer vertices) {
+  public void renderTexturedQuads(final NiftyTexture texture, final FloatBuffer vertices) {
     log.trace("render()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
@@ -343,6 +343,187 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
+  public void maskBegin() {
+    log.trace("maskBegin()");
+    pathFBO.bindFramebuffer();
+    gl.glViewport(0, 0, pathTexture.getWidth(), pathTexture.getHeight());
+    mvpFlipped(pathTexture.getWidth(), pathTexture.getHeight());
+  }
+
+  @Override
+  public void maskEnd() {
+    log.trace("maskEnd()");
+    pathFBO.disable();
+
+    // Third Pass
+    //
+    // Now render the pathTexture to the target FBO (or the screen)
+    if (currentFBO != null) {
+      currentFBO.bindFramebuffer();
+    }
+    vbo.getBuffer().clear();
+    FloatBuffer quad = vbo.getBuffer();
+    quad.put(0.f);
+    quad.put(0.f);
+    quad.put(0.f);
+    quad.put(0.f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+
+    quad.put(0.f);
+    quad.put(0.f + getDisplayHeight());
+    quad.put(0.f);
+    quad.put(1.f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+
+    quad.put(0.f + getDisplayWidth());
+    quad.put(0.f);
+    quad.put(1.f);
+    quad.put(0.f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+
+    quad.put(0.f + getDisplayWidth());
+    quad.put(0.f + getDisplayHeight());
+    quad.put(1.f);
+    quad.put(1.f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.put(1.0f);
+    quad.flip();
+
+    vao.bind();
+    vbo.bind();
+    vbo.send();
+    vao.enableVertexAttribute(0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 8, 0);
+    vao.enableVertexAttribute(1);
+    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 8, 2);
+    vao.enableVertexAttribute(2);
+    vao.vertexAttribPointer(2, 4, FloatType.FLOAT, 8, 4);
+
+    CoreShader shader = shaderManager.activate(TEXTURE_SHADER);
+    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
+    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
+
+    internal(pathTexture).bind();
+
+    changeCompositeOperation(NiftyCompositeOperation.SourceOver);
+    coreRender.renderTriangleStrip(4);
+
+    vao.disableVertexAttribute(2);
+    vao.unbind();
+  }
+
+  @Override
+  public void maskClear() {
+    log.trace("maskClear()");
+    gl.glClearColor(0.f, 0.f, 0.f, 0.f);
+    gl.glClear(gl.GL_COLOR_BUFFER_BIT());
+  }
+
+  @Override
+  public void maskRenderLines(
+    final FloatBuffer vertices,
+    final float lineWidth,
+    final NiftyLineCapType lineCapType,
+    final NiftyLineJoinType lineJoinType) {
+    log.trace("maskRenderLines()");
+
+    vbo.getBuffer().clear();
+    FloatBuffer b = vbo.getBuffer();
+    vertices.flip();
+
+    // we need the first vertex twice for the shader to work correctly
+    b.put(vertices.get(0));
+    b.put(vertices.get(1));
+
+    // now put all the vertices into the buffer
+    b.put(vertices);
+
+    // we need the last vertex twice as well
+    b.put(vertices.get(vertices.limit() - 2));
+    b.put(vertices.get(vertices.limit() - 1));
+
+    // line parameters
+    float w = lineWidth;
+    float r = 1.f;
+
+    // set up the shader
+    CoreShader shader = shaderManager.activate(getLineShaderKey(lineCapType, lineJoinType));
+    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
+    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
+    shader.setUniformf("lineColorAlpha", 1.f);
+    shader.setUniformf("lineParameters", (2*r + w), (2*r + w) / 2.f, (2*r + w) / 2.f - 2 * r, (2*r));
+
+    vao.bind();
+    vbo.bind();
+    vbo.getBuffer().flip();
+    vbo.send();
+
+    vao.enableVertexAttribute(0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
+    vao.disableVertexAttribute(1);
+
+    changeCompositeOperation(NiftyCompositeOperation.Max);
+    coreRender.renderLinesAdjacent(vertices.limit() / LineBatch.PRIMITIVE_SIZE + 2);
+
+    vbo.getBuffer().clear();
+  }
+
+  @Override
+  public void maskRenderFill(final FloatBuffer vertices) {
+    log.trace("maskRenderFill()");
+
+    // set up the shader
+    CoreShader shader = shaderManager.activate(FILL_ALPHA_SHADER);
+    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
+    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
+
+    vbo.getBuffer().clear();
+    FloatBuffer b = vbo.getBuffer();
+    vertices.flip();
+    b.put(vertices);
+    b.flip();
+    vao.bind();
+    vbo.bind();
+    vbo.send();
+    vao.enableVertexAttribute(0);
+    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
+    vao.disableVertexAttribute(1);
+
+    gl.glEnable(gl.GL_STENCIL_TEST());
+
+    gl.glStencilMask(0xFF);
+    gl.glClear(gl.GL_STENCIL_BUFFER_BIT());
+
+    gl.glColorMask(false, false, false, false);
+    gl.glDepthMask(false);
+    gl.glStencilFunc(gl.GL_NEVER(), 0, 0xFF);
+    gl.glStencilOp(gl.GL_INVERT(), gl.GL_KEEP(), gl.GL_KEEP());
+
+    coreRender.renderTriangleFan(vertices.limit() / 2);
+
+    gl.glColorMask(true, true, true, true);
+    gl.glDepthMask(true);
+    gl.glStencilMask(0x00);
+    gl.glStencilFunc(gl.GL_NOTEQUAL(), 0, 0xFF);
+
+    coreRender.renderTriangleFan(vertices.limit() / 2);
+    vbo.getBuffer().clear();
+
+    gl.glDisable(gl.GL_STENCIL_TEST());
+  }
+
+  @Override
   public String loadCustomShader(final String filename) {
     log.trace("loadCustomShader()");
     CoreShader shader = CoreShader.createShaderWithVertexAttributes(gl, "aVertex");
@@ -455,234 +636,6 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
         gl.glBlendEquationSeparate(gl.GL_MAX(), gl.GL_MAX());
         break;
     }
-  }
-
-  @Override
-  public void pathBegin() {
-    log.trace("pathBegin()");
-    pathFBO.bindFramebuffer();
-    pathFBO.attachTexture(getTextureId(pathTexture), 0);
-    pathFBO.attachStencil(pathTexture.getWidth(), pathTexture.getHeight());
-    gl.glViewport(0, 0, pathTexture.getWidth(), pathTexture.getHeight());
-    mvpFlipped(pathTexture.getWidth(), pathTexture.getHeight());
-
-    gl.glClearColor(0.f, 0.f, 0.f, 0.f);
-    gl.glClear(gl.GL_COLOR_BUFFER_BIT());
-  }
-
-  @Override
-  public void pathLines(
-      final FloatBuffer vertices,
-      final float lineWidth,
-      final NiftyLineCapType lineCapType,
-      final NiftyLineJoinType lineJoinType) {
-    log.trace("pathLines()");
-    vbo.getBuffer().clear();
-    FloatBuffer b = vbo.getBuffer();
-    vertices.flip();
-
-    // we need the first vertex twice for the shader to work correctly
-    b.put(vertices.get(0));
-    b.put(vertices.get(1));
-
-    // now put all the vertices into the buffer
-    b.put(vertices);
-
-    // we need the last vertex twice as well
-    b.put(vertices.get(vertices.limit() - 2));
-    b.put(vertices.get(vertices.limit() - 1));
-
-    // line parameters
-    float w = lineWidth;
-    float r = 1.f;
-
-    // set up the shader
-    CoreShader shader = shaderManager.activate(getLineShaderKey(lineCapType, lineJoinType));
-    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
-    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-    shader.setUniformf("lineColorAlpha", 1.f);
-    shader.setUniformf("lineParameters", (2*r + w), (2*r + w) / 2.f, (2*r + w) / 2.f - 2 * r, (2*r));
-
-    vao.bind();
-    vbo.bind();
-    vbo.getBuffer().flip();
-    vbo.send();
-
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
-    vao.disableVertexAttribute(1);
-
-    changeCompositeOperation(NiftyCompositeOperation.Max);
-    coreRender.renderLinesAdjacent(vertices.limit() / LineBatch.PRIMITIVE_SIZE + 2);
-
-    vbo.getBuffer().clear();
-  }
-
-  @Override
-  public void pathFill(final FloatBuffer vertices) {
-    log.trace("pathFill()");
-
-    // set up the shader
-    CoreShader shader = shaderManager.activate(FILL_ALPHA_SHADER);
-    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
-    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-
-    vbo.getBuffer().clear();
-    FloatBuffer b = vbo.getBuffer();
-    vertices.flip();
-    b.put(vertices);
-    b.flip();
-    vao.bind();
-    vbo.bind();
-    vbo.send();
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
-    vao.disableVertexAttribute(1);
-
-    gl.glEnable(gl.GL_STENCIL_TEST());
-
-    gl.glStencilMask(0xFF);
-    gl.glClear(gl.GL_STENCIL_BUFFER_BIT());
-
-    gl.glColorMask(false, false, false, false);
-    gl.glDepthMask(false);
-    gl.glStencilFunc(gl.GL_NEVER(), 0, 0xFF);
-    gl.glStencilOp(gl.GL_INVERT(), gl.GL_KEEP(), gl.GL_KEEP());
-
-    coreRender.renderTriangleFan(vertices.limit() / 2);
-
-    gl.glColorMask(true, true, true, true);
-    gl.glDepthMask(true);
-    gl.glStencilMask(0x00);
-    gl.glStencilFunc(gl.GL_NOTEQUAL(), 0, 0xFF);
-
-    coreRender.renderTriangleFan(vertices.limit() / 2);
-    vbo.getBuffer().clear();
-
-    gl.glDisable(gl.GL_STENCIL_TEST());
-  }
-
-  @Override
-  public void pathEnd(final NiftyColor color) {
-    log.trace("pathEnd()");
-
-    // Second Pass
-    //
-    // Now render the actual lines using the FBO texture as the mask.
-    FloatBuffer quad = vbo.getBuffer();
-    quad.put(0.f);
-    quad.put(0.f);
-    quad.put((float) color.getRed());
-    quad.put((float) color.getGreen());
-    quad.put((float) color.getBlue());
-    quad.put((float) color.getAlpha());
-
-    quad.put(0.f);
-    quad.put(0.f + getDisplayHeight());
-    quad.put((float) color.getRed());
-    quad.put((float) color.getGreen());
-    quad.put((float) color.getBlue());
-    quad.put((float) color.getAlpha());
-
-    quad.put(0.f + getDisplayWidth());
-    quad.put(0.f);
-    quad.put((float) color.getRed());
-    quad.put((float) color.getGreen());
-    quad.put((float) color.getBlue());
-    quad.put((float) color.getAlpha());
-
-    quad.put(0.f + getDisplayWidth());
-    quad.put(0.f + getDisplayHeight());
-    quad.put((float) color.getRed());
-    quad.put((float) color.getGreen());
-    quad.put((float) color.getBlue());
-    quad.put((float) color.getAlpha());
-    quad.flip();
-
-    vao.bind();
-    vbo.bind();
-    vbo.send();
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 6, 0);
-    vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 4, FloatType.FLOAT, 6, 2);
-
-    CoreShader shader = shaderManager.activate(PLAIN_COLOR_SHADER);
-    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
-    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-
-    changeCompositeOperation(NiftyCompositeOperation.SourceIn);
-    coreRender.renderTriangleStrip(4);
-    vao.unbind();
-
-    pathFBO.disable();
-
-    // Third Pass
-    //
-    // Now render the pathTexture to the target FBO (or the screen)
-    if (currentFBO != null) {
-      currentFBO.bindFramebuffer();
-    }
-    vbo.getBuffer().clear();
-    quad = vbo.getBuffer();
-    quad.put(0.f);
-    quad.put(0.f);
-    quad.put(0.f);
-    quad.put(0.f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-
-    quad.put(0.f);
-    quad.put(0.f + getDisplayHeight());
-    quad.put(0.f);
-    quad.put(1.f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-
-    quad.put(0.f + getDisplayWidth());
-    quad.put(0.f);
-    quad.put(1.f);
-    quad.put(0.f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-
-    quad.put(0.f + getDisplayWidth());
-    quad.put(0.f + getDisplayHeight());
-    quad.put(1.f);
-    quad.put(1.f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-    quad.put(1.0f);
-    quad.flip();
-
-    vao.bind();
-    vbo.bind();
-    vbo.send();
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 8, 0);
-    vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 8, 2);
-    vao.enableVertexAttribute(2);
-    vao.vertexAttribPointer(2, 4, FloatType.FLOAT, 8, 4);
-
-    shader = shaderManager.activate(TEXTURE_SHADER);
-    localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
-    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-
-    internal(pathTexture).bind();
-
-    changeCompositeOperation(NiftyCompositeOperation.SourceOver);
-    coreRender.renderTriangleStrip(4);
-
-    vao.disableVertexAttribute(2);
-    vao.unbind();
   }
 
   private int getTextureId(final NiftyTexture texture) {

@@ -26,7 +26,6 @@
  */
 package de.lessvoid.niftyinternal.canvas;
 
-import de.lessvoid.nifty.NiftyStatistics;
 import de.lessvoid.niftyinternal.InternalNiftyImage;
 import de.lessvoid.niftyinternal.accessor.NiftyFontAccessor;
 import de.lessvoid.niftyinternal.accessor.NiftyImageAccessor;
@@ -247,15 +246,19 @@ public class Context {
   }
 
   public void strokePath() {
-    batchManager.addBeginPath();
+    batchManager.addMaskBegin();
     pathRenderer.strokePath(lineParameters, transform, batchManager);
-    batchManager.addEndPath(lineParameters.getColor());
+    batchManager.addChangeCompositeOperation(NiftyCompositeOperation.SourceIn);
+    batchManager.addColorQuad(0., 0., renderDevice.getDisplayWidth(), renderDevice.getDisplayHeight(), getStrokeStyle(), transform);
+    batchManager.addMaskEnd();
   }
 
   public void fillPath() {
-    batchManager.addBeginPath();
+    batchManager.addMaskBegin();
     pathRenderer.fillPath(transform, batchManager, fillOutlineParameters);
-    batchManager.addEndPath(fillColor);
+    batchManager.addChangeCompositeOperation(NiftyCompositeOperation.SourceIn);
+    fillRect(0., 0., renderDevice.getDisplayWidth(), renderDevice.getDisplayHeight());
+    batchManager.addMaskEnd();
   }
 
   public void fillRect(final double x, final double y, final double width, final double height) {

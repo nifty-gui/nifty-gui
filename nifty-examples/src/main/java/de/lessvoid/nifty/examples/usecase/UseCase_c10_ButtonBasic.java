@@ -28,6 +28,9 @@ package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyFont;
+import de.lessvoid.nifty.NiftyNodeCallback;
+import de.lessvoid.nifty.control.ButtonNode;
+import de.lessvoid.nifty.node.NiftyTransformationNode;
 import de.lessvoid.nifty.types.NiftyColor;
 
 import java.io.IOException;
@@ -38,6 +41,7 @@ import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
 import static de.lessvoid.nifty.node.Horizontal.Center;
 import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
 import static de.lessvoid.nifty.node.Vertical.Middle;
 
 /**
@@ -46,13 +50,25 @@ import static de.lessvoid.nifty.node.Vertical.Middle;
  */
 public class UseCase_c10_ButtonBasic {
   public UseCase_c10_ButtonBasic(final Nifty nifty) throws IOException {
-    final NiftyFont font = nifty.createFont("fonts/aurulent-sans-16.fnt");
+    NiftyTransformationNode rootTransformation = transformationNode();
+    ButtonNode button = button(nifty.createFont("fonts/aurulent-sans-16.fnt"), "Hello Nifty GUI");
+
+    nifty.startAnimated(0, 15, rootTransformation, new NiftyNodeCallback<Float, NiftyTransformationNode>() {
+      private float angle = 0;
+      @Override
+      public void execute(final Float time, final NiftyTransformationNode niftyTransformationNode) {
+        niftyTransformationNode.setAngleZ(angle++);
+        niftyTransformationNode.setPosY(Math.sin(angle/30.f)*100);
+      }
+    });
+
     nifty
       .addNode(backgroundColorNode(NiftyColor.fromString("#ccc")))
         .addNode(contentNode())
           .addNode(alignmentLayoutNode())
             .addNode(alignmentLayoutChildNode(Center, Middle))
-              .addNode(button(font, "Hello Nifty GUI"));
+              .addNode(rootTransformation)
+                .addNode(button);
   }
 
   public static void main(final String[] args) throws Exception {

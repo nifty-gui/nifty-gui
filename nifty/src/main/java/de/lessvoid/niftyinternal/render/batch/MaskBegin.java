@@ -28,11 +28,12 @@ package de.lessvoid.niftyinternal.render.batch;
 
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 
-public class BeginPathBatch implements Batch<Void> {
+public class MaskBegin implements Batch<Void> {
 
   @Override
   public void render(final NiftyRenderDevice renderDevice) {
-    renderDevice.pathBegin();
+    renderDevice.maskBegin();
+    renderDevice.maskClear();
   }
 
   @Override

@@ -32,7 +32,6 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.niftyinternal.math.Vec4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
@@ -54,7 +53,7 @@ public class TriangleFanBatch implements Batch<Void> {
     for (int i=0; i<vertices.size(); i++) {
       buffer.put(vertices.get(i));
     }
-    renderDevice.pathFill(buffer);
+    renderDevice.maskRenderFill(buffer);
   }
 
   @Override

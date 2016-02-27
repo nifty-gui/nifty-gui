@@ -108,6 +108,11 @@ public interface NiftyRenderDevice {
   void beginRender();
 
   /**
+   * Called after all render*() calls are done to end rendering.
+   */
+  void endRender();
+
+  /**
    * Render a textured Quad with the given NiftyTexture using vertex data given in the FloatBuffer containing:
    * - 2 floats x and y vertex position
    * - 2 floats u and v texture coordinates
@@ -116,7 +121,7 @@ public interface NiftyRenderDevice {
    * @param texture the NiftyTexture to render
    * @param vertices the vertex data to render
    */
-  void render(NiftyTexture texture, FloatBuffer vertices);
+  void renderTexturedQuads(NiftyTexture texture, FloatBuffer vertices);
 
   /**
    * Render an untextured Quad with the vertex data given in the FloatBuffer containing:
@@ -141,12 +146,7 @@ public interface NiftyRenderDevice {
   void renderLinearGradientQuads(double x0, double y0, double x1, double y1, List<NiftyColorStop> colorStops, FloatBuffer vertices);
 
   /**
-   * Called after all render*() calls are done to end rendering.
-   */
-  void endRender();
-
-  /**
-   * Redirect all subsequent render calls to the NiftyTexture given as a parameter. 
+   * Redirect all subsequent render calls to the NiftyTexture given as a parameter.
    * @param texture the texture to use
    */
   void beginRenderToTexture(NiftyTexture texture);
@@ -158,8 +158,37 @@ public interface NiftyRenderDevice {
   void endRenderToTexture(NiftyTexture texture);
 
   /**
+   * This call enables rendering to the internal hold full screen alpha texture.
    */
-  void pathBegin();
+  void maskBegin();
+
+  /**
+   * This call stops rendering to the internal hold full screen alpha texture.
+   */
+  void maskEnd();
+
+  /**
+   * This call should clear the mask alpha texture.
+   */
+  void maskClear();
+
+  /**
+   * Render lines from the given FloatBuffer containing the line vertices into the internal alpha mask texture.
+   *
+   * @param b the FloatBuffer containing the vertex data
+   * @param lineWidth the width of the line to render
+   * @param lineCapType the line cap type to use
+   * @param lineJoinType the line join type
+   */
+  void maskRenderLines(FloatBuffer b, float lineWidth, NiftyLineCapType lineCapType, NiftyLineJoinType lineJoinType);
+
+  /**
+   * Render the given outline given as the vertices on the outline and fill it. The vertex data consists of:
+   * - 2 floats x and y vertex position
+   *
+   * @param vertices the vertex data to render
+   */
+  void maskRenderFill(final FloatBuffer vertices);
 
   /**
    * Change the current composite operation (blend mode in GL) for subsequent render calls.
@@ -179,27 +208,6 @@ public interface NiftyRenderDevice {
    * @param shaderId the shaderId to activate
    */
   public void activateCustomShader(String shaderId);
-
-  /**
-   * Render lines from the given FloatBuffer containing the line vertices.
-   * @param b the FloatBuffer containing the vertex data
-   * @param lineWidth the width of the line to render
-   * @param lineCapType the line cap type to use
-   * @param lineJoinType the line join type
-   */
-  void pathLines(FloatBuffer b, float lineWidth, NiftyLineCapType lineCapType, NiftyLineJoinType lineJoinType);
-
-  /**
-   * FIXME
-   *
-   * @param vertices the vertex data to render
-   */
-  public void pathFill(final FloatBuffer vertices);
-
-  /**
-   * @param lineColor the color
-   */
-  void pathEnd(NiftyColor lineColor);
 
   /**
    * The type of filtering to use when loading a texture (Actually this is the filtering mode of the texture after

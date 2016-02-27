@@ -60,12 +60,12 @@ public class BatchManager {
         ChangeCompositeOperationBatchFactory.Instance);
   }
 
-  public void addBeginPath() {
-    requestBatch(BeginPathBatch.class, null, BeginPathBatchFactory.Instance);
+  public void addMaskBegin() {
+    requestBatch(MaskBegin.class, null, MaskBeginBatchFactory.Instance);
   }
 
-  public void addEndPath(final NiftyColor lineColor) {
-    requestBatch(EndPathBatch.class, lineColor, EndPathBatchFactory.Instance);
+  public void addMaskEnd() {
+    requestBatch(MaskEndBatch.class, null, MaskEndBatchFactory.Instance);
   }
 
   public void addTextureQuad(final NiftyTexture niftyTexture, final Mat4 mat, final NiftyColor color) {
@@ -176,12 +176,21 @@ public class BatchManager {
     T createBatch(P param);
   }
 
-  private enum BeginPathBatchFactory implements BatchFactory<BeginPathBatch, Void> {
+  private enum MaskBeginBatchFactory implements BatchFactory<MaskBegin, Void> {
     Instance;
     @Nonnull
     @Override
-    public BeginPathBatch createBatch(final Void param) {
-      return new BeginPathBatch();
+    public MaskBegin createBatch(final Void param) {
+      return new MaskBegin();
+    }
+  }
+
+  private enum MaskEndBatchFactory implements BatchFactory<MaskEndBatch, Void> {
+    Instance;
+    @Nonnull
+    @Override
+    public MaskEndBatch createBatch(final Void param) {
+      return new MaskEndBatch();
     }
   }
 
@@ -193,8 +202,8 @@ public class BatchManager {
     public ChangeCompositeOperationBatch createBatch(final NiftyCompositeOperation param) {
       return new ChangeCompositeOperationBatch(param);
     }
-  }
 
+  }
   private enum ColorQuadBatchFactory implements BatchFactory<ColorQuadBatch, Void> {
     Instance;
     @Nonnull
@@ -202,8 +211,8 @@ public class BatchManager {
     public ColorQuadBatch createBatch(final Void param) {
       return new ColorQuadBatch();
     }
-  }
 
+  }
   private enum CustomShaderBatchFactory implements BatchFactory<CustomShaderBatch, String> {
     Instance;
     @Nonnull
@@ -211,15 +220,7 @@ public class BatchManager {
     public CustomShaderBatch createBatch(final String param) {
       return new CustomShaderBatch(param);
     }
-  }
 
-  private enum EndPathBatchFactory implements BatchFactory<EndPathBatch, NiftyColor> {
-    Instance;
-    @Nonnull
-    @Override
-    public EndPathBatch createBatch(final NiftyColor param) {
-      return new EndPathBatch(param);
-    }
   }
 
   private enum LinearGradientQuadBatchFactory implements BatchFactory<LinearGradientQuadBatch, LinearGradient> {

@@ -30,7 +30,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.List;
 
-import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyColorStop;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.types.NiftyLineCapType;
@@ -92,7 +91,7 @@ public class NiftyRenderDeviceJava2D implements NiftyRenderDevice {
   }
 
   @Override
-  public void render(NiftyTexture texture, FloatBuffer vertices) {
+  public void renderTexturedQuads(NiftyTexture texture, FloatBuffer vertices) {
     // TODO Auto-generated method stub
     
   }
@@ -134,7 +133,17 @@ public class NiftyRenderDeviceJava2D implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathBegin() {
+  public void maskBegin() {
+
+  }
+
+  @Override
+  public void maskEnd() {
+
+  }
+
+  @Override
+  public void maskClear() {
     // TODO Auto-generated method stub
     
   }
@@ -158,19 +167,13 @@ public class NiftyRenderDeviceJava2D implements NiftyRenderDevice {
   }
 
   @Override
-  public void pathLines(FloatBuffer b, float lineWidth, NiftyLineCapType lineCapType, NiftyLineJoinType lineJoinType) {
+  public void maskRenderLines(FloatBuffer b, float lineWidth, NiftyLineCapType lineCapType, NiftyLineJoinType lineJoinType) {
     // TODO Auto-generated method stub
     
   }
 
   @Override
-  public void pathFill(FloatBuffer vertices) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  @Override
-  public void pathEnd(NiftyColor lineColor) {
+  public void maskRenderFill(FloatBuffer vertices) {
     // TODO Auto-generated method stub
     
   }
