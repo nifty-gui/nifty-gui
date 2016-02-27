@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (c) 2016, Nifty GUI Community
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without
+  ~ modification, are permitted provided that the following conditions are
+  ~ met:
+  ~
+  ~  * Redistributions of source code must retain the above copyright
+  ~    notice, this list of conditions and the following disclaimer.
+  ~  * Redistributions in binary form must reproduce the above copyright
+  ~    notice, this list of conditions and the following disclaimer in the
+  ~    documentation and/or other materials provided with the distribution.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+  ~ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  ~ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  ~ PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE
+  ~ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  ~ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  ~ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  ~ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  ~ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ~ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+  ~ THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="340" height="220">
+  <style type="text/css">
+    * {
+      font-size: 14px;
+      font-family: "DejaVu Sans Mono",monospace;
+    }
+    marker {
+      overflow:visible
+    }
+    rect {
+      fill:none;
+      stroke-width:4;
+    }
+    g.parentNode {
+      stroke:#474747;
+      fill:#474747;
+    }
+    g.parentNode text {
+      stroke:none;
+    }
+    g.parentNode > text {
+      fill: #353833;
+      font-weight: bold;
+    }
+    g.anchors {
+      stroke:darkred;
+      fill:darkred;
+    }
+    g.anchors text {
+      stroke:none;
+    }
+  </style>
+  <g class="parentNode">
+    <rect width="300" height="150" />
+    <text x="150" y="75" text-anchor="middle" dominant-baseline="central">AlignmentLayoutNode</text>
+    <g class="anchors">
+      <circle r="5" cx="0" cy="0" />
+      <circle r="5" cx="150" cy="0" />
+      <circle r="5" cx="300" cy="0" />
+      <circle r="5" cx="0" cy="75" />
+      <circle r="5" cx="300" cy="75" />
+      <circle r="5" cx="0" cy="150" />
+      <circle r="5" cx="150" cy="150" />
+      <circle r="5" cx="300" cy="150" />
+      <g transform="translate(5, 5)">
+        <text text-anchor="start" dominant-baseline="hanging">Top</text>
+        <text y="15" text-anchor="start" dominant-baseline="hanging">Left</text>
+      </g>
+      <g transform="translate(150, 0) translate(0, 5)">
+        <text text-anchor="middle" dominant-baseline="hanging">Top</text>
+        <text y="15" text-anchor="middle" dominant-baseline="hanging">Center</text>
+      </g>
+      <g transform="translate(300, 0) translate(-5, 5)">
+        <text text-anchor="end" dominant-baseline="hanging">Top</text>
+        <text y="15" text-anchor="end" dominant-baseline="hanging">Right</text>
+      </g>
+
+      <g transform="translate(0, 75) translate(0, -7.5) translate(5, 0)">
+        <text text-anchor="start" dominant-baseline="middle">Middle</text>
+        <text y="15" text-anchor="start" dominant-baseline="middle">Left</text>
+      </g>
+      <g transform="translate(300, 75) translate(0, -7.5) translate(-5, 0)">
+        <text text-anchor="end" dominant-baseline="middle">Middle</text>
+        <text y="15" text-anchor="end" dominant-baseline="middle">Right</text>
+      </g>
+
+      <g transform="translate(0, 150) translate(0, -15) translate(5, -5)">
+        <text text-anchor="start" dominant-baseline="no-change">Bottom</text>
+        <text y="15" text-anchor="start" dominant-baseline="no-change">Left</text>
+      </g>
+      <g transform="translate(150, 150) translate(0, -15) translate(0, -5)">
+        <text text-anchor="middle" dominant-baseline="no-change">Bottom</text>
+        <text y="15" text-anchor="middle" dominant-baseline="no-change">Center</text>
+      </g>
+      <g transform="translate(300, 150) translate(0, -15) translate(-5, -5)">
+        <text text-anchor="end" dominant-baseline="no-change">Bottom</text>
+        <text y="15" text-anchor="end" dominant-baseline="no-change">Right</text>
+      </g>
+    </g>
+  </g>
+</svg>
