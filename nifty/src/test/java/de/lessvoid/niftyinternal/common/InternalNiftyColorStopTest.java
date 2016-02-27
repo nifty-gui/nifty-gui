@@ -24,56 +24,55 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty;
+package de.lessvoid.niftyinternal.common;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import de.lessvoid.nifty.types.NiftyColor;
-import de.lessvoid.nifty.types.NiftyColorStop;
 import org.junit.Test;
 
-public class NiftyColorStopTest {
+public class InternalNiftyColorStopTest {
 
   @Test
   public void testCreate() {
-    NiftyColorStop stop = new NiftyColorStop(1.0, NiftyColor.blue());
+    InternalNiftyColorStop stop = new InternalNiftyColorStop(1.0, NiftyColor.blue());
     assertEquals(1.0, stop.getStop(), 1.f / 255.f);
     assertEquals("#0000ffff {0.0, 0.0, 1.0, 1.0}", stop.getColor().toString());
   }
 
   @Test
   public void testLower() {
-    NiftyColorStop stopA = new NiftyColorStop(0.4, NiftyColor.blue());
-    NiftyColorStop stopB = new NiftyColorStop(1.0, NiftyColor.blue());
+    InternalNiftyColorStop stopA = new InternalNiftyColorStop(0.4, NiftyColor.blue());
+    InternalNiftyColorStop stopB = new InternalNiftyColorStop(1.0, NiftyColor.blue());
     assertTrue(stopA.compareTo(stopB) < 0);
   }
 
   @Test
   public void testHigher() {
-    NiftyColorStop stopA = new NiftyColorStop(1.0, NiftyColor.blue());
-    NiftyColorStop stopB = new NiftyColorStop(0.4, NiftyColor.blue());
+    InternalNiftyColorStop stopA = new InternalNiftyColorStop(1.0, NiftyColor.blue());
+    InternalNiftyColorStop stopB = new InternalNiftyColorStop(0.4, NiftyColor.blue());
     assertTrue(stopA.compareTo(stopB) > 0);
   }
 
   @Test
   public void testEquals() {
-    NiftyColorStop stopA = new NiftyColorStop(1.0, NiftyColor.blue());
-    NiftyColorStop stopB = new NiftyColorStop(1.0, NiftyColor.blue());
+    InternalNiftyColorStop stopA = new InternalNiftyColorStop(1.0, NiftyColor.blue());
+    InternalNiftyColorStop stopB = new InternalNiftyColorStop(1.0, NiftyColor.blue());
     assertTrue(stopA.compareTo(stopB) == 0);
   }
 
   @Test
   public void testEqualsLower() {
-    NiftyColorStop stopA = new NiftyColorStop(1.0, NiftyColor.black());
-    NiftyColorStop stopB = new NiftyColorStop(1.0, NiftyColor.blue());
+    InternalNiftyColorStop stopA = new InternalNiftyColorStop(1.0, NiftyColor.black());
+    InternalNiftyColorStop stopB = new InternalNiftyColorStop(1.0, NiftyColor.blue());
     assertTrue(stopA.compareTo(stopB) == 0);
   }
 
   @Test
   public void testEqualsHigher() {
-    NiftyColorStop stopA = new NiftyColorStop(1.0, NiftyColor.blue());
-    NiftyColorStop stopB = new NiftyColorStop(1.0, NiftyColor.black());
+    InternalNiftyColorStop stopA = new InternalNiftyColorStop(1.0, NiftyColor.blue());
+    InternalNiftyColorStop stopB = new InternalNiftyColorStop(1.0, NiftyColor.black());
     assertTrue(stopA.compareTo(stopB) == 0);
   }
 }

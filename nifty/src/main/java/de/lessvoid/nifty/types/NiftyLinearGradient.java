@@ -26,6 +26,9 @@
  */
 package de.lessvoid.nifty.types;
 
+import de.lessvoid.niftyinternal.accessor.NiftyLinearGradientAccessor;
+import de.lessvoid.niftyinternal.common.InternalNiftyColorStop;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,24 +36,28 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * A linear gradient between with a given angle that contains a number of color stops.
+ * A linear gradient between two points. The two points are either given directly or are implied when only an angle
+ * is given. In the latter case points are calculated internally using normalised coordinates.
+ *
+ * Color stops can be added along the line given as a stop value in the interval [0.0, 1.0] and a NiftyColor.
+ *
+ * Currently once these color stops are added they are treated as read-only, which means that their position and color
+ * can't be changed anymore.
  *
  * @author void
  */
 public class NiftyLinearGradient {
   private final double angleInRadiants;
-  private final Set<NiftyColorStop> colorStops = new TreeSet<NiftyColorStop>();
-  private double scale = 1.0;
-  private boolean flip = false;
+  private final Set<InternalNiftyColorStop> colorStops = new TreeSet<>();
 
-  private NiftyLinearGradient(final double angleInRadiants) {
-    this.angleInRadiants = angleInRadiants;
-  }
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Public API
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   /**
    * Create a linear gradient from an angle in degrees.
    *
-   * @param angleInRadiants The angle of the gradient line in degrees
+   * @param angleInDegree The angle of the gradient line in degrees
    */
   public static NiftyLinearGradient createFromAngleInDeg(final double angleInDegree) {
     return new NiftyLinearGradient(toRad(angleInDegree));
@@ -59,30 +66,10 @@ public class NiftyLinearGradient {
   /**
    * Create a linear gradient from an angle in radian.
    *
-   * @param angleInRadiants The angle of the gradient line in radian
+   * @param angleInRadians The angle of the gradient line in radian
    */
   public static NiftyLinearGradient createFromAngleInRad(final double angleInRadians) {
     return new NiftyLinearGradient(angleInRadians);
-  }
-
-  /**
-   * Copy constructor.
-   * @param src the source
-   */
-  public NiftyLinearGradient(final NiftyLinearGradient src) {
-    this.angleInRadiants = src.angleInRadiants;
-    this.colorStops.addAll(src.colorStops);
-    this.scale = src.scale;
-    this.flip = src.flip;
-  }
-
-  /**
-   * Add a list of NiftyColorStops to this gradient.
-   * @param newColorSteps the list of NiftyColorStops to add
-   */
-  public NiftyLinearGradient addColorSteps(final List<NiftyColorStop> newColorSteps) {
-    this.colorStops.addAll(newColorSteps);
-    return this;
   }
 
   /**
@@ -93,63 +80,10 @@ public class NiftyLinearGradient {
    * @param color a NiftyColor to display at stop position.
    */
   public NiftyLinearGradient addColorStop(final double stop, final NiftyColor color) {
-    NiftyColorStop newColorStop = new NiftyColorStop(stop, color);
+    InternalNiftyColorStop newColorStop = new InternalNiftyColorStop(stop, color);
     colorStops.remove(newColorStop);
     colorStops.add(newColorStop);
     return this;
-  }
-
-  /**
-   * Get the angle of the gradient line.
-   *
-   * @return the angle of the gradient line
-   */
-  public double getAngleInRadiants() {
-    return angleInRadiants;
-  }
-
-  /**
-   * Returns a List of all existing color stops in this gradient. You'll get a new list so you can't modify the list.
-   * @return the existing list of NiftyColorStops
-   */
-  public List<NiftyColorStop> getColorStops() {
-    return Collections.unmodifiableList(new ArrayList<NiftyColorStop>(colorStops));
-  }
-
-  /**
-   * Apply an optional scale factor to all stops. The default value is 1.0.
-   * @param scale the new scale factor for the gradient
-   * @return this
-   */
-  public NiftyLinearGradient setScale(final double scale) {
-    assertPositiveScale(scale);
-    this.scale = scale;
-    return this;
-  }
-
-  /**
-   * Get the current scale factor.
-   * @return the current scale factor or 1.0 if none have been set.
-   */
-  public double getScale() {
-    return scale ;
-  }
-
-  /**
-   * Flip the color stops in this gradient around.
-   * @return this
-   */
-  public NiftyLinearGradient setFlip() {
-    this.flip = true;
-    return this;
-  }
-
-  /**
-   * Return true if this gradient should be flipped. Default is false.
-   * @return true when this gradient is supposed to be flipped and false if not
-   */
-  public boolean isFlip() {
-    return flip;
   }
 
   @Override
@@ -182,13 +116,49 @@ public class NiftyLinearGradient {
     return true;
   }
 
-  private void assertPositiveScale(final double scale) {
-    if (Math.signum(scale) < 0) {
-      throw new IllegalArgumentException("scale must be positive but was (" + scale + ")");
-    }
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Friend API
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  /**
+   * Copy constructor.
+   * @param src the source
+   */
+  NiftyLinearGradient(final NiftyLinearGradient src) {
+    this.angleInRadiants = src.angleInRadiants;
+    this.colorStops.addAll(src.colorStops);
+  }
+
+  /**
+   * Get the angle of the gradient line.
+   *
+   * @return the angle of the gradient line
+   */
+  double getAngleInRadiants() {
+    return angleInRadiants;
+  }
+
+  /**
+   * Returns a List of all existing color stops in this gradient. You'll get a new list so you can't modify the list.
+   * @return the existing list of NiftyColorStops
+   */
+  List<InternalNiftyColorStop> getColorStops() {
+    return Collections.unmodifiableList(new ArrayList<>(colorStops));
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Private
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  private NiftyLinearGradient(final double angleInRadiants) {
+    this.angleInRadiants = angleInRadiants;
   }
 
   private static double toRad(final double grad) {
     return Math.PI * 2 * grad / 360.;
+  }
+
+  static {
+    NiftyLinearGradientAccessor.DEFAULT = new NiftyLinearGradientAccessorImpl();
   }
 }

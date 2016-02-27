@@ -26,18 +26,16 @@
  */
 package de.lessvoid.nifty.spi;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import de.lessvoid.nifty.types.NiftyColor;
-import de.lessvoid.nifty.types.NiftyColorStop;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.types.NiftyLineCapType;
 import de.lessvoid.nifty.types.NiftyLineJoinType;
 import de.lessvoid.niftyinternal.NiftyResourceLoader;
+
+import javax.annotation.Nonnull;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.util.List;
 
 /**
  * NiftyRenderDevice is part of the SPI that allows Nifty to use different graphics backends. Everything that can
@@ -143,7 +141,7 @@ public interface NiftyRenderDevice {
    * @param colorStops the list of colorstops
    * @param vertices the vertex data to render
    */
-  void renderLinearGradientQuads(double x0, double y0, double x1, double y1, List<NiftyColorStop> colorStops, FloatBuffer vertices);
+  void renderLinearGradientQuads(double x0, double y0, double x1, double y1, List<ColorStop> colorStops, FloatBuffer vertices);
 
   /**
    * Redirect all subsequent render calls to the NiftyTexture given as a parameter.
@@ -201,13 +199,13 @@ public interface NiftyRenderDevice {
    * @param filename the filename of the shader code to load.
    * @return some kind of identification to activate this custom shader later for rendering
    */
-  public String loadCustomShader(String filename);
+  String loadCustomShader(String filename);
 
   /**
    * Activate the custom shader with the given shaderId
    * @param shaderId the shaderId to activate
    */
-  public void activateCustomShader(String shaderId);
+  void activateCustomShader(String shaderId);
 
   /**
    * The type of filtering to use when loading a texture (Actually this is the filtering mode of the texture after
@@ -232,5 +230,13 @@ public interface NiftyRenderDevice {
   enum PreMultipliedAlphaMode {
     UseAsIs,
     PreMultiplyAlpha
+  }
+
+  /**
+   * When rendering renderLinearGradientQuads() the NiftyRenderDevice implementation gets a list of ColorStop instances.
+   */
+  interface ColorStop {
+    NiftyColor getColor();
+    float getStop();
   }
 }

@@ -43,15 +43,20 @@ import de.lessvoid.nifty.spi.node.NiftyLayoutNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
-import de.lessvoid.niftyinternal.*;
+import de.lessvoid.niftyinternal.InternalNiftyEventBus;
+import de.lessvoid.niftyinternal.InternalNiftyImage;
+import de.lessvoid.niftyinternal.InternalNiftyNodeAccessorRegistry;
+import de.lessvoid.niftyinternal.NiftyResourceLoader;
 import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
 import de.lessvoid.niftyinternal.animate.IntervalAnimator;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.render.NiftyRenderer;
-import de.lessvoid.niftyinternal.render.standard.StandardNiftyRenderer;
 import de.lessvoid.niftyinternal.render.font.FontRenderer;
+import de.lessvoid.niftyinternal.render.standard.StandardNiftyRenderer;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
 import org.jglfont.JGLFontFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -61,9 +66,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNiftyNode;
 import static de.lessvoid.niftyinternal.tree.NiftyTreeNodeConverters.toNiftyNodeClass;

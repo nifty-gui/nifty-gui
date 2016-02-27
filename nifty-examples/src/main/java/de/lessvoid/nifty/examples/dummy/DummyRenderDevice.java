@@ -109,7 +109,7 @@ public class DummyRenderDevice implements NiftyRenderDevice {
   }
 
   @Override
-  public void renderLinearGradientQuads(double x0, double y0, double x1, double y1, List<NiftyColorStop> colorStops, FloatBuffer vertices) {
+  public void renderLinearGradientQuads(double x0, double y0, double x1, double y1, List<ColorStop> colorStops, FloatBuffer vertices) {
   }
 
   @Override

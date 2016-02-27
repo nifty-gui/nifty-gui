@@ -30,7 +30,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.List;
 
-import de.lessvoid.nifty.types.NiftyColorStop;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.types.NiftyLineCapType;
 import de.lessvoid.nifty.types.NiftyLineJoinType;
@@ -108,10 +107,9 @@ public class NiftyRenderDeviceJava2D implements NiftyRenderDevice {
       double y0,
       double x1,
       double y1,
-      List<NiftyColorStop> colorStops,
+      List<ColorStop> colorStops,
       FloatBuffer vertices) {
     // TODO Auto-generated method stub
-    
   }
 
   @Override

@@ -37,7 +37,6 @@ import com.lessvoid.coregl.CoreVBO;
 import com.lessvoid.coregl.spi.CoreGL;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
-import de.lessvoid.nifty.types.NiftyColorStop;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.types.NiftyLineCapType;
 import de.lessvoid.nifty.types.NiftyLineJoinType;
@@ -283,7 +282,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   @Override
-  public void renderLinearGradientQuads(final double x0, final double y0, final double x1, final double y1, final List<NiftyColorStop> colorStops, final FloatBuffer vertices) {
+  public void renderLinearGradientQuads(final double x0, final double y0, final double x1, final double y1, final List<ColorStop> colorStops, final FloatBuffer vertices) {
     log.trace("renderLinearGradientQuads()");
     vbo.getBuffer().clear();
     FloatBuffer b = vbo.getBuffer();
@@ -296,12 +295,12 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     float[] gradientStop = new float[colorStops.size()];
     float[] gradientColor = new float[colorStops.size() * 4];
     int i = 0;
-    for (NiftyColorStop stop : colorStops) {
+    for (ColorStop stop : colorStops) {
       gradientColor[i * 4 + 0] = (float) stop.getColor().getRed();
       gradientColor[i * 4 + 1] = (float) stop.getColor().getGreen();
       gradientColor[i * 4 + 2] = (float) stop.getColor().getBlue();
       gradientColor[i * 4 + 3] = (float) stop.getColor().getAlpha();
-      gradientStop[i] = (float) stop.getStop();
+      gradientStop[i] = stop.getStop();
       i++;
     }
 

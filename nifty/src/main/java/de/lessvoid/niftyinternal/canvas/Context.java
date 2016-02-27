@@ -29,6 +29,7 @@ package de.lessvoid.niftyinternal.canvas;
 import de.lessvoid.niftyinternal.InternalNiftyImage;
 import de.lessvoid.niftyinternal.accessor.NiftyFontAccessor;
 import de.lessvoid.niftyinternal.accessor.NiftyImageAccessor;
+import de.lessvoid.niftyinternal.accessor.NiftyLinearGradientAccessor;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.render.batch.BatchManager;
 import de.lessvoid.niftyinternal.render.batch.ColorQuadBatch;
@@ -146,7 +147,7 @@ public class Context {
 
   public void setFillLinearGradient(final NiftyLinearGradient gradient) {
     fillColor = null;
-    linearGradient = new NiftyLinearGradient(gradient);
+    linearGradient = NiftyLinearGradientAccessor.getDefault().copyNiftyCanvas(gradient);
   }
 
   public LineParameters getLineParameters() {

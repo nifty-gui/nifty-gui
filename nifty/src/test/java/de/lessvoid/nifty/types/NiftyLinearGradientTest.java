@@ -24,18 +24,16 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty;
+package de.lessvoid.nifty.types;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import de.lessvoid.niftyinternal.accessor.NiftyLinearGradientAccessor;
+import de.lessvoid.niftyinternal.common.InternalNiftyColorStop;
+import org.junit.Test;
 
 import java.util.List;
 
-import de.lessvoid.nifty.types.NiftyColor;
-import de.lessvoid.nifty.types.NiftyColorStop;
-import de.lessvoid.nifty.types.NiftyLinearGradient;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class NiftyLinearGradientTest {
 
@@ -44,14 +42,10 @@ public class NiftyLinearGradientTest {
     NiftyLinearGradient source = createNiftyLinearGradient();
     source.addColorStop(0.0, NiftyColor.black());
     source.addColorStop(0.0, NiftyColor.blue());
-    source.setFlip();
-    source.setScale(2.);
 
-    NiftyLinearGradient gradient = new NiftyLinearGradient(source);
+    NiftyLinearGradient gradient = NiftyLinearGradientAccessor.getDefault().copyNiftyCanvas(source);
     assertEquals(Math.PI/2, gradient.getAngleInRadiants(), 0.0001);
-    assertColorStops(gradient.getColorStops(), new NiftyColorStop(0.0, NiftyColor.blue()));
-    assertTrue(gradient.isFlip());
-    assertEquals(2., gradient.getScale(), 0.0001);
+    assertColorStops(gradient.getColorStops(), new InternalNiftyColorStop(0.0, NiftyColor.blue()));
   }
 
   @Test
@@ -64,7 +58,7 @@ public class NiftyLinearGradientTest {
   public void testSingleColor() {
     NiftyLinearGradient gradient = createNiftyLinearGradient();
     gradient.addColorStop(0.0, NiftyColor.black());
-    assertColorStops(gradient.getColorStops(), new NiftyColorStop(0.0, NiftyColor.black()));
+    assertColorStops(gradient.getColorStops(), new InternalNiftyColorStop(0.0, NiftyColor.black()));
   }
 
   @Test
@@ -74,8 +68,8 @@ public class NiftyLinearGradientTest {
     gradient.addColorStop(1.0, NiftyColor.green());
     assertColorStops(
         gradient.getColorStops(),
-        new NiftyColorStop(0.0, NiftyColor.black()),
-        new NiftyColorStop(1.0, NiftyColor.green()));
+        new InternalNiftyColorStop(0.0, NiftyColor.black()),
+        new InternalNiftyColorStop(1.0, NiftyColor.green()));
   }
 
   @Test
@@ -86,9 +80,9 @@ public class NiftyLinearGradientTest {
     gradient.addColorStop(1.0, NiftyColor.green());
     assertColorStops(
         gradient.getColorStops(),
-        new NiftyColorStop(0.0, NiftyColor.black()),
-        new NiftyColorStop(0.5, NiftyColor.red()),
-        new NiftyColorStop(1.0, NiftyColor.green()));
+        new InternalNiftyColorStop(0.0, NiftyColor.black()),
+        new InternalNiftyColorStop(0.5, NiftyColor.red()),
+        new InternalNiftyColorStop(1.0, NiftyColor.green()));
   }
 
   @Test
@@ -96,34 +90,14 @@ public class NiftyLinearGradientTest {
     NiftyLinearGradient gradient = createNiftyLinearGradient();
     gradient.addColorStop(0.0, NiftyColor.black());
     gradient.addColorStop(0.0, NiftyColor.blue());
-    assertColorStops(gradient.getColorStops(), new NiftyColorStop(0.0, NiftyColor.blue()));
-  }
-
-  @Test
-  public void testScale() {
-    NiftyLinearGradient gradient = createNiftyLinearGradient();
-    assertEquals(gradient, gradient.setScale(1.23));
-    assertEquals(1.23, gradient.getScale(), 0.0001);
-  }
-
-  @Test
-  public void testFlipDefault() {
-    NiftyLinearGradient gradient = createNiftyLinearGradient();
-    assertFalse(gradient.isFlip());
-  }
-
-  @Test
-  public void testFlip() {
-    NiftyLinearGradient gradient = createNiftyLinearGradient();
-    assertEquals(gradient, gradient.setFlip());
-    assertTrue(gradient.isFlip());
+    assertColorStops(gradient.getColorStops(), new InternalNiftyColorStop(0.0, NiftyColor.blue()));
   }
 
   private NiftyLinearGradient createNiftyLinearGradient() {
     return NiftyLinearGradient.createFromAngleInRad(Math.PI/2);
   }
 
-  private void assertColorStops(final List<NiftyColorStop> colorStops, final NiftyColorStop ... stops) {
+  private void assertColorStops(final List<InternalNiftyColorStop> colorStops, final InternalNiftyColorStop... stops) {
     assertEquals(colorStops.size(), stops.length);
     for (int i=0; i<stops.length; i++) {
       assertTrue(colorStops.get(i).equals(stops[i]));

@@ -24,20 +24,32 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.canvas;
+package de.lessvoid.niftyinternal.accessor;
 
 import de.lessvoid.nifty.types.NiftyLinearGradient;
-import de.lessvoid.niftyinternal.accessor.NiftyLinearGradientAccessor;
+import de.lessvoid.niftyinternal.common.InternalNiftyColorStop;
 
-public class CommandFillLinearGradient implements Command {
-  private final NiftyLinearGradient gradient;
+import java.util.List;
 
-  public CommandFillLinearGradient(final NiftyLinearGradient gradient) {
-    this.gradient = NiftyLinearGradientAccessor.getDefault().copyNiftyCanvas(gradient);
-  }
+public abstract class NiftyLinearGradientAccessor {
+    public static NiftyLinearGradientAccessor DEFAULT;
 
-  @Override
-  public void execute(final Context context) {
-    context.setFillLinearGradient(gradient);
-  }
+    public static NiftyLinearGradientAccessor getDefault() {
+        if (DEFAULT != null) {
+            return DEFAULT;
+        }
+
+        Class<?> c = NiftyLinearGradient.class;
+        try {
+            Class.forName(c.getName(), true, c.getClassLoader());
+        } catch (ClassNotFoundException ex) {
+            assert false : ex;
+        }
+        assert DEFAULT != null : "The DEFAULT field must be initialized";
+        return DEFAULT;
+    }
+
+    public abstract NiftyLinearGradient copyNiftyCanvas(NiftyLinearGradient src);
+    public abstract double getAngleInRadians(NiftyLinearGradient gradient);
+    public abstract List<InternalNiftyColorStop> getColorStops(NiftyLinearGradient gradient);
 }

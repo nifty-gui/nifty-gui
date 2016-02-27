@@ -26,14 +26,15 @@
  */
 package de.lessvoid.niftyinternal.render.batch;
 
+import de.lessvoid.nifty.spi.NiftyRenderDevice.ColorStop;
+import de.lessvoid.nifty.types.NiftyLinearGradient;
+import de.lessvoid.niftyinternal.accessor.NiftyLinearGradientAccessor;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-import de.lessvoid.nifty.types.NiftyColorStop;
-import de.lessvoid.nifty.types.NiftyLinearGradient;
 
 /**
  * A linear gradient between two points that contains a number of color stops. This is a linear gradient as the
@@ -46,7 +47,7 @@ public class LinearGradient {
   private final double startY;
   private final double endX;
   private final double endY;
-  private final Set<NiftyColorStop> colorStops = new TreeSet<NiftyColorStop>();
+  private final Set<ColorStop> colorStops = new TreeSet<>();
 
   /**
    * Create a linear gradient considering the given rectangle (x0, y0) - (x1, y1) and the angle and colorstop from the
@@ -63,7 +64,7 @@ public class LinearGradient {
     double h = y1 - y0;
     double mx = x0 + w / 2;
     double my = y0 + h / 2;
-    double angle = gradient.getAngleInRadiants();
+    double angle = NiftyLinearGradientAccessor.getDefault().getAngleInRadians(gradient);
     double sinAngle = Math.sin(angle);
     double cosAngle = Math.cos(angle);
     double length = Math.abs(w * sinAngle) +
@@ -75,7 +76,7 @@ public class LinearGradient {
     this.startY = my + halfLength * cosAngle;
     this.endX = mx - halfLength * sinAngle;
     this.endY = my - halfLength * cosAngle;
-    this.colorStops.addAll(flip(applyScale(gradient.getColorStops(), gradient.getScale()), gradient.isFlip()));
+    this.colorStops.addAll(NiftyLinearGradientAccessor.getDefault().getColorStops(gradient));
   }
 
   /**
@@ -130,8 +131,8 @@ public class LinearGradient {
    * Returns a List of all existing color stops in this gradient. You'll get a new list so you can't modify the list.
    * @return the existing list of NiftyColorStops
    */
-  public List<NiftyColorStop> getColorStops() {
-    return Collections.unmodifiableList(new ArrayList<NiftyColorStop>(colorStops));
+  public List<ColorStop> getColorStops() {
+    return Collections.unmodifiableList(new ArrayList<>(colorStops));
   }
 
   @Override
@@ -174,47 +175,5 @@ public class LinearGradient {
     if (Double.doubleToLongBits(endY) != Double.doubleToLongBits(other.endY))
       return false;
     return true;
-  }
-
-  private List<NiftyColorStop> flip(final List<NiftyColorStop> colorStops, final boolean flip) {
-    if (!flip) {
-      return colorStops;
-    }
-
-    // make a copy of the stops
-    ArrayList<NiftyColorStop> reversedList = new ArrayList<NiftyColorStop>(colorStops);
-
-    // reverse the order (so that the colors are in the flipped order)
-    Collections.reverse(reversedList);
-
-    // since NiftyColorStop is not mutable we need to return a new list
-    ArrayList<NiftyColorStop> result = new ArrayList<NiftyColorStop>();
-
-    // now flip the color stops as well 
-    for (int i=0; i<reversedList.size(); i++) {
-      NiftyColorStop stop = reversedList.get(i);
-      result.add(new NiftyColorStop((stop.getStop() - 1.0) * -1.0, stop.getColor()));
-    }
-    return result;
-  }
-
-  private List<NiftyColorStop> applyScale(final List<NiftyColorStop> colorStops, final double scale) {
-    // just shortcut the regular case
-    if (scale == 1.0) {
-      return colorStops;
-    }
-
-    List<NiftyColorStop> result = new ArrayList<NiftyColorStop>();
-    for (int i=0; i<colorStops.size(); i++) {
-      NiftyColorStop colorStop = colorStops.get(i);
-      double newStop = colorStop.getStop() * scale;
-      result.add(new NiftyColorStop(newStop, colorStop.getColor()));
-
-      // having colorStops > 1.0 doesn't really make sense since we'll never see them
-      if (newStop >= 1.0) {
-        return result;
-      }
-    }
-    return result;
   }
 }
