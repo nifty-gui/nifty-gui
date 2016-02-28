@@ -27,23 +27,16 @@
 package de.lessvoid.nifty.types;
 
 import de.lessvoid.niftyinternal.accessor.NiftyLinearGradientAccessor;
-import de.lessvoid.niftyinternal.common.InternalNiftyColorStop;
-
-import java.util.List;
+import de.lessvoid.niftyinternal.render.batch.LinearGradient;
 
 final class NiftyLinearGradientAccessorImpl extends NiftyLinearGradientAccessor {
   @Override
-  public NiftyLinearGradient copyNiftyCanvas(final NiftyLinearGradient src) {
+  public NiftyLinearGradient copyLinearGradient(final NiftyLinearGradient src) {
     return new NiftyLinearGradient(src);
   }
 
   @Override
-  public double getAngleInRadians(final NiftyLinearGradient gradient) {
-    return gradient.getAngleInRadiants();
-  }
-
-  @Override
-  public List<InternalNiftyColorStop> getColorStops(final NiftyLinearGradient gradient) {
-    return gradient.getColorStops();
+  public LinearGradient asLinearGradient(final NiftyLinearGradient gradient, final double x0, final double y0, final double x1, final double y1) {
+    return gradient.asLinearGradient(x0, y0, x1, y1);
   }
 }

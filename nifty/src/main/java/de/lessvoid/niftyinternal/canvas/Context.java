@@ -147,7 +147,7 @@ public class Context {
 
   public void setFillLinearGradient(final NiftyLinearGradient gradient) {
     fillColor = null;
-    linearGradient = NiftyLinearGradientAccessor.getDefault().copyNiftyCanvas(gradient);
+    linearGradient = NiftyLinearGradientAccessor.getDefault().copyLinearGradient(gradient);
   }
 
   public LineParameters getLineParameters() {

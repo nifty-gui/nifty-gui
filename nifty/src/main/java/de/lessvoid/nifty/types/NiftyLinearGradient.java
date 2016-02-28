@@ -28,26 +28,30 @@ package de.lessvoid.nifty.types;
 
 import de.lessvoid.niftyinternal.accessor.NiftyLinearGradientAccessor;
 import de.lessvoid.niftyinternal.common.InternalNiftyColorStop;
+import de.lessvoid.niftyinternal.render.batch.LinearGradient;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
  * A linear gradient between two points. The two points are either given directly or are implied when only an angle
- * is given. In the latter case points are calculated internally using normalised coordinates.
- *
+ * is given. In the latter case the actual points are calculated later with respect to the coordinates of the node
+ * the gradient will be applied to.
+ * <br>
  * Color stops can be added along the line given as a stop value in the interval [0.0, 1.0] and a NiftyColor.
- *
+ * <br>
  * Currently once these color stops are added they are treated as read-only, which means that their position and color
  * can't be changed anymore.
- *
+ * <br>
  * @author void
  */
-public class NiftyLinearGradient {
+public final class NiftyLinearGradient {
+  private final double startX;
+  private final double startY;
+  private final double endX;
+  private final double endY;
   private final double angleInRadiants;
+  private final boolean angleMode;
   private final Set<InternalNiftyColorStop> colorStops = new TreeSet<>();
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,9 +59,23 @@ public class NiftyLinearGradient {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   /**
+   * Create the gradient from two points.
+   *
+   * @param x0 start point x
+   * @param y0 start point y
+   * @param x1 end point x
+   * @param y1 end point y
+   * @return the NiftyLinearGradient
+   */
+  public static NiftyLinearGradient create(final double x0, final double y0, final double x1, final double y1) {
+    return new NiftyLinearGradient(x0, y0, x1, y1);
+  }
+
+  /**
    * Create a linear gradient from an angle in degrees.
    *
    * @param angleInDegree The angle of the gradient line in degrees
+   * @return the NiftyLinearGradient
    */
   public static NiftyLinearGradient createFromAngleInDeg(final double angleInDegree) {
     return new NiftyLinearGradient(toRad(angleInDegree));
@@ -67,6 +85,7 @@ public class NiftyLinearGradient {
    * Create a linear gradient from an angle in radian.
    *
    * @param angleInRadians The angle of the gradient line in radian
+   * @return the NiftyLinearGradient
    */
   public static NiftyLinearGradient createFromAngleInRad(final double angleInRadians) {
     return new NiftyLinearGradient(angleInRadians);
@@ -79,7 +98,7 @@ public class NiftyLinearGradient {
    * gradient.
    * @param color a NiftyColor to display at stop position.
    */
-  public NiftyLinearGradient addColorStop(final double stop, final NiftyColor color) {
+  public final NiftyLinearGradient addColorStop(final double stop, final NiftyColor color) {
     InternalNiftyColorStop newColorStop = new InternalNiftyColorStop(stop, color);
     colorStops.remove(newColorStop);
     colorStops.add(newColorStop);
@@ -87,33 +106,38 @@ public class NiftyLinearGradient {
   }
 
   @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    long temp;
-    temp = Double.doubleToLongBits(angleInRadiants);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((colorStops == null) ? 0 : colorStops.hashCode());
-    return result;
+  public boolean equals(final Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    NiftyLinearGradient that = (NiftyLinearGradient) o;
+
+    if (Double.compare(that.startX, startX) != 0) return false;
+    if (Double.compare(that.startY, startY) != 0) return false;
+    if (Double.compare(that.endX, endX) != 0) return false;
+    if (Double.compare(that.endY, endY) != 0) return false;
+    if (Double.compare(that.angleInRadiants, angleInRadiants) != 0) return false;
+    if (angleMode != that.angleMode) return false;
+    return colorStops.equals(that.colorStops);
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    NiftyLinearGradient other = (NiftyLinearGradient) obj;
-    if (Double.doubleToLongBits(angleInRadiants) != Double.doubleToLongBits(other.angleInRadiants))
-      return false;
-    if (colorStops == null) {
-      if (other.colorStops != null)
-        return false;
-    } else if (!colorStops.equals(other.colorStops))
-      return false;
-    return true;
+  public int hashCode() {
+    int result;
+    long temp;
+    temp = Double.doubleToLongBits(startX);
+    result = (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(startY);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(endX);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(endY);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(angleInRadiants);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    result = 31 * result + (angleMode ? 1 : 0);
+    result = 31 * result + colorStops.hashCode();
+    return result;
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,33 +149,75 @@ public class NiftyLinearGradient {
    * @param src the source
    */
   NiftyLinearGradient(final NiftyLinearGradient src) {
+    this.angleMode = src.angleMode;
     this.angleInRadiants = src.angleInRadiants;
     this.colorStops.addAll(src.colorStops);
+    this.startX = src.startX;
+    this.startY = src.startY;
+    this.endX = src.endX;
+    this.endY = src.endY;
   }
 
   /**
-   * Get the angle of the gradient line.
+   * Return the internal Nifty LinearGradient instance taking the given node coordinates into account when this
+   * NiftyLinearGradient instance is using angleMode. If it is not using angleMode then the coordinates given in the
+   * constructor are used as-is.
    *
-   * @return the angle of the gradient line
+   * @param x0 top left x coordinate of the node/rectangle to apply the gradient to
+   * @param y0 top left y coordinate of the node/rectangle to apply the gradient to
+   * @param x1 bottom right x coordinate of the node/rectangle to apply the gradient to
+   * @param y1 bottom right x coordinate of the node/rectangle to apply the gradient to
+   * @return the LinearGradient
    */
-  double getAngleInRadiants() {
-    return angleInRadiants;
-  }
+  final LinearGradient asLinearGradient(final double x0, final double y0, final double x1, final double y1) {
+    if (angleMode) {
+      double w = x1 - x0;
+      double h = y1 - y0;
+      double mx = x0 + w / 2;
+      double my = y0 + h / 2;
+      double sinAngle = Math.sin(angleInRadiants);
+      double cosAngle = Math.cos(angleInRadiants);
+      double length = Math.abs(w * sinAngle) + Math.abs(h * cosAngle);
+      double halfLength = length / 2;
 
-  /**
-   * Returns a List of all existing color stops in this gradient. You'll get a new list so you can't modify the list.
-   * @return the existing list of NiftyColorStops
-   */
-  List<InternalNiftyColorStop> getColorStops() {
-    return Collections.unmodifiableList(new ArrayList<>(colorStops));
+      // we flip start end end coordinates here since in Nifty the upper left hand corner is (0, 0)
+      return new LinearGradient(
+        mx - halfLength * sinAngle,
+        my + halfLength * cosAngle,
+        mx + halfLength * sinAngle,
+        my - halfLength * cosAngle,
+        colorStops);
+    } else {
+      return new LinearGradient(
+        startX,
+        startY,
+        endX,
+        endY,
+        colorStops
+      );
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Private
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  private NiftyLinearGradient(final double x0, final double y0, final double x1, final double y1) {
+    this.angleMode = false;
+    this.angleInRadiants = 0.0;
+    this.startX = x0;
+    this.startY = y0;
+    this.endX = x1;
+    this.endY = y1;
+  }
+
   private NiftyLinearGradient(final double angleInRadiants) {
+    this.angleMode = true;
     this.angleInRadiants = angleInRadiants;
+    this.startX = 0.0;
+    this.startY = 0.0;
+    this.endX = 0.0;
+    this.endY = 0.0;
   }
 
   private static double toRad(final double grad) {

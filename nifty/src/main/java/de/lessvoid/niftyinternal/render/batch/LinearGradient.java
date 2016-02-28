@@ -27,8 +27,7 @@
 package de.lessvoid.niftyinternal.render.batch;
 
 import de.lessvoid.nifty.spi.NiftyRenderDevice.ColorStop;
-import de.lessvoid.nifty.types.NiftyLinearGradient;
-import de.lessvoid.niftyinternal.accessor.NiftyLinearGradientAccessor;
+import de.lessvoid.niftyinternal.common.InternalNiftyColorStop;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,11 +37,11 @@ import java.util.TreeSet;
 
 /**
  * A linear gradient between two points that contains a number of color stops. This is a linear gradient as the
- * renderer sees it. The points it carries are the resolved, e.g. NiftyNode coordinate system specific points.
+ * renderer sees it.
  *
  * @author void
  */
-public class LinearGradient {
+public final class LinearGradient {
   private final double startX;
   private final double startY;
   private final double endX;
@@ -50,45 +49,20 @@ public class LinearGradient {
   private final Set<ColorStop> colorStops = new TreeSet<>();
 
   /**
-   * Create a linear gradient considering the given rectangle (x0, y0) - (x1, y1) and the angle and colorstop from the
-   * NiftyLinearGradient.
+   * Create a new LinearGradient.
    *
-   * @param x0 The x-coordinate of the rectangle
-   * @param y0 The y-coordinate of the rectangle
-   * @param x1 The x-coordinate of the rectangle
-   * @param y1 The y-coordinate of the rectangle
-   * @param gradient The NiftyLinearGradient parameter
+   * @param startX start x
+   * @param startY start y
+   * @param endX end x
+   * @param endY end y
+   * @param colorStops color stops
    */
-  public LinearGradient(final double x0, final double y0, final double x1, final double y1, final NiftyLinearGradient gradient) {
-    double w = x1 - x0;
-    double h = y1 - y0;
-    double mx = x0 + w / 2;
-    double my = y0 + h / 2;
-    double angle = NiftyLinearGradientAccessor.getDefault().getAngleInRadians(gradient);
-    double sinAngle = Math.sin(angle);
-    double cosAngle = Math.cos(angle);
-    double length = Math.abs(w * sinAngle) +
-                    Math.abs(h * cosAngle);
-    double halfLength = length / 2;
-
-    // we flip start end end coordinates here since in Nifty the upper left hand corner is (0, 0)
-    this.startX = mx + halfLength * sinAngle;
-    this.startY = my + halfLength * cosAngle;
-    this.endX = mx - halfLength * sinAngle;
-    this.endY = my - halfLength * cosAngle;
-    this.colorStops.addAll(NiftyLinearGradientAccessor.getDefault().getColorStops(gradient));
-  }
-
-  /**
-   * Copy constructor.
-   * @param src the source
-   */
-  public LinearGradient(final LinearGradient src) {
-    this.startX = src.startX;
-    this.startY = src.startY;
-    this.endX = src.endX;
-    this.endY = src.endY;
-    this.colorStops.addAll(src.colorStops);
+  public LinearGradient(final double startX, final double startY, final double endX, final double endY, final Set<InternalNiftyColorStop> colorStops) {
+    this.startX = startX;
+    this.startY = startY;
+    this.endX = endX;
+    this.endY = endY;
+    this.colorStops.addAll(colorStops);
   }
 
   /**
@@ -96,7 +70,7 @@ public class LinearGradient {
    *
    * @return x-coordinate of the start point of the gradient.
    */
-  public double getStartX() {
+  public final double getStartX() {
     return startX;
   }
 
@@ -105,7 +79,7 @@ public class LinearGradient {
    *
    * @return y-coordinate of the start point of the gradient.
    */
-  public double getStartY() {
+  public final double getStartY() {
     return startY;
   }
 
@@ -114,7 +88,7 @@ public class LinearGradient {
    *
    * @return x-coordinate of the end point of the gradient.
    */
-  public double getEndX() {
+  public final double getEndX() {
     return endX;
   }
 
@@ -123,7 +97,7 @@ public class LinearGradient {
    *
    * @return y-coordinate of the end point of the gradient.
    */
-  public double getEndY() {
+  public final double getEndY() {
     return endY;
   }
 
@@ -131,12 +105,12 @@ public class LinearGradient {
    * Returns a List of all existing color stops in this gradient. You'll get a new list so you can't modify the list.
    * @return the existing list of NiftyColorStops
    */
-  public List<ColorStop> getColorStops() {
+  public final List<ColorStop> getColorStops() {
     return Collections.unmodifiableList(new ArrayList<>(colorStops));
   }
 
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((colorStops == null) ? 0 : colorStops.hashCode());
@@ -153,7 +127,7 @@ public class LinearGradient {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public final boolean equals(Object obj) {
     if (this == obj)
       return true;
     if (obj == null)

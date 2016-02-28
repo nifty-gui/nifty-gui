@@ -27,7 +27,6 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyFont;
 import de.lessvoid.nifty.NiftyNodeCallback;
 import de.lessvoid.nifty.control.ButtonNode;
 import de.lessvoid.nifty.node.NiftyTransformationNode;
@@ -58,7 +57,6 @@ public class UseCase_c10_ButtonBasic {
       @Override
       public void execute(final Float time, final NiftyTransformationNode niftyTransformationNode) {
         niftyTransformationNode.setAngleZ(angle++);
-        niftyTransformationNode.setPosY(Math.sin(angle/30.f)*100);
       }
     });
 

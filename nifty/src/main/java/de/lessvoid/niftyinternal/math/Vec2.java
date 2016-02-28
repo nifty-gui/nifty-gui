@@ -31,6 +31,7 @@
  */
 package de.lessvoid.niftyinternal.math;
 
+import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.nio.FloatBuffer;
 
@@ -261,4 +262,9 @@ public class Vec2 implements Serializable {
 		this.y = y;
 	}
 
+	public boolean equals(@Nullable final Vec2 other, final float tolerance) {
+		return (other != null) &&
+			     (Math.abs(x - other.x) <= tolerance) &&
+					 (Math.abs(y - other.y) <= tolerance);
+	}
 }

@@ -32,6 +32,7 @@ import java.util.List;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.types.NiftyLinearGradient;
+import de.lessvoid.niftyinternal.accessor.NiftyLinearGradientAccessor;
 import de.lessvoid.niftyinternal.canvas.LineParameters;
 import de.lessvoid.niftyinternal.math.Mat4;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
@@ -102,7 +103,7 @@ public class BatchManager {
       final double y1,
       final Mat4 mat,
       final NiftyLinearGradient fillLinearGradient) {
-    LinearGradient gradient = new LinearGradient(x0, y0, x1, y1, fillLinearGradient);
+    LinearGradient gradient = NiftyLinearGradientAccessor.getDefault().asLinearGradient(fillLinearGradient, x0, y0, x1, y1);
 
     LinearGradientQuadBatch batch = requestBatch(LinearGradientQuadBatch.class, gradient,
         LinearGradientQuadBatchFactory.Instance);

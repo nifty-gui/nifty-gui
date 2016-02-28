@@ -27,9 +27,7 @@
 package de.lessvoid.niftyinternal.accessor;
 
 import de.lessvoid.nifty.types.NiftyLinearGradient;
-import de.lessvoid.niftyinternal.common.InternalNiftyColorStop;
-
-import java.util.List;
+import de.lessvoid.niftyinternal.render.batch.LinearGradient;
 
 public abstract class NiftyLinearGradientAccessor {
     public static NiftyLinearGradientAccessor DEFAULT;
@@ -49,7 +47,6 @@ public abstract class NiftyLinearGradientAccessor {
         return DEFAULT;
     }
 
-    public abstract NiftyLinearGradient copyNiftyCanvas(NiftyLinearGradient src);
-    public abstract double getAngleInRadians(NiftyLinearGradient gradient);
-    public abstract List<InternalNiftyColorStop> getColorStops(NiftyLinearGradient gradient);
+    public abstract NiftyLinearGradient copyLinearGradient(NiftyLinearGradient src);
+    public abstract LinearGradient asLinearGradient(NiftyLinearGradient fillLinearGradient, double x0, double y0, double x1, double y1);
 }

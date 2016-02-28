@@ -125,9 +125,7 @@ final class ButtonNodeImpl implements NiftyControlNodeImpl<ButtonNode, ButtonNod
       canvas.lineTo(         0.0 + inset, 10.0 + inset);
       canvas.arcTo(          0.0 + inset, 0.0 + inset, 10.0 + inset, 0.0 + inset, radius);
 
-      // TODO this does not yet work because the gradient is currently rendered fullscreen and we don't support yet
-      // TODO to restrict it to some area - which we should add next
-      NiftyLinearGradient gradient = NiftyLinearGradient.createFromAngleInDeg(0.);
+      NiftyLinearGradient gradient = NiftyLinearGradient.create(0.0, 30.0, 0.0, 0.f);
       gradient.addColorStop( 0.0,   NiftyColor.fromString("#703434"));
       gradient.addColorStop( 0.458, NiftyColor.fromString("#211"));
       gradient.addColorStop( 0.508, NiftyColor.fromString("#211"));
