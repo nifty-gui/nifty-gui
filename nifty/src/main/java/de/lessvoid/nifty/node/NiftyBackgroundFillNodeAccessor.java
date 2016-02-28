@@ -34,16 +34,16 @@ import javax.annotation.Nonnull;
 /**
  * Created by void on 22.08.15.
  */
-class NiftyBackgroundColorNodeAccessor implements NiftyNodeAccessor<NiftyBackgroundColorNode> {
+class NiftyBackgroundFillNodeAccessor implements NiftyNodeAccessor<NiftyBackgroundFillNode> {
   @Nonnull
   @Override
-  public Class<NiftyBackgroundColorNode> getNodeClass() {
-    return NiftyBackgroundColorNode.class;
+  public Class<NiftyBackgroundFillNode> getNodeClass() {
+    return NiftyBackgroundFillNode.class;
   }
 
   @Nonnull
   @Override
-  public NiftyNodeImpl<NiftyBackgroundColorNode> getImplementation(@Nonnull final NiftyBackgroundColorNode niftyNode) {
+  public NiftyNodeImpl<NiftyBackgroundFillNode> getImplementation(@Nonnull final NiftyBackgroundFillNode niftyNode) {
     return niftyNode.getImpl();
   }
 }

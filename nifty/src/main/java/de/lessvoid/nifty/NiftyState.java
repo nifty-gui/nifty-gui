@@ -53,7 +53,7 @@ public class NiftyState {
   }
 
   public enum NiftyStandardState implements State {
-    NiftyStateBackgroundColor,
+    NiftyStateBackgroundFill,
     NiftyStateTransformation,
     NiftyStateTransformationChanged,
     NiftyStateTransformationLayoutRect
@@ -63,14 +63,21 @@ public class NiftyState {
     stateMap.put(state, value);
   }
 
-  public <T> T getState(final State state) {
-    return (T) stateMap.get(state);
-  }
-
   public <T> T getState(final State state, final T defaultValue) {
     T value = (T) stateMap.get(state);
     if (value != null) {
       return value;
+    }
+    return defaultValue;
+  }
+
+  public <T> T getState(final State state, final T defaultValue, final Class<T> clazz) {
+    Object o = stateMap.get(state);
+    if (o == null) {
+      return defaultValue;
+    }
+    if (clazz.isAssignableFrom(o.getClass())) {
+      return (T) o;
     }
     return defaultValue;
   }

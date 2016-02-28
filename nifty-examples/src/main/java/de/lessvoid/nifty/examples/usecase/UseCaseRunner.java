@@ -26,18 +26,18 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
 import com.lessvoid.coregl.jogl.CoreSetupJogl;
 import com.lessvoid.coregl.jogl.JoglCoreGL;
 import com.lessvoid.coregl.lwjgl.CoreSetupLwjgl;
 import com.lessvoid.coregl.lwjgl.LwjglCoreGL;
 import de.lessvoid.nifty.NiftyConfiguration;
 import org.slf4j.bridge.SLF4JBridgeHandler;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * A helper class that initializes the rendering subsystem and the main Nifty instance. It will then instantiate

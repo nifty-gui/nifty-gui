@@ -31,15 +31,11 @@ import de.lessvoid.nifty.NiftyCanvasPainter;
 import de.lessvoid.nifty.NiftyFont;
 import de.lessvoid.nifty.NiftyNodeBuilder;
 import de.lessvoid.nifty.node.NiftyContentNode;
-import de.lessvoid.nifty.spi.node.NiftyControlNode;
 import de.lessvoid.nifty.spi.node.NiftyControlNodeImpl;
 import de.lessvoid.nifty.types.NiftyColor;
-import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.types.NiftyLinearGradient;
 
-import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
 import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
 

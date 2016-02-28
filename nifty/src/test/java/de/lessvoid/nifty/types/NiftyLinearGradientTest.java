@@ -150,6 +150,54 @@ public class NiftyLinearGradientTest {
       new InternalNiftyColorStop(0.0, NiftyColor.blue()));
   }
 
+  @Test
+  public void testToString() {
+    NiftyLinearGradient gradient = createFromAngleInRad(0.0);
+    gradient.addColorStop(0.0, NiftyColor.black());
+    gradient.addColorStop(0.5, NiftyColor.red());
+    gradient.addColorStop(1.0, NiftyColor.green());
+    assertEquals(
+      "NiftyLinearGradient(" +
+        "startX[0.0] " +
+        "startY[0.0] " +
+        "endX[0.0] " +
+        "endY[0.0] " +
+        "angleInRadiants[0.0] " +
+        "angleMode[true] " +
+        "colorStops [" +
+          "0.0: #000000ff {0.0, 0.0, 0.0, 1.0}, " +
+          "0.5: #ff0000ff {1.0, 0.0, 0.0, 1.0}, " +
+          "1.0: #008000ff {0.0, 0.501960813999176, 0.0, 1.0}])", gradient.toString());
+  }
+
+  @Test
+  public void testToStringNoColorStops() {
+    NiftyLinearGradient gradient = createFromAngleInRad(0.0);
+    assertEquals(
+      "NiftyLinearGradient(" +
+        "startX[0.0] " +
+        "startY[0.0] " +
+        "endX[0.0] " +
+        "endY[0.0] " +
+        "angleInRadiants[0.0] " +
+        "angleMode[true] " +
+        "colorStops [])", gradient.toString());
+  }
+
+  @Test
+  public void testToStringPointMode() {
+    NiftyLinearGradient gradient = createFromPoints(1.0, 2.0, 3.0, 4.0);
+    assertEquals(
+      "NiftyLinearGradient(" +
+        "startX[1.0] " +
+        "startY[2.0] " +
+        "endX[3.0] " +
+        "endY[4.0] " +
+        "angleInRadiants[0.0] " +
+        "angleMode[false] " +
+        "colorStops [])", gradient.toString());
+  }
+
   private void assertLinearGradient(
     final NiftyLinearGradient gradient,
     final double startX,

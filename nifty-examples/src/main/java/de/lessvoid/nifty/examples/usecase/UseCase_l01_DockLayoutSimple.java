@@ -30,11 +30,14 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.node.NiftyReferenceNode;
 import de.lessvoid.nifty.types.NiftyColor;
 
-import static de.lessvoid.nifty.node.DockLayoutChildNode.*;
+import static de.lessvoid.nifty.node.DockLayoutChildNode.dockEastLayoutNode;
+import static de.lessvoid.nifty.node.DockLayoutChildNode.dockNorthLayoutNode;
+import static de.lessvoid.nifty.node.DockLayoutChildNode.dockSouthLayoutNode;
+import static de.lessvoid.nifty.node.DockLayoutChildNode.dockWestLayoutNode;
 import static de.lessvoid.nifty.node.DockLayoutNode.dockLayoutNode;
-import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
 
 /**
  * This example demonstrates the capabilities of the dock layout in a very simple way.
@@ -60,22 +63,22 @@ public class UseCase_l01_DockLayoutSimple {
           .addNode(NiftyReferenceNode.referenceNode("dockNode"))
             .addNode(dockNorthLayoutNode())
               .addNode(fixedSizeLayoutNode(0.f, 50.f))
-                .addNode(backgroundColorNode(NiftyColor.blue()))
+                .addNode(backgroundFillColor(NiftyColor.blue()))
                   .addNode(contentNode())
           .addAsChildOf("dockNode")
             .addNode(dockSouthLayoutNode())
               .addNode(fixedSizeLayoutNode(0.f, 50.f))
-                .addNode(backgroundColorNode(NiftyColor.green()))
+                .addNode(backgroundFillColor(NiftyColor.green()))
                   .addNode(contentNode())
           .addAsChildOf("dockNode")
             .addNode(dockWestLayoutNode())
               .addNode(fixedSizeLayoutNode(50.f, 0.f))
-                .addNode(backgroundColorNode(NiftyColor.yellow()))
+                .addNode(backgroundFillColor(NiftyColor.yellow()))
                   .addNode(contentNode())
           .addAsChildOf("dockNode")
             .addNode(dockEastLayoutNode())
               .addNode(fixedSizeLayoutNode(50.f, 0.f))
-                .addNode(backgroundColorNode(NiftyColor.red()))
+                .addNode(backgroundFillColor(NiftyColor.red()))
                   .addNode(contentNode());
   }
 

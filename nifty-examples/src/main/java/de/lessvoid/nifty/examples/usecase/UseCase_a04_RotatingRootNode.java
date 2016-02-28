@@ -34,10 +34,10 @@ import de.lessvoid.nifty.types.NiftyColor;
 
 import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
 import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
-import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
 
 /**
  * A single root node of a fixed size with a background color that is constantly rotating.
@@ -60,7 +60,7 @@ public class UseCase_a04_RotatingRootNode {
           .addNode(absoluteLayoutChildNode(nifty.getScreenWidth() / 2 - 50, nifty.getScreenHeight() / 2 - 50))
             .addNode(fixedSizeLayoutNode(100.f, 100.f))
               .addNode(rootTransformation)
-                .addNode(backgroundColorNode(NiftyColor.green()))
+                .addNode(backgroundFillColor(NiftyColor.green()))
                   .addNode(contentNode());
   }
 

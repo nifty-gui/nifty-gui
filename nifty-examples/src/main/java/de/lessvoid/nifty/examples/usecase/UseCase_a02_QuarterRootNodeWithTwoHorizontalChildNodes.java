@@ -32,11 +32,11 @@ import de.lessvoid.nifty.types.NiftyColor;
 
 import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
 import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
-import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.NiftyReferenceNode.referenceNode;
 import static de.lessvoid.nifty.node.SimpleLayoutNode.simpleLayoutNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
 import static de.lessvoid.nifty.node.UniformStackLayoutNode.uniformStackLayoutNode;
 
 /**
@@ -54,11 +54,11 @@ public class UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes {
             .addNode(uniformStackLayoutNode(Orientation.Vertical))
               .addNode(referenceNode("node"))
                 .addNode(simpleLayoutNode())
-                  .addNode(backgroundColorNode(NiftyColor.fromString("#ff0f")))
+                  .addNode(backgroundFillColor(NiftyColor.fromString("#ff0f")))
                     .addNode(contentNode())
               .addAsChildOf("node")
                 .addNode(simpleLayoutNode())
-                  .addNode(backgroundColorNode(NiftyColor.fromString("#00ff")))
+                  .addNode(backgroundFillColor(NiftyColor.fromString("#00ff")))
                     .addNode(contentNode());
   }
 

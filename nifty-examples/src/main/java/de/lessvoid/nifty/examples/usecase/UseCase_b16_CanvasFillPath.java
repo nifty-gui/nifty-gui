@@ -30,9 +30,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyCallback;
 import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.NiftyCanvasPainter;
-import de.lessvoid.nifty.UnitValue;
 import de.lessvoid.nifty.node.NiftyContentNode;
-import de.lessvoid.nifty.spi.node.NiftyNode;
 import de.lessvoid.nifty.types.NiftyColor;
 
 import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;

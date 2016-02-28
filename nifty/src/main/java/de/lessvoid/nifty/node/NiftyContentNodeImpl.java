@@ -33,6 +33,7 @@ import de.lessvoid.nifty.spi.node.NiftyLayoutReceiver;
 import de.lessvoid.nifty.spi.node.NiftyNodeContentImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
 import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.types.NiftyLinearGradient;
 import de.lessvoid.nifty.types.NiftyPoint;
 import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.nifty.types.NiftySize;
@@ -42,7 +43,7 @@ import de.lessvoid.niftyinternal.math.Mat4;
 
 import javax.annotation.Nonnull;
 
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundColor;
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundFill;
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformation;
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationChanged;
 import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateTransformationLayoutRect;
@@ -62,6 +63,7 @@ class NiftyContentNodeImpl
   private final Mat4 contentLayoutPosTransformation = Mat4.createIdentity();
 
   private NiftyColor backgroundColor;
+  private NiftyLinearGradient backgroundGradient;
   private NiftyCanvasPainter canvasPainter = defaultNiftyCanvasPainter();
   private NiftyRect layoutRect = NiftyRect.newNiftyRect(NiftyPoint.ZERO, NiftySize.ZERO);
   private boolean layoutRectChanged = true;
@@ -81,9 +83,10 @@ class NiftyContentNodeImpl
 
   @Override
   public void update(final NiftyState niftyState) {
-    backgroundColor = niftyState.getState(NiftyStateBackgroundColor, NiftyColor.purple());
+    backgroundColor = niftyState.getState(NiftyStateBackgroundFill, null, NiftyColor.class);
+    backgroundGradient = niftyState.getState(NiftyStateBackgroundFill, null, NiftyLinearGradient.class);
 
-    NiftyRect parentLayoutRect = niftyState.getState(NiftyStateTransformationLayoutRect);
+    NiftyRect parentLayoutRect = niftyState.getState(NiftyStateTransformationLayoutRect, null);
     float parentRelativeLayoutPosX = layoutRect.getOrigin().getX();
     float parentRelativeLayoutPosY = layoutRect.getOrigin().getY();
     if (parentLayoutRect != null) {
@@ -147,7 +150,12 @@ class NiftyContentNodeImpl
     return new NiftyCanvasPainter() {
       @Override
       public void paint(final NiftyContentNode node, final NiftyCanvas niftyCanvas) {
-        niftyCanvas.setFillStyle(backgroundColor);
+        if (backgroundColor != null) {
+          niftyCanvas.setFillStyle(backgroundColor);
+        }
+        if (backgroundGradient != null) {
+          niftyCanvas.setFillStyle(backgroundGradient);
+        }
         niftyCanvas.fillRect(0., 0., getContentWidth(), getContentHeight());
       }
     };

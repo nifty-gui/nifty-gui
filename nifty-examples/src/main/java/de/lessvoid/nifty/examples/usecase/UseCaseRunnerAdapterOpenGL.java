@@ -26,23 +26,21 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import de.lessvoid.nifty.NiftyConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.lessvoid.coregl.spi.CoreGL;
 import com.lessvoid.coregl.spi.CoreSetup;
 import com.lessvoid.coregl.spi.CoreSetup.RenderLoopCallback;
-
-import de.lessvoid.nifty.NiftyCallback;
-import de.lessvoid.nifty.time.AccurateTimeProvider;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.NiftyCallback;
+import de.lessvoid.nifty.NiftyConfiguration;
 import de.lessvoid.nifty.input.lwjgl.NiftyInputDeviceLWJGL;
 import de.lessvoid.nifty.renderer.opengl.NiftyRenderDeviceOpenGL;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
+import de.lessvoid.nifty.time.AccurateTimeProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static de.lessvoid.nifty.Nifty.createNifty;
 

@@ -40,10 +40,22 @@ import java.util.Queue;
 
 import static de.lessvoid.nifty.node.DockLayoutChildNode.dockLayoutChildNode;
 import static de.lessvoid.nifty.node.DockLayoutNode.dockLayoutNode;
-import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
-import static de.lessvoid.nifty.types.NiftyColor.*;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.types.NiftyColor.aqua;
+import static de.lessvoid.nifty.types.NiftyColor.blue;
+import static de.lessvoid.nifty.types.NiftyColor.fuchsia;
+import static de.lessvoid.nifty.types.NiftyColor.green;
+import static de.lessvoid.nifty.types.NiftyColor.maroon;
+import static de.lessvoid.nifty.types.NiftyColor.navy;
+import static de.lessvoid.nifty.types.NiftyColor.purple;
+import static de.lessvoid.nifty.types.NiftyColor.randomColor;
+import static de.lessvoid.nifty.types.NiftyColor.red;
+import static de.lessvoid.nifty.types.NiftyColor.silver;
+import static de.lessvoid.nifty.types.NiftyColor.teal;
+import static de.lessvoid.nifty.types.NiftyColor.white;
+import static de.lessvoid.nifty.types.NiftyColor.yellow;
 import static de.lessvoid.nifty.types.NiftySize.newNiftySize;
 
 /**
@@ -97,7 +109,7 @@ public final class UseCase_l02_DockLayoutSnake {
 
         dockLayout.addNode(dockLayoutChildNode(dock))
             .addNode(fixedSizeLayoutNode(usedSize))
-            .addNode(backgroundColorNode(colors.isEmpty() ? randomColor() : colors.poll()))
+            .addNode(backgroundFillColor(colors.isEmpty() ? randomColor() : colors.poll()))
             .addNode(contentNode());
       }
     }

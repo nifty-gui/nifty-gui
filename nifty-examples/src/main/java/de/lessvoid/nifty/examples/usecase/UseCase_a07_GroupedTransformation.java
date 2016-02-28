@@ -38,10 +38,9 @@ import de.lessvoid.nifty.types.NiftyColor;
 
 import java.io.IOException;
 
-import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
 import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
 import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.NiftyReferenceNode.referenceNode;
 import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
@@ -67,22 +66,22 @@ public class UseCase_a07_GroupedTransformation {
                   .addNode(referenceNode("parent"))
                     .addNode(AbsoluteLayoutChildNode.absoluteLayoutChildNode(0.f, 0.f))
                       .addNode(fixedSizeLayoutNode(50.f, 50.f))
-                        .addNode(backgroundColorNode(NiftyColor.green()))
+                        .addNode(backgroundFillColor(NiftyColor.green()))
                           .addNode(contentNode())
                   .addAsChildOf("parent")
                     .addNode(AbsoluteLayoutChildNode.absoluteLayoutChildNode(50.f, 0.f))
                       .addNode(fixedSizeLayoutNode(50.f, 50.f))
-                        .addNode(backgroundColorNode(NiftyColor.blue()))
+                        .addNode(backgroundFillColor(NiftyColor.blue()))
                           .addNode(contentNode())
                   .addAsChildOf("parent")
                     .addNode(AbsoluteLayoutChildNode.absoluteLayoutChildNode(0.f, 50.f))
                       .addNode(fixedSizeLayoutNode(50.f, 50.f))
-                        .addNode(backgroundColorNode(NiftyColor.red()))
+                        .addNode(backgroundFillColor(NiftyColor.red()))
                           .addNode(contentNode())
                   .addAsChildOf("parent")
                     .addNode(AbsoluteLayoutChildNode.absoluteLayoutChildNode(50.f, 50.f))
                       .addNode(fixedSizeLayoutNode(50.f, 50.f))
-                        .addNode(backgroundColorNode(NiftyColor.purple()))
+                        .addNode(backgroundFillColor(NiftyColor.purple()))
                           .addNode(contentNode());
     nifty.startAnimated(0, 10, new NiftyCallback<Float>() {
       float rot = 0;

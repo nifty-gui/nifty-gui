@@ -66,7 +66,7 @@ class NiftyTransformationNodeImpl
 
   @Override
   public void update(final NiftyState niftyState) {
-    NiftyRect parentLayoutRect = niftyState.getState(NiftyStateTransformationLayoutRect);
+    NiftyRect parentLayoutRect = niftyState.getState(NiftyStateTransformationLayoutRect, null);
     niftyState.setState(NiftyStateTransformationLayoutRect, layoutRect);
 
     float parentRelativeLayoutPosX = layoutRect.getOrigin().getX();

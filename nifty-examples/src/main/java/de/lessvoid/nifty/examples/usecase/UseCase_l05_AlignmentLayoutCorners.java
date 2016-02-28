@@ -34,7 +34,7 @@ import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChi
 import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
 import static de.lessvoid.nifty.node.Horizontal.Left;
 import static de.lessvoid.nifty.node.Horizontal.Right;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
 import static de.lessvoid.nifty.node.Vertical.Bottom;
@@ -60,22 +60,22 @@ public final class UseCase_l05_AlignmentLayoutCorners {
           .addNode(NiftyReferenceNode.referenceNode("alignmentNode"))
             .addNode(alignmentLayoutChildNode(Left, Top))
               .addNode(fixedSizeLayoutNode(100.f, 100.f))
-                .addNode(backgroundColorNode(NiftyColor.red()))
+                .addNode(backgroundFillColor(NiftyColor.red()))
                   .addNode(contentNode())
           .addAsChildOf("alignmentNode")
             .addNode(alignmentLayoutChildNode(Right, Top))
               .addNode(fixedSizeLayoutNode(100.f, 100.f))
-                .addNode(backgroundColorNode(NiftyColor.green()))
+                .addNode(backgroundFillColor(NiftyColor.green()))
                   .addNode(contentNode())
           .addAsChildOf("alignmentNode")
             .addNode(alignmentLayoutChildNode(Left, Bottom))
               .addNode(fixedSizeLayoutNode(100.f, 100.f))
-                .addNode(backgroundColorNode(NiftyColor.blue()))
+                .addNode(backgroundFillColor(NiftyColor.blue()))
                   .addNode(contentNode())
           .addAsChildOf("alignmentNode")
             .addNode(alignmentLayoutChildNode(Right, Bottom))
               .addNode(fixedSizeLayoutNode(100.f, 100.f))
-                .addNode(backgroundColorNode(NiftyColor.yellow()))
+                .addNode(backgroundFillColor(NiftyColor.yellow()))
                   .addNode(contentNode());
   }
 

@@ -32,7 +32,7 @@ import de.lessvoid.nifty.types.NiftyColor;
 import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
 import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
 import static de.lessvoid.nifty.node.Horizontal.Center;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
 import static de.lessvoid.nifty.node.Vertical.Middle;
@@ -50,7 +50,7 @@ public final class UseCase_l04_AlignmentLayoutCenter {
         .addNode(alignmentLayoutNode())
           .addNode(alignmentLayoutChildNode(Center, Middle))
             .addNode(fixedSizeLayoutNode(100.f, 50.f))
-              .addNode(backgroundColorNode(NiftyColor.red()))
+              .addNode(backgroundFillColor(NiftyColor.red()))
                 .addNode(contentNode());
   }
 

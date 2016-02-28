@@ -27,39 +27,54 @@
 package de.lessvoid.nifty.node;
 
 import de.lessvoid.nifty.NiftyState;
-import de.lessvoid.nifty.node.NiftyBackgroundColorNode;
-import de.lessvoid.nifty.spi.node.NiftyNodeImpl;
 import de.lessvoid.nifty.spi.node.NiftyNodeStateImpl;
 import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.types.NiftyLinearGradient;
 
-import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundColor;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.NiftyState.NiftyStandardState.NiftyStateBackgroundFill;
 
 /**
  * Created by void on 09.08.15.
  */
-class NiftyBackgroundColorNodeImpl implements NiftyNodeStateImpl<NiftyBackgroundColorNode> {
+final class NiftyBackgroundFillNodeImpl implements NiftyNodeStateImpl<NiftyBackgroundFillNode> {
   private NiftyColor backgroundColor;
+  private NiftyLinearGradient backgroundGradient;
 
-  public NiftyBackgroundColorNodeImpl(final NiftyColor backgroundColor) {
+  public NiftyBackgroundFillNodeImpl(final NiftyColor backgroundColor) {
     this.backgroundColor = backgroundColor;
   }
 
-  @Override
-  public NiftyBackgroundColorNode getNiftyNode() {
-    return new NiftyBackgroundColorNode(this);
+  public NiftyBackgroundFillNodeImpl(final NiftyLinearGradient backgroundGradient) {
+    this.backgroundGradient = backgroundGradient;
   }
 
   @Override
-  public void update(final NiftyState niftyState) {
-    niftyState.setState(NiftyStateBackgroundColor, backgroundColor);
+  public final NiftyBackgroundFillNode getNiftyNode() {
+    return new NiftyBackgroundFillNode(this);
   }
 
-  public void setBackgroundColor(NiftyColor backgroundColor) {
+  @Override
+  public final void update(final NiftyState niftyState) {
+    if (backgroundGradient != null) {
+      niftyState.setState(NiftyStateBackgroundFill, backgroundGradient);
+    } else {
+      niftyState.setState(NiftyStateBackgroundFill, backgroundColor);
+    }
+  }
+
+  public final void setBackgroundColor(final NiftyColor backgroundColor) {
     this.backgroundColor = backgroundColor;
   }
 
-  public NiftyColor getBackgroundColor() {
+  public final NiftyColor getBackgroundColor() {
     return backgroundColor;
+  }
+
+  public final void setBackgroundGradient(final NiftyLinearGradient backgroundGradient) {
+    this.backgroundGradient = backgroundGradient;
+  }
+
+  public final NiftyLinearGradient getBackgroundGradient() {
+    return backgroundGradient;
   }
 }

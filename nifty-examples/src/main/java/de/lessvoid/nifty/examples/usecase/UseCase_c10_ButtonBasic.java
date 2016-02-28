@@ -38,7 +38,7 @@ import static de.lessvoid.nifty.control.ButtonNode.button;
 import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
 import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
 import static de.lessvoid.nifty.node.Horizontal.Center;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.NiftyTransformationNode.transformationNode;
 import static de.lessvoid.nifty.node.Vertical.Middle;
@@ -61,7 +61,7 @@ public class UseCase_c10_ButtonBasic {
     });
 
     nifty
-      .addNode(backgroundColorNode(NiftyColor.fromString("#ccc")))
+      .addNode(backgroundFillColor(NiftyColor.fromString("#ccc")))
         .addNode(contentNode())
           .addNode(alignmentLayoutNode())
             .addNode(alignmentLayoutChildNode(Center, Middle))

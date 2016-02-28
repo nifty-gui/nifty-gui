@@ -31,9 +31,9 @@ import de.lessvoid.nifty.types.NiftyColor;
 
 import static de.lessvoid.nifty.node.AbsoluteLayoutChildNode.absoluteLayoutChildNode;
 import static de.lessvoid.nifty.node.AbsoluteLayoutNode.absoluteLayoutNode;
-import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
 
 /**
  * A single root node with a fixed size and a blue background color.
@@ -44,7 +44,7 @@ public class UseCase_a03_FixedSizedRootNode {
 
   public UseCase_a03_FixedSizedRootNode(final Nifty nifty) {
     nifty
-      .addNode(backgroundColorNode(NiftyColor.blue()))
+      .addNode(backgroundFillColor(NiftyColor.blue()))
         .addNode(absoluteLayoutNode())
           .addNode(absoluteLayoutChildNode(10, 10))
             .addNode(fixedSizeLayoutNode(100.f, 100.f))

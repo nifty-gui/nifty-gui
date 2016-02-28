@@ -37,12 +37,12 @@ import java.util.TreeSet;
  * A linear gradient between two points. The two points are either given directly or are implied when only an angle
  * is given. In the latter case the actual points are calculated later with respect to the coordinates of the node
  * the gradient will be applied to.
- * <br>
+ * <p>
  * Color stops can be added along the line given as a stop value in the interval [0.0, 1.0] and a NiftyColor.
- * <br>
+ * <p>
  * Currently once these color stops are added they are treated as read-only, which means that their position and color
  * can't be changed anymore.
- * <br>
+ * <p>
  * @author void
  */
 public final class NiftyLinearGradient {
@@ -103,6 +103,31 @@ public final class NiftyLinearGradient {
     colorStops.remove(newColorStop);
     colorStops.add(newColorStop);
     return this;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder b = new StringBuilder();
+    b.append("NiftyLinearGradient(");
+    b.append("startX[").append(startX).append("] ");
+    b.append("startY[").append(startY).append("] ");
+    b.append("endX[").append(endX).append("] ");
+    b.append("endY[").append(endY).append("] ");
+    b.append("angleInRadiants[").append(angleInRadiants).append("] ");
+    b.append("angleMode[").append(angleMode).append("] ");
+    b.append("colorStops [");
+    boolean first = true;
+    for (InternalNiftyColorStop stop : colorStops) {
+      if (!first) {
+        b.append(", ");
+      }
+      b.append(stop);
+      if (first) {
+        first = false;
+      }
+    }
+    b.append("])");
+    return b.toString();
   }
 
   @Override

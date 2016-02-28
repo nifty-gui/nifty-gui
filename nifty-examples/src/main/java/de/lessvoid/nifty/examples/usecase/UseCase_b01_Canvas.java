@@ -33,7 +33,7 @@ import de.lessvoid.nifty.NiftyCanvasPainter;
 import de.lessvoid.nifty.node.NiftyContentNode;
 import de.lessvoid.nifty.types.NiftyColor;
 
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 
 /**
@@ -46,7 +46,7 @@ public class UseCase_b01_Canvas {
   public UseCase_b01_Canvas(final Nifty nifty) {
     final NiftyContentNode customContentNode = customContentNode();
     nifty
-        .addNode(backgroundColorNode(NiftyColor.green()))
+        .addNode(backgroundFillColor(NiftyColor.green()))
           .addNode(contentNode())
             .addNode(customContentNode);
     nifty.startAnimated(0, 50, new NiftyCallback<Float>() {

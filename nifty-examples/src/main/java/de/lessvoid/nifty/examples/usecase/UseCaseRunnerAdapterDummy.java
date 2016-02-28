@@ -31,7 +31,6 @@ import de.lessvoid.nifty.NiftyConfiguration;
 import de.lessvoid.nifty.examples.dummy.DummyInputDevice;
 import de.lessvoid.nifty.examples.dummy.DummyRenderDevice;
 import de.lessvoid.nifty.time.AccurateTimeProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

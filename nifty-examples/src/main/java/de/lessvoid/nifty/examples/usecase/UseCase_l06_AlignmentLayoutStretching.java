@@ -37,7 +37,7 @@ import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
 import static de.lessvoid.nifty.node.Horizontal.Center;
 import static de.lessvoid.nifty.node.Horizontal.Left;
 import static de.lessvoid.nifty.node.Horizontal.Right;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
 import static de.lessvoid.nifty.node.Vertical.Bottom;
@@ -68,32 +68,32 @@ public final class UseCase_l06_AlignmentLayoutStretching {
           .addNode(NiftyReferenceNode.referenceNode("alignmentNode"))
             .addNode(alignmentLayoutChildNode(Horizontal.Stretch, Top))
               .addNode(fixedSizeLayoutNode(100.f, 100.f))
-                .addNode(backgroundColorNode(NiftyColor.red()))
+                .addNode(backgroundFillColor(NiftyColor.red()))
                   .addNode(contentNode())
           .addAsChildOf("alignmentNode")
             .addNode(alignmentLayoutChildNode(Horizontal.Stretch, Bottom))
               .addNode(fixedSizeLayoutNode(100.f, 100.f))
-                .addNode(backgroundColorNode(NiftyColor.green()))
+                .addNode(backgroundFillColor(NiftyColor.green()))
                   .addNode(contentNode())
           .addAsChildOf("alignmentNode")
             .addNode(alignmentLayoutChildNode(Left, Vertical.Stretch))
               .addNode(fixedSizeLayoutNode(100.f, 100.f))
-                .addNode(backgroundColorNode(NiftyColor.blue()))
+                .addNode(backgroundFillColor(NiftyColor.blue()))
                   .addNode(contentNode())
           .addAsChildOf("alignmentNode")
             .addNode(alignmentLayoutChildNode(Right, Vertical.Stretch))
               .addNode(fixedSizeLayoutNode(100.f, 100.f))
-                .addNode(backgroundColorNode(NiftyColor.yellow()))
+                .addNode(backgroundFillColor(NiftyColor.yellow()))
                   .addNode(contentNode())
           .addAsChildOf("alignmentNode")
             .addNode(alignmentLayoutChildNode(Horizontal.Stretch, Middle))
               .addNode(fixedSizeLayoutNode(100.f, 100.f))
-                .addNode(backgroundColorNode(NiftyColor.aqua()))
+                .addNode(backgroundFillColor(NiftyColor.aqua()))
                   .addNode(contentNode())
           .addAsChildOf("alignmentNode")
             .addNode(alignmentLayoutChildNode(Center, Vertical.Stretch))
               .addNode(fixedSizeLayoutNode(100.f, 100.f))
-                .addNode(backgroundColorNode(NiftyColor.purple()))
+                .addNode(backgroundFillColor(NiftyColor.purple()))
                   .addNode(contentNode());
   }
 

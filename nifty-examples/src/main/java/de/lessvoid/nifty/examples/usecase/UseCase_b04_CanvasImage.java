@@ -26,20 +26,20 @@
  */
 package de.lessvoid.nifty.examples.usecase;
 
-import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
-import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
-import static de.lessvoid.nifty.node.Horizontal.Center;
-import static de.lessvoid.nifty.node.NiftyBackgroundColorNode.backgroundColorNode;
-import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
-import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
-import static de.lessvoid.nifty.node.Vertical.Middle;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.NiftyCanvasPainter;
 import de.lessvoid.nifty.NiftyImage;
 import de.lessvoid.nifty.node.NiftyContentNode;
 import de.lessvoid.nifty.types.NiftyColor;
+
+import static de.lessvoid.nifty.node.AlignmentLayoutChildNode.alignmentLayoutChildNode;
+import static de.lessvoid.nifty.node.AlignmentLayoutNode.alignmentLayoutNode;
+import static de.lessvoid.nifty.node.Horizontal.Center;
+import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor;
+import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
+import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
+import static de.lessvoid.nifty.node.Vertical.Middle;
 
 /**
  * custom canvas painter for rendering images
@@ -50,7 +50,7 @@ public class UseCase_b04_CanvasImage {
   public UseCase_b04_CanvasImage(final Nifty nifty) {
     final NiftyImage image = nifty.createNiftyImage("nifty.png");
     nifty.addNode(alignmentLayoutNode()).addNode(alignmentLayoutChildNode(Center, Middle))
-    .addNode(fixedSizeLayoutNode(400.f, 400.f)).addNode(backgroundColorNode(NiftyColor.transparent()))
+    .addNode(fixedSizeLayoutNode(400.f, 400.f)).addNode(backgroundFillColor(NiftyColor.transparent()))
     .addNode(contentNode().setCanvasPainter(new NiftyCanvasPainter() {
       
       @Override

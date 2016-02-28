@@ -40,31 +40,43 @@ public class NiftyStateTest {
 
   @Test
   public void testDefaultState() {
-    assertEquals(null, niftyState.getState(NiftyStateBackgroundColor));
+    assertEquals(null, niftyState.getState(NiftyStateBackgroundFill, null));
   }
 
   @Test
   public void testSetNewState() {
-    niftyState.setState(NiftyStateBackgroundColor, NiftyColor.black());
-    assertEquals(NiftyColor.black(), niftyState.getState(NiftyStateBackgroundColor));
+    niftyState.setState(NiftyStateBackgroundFill, NiftyColor.black());
+    assertEquals(NiftyColor.black(), niftyState.getState(NiftyStateBackgroundFill, null));
+  }
+
+  @Test
+  public void testGetStateWithClassMatch() {
+    niftyState.setState(NiftyStateBackgroundFill, NiftyColor.blue());
+    assertEquals(NiftyColor.blue(), niftyState.getState(NiftyStateBackgroundFill, null, NiftyColor.class));
+  }
+
+  @Test
+  public void testGetStateWithClassMissMatch() {
+    niftyState.setState(NiftyStateBackgroundFill, new Object());
+    assertNull(niftyState.getState(NiftyStateBackgroundFill, null, NiftyColor.class));
   }
 
   @Test
   public void testCopy() {
-    niftyState.setState(NiftyStateBackgroundColor, NiftyColor.black());
+    niftyState.setState(NiftyStateBackgroundFill, NiftyColor.black());
     NiftyState copy = new NiftyState(niftyState);
-    assertEquals(NiftyColor.black(), copy.getState(NiftyStateBackgroundColor));
+    assertEquals(NiftyColor.black(), copy.getState(NiftyStateBackgroundFill, null));
 
     // changing the original state should not modify the copy
-    niftyState.setState(NiftyStateBackgroundColor, NiftyColor.blue());
-    assertEquals(NiftyColor.black(), copy.getState(NiftyStateBackgroundColor));
+    niftyState.setState(NiftyStateBackgroundFill, NiftyColor.blue());
+    assertEquals(NiftyColor.black(), copy.getState(NiftyStateBackgroundFill, null));
   }
 
   @Test
   public void testToString() {
-    niftyState.setState(NiftyStateBackgroundColor, NiftyColor.black());
+    niftyState.setState(NiftyStateBackgroundFill, NiftyColor.black());
     assertEquals(
-        "  NiftyStateBackgroundColor [#000000ff {0.0, 0.0, 0.0, 1.0}]\n",
+        "  NiftyStateBackgroundFill [#000000ff {0.0, 0.0, 0.0, 1.0}]\n",
         niftyState.toString());
   }
 }
