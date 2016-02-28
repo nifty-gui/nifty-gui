@@ -63,7 +63,7 @@ public class UseCaseRunnerAdapterOpenGL implements UseCaseRunnerAdapter {
   @Override
   public void run(final Class<?> useCaseClass, final String[] args, final NiftyConfiguration niftyConfiguration) throws Exception {
     setup.initialize(caption(useCaseClass.getSimpleName()), 1024, 768);
-    setup.enableVSync(false);
+    setup.enableVSync(true);
 
     // create nifty instance
     final Nifty nifty = createNifty(createRenderDevice(), createInputDevice(), new AccurateTimeProvider(), niftyConfiguration);

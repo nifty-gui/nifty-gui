@@ -56,7 +56,7 @@ public class UseCase_c10_ButtonBasic {
       private float angle = 0;
       @Override
       public void execute(final Float time, final NiftyTransformationNode niftyTransformationNode) {
-        niftyTransformationNode.setAngleZ(angle++);
+        niftyTransformationNode.setAngleZ(angle+=2);
       }
     });
 
