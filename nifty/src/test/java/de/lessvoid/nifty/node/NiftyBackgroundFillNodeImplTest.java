@@ -65,38 +65,38 @@ public class NiftyBackgroundFillNodeImplTest {
 
   @Test
   public void testConstructorBackgroundGradient() {
-    NiftyBackgroundFillNodeImpl impl = new NiftyBackgroundFillNodeImpl(NiftyLinearGradient.createFromAngleInDeg(0));
+    NiftyBackgroundFillNodeImpl impl = new NiftyBackgroundFillNodeImpl(NiftyLinearGradient.linearGradientFromAngleInDeg(0));
     assertNull(impl.getBackgroundColor());
-    assertEquals(NiftyLinearGradient.createFromAngleInDeg(0), impl.getBackgroundGradient());
+    assertEquals(NiftyLinearGradient.linearGradientFromAngleInDeg(0), impl.getBackgroundGradient());
   }
 
   @Test
   public void testChangeBackgroundGradient() {
-    NiftyBackgroundFillNodeImpl impl = new NiftyBackgroundFillNodeImpl(NiftyLinearGradient.createFromAngleInDeg(0));
-    impl.setBackgroundGradient(NiftyLinearGradient.createFromAngleInDeg(90));
-    assertEquals(NiftyLinearGradient.createFromAngleInDeg(90), impl.getBackgroundGradient());
+    NiftyBackgroundFillNodeImpl impl = new NiftyBackgroundFillNodeImpl(NiftyLinearGradient.linearGradientFromAngleInDeg(0));
+    impl.setBackgroundGradient(NiftyLinearGradient.linearGradientFromAngleInDeg(90));
+    assertEquals(NiftyLinearGradient.linearGradientFromAngleInDeg(90), impl.getBackgroundGradient());
   }
 
   @Test
   public void testBackgroundGradientUpdate() {
-    NiftyBackgroundFillNodeImpl impl = new NiftyBackgroundFillNodeImpl(NiftyLinearGradient.createFromAngleInDeg(0));
+    NiftyBackgroundFillNodeImpl impl = new NiftyBackgroundFillNodeImpl(NiftyLinearGradient.linearGradientFromAngleInDeg(0));
     NiftyState state = NiftyStateAccessor.getDefault().newNiftyState();
     impl.update(state);
-    assertEquals(NiftyLinearGradient.createFromAngleInDeg(0), state.getState(NiftyStateBackgroundFill, null));
+    assertEquals(NiftyLinearGradient.linearGradientFromAngleInDeg(0), state.getState(NiftyStateBackgroundFill, null));
   }
 
   @Test
   public void testBackgroundGradientUpdateWithColorSetAsWell() {
-    NiftyBackgroundFillNodeImpl impl = new NiftyBackgroundFillNodeImpl(NiftyLinearGradient.createFromAngleInDeg(0));
+    NiftyBackgroundFillNodeImpl impl = new NiftyBackgroundFillNodeImpl(NiftyLinearGradient.linearGradientFromAngleInDeg(0));
     impl.setBackgroundColor(NiftyColor.fuchsia());
     NiftyState state = NiftyStateAccessor.getDefault().newNiftyState();
     impl.update(state);
-    assertEquals(NiftyLinearGradient.createFromAngleInDeg(0), state.getState(NiftyStateBackgroundFill, null));
+    assertEquals(NiftyLinearGradient.linearGradientFromAngleInDeg(0), state.getState(NiftyStateBackgroundFill, null));
   }
 
   @Test
   public void testGetNiftyNode() {
-    NiftyBackgroundFillNodeImpl impl = new NiftyBackgroundFillNodeImpl(NiftyLinearGradient.createFromAngleInDeg(0));
+    NiftyBackgroundFillNodeImpl impl = new NiftyBackgroundFillNodeImpl(NiftyLinearGradient.linearGradientFromAngleInDeg(0));
     assertEquals(impl, impl.getNiftyNode().getImpl());
   }
 }

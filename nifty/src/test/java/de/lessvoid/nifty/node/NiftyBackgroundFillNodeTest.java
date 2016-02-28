@@ -45,9 +45,9 @@ public class NiftyBackgroundFillNodeTest {
 
   @Test
   public void testCreateWithGradient() {
-    NiftyBackgroundFillNode node = NiftyBackgroundFillNode.backgroundFillGradient(NiftyLinearGradient.createFromAngleInDeg(0));
+    NiftyBackgroundFillNode node = NiftyBackgroundFillNode.backgroundFillGradient(NiftyLinearGradient.linearGradientFromAngleInDeg(0));
     assertNull(node.getBackgroundColor());
-    assertEquals(NiftyLinearGradient.createFromAngleInDeg(0), node.getBackgroundGradient());
+    assertEquals(NiftyLinearGradient.linearGradientFromAngleInDeg(0), node.getBackgroundGradient());
   }
 
   @Test
@@ -59,9 +59,9 @@ public class NiftyBackgroundFillNodeTest {
 
   @Test
   public void testChangeBackgroundGradient() {
-    NiftyBackgroundFillNode node = NiftyBackgroundFillNode.backgroundFillGradient(NiftyLinearGradient.createFromAngleInDeg(0));
-    node.setBackgroundGradient(NiftyLinearGradient.createFromAngleInDeg(90));
-    assertEquals(NiftyLinearGradient.createFromAngleInDeg(90), node.getBackgroundGradient());
+    NiftyBackgroundFillNode node = NiftyBackgroundFillNode.backgroundFillGradient(NiftyLinearGradient.linearGradientFromAngleInDeg(0));
+    node.setBackgroundGradient(NiftyLinearGradient.linearGradientFromAngleInDeg(90));
+    assertEquals(NiftyLinearGradient.linearGradientFromAngleInDeg(90), node.getBackgroundGradient());
   }
 
   @Test
@@ -75,7 +75,7 @@ public class NiftyBackgroundFillNodeTest {
 
   @Test
   public void testToStringBackgroundGradientOnly() {
-    NiftyBackgroundFillNode node = NiftyBackgroundFillNode.backgroundFillGradient(NiftyLinearGradient.createFromAngleInDeg(0));
+    NiftyBackgroundFillNode node = NiftyBackgroundFillNode.backgroundFillGradient(NiftyLinearGradient.linearGradientFromAngleInDeg(0));
     assertEquals(
       "(NiftyBackgroundFillNode) " +
         "backgroundGradient [NiftyLinearGradient(startX[0.0] startY[0.0] endX[0.0] endY[0.0] angleInRadiants[0.0] angleMode[true] colorStops [])] " +

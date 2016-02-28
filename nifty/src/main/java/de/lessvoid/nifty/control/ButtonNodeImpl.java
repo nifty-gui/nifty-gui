@@ -121,7 +121,7 @@ final class ButtonNodeImpl implements NiftyControlNodeImpl<ButtonNode, ButtonNod
       canvas.lineTo(         0.0 + inset, 10.0 + inset);
       canvas.arcTo(          0.0 + inset, 0.0 + inset, 10.0 + inset, 0.0 + inset, radius);
 
-      NiftyLinearGradient gradient = NiftyLinearGradient.create(0.0, 30.0, 0.0, 0.f);
+      NiftyLinearGradient gradient = NiftyLinearGradient.linearGradientFromtPoints(0.0, 30.0, 0.0, 0.f);
       gradient.addColorStop( 0.0,   NiftyColor.fromString("#703434"));
       gradient.addColorStop( 0.458, NiftyColor.fromString("#211"));
       gradient.addColorStop( 0.508, NiftyColor.fromString("#211"));

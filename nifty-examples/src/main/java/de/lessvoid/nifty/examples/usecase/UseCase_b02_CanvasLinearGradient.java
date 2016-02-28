@@ -40,6 +40,7 @@ import static de.lessvoid.nifty.node.NiftyBackgroundFillNode.backgroundFillColor
 import static de.lessvoid.nifty.node.NiftyContentNode.contentNode;
 import static de.lessvoid.nifty.node.SizeLayoutNode.fixedSizeLayoutNode;
 import static de.lessvoid.nifty.node.Vertical.Middle;
+import static de.lessvoid.nifty.types.NiftyLinearGradient.linearGradientFromAngleInDeg;
 
 /**
  * custom canvas painter rendering gradients.
@@ -59,19 +60,19 @@ public class UseCase_b02_CanvasLinearGradient {
             canvas.setFillStyle(NiftyColor.blue());
             canvas.fillRect(0, 0, node.getWidth(), node.getHeight());
 
-            NiftyLinearGradient gradient = NiftyLinearGradient.createFromAngleInDeg(90.);
+            NiftyLinearGradient gradient = linearGradientFromAngleInDeg(90.);
             gradient.addColorStop(0.0, NiftyColor.red());
             gradient.addColorStop(1.0, NiftyColor.white());
             canvas.setFillStyle(gradient);
             canvas.fillRect(50, 50, 300, 100);
 
-            gradient = NiftyLinearGradient.createFromAngleInDeg(180.);
+            gradient = linearGradientFromAngleInDeg(180.);
             gradient.addColorStop(0.0, NiftyColor.green());
             gradient.addColorStop(1.0, NiftyColor.black());
             canvas.setFillStyle(gradient);
             canvas.fillRect(50, 150, 300, 100);
 
-            gradient = NiftyLinearGradient.createFromAngleInDeg(135.);
+            gradient = linearGradientFromAngleInDeg(135.);
             gradient.addColorStop(0.0, NiftyColor.white());
             gradient.addColorStop(1.0, NiftyColor.black());
             canvas.setFillStyle(gradient);

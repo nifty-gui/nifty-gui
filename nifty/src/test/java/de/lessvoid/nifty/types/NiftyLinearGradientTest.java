@@ -214,15 +214,15 @@ public class NiftyLinearGradientTest {
   }
 
   private NiftyLinearGradient createFromPoints(final double x0, final double y0, final double x1, final double y1) {
-    return NiftyLinearGradient.create(x0, y0, x1, y1);
+    return NiftyLinearGradient.linearGradientFromtPoints(x0, y0, x1, y1);
   }
 
   private NiftyLinearGradient createFromAngleInRad(final double angleRad) {
-    return NiftyLinearGradient.createFromAngleInRad(angleRad);
+    return NiftyLinearGradient.linearGradientFromAngleInRad(angleRad);
   }
 
   private NiftyLinearGradient createFromAngleInDegree(final double angleInDegree) {
-    return NiftyLinearGradient.createFromAngleInDeg(angleInDegree);
+    return NiftyLinearGradient.linearGradientFromAngleInDeg(angleInDegree);
   }
 
   private void assertColorStops(final List<ColorStop> colorStops, final InternalNiftyColorStop... stops) {

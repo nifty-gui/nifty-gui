@@ -67,7 +67,7 @@ public final class NiftyLinearGradient {
    * @param y1 end point y
    * @return the NiftyLinearGradient
    */
-  public static NiftyLinearGradient create(final double x0, final double y0, final double x1, final double y1) {
+  public static NiftyLinearGradient linearGradientFromtPoints(final double x0, final double y0, final double x1, final double y1) {
     return new NiftyLinearGradient(x0, y0, x1, y1);
   }
 
@@ -77,7 +77,7 @@ public final class NiftyLinearGradient {
    * @param angleInDegree The angle of the gradient line in degrees
    * @return the NiftyLinearGradient
    */
-  public static NiftyLinearGradient createFromAngleInDeg(final double angleInDegree) {
+  public static NiftyLinearGradient linearGradientFromAngleInDeg(final double angleInDegree) {
     return new NiftyLinearGradient(toRad(angleInDegree));
   }
 
@@ -87,7 +87,7 @@ public final class NiftyLinearGradient {
    * @param angleInRadians The angle of the gradient line in radian
    * @return the NiftyLinearGradient
    */
-  public static NiftyLinearGradient createFromAngleInRad(final double angleInRadians) {
+  public static NiftyLinearGradient linearGradientFromAngleInRad(final double angleInRadians) {
     return new NiftyLinearGradient(angleInRadians);
   }
 
