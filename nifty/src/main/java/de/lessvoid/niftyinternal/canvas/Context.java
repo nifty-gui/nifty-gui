@@ -78,6 +78,7 @@ public class Context {
   private NiftyCompositeOperation compositeOperation;
 
   private PathRenderer pathRenderer = new PathRenderer();
+  private final Mat4 identity = Mat4.createIdentity();
 
   public Context(final NiftyTexture contentTexture, final NiftyTexture workingTexture, final Statistics stats) {
     this.contentTexture = contentTexture;
@@ -319,7 +320,7 @@ public class Context {
         NiftyColor.transparent(),
         NiftyColor.transparent(),
         NiftyColor.transparent(),
-        Mat4.createIdentity());
+        identity);
     return result;
   }
 }

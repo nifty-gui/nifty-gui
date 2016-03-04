@@ -57,7 +57,9 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.lessvoid.coregl.CoreVBO.DataType.FLOAT;
 import static com.lessvoid.coregl.CoreVBO.UsageType.STATIC_DRAW;
@@ -75,15 +77,25 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   private final CoreGL gl;
   private final CoreRender coreRender;
   private final CoreShaderManager shaderManager = new CoreShaderManager();
-  private final CoreVBO<FloatBuffer> quadVBO;
-
-  private CoreVAO vao;
-  private CoreVBO<FloatBuffer> vbo;
   private final CoreFBO fbo;
 
+  private CoreVAO vaoVertexUVColor;
+  private CoreVBO<FloatBuffer> vboVertexUVColor;
+
+  private CoreVAO vaoVertexColor;
+  private CoreVBO<FloatBuffer> vboVertexColor;
+
+  private CoreVAO vaoVertex;
+  private CoreVBO<FloatBuffer> vboVertex;
+
+  private CoreVAO vaoCustomShader;
+  private CoreVBO<FloatBuffer> vboCustomerShader;
+
   private Mat4 mvp;
-  private int currentWidth;
-  private int currentHeight;
+  private Map<String, Boolean> mvpMap = new HashMap<>();
+  private int mvpWidth;
+  private int mvpHeight;
+  private boolean mvpFlipped = false;
 
   private boolean clearScreenOnRender = false;
   private NiftyResourceLoader resourceLoader;
@@ -128,13 +140,43 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     fbo.bindFramebuffer();
     fbo.disable();
 
-    vao = CoreVAO.createCoreVAO(gl);
-    vao.bind();
+    // setup vao and vbo for textured quads
+    vaoVertexUVColor = CoreVAO.createCoreVAO(gl);
+    vaoVertexUVColor.bind();
+    vboVertexUVColor = CoreVBO.createCoreVBO(gl, FLOAT, STREAM_DRAW, VBO_SIZE);
+    vboVertexUVColor.send();
+    vaoVertexUVColor.enableVertexAttribute(0);
+    vaoVertexUVColor.vertexAttribPointer(0, 2, FloatType.FLOAT, 8, 0);
+    vaoVertexUVColor.enableVertexAttribute(1);
+    vaoVertexUVColor.vertexAttribPointer(1, 2, FloatType.FLOAT, 8, 2);
+    vaoVertexUVColor.enableVertexAttribute(2);
+    vaoVertexUVColor.vertexAttribPointer(2, 4, FloatType.FLOAT, 8, 4);
+    vaoVertexUVColor.unbind();
 
-    vbo = CoreVBO.createCoreVBO(gl, FLOAT, STREAM_DRAW, VBO_SIZE);
-    vbo.bind();
+    // setup vao and vbo for colored quads
+    vaoVertexColor = CoreVAO.createCoreVAO(gl);
+    vaoVertexColor.bind();
+    vboVertexColor = CoreVBO.createCoreVBO(gl, FLOAT, STREAM_DRAW, VBO_SIZE);
+    vboVertexColor.send();
+    vaoVertexColor.enableVertexAttribute(0);
+    vaoVertexColor.vertexAttribPointer(0, 2, FloatType.FLOAT, 6, 0);
+    vaoVertexColor.enableVertexAttribute(1);
+    vaoVertexColor.vertexAttribPointer(1, 4, FloatType.FLOAT, 6, 2);
+    vaoVertexColor.unbind();
 
-    quadVBO = CoreVBO.createCoreVBO(gl, FLOAT, STATIC_DRAW, new Float[] {
+    // setup vao and vbo for colored quads
+    vaoVertex = CoreVAO.createCoreVAO(gl);
+    vaoVertex.bind();
+    vboVertex = CoreVBO.createCoreVBO(gl, FLOAT, STREAM_DRAW, VBO_SIZE);
+    vboVertex.send();
+    vaoVertex.enableVertexAttribute(0);
+    vaoVertex.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
+    vaoVertex.unbind();
+
+    // setup vao and vbo for custom shader render
+    vaoCustomShader = CoreVAO.createCoreVAO(gl);
+    vaoCustomShader.bind();
+    vboCustomerShader = CoreVBO.createCoreVBO(gl, FLOAT, STATIC_DRAW, new Float[] {
         0.0f, 0.0f,
         0.0f, 1.0f,
         1.0f, 0.0f,
@@ -143,9 +185,10 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
         1.0f, 1.0f,
         1.0f, 0.0f
     });
-    quadVBO.bind();
-
-    vao.unbind();
+    vboCustomerShader.bind();
+    vaoCustomShader.enableVertexAttribute(0);
+    vaoCustomShader.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
+    vaoCustomShader.unbind();
 
     pathTexture = NiftyTextureOpenGL.newTextureRGBA(gl, getDisplayWidth(), getDisplayHeight(), FilterMode.Nearest);
 
@@ -186,13 +229,15 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       gl.glClearColor(0.f, 0.f, 0.f, 1.f);
       gl.glClear(gl.GL_COLOR_BUFFER_BIT());
     }
-
-    vbo.getBuffer().clear();
   }
 
   @Override
   public void endRender() {
     log.trace("endRender()");
+    int error = gl.glGetError();
+    if (error != gl.GL_NO_ERROR()) {
+      log.error("glGetError(): {}", error);
+    }
   }
 
   @Override
@@ -225,72 +270,52 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   @Override
   public void renderTexturedQuads(final NiftyTexture texture, final FloatBuffer vertices) {
-    log.trace("render()");
-    vbo.getBuffer().clear();
-    FloatBuffer b = vbo.getBuffer();
+    log.trace("renderTexturedQuads()");
     vertices.flip();
+
+    FloatBuffer b = vboVertexUVColor.getBuffer();
+    b.clear();
     b.put(vertices);
+    b.flip();
+    vboVertexUVColor.send();
 
-    CoreShader shader = shaderManager.activate(TEXTURE_SHADER);
-    shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
+    activateShader(TEXTURE_SHADER);
 
-    vao.bind();
-    vbo.bind();
-    vbo.getBuffer().flip();
-    vbo.send();
-
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 8, 0);
-    vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 8, 2);
-    vao.enableVertexAttribute(2);
-    vao.vertexAttribPointer(2, 4, FloatType.FLOAT, 8, 4);
+    vaoVertexUVColor.bind();
 
     internal(texture).bind();
     coreRender.renderTriangles(vertices.position() / TextureBatch.PRIMITIVE_SIZE * 6);
-
-    vao.disableVertexAttribute(2);
-
-    vao.unbind();
-    vbo.getBuffer().clear();
   }
 
   @Override
   public void renderColorQuads(final FloatBuffer vertices) {
     log.trace("renderColorQuads()");
-    vbo.getBuffer().clear();
-    FloatBuffer b = vbo.getBuffer();
     vertices.flip();
+
+    FloatBuffer b = vboVertexColor.getBuffer();
+    b.clear();
     b.put(vertices);
+    b.flip();
+    vboVertexColor.send();
 
-    CoreShader shader = shaderManager.activate(PLAIN_COLOR_SHADER);
-    shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
+    activateShader(PLAIN_COLOR_SHADER);
 
-    vao.bind();
-    vbo.bind();
-    vbo.getBuffer().flip();
-    vbo.send();
-
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 6, 0);
-    vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 4, FloatType.FLOAT, 6, 2);
-
+    vaoVertexColor.bind();
     coreRender.renderTriangles(vertices.position() / ColorQuadBatch.PRIMITIVE_SIZE * 6);
-    vao.unbind();
-    vbo.getBuffer().clear();
   }
 
   @Override
   public void renderLinearGradientQuads(final double x0, final double y0, final double x1, final double y1, final List<ColorStop> colorStops, final FloatBuffer vertices) {
     log.trace("renderLinearGradientQuads()");
-    vbo.getBuffer().clear();
-    FloatBuffer b = vbo.getBuffer();
     vertices.flip();
-    b.put(vertices);
 
-    CoreShader shader = shaderManager.activate(LINEAR_GRADIENT_SHADER);
-    shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
+    FloatBuffer b = vboVertex.getBuffer();
+    b.clear();
+    b.put(vertices);
+    b.flip();
+    vboVertex.send();
+
+    CoreShader shader = activateShader(LINEAR_GRADIENT_SHADER);
 
     float[] gradientStop = new float[colorStops.size()];
     float[] gradientColor = new float[colorStops.size() * 4];
@@ -309,18 +334,8 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     shader.setUniformi("numStops", colorStops.size());
     shader.setUniformf("gradient", (float)x0, (float)y0, (float)x1, (float)y1);
 
-    vao.bind();
-    vbo.bind();
-    vbo.getBuffer().flip();
-    vbo.send();
-
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
-    vao.disableVertexAttribute(1);
-
+    vaoVertex.bind();
     coreRender.renderTriangles(vertices.position() / LinearGradientQuadBatch.PRIMITIVE_SIZE * 6);
-    vao.unbind();
-    vbo.getBuffer().clear();
   }
 
   @Override
@@ -352,16 +367,18 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   @Override
   public void maskEnd() {
     log.trace("maskEnd()");
-    pathFBO.disable();
 
     // Third Pass
     //
     // Now render the pathTexture to the target FBO (or the screen)
     if (currentFBO != null) {
       currentFBO.bindFramebuffer();
+    } else {
+      pathFBO.disable();
     }
-    vbo.getBuffer().clear();
-    FloatBuffer quad = vbo.getBuffer();
+
+    FloatBuffer quad = vboVertexUVColor.getBuffer();
+    quad.clear();
     quad.put(0.f);
     quad.put(0.f);
     quad.put(0.f);
@@ -399,27 +416,14 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     quad.put(1.0f);
     quad.flip();
 
-    vao.bind();
-    vbo.bind();
-    vbo.send();
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 8, 0);
-    vao.enableVertexAttribute(1);
-    vao.vertexAttribPointer(1, 2, FloatType.FLOAT, 8, 2);
-    vao.enableVertexAttribute(2);
-    vao.vertexAttribPointer(2, 4, FloatType.FLOAT, 8, 4);
+    vboVertexUVColor.send();
+    vaoVertexUVColor.bind();
 
-    CoreShader shader = shaderManager.activate(TEXTURE_SHADER);
-    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
-    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-
+    activateShader(TEXTURE_SHADER);
     internal(pathTexture).bind();
 
     changeCompositeOperation(NiftyCompositeOperation.SourceOver);
     coreRender.renderTriangleStrip(4);
-
-    vao.disableVertexAttribute(2);
-    vao.unbind();
   }
 
   @Override
@@ -437,9 +441,10 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     final NiftyLineJoinType lineJoinType) {
     log.trace("maskRenderLines()");
 
-    vbo.getBuffer().clear();
-    FloatBuffer b = vbo.getBuffer();
     vertices.flip();
+
+    FloatBuffer b = vboVertex.getBuffer();
+    b.clear();
 
     // we need the first vertex twice for the shader to work correctly
     b.put(vertices.get(0));
@@ -451,31 +456,22 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     // we need the last vertex twice as well
     b.put(vertices.get(vertices.limit() - 2));
     b.put(vertices.get(vertices.limit() - 1));
+    b.flip();
 
     // line parameters
     float w = lineWidth;
     float r = 1.f;
 
     // set up the shader
-    CoreShader shader = shaderManager.activate(getLineShaderKey(lineCapType, lineJoinType));
-    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
-    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
+    CoreShader shader = activateShader(getLineShaderKey(lineCapType, lineJoinType));
     shader.setUniformf("lineColorAlpha", 1.f);
     shader.setUniformf("lineParameters", (2*r + w), (2*r + w) / 2.f, (2*r + w) / 2.f - 2 * r, (2*r));
 
-    vao.bind();
-    vbo.bind();
-    vbo.getBuffer().flip();
-    vbo.send();
-
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
-    vao.disableVertexAttribute(1);
+    vboVertex.send();
+    vaoVertex.bind();
 
     changeCompositeOperation(NiftyCompositeOperation.Max);
     coreRender.renderLinesAdjacent(vertices.limit() / LineBatch.PRIMITIVE_SIZE + 2);
-
-    vbo.getBuffer().clear();
   }
 
   @Override
@@ -483,21 +479,15 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     log.trace("maskRenderFill()");
 
     // set up the shader
-    CoreShader shader = shaderManager.activate(FILL_ALPHA_SHADER);
-    Mat4 localMvp = mvpFlippedReturn(pathTexture.getWidth(), pathTexture.getHeight());
-    shader.setUniformMatrix("uMvp", 4, localMvp.toBuffer());
-
-    vbo.getBuffer().clear();
-    FloatBuffer b = vbo.getBuffer();
+    activateShader(FILL_ALPHA_SHADER);
     vertices.flip();
+
+    FloatBuffer b = vboVertex.getBuffer();
+    b.clear();
     b.put(vertices);
     b.flip();
-    vao.bind();
-    vbo.bind();
-    vbo.send();
-    vao.enableVertexAttribute(0);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
-    vao.disableVertexAttribute(1);
+    vboVertex.send();
+    vaoVertex.bind();
 
     gl.glEnable(gl.GL_STENCIL_TEST());
 
@@ -517,7 +507,6 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     gl.glStencilFunc(gl.GL_NOTEQUAL(), 0, 0xFF);
 
     coreRender.renderTriangleFan(vertices.limit() / 2);
-    vbo.getBuffer().clear();
 
     gl.glDisable(gl.GL_STENCIL_TEST());
   }
@@ -538,21 +527,21 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   @Override
   public void activateCustomShader(final String shaderId) {
     log.trace("activateCustomShader()");
-    CoreShader shader = shaderManager.activate(shaderId);
-    shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
+
+    CoreShader shader = activateShader(shaderId);
     shader.setUniformf("time", (System.nanoTime() - beginTime) / NANO_TO_MS_CONVERSION / 1000.f);
-    shader.setUniformf("resolution", currentWidth, currentHeight);
+    shader.setUniformf("resolution", mvpWidth, mvpHeight);
 
-    vao.bind();
-    quadVBO.bind();
-    quadVBO.send();
+    vaoCustomShader.bind();
+    vboCustomerShader.bind();
+    vboCustomerShader.send();
 
-    vao.enableVertexAttribute(0);
-    vao.disableVertexAttribute(1);
-    vao.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
+    vaoCustomShader.enableVertexAttribute(0);
+    vaoCustomShader.disableVertexAttribute(1);
+    vaoCustomShader.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
 
     coreRender.renderTriangles(3 * 2);
-    vao.unbind();
+    vaoCustomShader.unbind();
   }
 
   @Override
@@ -703,22 +692,31 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   }
 
   private void mvp(final int newWidth, final int newHeight) {
+    boolean sameDimension = newWidth == mvpWidth && newHeight == mvpHeight;
+    if (sameDimension && !mvpFlipped) {
+      return;
+    }
     mvp = MatrixFactory.createOrtho(0, newWidth, newHeight, 0);
-    currentWidth = newWidth;
-    currentHeight = newHeight;
+    mvpWidth = newWidth;
+    mvpHeight = newHeight;
+    mvpFlipped = false;
+    if (!sameDimension) {
+      mvpMap.clear();
+    }
   }
 
   private void mvpFlipped(final int newWidth, final int newHeight) {
+    boolean sameDimension = newWidth == mvpWidth && newHeight == mvpHeight;
+    if (sameDimension && mvpFlipped) {
+      return;
+    }
     mvp = MatrixFactory.createOrtho(0, newWidth, 0, newHeight);
-    currentWidth = newWidth;
-    currentHeight = newHeight;
-  }
-
-  private Mat4 mvpFlippedReturn(final int newWidth, final int newHeight) {
-    Mat4 result = MatrixFactory.createOrtho(0, newWidth, 0, newHeight);
-    currentWidth = newWidth;
-    currentHeight = newHeight;
-    return result;
+    mvpWidth = newWidth;
+    mvpHeight = newHeight;
+    mvpFlipped = true;
+    if (!sameDimension) {
+      mvpMap.clear();
+    }
   }
 
   private void registerLineShader(
@@ -739,5 +737,16 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
   private String getArcShaderKey(final NiftyLineCapType lineCapType) {
     return lineCapType.toString();
+  }
+
+  private CoreShader activateShader(final String shaderName) {
+    CoreShader shader = shaderManager.activate(shaderName);
+    Boolean shaderMvpFlipped = mvpMap.get(shaderName);
+    if (shaderMvpFlipped != null && shaderMvpFlipped == mvpFlipped) {
+      return shader;
+    }
+    shader.setUniformMatrix("uMvp", 4, mvp.toBuffer());
+    mvpMap.put(shaderName, mvpFlipped);
+    return shader;
   }
 }
