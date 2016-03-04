@@ -72,7 +72,7 @@ public final class NiftyLinearGradient {
   }
 
   /**
-   * Create a linear gradient from an angle in degrees.
+   * Create a linear gradient from an angle in degrees. 0 degree is from bottom to top and positive angles are clockwise
    *
    * @param angleInDegree The angle of the gradient line in degrees
    * @return the NiftyLinearGradient
@@ -82,7 +82,7 @@ public final class NiftyLinearGradient {
   }
 
   /**
-   * Create a linear gradient from an angle in radian.
+   * Create a linear gradient from an angle in radian. 0 is from bottom to top and positive angles are clockwise
    *
    * @param angleInRadians The angle of the gradient line in radian
    * @return the NiftyLinearGradient
