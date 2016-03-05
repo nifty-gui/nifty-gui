@@ -61,12 +61,12 @@ public class UseCase_z00_DeviantArtViewer {
       .addNode(
         backgroundFillGradient(
           linearGradientFromAngleInDeg(0)
-            .addColorStop(0.0, NiftyColor.aqua())
-            .addColorStop(1.0, NiftyColor.blue())))
+            .addColorStop(0.0, NiftyColor.teal())
+            .addColorStop(1.0, NiftyColor.black())))
         .addNode(contentNode())
           .addNode(absoluteLayoutNode())
-            .addNode(absoluteLayoutChildNode(nifty.getScreenWidth() / 2 - 400, nifty.getScreenHeight() / 2 - 300))
-              .addNode(fixedSizeLayoutNode(800.f, 600.f))
+            .addNode(absoluteLayoutChildNode(nifty.getScreenWidth() / 2 - 75, nifty.getScreenHeight() / 2 - 75))
+              .addNode(fixedSizeLayoutNode(150.f, 150.f))
                 .addNode(transformationNode)
                   .addNode(backgroundFillColor(NiftyColor.fromString("#eeef")))
                     .addNode(contentNode().setCanvasPainter(new NiftyCanvasPainter() {
@@ -75,19 +75,24 @@ public class UseCase_z00_DeviantArtViewer {
                         canvas.drawImage(image, node.getWidth()/2 - image.getWidth()/2, node.getHeight()/2 - image.getHeight()/2);
                       }
                     }));
-    nifty.startAnimated(0, 16, new NiftyCallback<Float>() {
-      private float rot = 0;
-      @Override public void execute(final Float totalTime) {
-        rot += 0.01;
-        transformationNode.setPosX(Math.sin(rot) * 512.);
-        double scale = (Math.sin((rot/2-Math.PI/4+Math.PI/2)*2.0)+1.0)/2.0;
+    nifty.startTickAnimator(new NiftyCallback<Float>() {
+      @Override public void execute(final Float time) {
+        transformationNode.setPosX(Math.sin(time) * 512.);
+        double scale = (Math.sin((time/2-Math.PI/4+Math.PI/2)*2.0)+1.0)/4.0+0.5;
         transformationNode.setScaleX(scale);
         transformationNode.setScaleY(scale);
+        transformationNode.setAngleZ(Math.sin(time) * 256.);
       }
     });
   }
 
   public static void main(final String[] args) throws Exception {
-    UseCaseRunner.run(UseCase_z00_DeviantArtViewer.class, args);
+    UseCaseRunner.run(UseCase_z00_DeviantArtViewer.class, args,
+      new NiftyConfiguration()
+        //.showRenderBuckets(true)
+        //.showRenderNodes(true)
+        .renderBucketWidth(1024)
+        .renderBucketHeight(768)
+      );
   }
 }
