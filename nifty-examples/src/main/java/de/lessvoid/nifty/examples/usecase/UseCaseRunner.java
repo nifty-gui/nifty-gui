@@ -30,6 +30,8 @@ import com.lessvoid.coregl.jogl.CoreSetupJogl;
 import com.lessvoid.coregl.jogl.JoglCoreGL;
 import com.lessvoid.coregl.lwjgl.CoreSetupLwjgl;
 import com.lessvoid.coregl.lwjgl.LwjglCoreGL;
+import com.lessvoid.coregl.spi.CoreGL;
+import com.lessvoid.coregl.state.CoreGLStateWrapper;
 import de.lessvoid.nifty.NiftyConfiguration;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
@@ -51,8 +53,10 @@ public class UseCaseRunner {
   // with the corresponding NiftyRenderDevices and then run the UseCase class.
   static Map<String, UseCaseRunnerAdapter> initAdapters = new HashMap<>();
   static {
-    initAdapters.put("lwjgl", new UseCaseRunnerAdapterOpenGL(new CoreSetupLwjgl(new LwjglCoreGL()), new LwjglCoreGL()));
-    initAdapters.put("jogl", new UseCaseRunnerAdapterOpenGL(new CoreSetupJogl(new JoglCoreGL()), new JoglCoreGL()));
+    CoreGL lwjglCoreGL = new CoreGLStateWrapper(new LwjglCoreGL());
+    CoreGL joglCoreGL = new CoreGLStateWrapper(new JoglCoreGL());
+    initAdapters.put("lwjgl", new UseCaseRunnerAdapterOpenGL(new CoreSetupLwjgl(lwjglCoreGL), lwjglCoreGL));
+    initAdapters.put("jogl", new UseCaseRunnerAdapterOpenGL(new CoreSetupJogl(joglCoreGL), joglCoreGL));
     initAdapters.put("java2d", new UseCaseRunnerAdapterJava2D());
     initAdapters.put("dummy", new UseCaseRunnerAdapterDummy());
   }
