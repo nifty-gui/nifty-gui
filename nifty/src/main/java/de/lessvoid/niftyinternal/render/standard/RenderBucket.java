@@ -28,7 +28,7 @@ package de.lessvoid.niftyinternal.render.standard;
 
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.types.NiftyColor;
-import de.lessvoid.nifty.types.NiftyCompositeOperation;
+import de.lessvoid.nifty.types.NiftyMutableColor;
 import de.lessvoid.nifty.types.NiftyRect;
 import de.lessvoid.nifty.NiftyConfiguration;
 import de.lessvoid.niftyinternal.canvas.Context;
@@ -61,7 +61,7 @@ public class RenderBucket {
   private final Mat4 bucketTransform;
   private final Mat4 bucketTransformInverse;
   private final NiftyConfiguration config;
-  private final NiftyColor debugOverlayColor = NiftyColor.randomColorWithAlpha(0.5);
+  private final NiftyMutableColor debugOverlayColor = new NiftyMutableColor(NiftyColor.randomColorWithAlpha(0.5));
   private boolean used;
 
   public RenderBucket(
@@ -111,8 +111,9 @@ public class RenderBucket {
         }
 
         if (config.isShowRenderBuckets()) {
-          context.setFillColor(debugOverlayColor);
+          context.setFillColor(debugOverlayColor.getColor());
           context.fillRect(0., 0., rect.getSize().getWidth(), rect.getSize().getHeight());
+          debugOverlayColor.set(NiftyColor.randomColorWithAlpha(0.5));
         }
 
         context.flush();
