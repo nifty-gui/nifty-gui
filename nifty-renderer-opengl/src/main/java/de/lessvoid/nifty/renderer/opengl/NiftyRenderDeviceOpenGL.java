@@ -229,6 +229,9 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       gl.glClearColor(0.f, 0.f, 0.f, 1.f);
       gl.glClear(gl.GL_COLOR_BUFFER_BIT());
     }
+
+    // reset the composite operation to its default value in case someone changed it on the last frame
+    changeCompositeOperation(NiftyCompositeOperation.SourceOver);
   }
 
   @Override

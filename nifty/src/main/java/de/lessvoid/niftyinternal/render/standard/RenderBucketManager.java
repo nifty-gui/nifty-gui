@@ -70,7 +70,6 @@ class RenderBucketManager {
   }
 
   public void render(final BatchManager batchManager, final NiftyRenderDevice renderDevice) {
-    batchManager.addChangeCompositeOperation(NiftyCompositeOperation.SourceOver);
     for (int i=0; i<renderBuckets.size(); i++) {
       renderBuckets.get(i).render(batchManager, renderDevice);
     }
