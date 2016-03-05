@@ -582,11 +582,12 @@ public class Nifty {
   }
 
   private void processInputEvents(final List<NiftyNode> inputReceivers) {
+/*
     inputDevice.forwardEvents(new NiftyInputConsumer() {
       @Override
       public boolean processPointerEvent(final NiftyPointerEvent... pointerEvents) {
         logInputReceivers(inputReceivers);
-/*  FIXME
+
         for (int i=0; i<pointerEvents.length; i++) {
           if (nodeThatCapturedPointerEvents != null) {
             if (nodeThatCapturedPointerEvents.getImpl().capturedPointerEvent(pointerEvents[i])) {
@@ -602,7 +603,6 @@ public class Nifty {
             }
           }
         }
-        */
         return false;
       }
 
@@ -611,6 +611,7 @@ public class Nifty {
         return false;
       }
     });
+*/
   }
 
   /**
