@@ -48,7 +48,9 @@ import de.lessvoid.niftyinternal.InternalNiftyImage;
 import de.lessvoid.niftyinternal.InternalNiftyNodeAccessorRegistry;
 import de.lessvoid.niftyinternal.NiftyResourceLoader;
 import de.lessvoid.niftyinternal.accessor.NiftyAccessor;
+import de.lessvoid.niftyinternal.animate.Animator;
 import de.lessvoid.niftyinternal.animate.IntervalAnimator;
+import de.lessvoid.niftyinternal.animate.TickAnimator;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.render.NiftyRenderer;
 import de.lessvoid.niftyinternal.render.font.FontRenderer;
@@ -129,7 +131,7 @@ public class Nifty {
   private final InternalNiftyNodeAccessorRegistry nodeAccessorRegistry;
 
   // IntervalAnimator will execute given NiftyCallbacks at given intervals
-  private List<IntervalAnimator> animators = new ArrayList<>();
+  private List<Animator> animators = new ArrayList<>();
 
   // configuration
   private NiftyConfiguration configuration;
@@ -299,6 +301,15 @@ public class Nifty {
         callback.execute(aFloat, node);
       }
     });
+  }
+
+  /**
+   * Start a callback to be executed on each update run.
+   *
+   * @param callback the NiftyCallback to call on each update
+   */
+  public void startTickAnimator(final NiftyCallback<Float> callback) {
+    animators.add(new TickAnimator(timeProvider, callback));
   }
 
   /**

@@ -29,7 +29,7 @@ package de.lessvoid.niftyinternal.animate;
 import de.lessvoid.nifty.NiftyCallback;
 import de.lessvoid.nifty.spi.TimeProvider;
 
-public class IntervalAnimator {
+public class IntervalAnimator implements Animator {
   // we need the time
   private final TimeProvider timeProvider;
 
@@ -62,6 +62,7 @@ public class IntervalAnimator {
     this.callback = callback;
   }
 
+  @Override
   public void update() {
     long currentTime = timeProvider.getMsTime();
     long deltaTime = currentTime - startTime;
