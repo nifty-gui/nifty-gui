@@ -29,6 +29,9 @@ public class BundleInfoResourceBundle implements BundleInfo {
       res = defaultResourceBundle;
     } else {
       res = resourceBundles.get(locale);
+      if (res == null) {
+        res = defaultResourceBundle;
+      }
     }
     return res.getString(resourceKey);
   }
