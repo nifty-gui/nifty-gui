@@ -27,13 +27,13 @@
 package de.lessvoid.nifty.renderer.opengl;
 
 
+import com.lessvoid.coregl.CoreBuffer;
 import com.lessvoid.coregl.CoreFBO;
 import com.lessvoid.coregl.CoreRender;
 import com.lessvoid.coregl.CoreShader;
 import com.lessvoid.coregl.CoreShaderManager;
 import com.lessvoid.coregl.CoreVAO;
 import com.lessvoid.coregl.CoreVAO.FloatType;
-import com.lessvoid.coregl.CoreVBO;
 import com.lessvoid.coregl.spi.CoreGL;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
@@ -61,9 +61,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.lessvoid.coregl.CoreVBO.DataType.FLOAT;
-import static com.lessvoid.coregl.CoreVBO.UsageType.STATIC_DRAW;
-import static com.lessvoid.coregl.CoreVBO.UsageType.STREAM_DRAW;
+import static com.lessvoid.coregl.CoreBuffer.createCoreBufferObject;
+import static com.lessvoid.coregl.CoreBufferDataType.FLOAT;
+import static com.lessvoid.coregl.CoreBufferTargetType.ARRAY_BUFFER;
+import static com.lessvoid.coregl.CoreBufferUsageType.STATIC_DRAW;
+import static com.lessvoid.coregl.CoreBufferUsageType.STREAM_DRAW;
 
 
 public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
@@ -80,16 +82,16 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
   private final CoreFBO fbo;
 
   private CoreVAO vaoVertexUVColor;
-  private CoreVBO<FloatBuffer> vboVertexUVColor;
+  private CoreBuffer<FloatBuffer> vboVertexUVColor;
 
   private CoreVAO vaoVertexColor;
-  private CoreVBO<FloatBuffer> vboVertexColor;
+  private CoreBuffer<FloatBuffer> vboVertexColor;
 
   private CoreVAO vaoVertex;
-  private CoreVBO<FloatBuffer> vboVertex;
+  private CoreBuffer<FloatBuffer> vboVertex;
 
   private CoreVAO vaoCustomShader;
-  private CoreVBO<FloatBuffer> vboCustomerShader;
+  private CoreBuffer<FloatBuffer> vboCustomerShader;
 
   private Mat4 mvp;
   private Map<String, Boolean> mvpMap = new HashMap<>();
@@ -143,8 +145,8 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     // setup vao and vbo for textured quads
     vaoVertexUVColor = CoreVAO.createCoreVAO(gl);
     vaoVertexUVColor.bind();
-    vboVertexUVColor = CoreVBO.createCoreVBO(gl, FLOAT, STREAM_DRAW, VBO_SIZE);
-    vboVertexUVColor.send();
+    vboVertexUVColor = createCoreBufferObject(gl, FLOAT, STREAM_DRAW, VBO_SIZE);
+    vboVertexUVColor.send(ARRAY_BUFFER);
     vaoVertexUVColor.enableVertexAttribute(0);
     vaoVertexUVColor.vertexAttribPointer(0, 2, FloatType.FLOAT, 8, 0);
     vaoVertexUVColor.enableVertexAttribute(1);
@@ -156,8 +158,8 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     // setup vao and vbo for colored quads
     vaoVertexColor = CoreVAO.createCoreVAO(gl);
     vaoVertexColor.bind();
-    vboVertexColor = CoreVBO.createCoreVBO(gl, FLOAT, STREAM_DRAW, VBO_SIZE);
-    vboVertexColor.send();
+    vboVertexColor = createCoreBufferObject(gl, FLOAT, STREAM_DRAW, VBO_SIZE);
+    vboVertexColor.send(ARRAY_BUFFER);
     vaoVertexColor.enableVertexAttribute(0);
     vaoVertexColor.vertexAttribPointer(0, 2, FloatType.FLOAT, 6, 0);
     vaoVertexColor.enableVertexAttribute(1);
@@ -167,8 +169,8 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     // setup vao and vbo for colored quads
     vaoVertex = CoreVAO.createCoreVAO(gl);
     vaoVertex.bind();
-    vboVertex = CoreVBO.createCoreVBO(gl, FLOAT, STREAM_DRAW, VBO_SIZE);
-    vboVertex.send();
+    vboVertex = createCoreBufferObject(gl, FLOAT, STREAM_DRAW, VBO_SIZE);
+    vboVertex.send(ARRAY_BUFFER);
     vaoVertex.enableVertexAttribute(0);
     vaoVertex.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
     vaoVertex.unbind();
@@ -176,7 +178,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     // setup vao and vbo for custom shader render
     vaoCustomShader = CoreVAO.createCoreVAO(gl);
     vaoCustomShader.bind();
-    vboCustomerShader = CoreVBO.createCoreVBO(gl, FLOAT, STATIC_DRAW, new Float[] {
+    vboCustomerShader = createCoreBufferObject(gl, ARRAY_BUFFER, STATIC_DRAW, new float[] {
         0.0f, 0.0f,
         0.0f, 1.0f,
         1.0f, 0.0f,
@@ -185,7 +187,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
         1.0f, 1.0f,
         1.0f, 0.0f
     });
-    vboCustomerShader.bind();
+    vboCustomerShader.bind(ARRAY_BUFFER);
     vaoCustomShader.enableVertexAttribute(0);
     vaoCustomShader.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
     vaoCustomShader.unbind();
@@ -280,7 +282,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     b.clear();
     b.put(vertices);
     b.flip();
-    vboVertexUVColor.send();
+    vboVertexUVColor.send(ARRAY_BUFFER);
 
     activateShader(TEXTURE_SHADER);
 
@@ -299,7 +301,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     b.clear();
     b.put(vertices);
     b.flip();
-    vboVertexColor.send();
+    vboVertexColor.send(ARRAY_BUFFER);
 
     activateShader(PLAIN_COLOR_SHADER);
 
@@ -316,7 +318,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     b.clear();
     b.put(vertices);
     b.flip();
-    vboVertex.send();
+    vboVertex.send(ARRAY_BUFFER);
 
     CoreShader shader = activateShader(LINEAR_GRADIENT_SHADER);
 
@@ -419,7 +421,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     quad.put(1.0f);
     quad.flip();
 
-    vboVertexUVColor.send();
+    vboVertexUVColor.send(ARRAY_BUFFER);
     vaoVertexUVColor.bind();
 
     activateShader(TEXTURE_SHADER);
@@ -470,7 +472,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     shader.setUniformf("lineColorAlpha", 1.f);
     shader.setUniformf("lineParameters", (2*r + w), (2*r + w) / 2.f, (2*r + w) / 2.f - 2 * r, (2*r));
 
-    vboVertex.send();
+    vboVertex.send(ARRAY_BUFFER);
     vaoVertex.bind();
 
     changeCompositeOperation(NiftyCompositeOperation.Max);
@@ -489,7 +491,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     b.clear();
     b.put(vertices);
     b.flip();
-    vboVertex.send();
+    vboVertex.send(ARRAY_BUFFER);
     vaoVertex.bind();
 
     gl.glEnable(gl.GL_STENCIL_TEST());
@@ -536,8 +538,8 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     shader.setUniformf("resolution", mvpWidth, mvpHeight);
 
     vaoCustomShader.bind();
-    vboCustomerShader.bind();
-    vboCustomerShader.send();
+    vboCustomerShader.bind(ARRAY_BUFFER);
+    vboCustomerShader.send(ARRAY_BUFFER);
 
     vaoCustomShader.enableVertexAttribute(0);
     vaoCustomShader.disableVertexAttribute(1);
