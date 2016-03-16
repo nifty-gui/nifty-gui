@@ -15,6 +15,6 @@ public class WindowBuilder extends ControlBuilder {
   }
 
   public void closeable(final boolean closeable) {
-    set("closable", String.valueOf(closeable));
+    set("closeable", String.valueOf(closeable));
   }
 }
