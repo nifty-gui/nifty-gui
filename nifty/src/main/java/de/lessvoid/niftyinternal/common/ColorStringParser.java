@@ -113,9 +113,9 @@ public class ColorStringParser {
    * @return Color instance
    */
   public NiftyColor fromString(final String color) {
-    float red = 1.f;
-    float green = 1.f;
-    float blue = 1.f;
+    float red;
+    float green;
+    float blue;
     float alpha = 1.f;
 
     if (colorValidator.isShortModeWithoutAlpha(color)) {

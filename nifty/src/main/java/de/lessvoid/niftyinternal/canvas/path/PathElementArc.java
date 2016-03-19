@@ -72,8 +72,8 @@ public class PathElementArc implements PathElement {
       i = 1;
     }
 
-    double cx = 0.0;
-    double cy = 0.0;
+    double cx;
+    double cy;
     for (; i<64; i++) {
       double t = i / (double) (64 - 1);
 
