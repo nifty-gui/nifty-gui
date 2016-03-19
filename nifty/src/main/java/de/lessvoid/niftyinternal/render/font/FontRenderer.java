@@ -47,7 +47,7 @@ import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
 import de.lessvoid.nifty.spi.NiftyTexture;
 
 public class FontRenderer implements JGLFontRenderer {
-  private final Map<String, BitmapInfo> textureInfos = new HashMap<String, BitmapInfo>();
+  private final Map<String, BitmapInfo> textureInfos = new HashMap<>();
   private final ColorValueParser colorValueParser = new ColorValueParser();
   private final NiftyRenderDevice renderDevice;
   private final NiftyMutableColor textColor = new NiftyMutableColor(NiftyColor.white());
@@ -216,7 +216,7 @@ public class FontRenderer implements JGLFontRenderer {
   // BitmapInfo
   class BitmapInfo {
     private final NiftyTexture image;
-    private final Map<Integer, CharRenderInfo> characterIndices = new HashMap<Integer, CharRenderInfo>();
+    private final Map<Integer, CharRenderInfo> characterIndices = new HashMap<>();
 
     public BitmapInfo(final NiftyTexture image) {
       this.image = image;

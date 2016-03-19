@@ -41,7 +41,7 @@ import de.lessvoid.nifty.spi.NiftyTexture;
 import javax.annotation.Nonnull;
 
 public class BatchManager {
-  private List<Batch<?>> activeBatches = new ArrayList<Batch<?>>();
+  private List<Batch<?>> activeBatches = new ArrayList<>();
 
   public void begin() {
     activeBatches.clear();

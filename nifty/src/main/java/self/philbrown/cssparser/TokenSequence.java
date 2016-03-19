@@ -55,7 +55,7 @@ public class TokenSequence implements Iterable<Token>
 	 */
 	public TokenSequence(Token token, String string)
 	{
-		this.tokens = new ArrayList<Token>();
+		this.tokens = new ArrayList<>();
 		this.tokens.add(token);
 		this.string = string;
 	}
@@ -103,7 +103,7 @@ public class TokenSequence implements Iterable<Token>
 	 */
 	public Enumeration<Token> enumerate()
 	{
-		Vector<Token> vector = new Vector<Token>();
+		Vector<Token> vector = new Vector<>();
 		for (int i = 0; i < tokens.size(); i++)
 		{
 			vector.add(tokens.get(i));
@@ -248,7 +248,7 @@ System.out.println("subSequence(0," + seq.length() + " = " + sub);//TODO remove 
 	 */
 	public TokenSequence[] splitOnAny(Token[] t)
 	{
-		List<TokenSequence> list = new ArrayList<TokenSequence>();
+		List<TokenSequence> list = new ArrayList<>();
 		Builder b = new Builder();
 		for (int i = 0; i < length(); i++)
 		{
@@ -283,7 +283,7 @@ System.out.println("subSequence(0," + seq.length() + " = " + sub);//TODO remove 
 	 */
 	public TokenSequence[] split(Token t)
 	{
-		List<TokenSequence> list = new ArrayList<TokenSequence>();
+		List<TokenSequence> list = new ArrayList<>();
 		Builder b = new Builder();
 		for (int i = 0; i < length(); i++)
 		{
@@ -365,7 +365,7 @@ System.out.println("subSequence(0," + seq.length() + " = " + sub);//TODO remove 
 		 */
 		public Builder()
 		{
-			tokens = new ArrayList<Token>();
+			tokens = new ArrayList<>();
 			builder = new StringBuilder();
 		}
 		

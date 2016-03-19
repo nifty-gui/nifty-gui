@@ -50,9 +50,9 @@ public class Scanner implements ParserConstants
 	private int line = 1;
 	
 	/** Keeps track of imports so no redundant calls are made */
-	private List<String> imports = new ArrayList<String>();
+	private List<String> imports = new ArrayList<>();
 	/** Keeps track of supports statements so no redundant calls are made */
-	private List<String> supports = new ArrayList<String>();
+	private List<String> supports = new ArrayList<>();
 	
 	/** The input stream */
 	private InputStream is;

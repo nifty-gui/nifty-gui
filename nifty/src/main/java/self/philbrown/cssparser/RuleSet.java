@@ -38,7 +38,7 @@ public class RuleSet
 	 */
 	public RuleSet()
 	{
-		declarationBlock = new ArrayList<Declaration>();
+		declarationBlock = new ArrayList<>();
 	}
 	
 	/**

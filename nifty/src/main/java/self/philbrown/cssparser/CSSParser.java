@@ -209,7 +209,7 @@ public class CSSParser implements ParserConstants
 					match(IDENTIFIER);
 					match(LEFT_CURLY_BRACKET);
 					int curlies = 1;
-					List<KeyFrame> keyFrames = new ArrayList<KeyFrame>();
+					List<KeyFrame> keyFrames = new ArrayList<>();
 					while (curlies > 0)
 					{
 						if (t.tokenCode == LEFT_CURLY_BRACKET)
@@ -246,7 +246,7 @@ public class CSSParser implements ParserConstants
 							}
 							match(LEFT_CURLY_BRACKET);
 							
-							List<Declaration> declarations = new ArrayList<Declaration>();
+							List<Declaration> declarations = new ArrayList<>();
 							while (t.tokenCode != RIGHT_CURLY_BRACKET)
 							{
 								TokenSequence.Builder property = new TokenSequence.Builder();
@@ -278,7 +278,7 @@ public class CSSParser implements ParserConstants
 					//get Typeface from handler
 					match(AT_RULE);
 					match(LEFT_CURLY_BRACKET);
-					List<Declaration> declarations = new ArrayList<Declaration>();
+					List<Declaration> declarations = new ArrayList<>();
 					while(t.tokenCode != RIGHT_CURLY_BRACKET)
 					{
 						TokenSequence.Builder property = new TokenSequence.Builder();
@@ -377,7 +377,7 @@ public class CSSParser implements ParserConstants
 					}
 					match(LEFT_CURLY_BRACKET);
 					
-					List<Declaration> declarations = new ArrayList<Declaration>();
+					List<Declaration> declarations = new ArrayList<>();
 					while (t.tokenCode != RIGHT_CURLY_BRACKET)
 					{
 						TokenSequence.Builder property = new TokenSequence.Builder();
@@ -478,7 +478,7 @@ public class CSSParser implements ParserConstants
 					return;
 				}
 				match(LEFT_CURLY_BRACKET);
-				List<Declaration> declarations = new ArrayList<Declaration>();
+				List<Declaration> declarations = new ArrayList<>();
 				while(t.tokenCode != RIGHT_CURLY_BRACKET)
 				{
 					TokenSequence.Builder property = new TokenSequence.Builder();

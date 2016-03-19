@@ -34,7 +34,7 @@ public class InternalNiftyEventBus {
   private MBassador<NiftyEvent> eventBus;
 
   public InternalNiftyEventBus() {
-    eventBus = new MBassador<NiftyEvent>(BusConfiguration.SyncAsync());
+    eventBus = new MBassador<>(BusConfiguration.SyncAsync());
   }
 
   public void subscribe(final Object listener) {

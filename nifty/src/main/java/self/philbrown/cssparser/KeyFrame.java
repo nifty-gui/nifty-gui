@@ -38,7 +38,7 @@ public class KeyFrame {
 	 */
 	public KeyFrame()
 	{
-		declarationBlock = new ArrayList<Declaration>();
+		declarationBlock = new ArrayList<>();
 	}
 	/**
 	 * Constructor
