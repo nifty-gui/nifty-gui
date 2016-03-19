@@ -31,6 +31,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class IdGenerator {
   private static final AtomicInteger id = new AtomicInteger(1);
 
+  private IdGenerator() {
+  }
+
   public static int generate() {
     return id.incrementAndGet();
   }

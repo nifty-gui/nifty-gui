@@ -28,6 +28,9 @@ import java.text.ParseException;
  */
 public class Tester 
 {
+	private Tester() {
+	}
+
 	/**
 	 * Run the test case
 	 * @param args

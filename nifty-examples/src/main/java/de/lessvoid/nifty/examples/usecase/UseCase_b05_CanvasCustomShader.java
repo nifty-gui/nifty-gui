@@ -52,6 +52,9 @@ public class UseCase_b05_CanvasCustomShader {
     });
   }
 
+  private UseCase_b05_CanvasCustomShader() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b05_CanvasCustomShader.class, args);
   }

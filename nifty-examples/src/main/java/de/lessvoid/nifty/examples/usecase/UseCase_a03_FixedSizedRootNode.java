@@ -51,6 +51,9 @@ public class UseCase_a03_FixedSizedRootNode {
               .addNode(contentNode());
   }
 
+  private UseCase_a03_FixedSizedRootNode() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a03_FixedSizedRootNode.class, args);
   }

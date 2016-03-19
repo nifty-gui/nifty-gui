@@ -75,6 +75,9 @@ public class UseCase_b16_CanvasFillPath {
     });
   }
 
+  private UseCase_b16_CanvasFillPath() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b16_CanvasFillPath.class, args);
   }

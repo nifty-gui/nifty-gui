@@ -67,7 +67,10 @@ public class UseCase_b07_CanvasTransformTranslate {
             }));
   }
 
-  public static void main(final String[] args) throws Exception {
+    private UseCase_b07_CanvasTransformTranslate() {
+    }
+
+    public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b07_CanvasTransformTranslate.class, args);
   }
 }

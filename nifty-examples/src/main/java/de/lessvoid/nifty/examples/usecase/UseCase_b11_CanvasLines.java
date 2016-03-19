@@ -109,6 +109,9 @@ public class UseCase_b11_CanvasLines {
     });
   }
 
+  private UseCase_b11_CanvasLines() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b11_CanvasLines.class, args);
   }

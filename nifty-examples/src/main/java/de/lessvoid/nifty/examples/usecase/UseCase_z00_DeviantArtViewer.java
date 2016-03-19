@@ -86,6 +86,9 @@ public class UseCase_z00_DeviantArtViewer {
     });
   }
 
+  private UseCase_z00_DeviantArtViewer() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_z00_DeviantArtViewer.class, args,
       new NiftyConfiguration()

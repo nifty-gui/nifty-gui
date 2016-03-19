@@ -60,7 +60,10 @@ public class UseCase_b04_CanvasImage {
         canvas.drawImage(image, 10, 10);
       }
     }));
-  }  
+  }
+
+  private UseCase_b04_CanvasImage() {
+  }
 
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b04_CanvasImage.class, args);

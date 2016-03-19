@@ -61,6 +61,9 @@ public class UseCaseRunner {
     initAdapters.put("dummy", new UseCaseRunnerAdapterDummy());
   }
 
+  private UseCaseRunner() {
+  }
+
   static void run(final Class<?> useCaseClass, final String[] args) throws Exception {
     run(useCaseClass, args, new NiftyConfiguration());
   }

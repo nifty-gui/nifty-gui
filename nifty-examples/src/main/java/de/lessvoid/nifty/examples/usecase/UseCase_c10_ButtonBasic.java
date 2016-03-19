@@ -69,6 +69,9 @@ public class UseCase_c10_ButtonBasic {
                 .addNode(button);
   }
 
+  private UseCase_c10_ButtonBasic() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_c10_ButtonBasic.class, args);
   }

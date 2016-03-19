@@ -33,6 +33,9 @@ package de.lessvoid.niftyinternal.math;
  */
 public class MatrixFactory {
 
+  private MatrixFactory() {
+  }
+
   /**
    * Create orthographic projection Matrix4f.
    * @param width width

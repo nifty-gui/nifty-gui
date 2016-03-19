@@ -34,6 +34,9 @@ import static org.junit.Assert.assertEquals;
 public class AssertColor {
   private static final float DELTA = 1.f / 255.f;
 
+  private AssertColor() {
+  }
+
   public static void assertColor(final double r, final double g, final double b, final double a, final NiftyColor c) {
     assertEquals(r, c.getRed(), DELTA);
     assertEquals(g, c.getGreen(), DELTA);

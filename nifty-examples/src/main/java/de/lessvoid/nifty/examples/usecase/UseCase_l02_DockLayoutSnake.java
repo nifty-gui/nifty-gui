@@ -115,6 +115,9 @@ public final class UseCase_l02_DockLayoutSnake {
     }
   }
 
+  private UseCase_l02_DockLayoutSnake() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_l02_DockLayoutSnake.class, args);
   }
