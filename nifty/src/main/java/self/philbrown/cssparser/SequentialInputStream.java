@@ -22,7 +22,7 @@ public class SequentialInputStream extends InputStream
 
     public SequentialInputStream(InputStream... streams) throws IOException
     {
-        this.streams = new ArrayList<InputStream>();
+        this.streams = new ArrayList<>();
         for (InputStream stream : streams)
         {
         	this.streams.add(stream);

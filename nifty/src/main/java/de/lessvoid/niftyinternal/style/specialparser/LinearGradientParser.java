@@ -96,7 +96,7 @@ public class LinearGradientParser {
   private static final String UNIT_RAD = "rad";
   private static final String UNIT_TURN = "turn";
 
-  private static final Map<String, String> toSideOrCornerMap = new HashMap<String, String>();
+  private static final Map<String, String> toSideOrCornerMap = new HashMap<>();
 
   static {
     toSideOrCornerMap.put(TOP,          "0");
@@ -173,7 +173,7 @@ public class LinearGradientParser {
 
   public static class Result {
     private double angleInRadiants;
-    private List<ColorStop> colorStops = new ArrayList<ColorStop>();
+    private List<ColorStop> colorStops = new ArrayList<>();
 
     public Result(final double angle) {
       this.angleInRadiants = angle;
@@ -193,7 +193,7 @@ public class LinearGradientParser {
   }
 
   public Result parse(final String value) throws Exception {
-    Queue<Token> tokenSeq = new LinkedList<Token>(TokenSequence.parse(value).getTokens());
+    Queue<Token> tokenSeq = new LinkedList<>(TokenSequence.parse(value).getTokens());
     assertIdentifier(tokenSeq, "linear-gradient");
     assertLeftParenthesis(tokenSeq);
 
@@ -257,11 +257,11 @@ public class LinearGradientParser {
     if (first.tokenCode != Token.IDENTIFIER) {
       throw new Exception("expected identifier token after 'to' but was (" + first.toDebugString() + ")");
     }
-    Set<String> supportedSidesH = new TreeSet<String>();
+    Set<String> supportedSidesH = new TreeSet<>();
     supportedSidesH.add(LEFT);
     supportedSidesH.add(RIGHT);
 
-    Set<String> supportedSidesV = new TreeSet<String>();
+    Set<String> supportedSidesV = new TreeSet<>();
     supportedSidesV.add(TOP);
     supportedSidesV.add(BOTTOM);
 
@@ -314,7 +314,7 @@ public class LinearGradientParser {
     if (next.tokenCode != Token.IDENTIFIER) {
       throw new Exception("expected angle unit identifier here but was (" + next.toDebugString() + ")");
     }
-    Set<String> supportedUnits = new HashSet<String>();
+    Set<String> supportedUnits = new HashSet<>();
     supportedUnits.add(UNIT_DEG);
     supportedUnits.add(UNIT_GRAD);
     supportedUnits.add(UNIT_RAD);

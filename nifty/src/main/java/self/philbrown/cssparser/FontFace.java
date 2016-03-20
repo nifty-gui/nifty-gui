@@ -140,7 +140,7 @@ public class FontFace implements ParserConstants
 				fontFamily = property;
 			else if (property.equals("src"))
 			{
-				sources = new HashMap<String, List<String>>();
+				sources = new HashMap<>();
 				List<Token> tokens = value.getTokens();
 				Iterator<Token> iterator = tokens.iterator();
 				while (iterator.hasNext())
@@ -161,7 +161,7 @@ public class FontFace implements ParserConstants
 						}
 						List<String> resources = sources.get(function);
 						if (resources == null)
-							resources = new ArrayList<String>();
+							resources = new ArrayList<>();
 						resources.add(uri.toString());
 						sources.put(function, resources);
 					}

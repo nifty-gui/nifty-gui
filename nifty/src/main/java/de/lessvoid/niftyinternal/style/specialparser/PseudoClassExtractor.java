@@ -36,7 +36,7 @@ import java.util.Set;
 import self.philbrown.cssparser.Token;
 
 public class PseudoClassExtractor {
-  private final static Set<Integer> PSEUDO_CLASSES = new HashSet<Integer>();
+  private final static Set<Integer> PSEUDO_CLASSES = new HashSet<>();
   {
     PSEUDO_CLASSES.add(Token.HOVER);
     PSEUDO_CLASSES.add(Token.ACTIVE);
@@ -47,9 +47,9 @@ public class PseudoClassExtractor {
   }
 
   public List<String> parse(final List<Token> tokenList) {
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
 
-    Queue<Token> tokenSeq = new LinkedList<Token>(tokenList);
+    Queue<Token> tokenSeq = new LinkedList<>(tokenList);
     while (tokenSeq.peek() != null) {
       Token colon = scanToColon(tokenSeq);
       if (colon != null) {
@@ -65,7 +65,7 @@ public class PseudoClassExtractor {
 
   public String extractSelector(final List<Token> tokenList) {
     StringBuilder result = new StringBuilder();
-    Queue<Token> tokenSeq = new LinkedList<Token>(tokenList);
+    Queue<Token> tokenSeq = new LinkedList<>(tokenList);
     while (tokenSeq.peek() != null) {
       Token next = tokenSeq.poll();
       while (next != null && next.tokenCode != Token.COLON) {

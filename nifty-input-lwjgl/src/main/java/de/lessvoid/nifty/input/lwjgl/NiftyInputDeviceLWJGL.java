@@ -55,8 +55,8 @@ public class NiftyInputDeviceLWJGL implements NiftyInputDevice {
   private final NiftyKeyboardInputEventFactory keyboardEventCreator = new NiftyKeyboardInputEventFactory();
   private final IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
   @Nonnull
-  private final ConcurrentLinkedQueue<MouseInputEvent> mouseEventsOut = new ConcurrentLinkedQueue<MouseInputEvent>();
-  private final ConcurrentLinkedQueue<NiftyKeyboardEvent> keyboardEventsOut = new ConcurrentLinkedQueue<NiftyKeyboardEvent>();
+  private final ConcurrentLinkedQueue<MouseInputEvent> mouseEventsOut = new ConcurrentLinkedQueue<>();
+  private final ConcurrentLinkedQueue<NiftyKeyboardEvent> keyboardEventsOut = new ConcurrentLinkedQueue<>();
 
   private boolean niftyHasKeyboardFocus = true;
   private boolean niftyTakesKeyboardFocusOnClick = false;

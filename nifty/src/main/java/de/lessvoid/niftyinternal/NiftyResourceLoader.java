@@ -54,7 +54,7 @@ public class NiftyResourceLoader {
   private final List<NiftyResourceLocation> locations;
 
   public NiftyResourceLoader() {
-    locations = new ArrayList<NiftyResourceLocation>();
+    locations = new ArrayList<>();
     locations.add(new ClasspathLocation());
     locations.add(new FileSystemLocation(new File(".")));
   }
