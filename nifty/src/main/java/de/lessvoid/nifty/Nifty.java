@@ -26,9 +26,6 @@
  */
 package de.lessvoid.nifty;
 
-import de.lessvoid.nifty.input.NiftyInputConsumer;
-import de.lessvoid.nifty.input.NiftyKeyboardEvent;
-import de.lessvoid.nifty.input.NiftyPointerEvent;
 import de.lessvoid.nifty.node.NiftyReferenceNode;
 import de.lessvoid.nifty.node.NiftyRootNode;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
@@ -62,6 +59,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -324,6 +322,20 @@ public class Nifty {
         filename,
         FilterMode.Linear,
         PreMultipliedAlphaMode.PreMultiplyAlpha)));
+  }
+
+  /**
+   * Create a new NiftyImage for width/height/data.
+   * <br/>
+   * @param width the width of the image data
+   * @param height the height of the image data
+   * @param data the actual pixel data
+   * @param filterMode the FilterMode
+   * @return the new NiftyImage
+   */
+  public NiftyImage createNiftyImage(final int width, final int height, final ByteBuffer data, final FilterMode filterMode) {
+    // TODO consider to make PreMultipliedAlphaMode availabe to the user as well?
+    return NiftyImage.newInstance(InternalNiftyImage.newImage(renderDevice.createTexture(width, height, data, filterMode)));
   }
 
   /**
