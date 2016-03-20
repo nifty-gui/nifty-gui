@@ -214,7 +214,7 @@ public class Scanner implements ParserConstants
 		{
 			while (Character.isLetter(C) || C == '-' || Character.isDigit(C) || C == '_')
 			{
-				attribute += C;
+				attribute += Character.toString(C);
 				getChar();
 			}
 			return new Token(lookup(attribute), attribute);
@@ -223,7 +223,7 @@ public class Scanner implements ParserConstants
 		{
 			while (Character.isDigit(C))
 			{
-				attribute += C;
+				attribute += Character.toString(C);
 				getChar();
 			}
 			return new Token(NUMBER, attribute);
@@ -247,13 +247,13 @@ public class Scanner implements ParserConstants
 							}
 							else
 							{
-								attribute += '*';
-								attribute += C;
+								attribute += Character.toString('*');
+								attribute += Character.toString(C);
 							}
 						}
 						else
 						{
-							attribute += C;
+							attribute += Character.toString(C);
 						}
 					}
 					getChar();
@@ -369,7 +369,7 @@ public class Scanner implements ParserConstants
 				{
 					while (Character.isLetter(C) || C == '-')
 					{
-						attribute += C;
+						attribute += Character.toString(C);
 						getChar();
 					}
 					return new Token(AT_RULE, attribute);
