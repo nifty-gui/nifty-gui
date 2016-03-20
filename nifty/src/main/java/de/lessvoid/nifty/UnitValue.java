@@ -228,6 +228,16 @@ public class UnitValue {
     return false;
   }
 
+  @Override
+  public int hashCode() {
+    int result = this.value != null ? this.value.hashCode() : 0;
+    result = 31 * result + (this.percentValue != +0.0f ? Float.floatToIntBits(this.percentValue) : 0);
+    result = 31 * result + (this.pixelValue != +0.0f ? Float.floatToIntBits(this.pixelValue) : 0);
+    result = 31 * result + (this.hasWidthSuffix ? 1 : 0);
+    result = 31 * result + (this.hasHeightSuffix ? 1 : 0);
+    return result;
+  }
+
   /**
    * Get the percent value this value represent.
    * @return the actual percent value.

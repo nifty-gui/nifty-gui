@@ -178,7 +178,14 @@ public class Token implements ParserConstants
 		}
 		return false;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		int result = this.tokenCode;
+		result = 31 * result + (this.attribute != null ? this.attribute.hashCode() : 0);
+		return result;
+	}
+
 	/**
 	 * Not-Equals shortcut method
 	 * @param o

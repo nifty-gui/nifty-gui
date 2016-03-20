@@ -199,7 +199,14 @@ public class TokenSequence implements Iterable<Token>
 		}
 		return false;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		int result = this.tokens != null ? this.tokens.hashCode() : 0;
+		result = 31 * result + (this.string != null ? this.string.hashCode() : 0);
+		return result;
+	}
+
 	/**
 	 * Not Equals
 	 * @param o
