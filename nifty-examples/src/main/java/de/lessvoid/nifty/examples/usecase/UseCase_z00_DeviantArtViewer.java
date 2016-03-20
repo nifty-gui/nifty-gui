@@ -90,7 +90,20 @@ public class UseCase_z00_DeviantArtViewer implements NiftyCanvasPainter {
 
   @Override
   public void paint(final NiftyContentNode node, final NiftyCanvas canvas) {
-    canvas.drawImage(image, node.getWidth()/2 - image.getWidth()/2, node.getHeight()/2 - image.getHeight()/2);
+    canvas.setFillStyle(NiftyColor.transparent());
+    canvas.fillRect(0., 0., node.getWidth(), node.getHeight());
+
+    // fit image on canvas keeping aspect ratio
+    int width;
+    int height;
+    if (image.getWidth() > image.getHeight()) {
+      width = node.getWidth();
+      height = Math.round(width * image.getHeight() / image.getWidth());
+    } else {
+      height = node.getHeight();
+      width = Math.round(height * image.getWidth() / image.getHeight());
+    }
+    canvas.drawImage(image, node.getWidth()/2 - width/2, node.getHeight()/2 - height/2, width, height);
   }
 
   public UseCase_z00_DeviantArtViewer(final Nifty nifty) {
@@ -115,7 +128,7 @@ public class UseCase_z00_DeviantArtViewer implements NiftyCanvasPainter {
                     .addNode(contentNode);
     nifty.startTickAnimator(new NiftyCallback<Float>() {
       @Override public void execute(final Float time) {
-        transformationNode.setPosX(Math.sin(time) * 512.);
+        transformationNode.setPosX(Math.sin(time) * 400.);
         double scale = (Math.sin((time/2-Math.PI/4+Math.PI/2)*2.0)+1.0)/4.0+0.5;
         transformationNode.setScaleX(scale);
         transformationNode.setScaleY(scale);
@@ -188,6 +201,7 @@ public class UseCase_z00_DeviantArtViewer implements NiftyCanvasPainter {
           } catch (InterruptedException e) {
           }
         }
+
         RSSFeedParser parser = new RSSFeedParser("http://backend.deviantart.com/rss.xml?q=special%3Add&type=deviation");
         for (RSSFeedEntry f : parser.readFeed()) {
           try {
