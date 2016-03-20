@@ -39,7 +39,7 @@ public final class NiftyServiceLoader<S> implements Iterable<S> {
     }
 
     Map<String, S> providers = new HashMap<>();
-    while (configs.hasMoreElements()) {
+    while (configs != null && configs.hasMoreElements()) {
       URL nextURL = configs.nextElement();
 
       for (String configLine : parse(service, nextURL)) {
