@@ -29,6 +29,8 @@ package de.lessvoid.nifty;
 import de.lessvoid.niftyinternal.InternalNiftyImage;
 import de.lessvoid.niftyinternal.accessor.NiftyImageAccessor;
 
+import java.nio.ByteBuffer;
+
 /**
  * A image that can be rendered into a NiftyCanvas or that can be used as a background image for a NiftyNode.
  * @author void
@@ -58,6 +60,10 @@ public final class NiftyImage {
    */
   public int getHeight() {
     return impl.getHeight();
+  }
+
+  public void update(final ByteBuffer buffer) {
+    impl.update(buffer);
   }
 
   // package private methods

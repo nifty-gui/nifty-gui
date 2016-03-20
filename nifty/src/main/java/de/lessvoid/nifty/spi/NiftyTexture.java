@@ -27,6 +27,8 @@
 package de.lessvoid.nifty.spi;
 
 
+import java.nio.ByteBuffer;
+
 /**
  * A NiftyTexture is a handle to a texture surface. A NiftyTexture can be rendered AND can be rendered to.
  * @author void
@@ -93,4 +95,10 @@ public interface NiftyTexture {
    * Free the texture memory. Call this if you don't plan to use this texture anymore to free any associated resources.
    */
   void dispose();
+
+  /**
+   * Update the content of this texture with the buffer data given as a parameter.
+   * @param buffer ByteBuffer with new texture data. this should be exactly width * height * color format bytes size.
+   */
+  void update(ByteBuffer buffer);
 }

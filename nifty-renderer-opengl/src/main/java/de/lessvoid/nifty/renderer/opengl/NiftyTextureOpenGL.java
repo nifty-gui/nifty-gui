@@ -26,53 +26,55 @@
  */
 package de.lessvoid.nifty.renderer.opengl;
 
-import java.nio.ByteBuffer;
-
 import com.lessvoid.coregl.ColorFormat;
 import com.lessvoid.coregl.CoreTexture2D;
 import com.lessvoid.coregl.ResizeFilter;
 import com.lessvoid.coregl.Type;
 import com.lessvoid.coregl.spi.CoreGL;
-import de.lessvoid.niftyinternal.NiftyResourceLoader;
-import de.lessvoid.niftyinternal.render.io.ImageLoader;
-import de.lessvoid.niftyinternal.render.io.ImageLoaderFactory;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
 import de.lessvoid.nifty.spi.NiftyTexture;
+import de.lessvoid.niftyinternal.NiftyResourceLoader;
+import de.lessvoid.niftyinternal.render.io.ImageLoader;
+import de.lessvoid.niftyinternal.render.io.ImageLoaderFactory;
+
+import java.nio.ByteBuffer;
 
 public class NiftyTextureOpenGL implements NiftyTexture {
   final CoreTexture2D texture;
 
-  private NiftyTextureOpenGL(final CoreTexture2D texture) {
-    this.texture = texture;
-  }
-
-  public static NiftyTextureOpenGL newTextureRGBA(
+  public static NiftyTextureOpenGL newNiftyTextureOpenGL(
       final CoreGL gl,
       final int width,
       final int height,
       final FilterMode filterMode) {
-    return new NiftyTextureOpenGL(CoreTexture2D.createEmptyTexture(gl, ColorFormat.RGBA, Type.UNSIGNED_BYTE, width, height, resizeFilter(filterMode)));
+    return new NiftyTextureOpenGL(
+        CoreTexture2D.createEmptyTexture(
+            gl,
+            ColorFormat.RGBA,
+            Type.UNSIGNED_BYTE,
+            width,
+            height,
+            resizeFilter(filterMode)));
   }
 
-  public static NiftyTextureOpenGL newTextureRed(
-      final CoreGL gl,
-      final int width,
-      final int height,
-      final FilterMode filterMode) {
-    return new NiftyTextureOpenGL(CoreTexture2D.createEmptyTexture(gl, ColorFormat.Red, Type.UNSIGNED_BYTE, width, height, resizeFilter(filterMode)));
-  }
-
-  public NiftyTextureOpenGL(
+  public static NiftyTextureOpenGL newNiftyTextureOpenGL(
       final CoreGL gl,
       final int width,
       final int height,
       final ByteBuffer data,
       final FilterMode filterMode) {
-    texture = CoreTexture2D.createCoreTexture(gl, ColorFormat.RGBA, width, height, data, resizeFilter(filterMode));
+    return new NiftyTextureOpenGL(
+        CoreTexture2D.createCoreTexture(
+            gl,
+            ColorFormat.RGBA,
+            width,
+            height,
+            data,
+            resizeFilter(filterMode)));
   }
 
-  public NiftyTextureOpenGL(
+  public static NiftyTextureOpenGL newNiftyTextureOpenGL(
       final CoreGL gl,
       final NiftyResourceLoader resourceLoader,
       final String filename,
@@ -81,13 +83,14 @@ public class NiftyTextureOpenGL implements NiftyTexture {
     try {
       ImageLoader imageLoader = ImageLoaderFactory.createImageLoader(filename);
       ByteBuffer data = imageLoader.loadAsByteBufferRGBA(resourceLoader.getResourceAsStream(filename));
-      texture = CoreTexture2D.createCoreTexture(
-          gl,
-          ColorFormat.RGBA,
-          imageLoader.getImageWidth(),
-          imageLoader.getImageHeight(),
-          preMultiply(data, preMultipliedAlpha),
-          resizeFilter(filterMode));
+      return new NiftyTextureOpenGL(
+          CoreTexture2D.createCoreTexture(
+            gl,
+            ColorFormat.RGBA,
+            imageLoader.getImageWidth(),
+            imageLoader.getImageHeight(),
+            preMultiply(data, preMultipliedAlpha),
+            resizeFilter(filterMode)));
     } catch (Exception e) {
       throw new RuntimeException("Could not load image from file: [" + filename + "]", e);
     }
@@ -142,7 +145,17 @@ public class NiftyTextureOpenGL implements NiftyTexture {
     texture.dispose();
   }
 
-  private ByteBuffer preMultiply(final ByteBuffer data, final PreMultipliedAlphaMode preMultipliedAlpha) {
+  @Override
+  public void update(final ByteBuffer buffer) {
+    texture.bind();
+    texture.updateTextureData(buffer);
+  }
+
+  private NiftyTextureOpenGL(final CoreTexture2D texture) {
+    this.texture = texture;
+  }
+
+  private static ByteBuffer preMultiply(final ByteBuffer data, final PreMultipliedAlphaMode preMultipliedAlpha) {
     if (PreMultipliedAlphaMode.UseAsIs == preMultipliedAlpha) {
       return data;
     }

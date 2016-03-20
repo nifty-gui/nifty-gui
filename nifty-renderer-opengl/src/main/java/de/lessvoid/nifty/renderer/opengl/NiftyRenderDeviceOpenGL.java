@@ -192,7 +192,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
     vaoCustomShader.vertexAttribPointer(0, 2, FloatType.FLOAT, 2, 0);
     vaoCustomShader.unbind();
 
-    pathTexture = NiftyTextureOpenGL.newTextureRGBA(gl, getDisplayWidth(), getDisplayHeight(), FilterMode.Nearest);
+    pathTexture = NiftyTextureOpenGL.newNiftyTextureOpenGL(gl, getDisplayWidth(), getDisplayHeight(), FilterMode.Nearest);
 
     pathFBO = CoreFBO.createCoreFBO(gl);
     pathFBO.bindFramebuffer();
@@ -251,7 +251,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final int height,
       final FilterMode filterMode) {
     log.trace("createTexture()");
-    return NiftyTextureOpenGL.newTextureRGBA(gl, width, height, filterMode);
+    return NiftyTextureOpenGL.newNiftyTextureOpenGL(gl, width, height, filterMode);
   }
 
   @Override
@@ -261,7 +261,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final ByteBuffer data,
       final FilterMode filterMode) {
     log.trace("createTexture()");
-    return new NiftyTextureOpenGL(gl, width, height, data, filterMode);
+    return NiftyTextureOpenGL.newNiftyTextureOpenGL(gl, width, height, data, filterMode);
   }
 
   @Override
@@ -270,7 +270,7 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
       final FilterMode filterMode,
       final PreMultipliedAlphaMode preMultipliedAlphaMode) {
     log.trace("loadTexture()");
-    return new NiftyTextureOpenGL(gl, resourceLoader, filename, filterMode, preMultipliedAlphaMode);
+    return NiftyTextureOpenGL.newNiftyTextureOpenGL(gl, resourceLoader, filename, filterMode, preMultipliedAlphaMode);
   }
 
   @Override

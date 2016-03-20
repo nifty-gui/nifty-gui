@@ -2,6 +2,8 @@ package de.lessvoid.nifty.examples.dummy;
 
 import de.lessvoid.nifty.spi.NiftyTexture;
 
+import java.nio.ByteBuffer;
+
 /**
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
@@ -56,6 +58,11 @@ public class DummyTexture implements NiftyTexture {
 
   @Override
   public void dispose() {
+
+  }
+
+  @Override
+  public void update(final ByteBuffer buffer) {
 
   }
 }

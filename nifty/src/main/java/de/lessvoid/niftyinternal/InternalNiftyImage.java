@@ -28,6 +28,8 @@ package de.lessvoid.niftyinternal;
 
 import de.lessvoid.nifty.spi.NiftyTexture;
 
+import java.nio.ByteBuffer;
+
 
 public class InternalNiftyImage {
   private NiftyTexture texture;
@@ -46,6 +48,10 @@ public class InternalNiftyImage {
 
   public int getHeight() {
     return texture.getHeight();
+  }
+
+  public void update(final ByteBuffer buffer) {
+    texture.update(buffer);
   }
 
   // Internal "API"
