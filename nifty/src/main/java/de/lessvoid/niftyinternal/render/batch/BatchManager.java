@@ -69,11 +69,16 @@ public class BatchManager {
     requestBatch(MaskEndBatch.class, null, MaskEndBatchFactory.Instance);
   }
 
-  public void addTextureQuad(final NiftyTexture niftyTexture, final Mat4 mat, final NiftyColor color) {
+  public void addTextureQuad(
+    final NiftyTexture niftyTexture,
+    final Mat4 mat,
+    final NiftyColor color,
+    final int width,
+    final int height) {
     TextureBatch batch = requestBatch(TextureBatch.class, niftyTexture, TextureBatchFactory.Instance);
     batch.add(
         0.0, 0.0,
-        niftyTexture.getWidth(), niftyTexture.getHeight(),
+        width, height,
         niftyTexture.getU0(), niftyTexture.getV0(),
         niftyTexture.getU1(), niftyTexture.getV1(),
         mat,

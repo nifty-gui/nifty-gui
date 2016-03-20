@@ -31,16 +31,20 @@ import de.lessvoid.nifty.NiftyImage;
 public class CommandImage implements Command {
   private final int x;
   private final int y;
+  private final int width;
+  private final int height;
   private final NiftyImage image;
 
-  public CommandImage(final int x, final int y, final NiftyImage image) {
+  public CommandImage(final NiftyImage image, final int x, final int y, final int width, final int height) {
     this.x = x;
     this.y = y;
+    this.width = width;
+    this.height = height;
     this.image = image;
   }
 
   @Override
   public void execute(final Context context) {
-    context.image(x, y, image);
+    context.image(image, x, y, width, height);
   }
 }

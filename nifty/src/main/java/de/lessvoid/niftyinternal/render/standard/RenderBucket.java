@@ -124,7 +124,12 @@ public class RenderBucket {
       }
     }
 
-    batchManager.addTextureQuad(context.getNiftyTexture(), bucketTransform, NiftyColor.white());
+    batchManager.addTextureQuad(
+      context.getNiftyTexture(),
+      bucketTransform,
+      NiftyColor.white(),
+      context.getNiftyTexture().getWidth(),
+      context.getNiftyTexture().getHeight());
 
     renderNodesLastFrame.clear();
     renderNodesLastFrame.addAll(renderNodes);

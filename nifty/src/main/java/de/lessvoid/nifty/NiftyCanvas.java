@@ -250,7 +250,11 @@ public class NiftyCanvas {
   // image drawing
 
   public void drawImage(final NiftyImage image, final int x, final int y) {
-    impl.image(x, y, image);
+    impl.image(image, x, y, image.getWidth(), image.getHeight());
+  }
+
+  public void drawImage(final NiftyImage image, final int x, final int y, final int width, final int height) {
+    impl.image(image, x, y, width, height);
   }
 
   // compositing

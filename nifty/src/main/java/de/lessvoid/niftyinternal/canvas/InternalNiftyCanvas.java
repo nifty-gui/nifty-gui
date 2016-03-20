@@ -89,8 +89,8 @@ public class InternalNiftyCanvas {
     changed = true;
   }
 
-  public void image(final int x, final int y, final NiftyImage image) {
-    commands.add(new CommandImage(x, y, image));
+  public void image(final NiftyImage image, final int x, final int y, final int width, final int height) {
+    commands.add(new CommandImage(image, x, y, width, height));
     changed = true;
   }
 

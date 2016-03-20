@@ -104,7 +104,12 @@ public class RenderBucketRenderNode {
   public void render(final BatchManager batchManager, final Mat4 bucketTransformation) {
     Mat4.mul(bucketTransformation, localToScreen, localWithBucketTransformation);
     batchManager.addChangeCompositeOperation(NiftyCompositeOperation.SourceOver);
-    batchManager.addTextureQuad(context.getNiftyTexture(), localWithBucketTransformation, NiftyColor.white());
+    batchManager.addTextureQuad(
+      context.getNiftyTexture(),
+      localWithBucketTransformation,
+      NiftyColor.white(),
+      context.getNiftyTexture().getWidth(),
+      context.getNiftyTexture().getHeight());
   }
 
   public NiftyRect getScreenSpaceAABB() {

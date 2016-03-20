@@ -279,10 +279,15 @@ public class Context {
     batchManager.addCustomShader(shaderId);
   }
 
-  public void image(final int x, final int y, final NiftyImage image) {
+  public void image(final NiftyImage image, final int x, final int y, final int width, final int height) {
     InternalNiftyImage internalImage = NiftyImageAccessor.getDefault().getInternalNiftyImage(image);
     Mat4 local = Mat4.mul(getTransform(), Mat4.createTranslate(x, y, 0.0f));
-    batchManager.addTextureQuad(internalImage.getTexture(), local, NiftyColor.white());
+    batchManager.addTextureQuad(
+      internalImage.getTexture(),
+      local,
+      NiftyColor.white(),
+      width,
+      height);
   }
 
   public void text(final int x, final int y, final NiftyFont font, final String text) {
