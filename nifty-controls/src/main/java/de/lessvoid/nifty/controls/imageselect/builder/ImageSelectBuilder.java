@@ -11,11 +11,11 @@ public class ImageSelectBuilder extends ControlBuilder {
   }
 
   public void setImageWidth(@Nonnull final SizeValue imageWidth) {
-    set("imageWidth", imageWidth.toString());
+    set("imageWidth", imageWidth.getValueAsString());
   }
 
   public void setImageHeight(@Nonnull final SizeValue imageHeight) {
-    set("imageHeight", imageHeight.toString());
+    set("imageHeight", imageHeight.getValueAsString());
   }
 
   public void addImage(@Nonnull final String filename) {

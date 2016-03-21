@@ -422,6 +422,21 @@ public final class SizeValue {
   }
 
   /**
+   * Get a string representation of this SizeValue that complies with the formatting
+   * standards for {@link #SizeValue(String)} constructor.
+   * @return a well-formed string representation of this SizeValue
+   */
+  public String getValueAsString()
+  {
+    final StringBuilder builder = new StringBuilder();
+    if (hasValue) {
+      builder.append(value);
+    }
+    builder.append(type.getExtension());
+    return builder.toString();
+  }
+
+  /**
    * Checks if this value describes a pixel value.
    *
    * @return true if the given string value ends with PIXEL
@@ -452,10 +467,11 @@ public final class SizeValue {
   }
 
   /**
-   * Get the string representation of this size value.
+   * Get a generic string representation of this size value.
    * <p />
    * The output of this function is most likely <b>not</b> valid to be parsed by the {@link #SizeValue(String)}
    * constructor as it contains the current calculated value and this constructor does not support this kind of value.
+   * To get a String value parseable by the {@link #SizeValue(String)} constructor, use {@link #getValueAsString()}.
    *
    * @return the string representation of this instance
    */

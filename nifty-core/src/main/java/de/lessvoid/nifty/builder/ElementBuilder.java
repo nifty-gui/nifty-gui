@@ -205,11 +205,11 @@ public abstract class ElementBuilder {
   }
 
   public void height(@Nonnull final SizeValue height) {
-    attributes.setHeight(height.toString());
+    attributes.setHeight(height.getValueAsString());
   }
 
   public void width(@Nonnull final SizeValue width) {
-    attributes.setWidth(width.toString());
+    attributes.setWidth(width.getValueAsString());
   }
 
   public void x(@Nonnull final String x) {
@@ -221,11 +221,11 @@ public abstract class ElementBuilder {
   }
 
   public void x(@Nonnull final SizeValue x) {
-    attributes.setX(x.toString());
+    attributes.setX(x.getValueAsString());
   }
 
   public void y(@Nonnull final SizeValue y) {
-    attributes.setY(y.toString());
+    attributes.setY(y.getValueAsString());
   }
 
   public void childClip(final boolean childClip) {
@@ -456,7 +456,7 @@ public abstract class ElementBuilder {
   public void interactOnClick(@Nonnull String method) {
     interactAttributes.setOnClick(method);
   }
-  
+
   public void interactOnMultiClick(@Nonnull String method){
     interactAttributes.setOnMultiClick(method);
   }

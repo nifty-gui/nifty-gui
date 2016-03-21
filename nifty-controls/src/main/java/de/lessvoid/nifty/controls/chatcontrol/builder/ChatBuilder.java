@@ -28,14 +28,14 @@ public class ChatBuilder extends ControlBuilder {
   }
 
   public void chatLineIconWidth(@Nonnull final SizeValue value) {
-    set("chatLineIconWidth", value.toString());
+    set("chatLineIconWidth", value.getValueAsString());
   }
 
   public void chatLineIconHeight(@Nonnull final SizeValue value) {
-    set("chatLineIconHeight", value.toString());
+    set("chatLineIconHeight", value.getValueAsString());
   }
 
   public void chatLineHeight(@Nonnull final SizeValue value) {
-    set("chatLineHeight", value.toString());
+    set("chatLineHeight", value.getValueAsString());
   }
 }
