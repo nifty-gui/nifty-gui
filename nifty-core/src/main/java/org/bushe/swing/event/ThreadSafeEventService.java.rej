@@ -1,0 +1,51 @@
+***************
+*** 1842,1848 ****
+           if (size != null) {
+              return size.intValue();
+           } else {
+-             //try mattching patterns
+              if (rawCacheSizesForPattern != null) {
+                 Set patterns = rawCacheSizesForPattern.keySet();
+                 for (Iterator iterator = patterns.iterator(); iterator.hasNext();) {
+--- 1842,1848 ----
+           if (size != null) {
+              return size.intValue();
+           } else {
++             //try matching patterns
+              if (rawCacheSizesForPattern != null) {
+                 Set patterns = rawCacheSizesForPattern.keySet();
+                 for (Iterator iterator = patterns.iterator(); iterator.hasNext();) {
+***************
+*** 1860,1866 ****
+     }
+  
+     /**
+-     * @param eventClass an index into the cache, cannot be an inteface
+      *
+      * @return the last event published for this event class, or null if caching is turned off (the default)
+      */
+--- 1860,1866 ----
+     }
+  
+     /**
++     * @param eventClass an index into the cache, cannot be an interface
+      *
+      * @return the last event published for this event class, or null if caching is turned off (the default)
+      */
+***************
+*** 1878,1884 ****
+     }
+  
+     /**
+-     * @param eventClass an index into the cache, cannot be an inteface
+      *
+      * @return the last events published for this event class, or null if caching is turned off (the default)
+      */
+--- 1878,1884 ----
+     }
+  
+     /**
++     * @param eventClass an index into the cache, cannot be an interface
+      *
+      * @return the last events published for this event class, or null if caching is turned off (the default)
+      */

@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+
+</head>
+
+<body bgcolor="white">
+<p>The main package, provides publish/subscribe services for Swing and non-Swing applications.</p>
+
+<p>See the <a href="../../../../overview-summary.html#overview_description">overview</a> for an introduction to the EventBus' pub/sub services.</p>
+<p>This simple example prints &quot;Hello World&quot; using class-based publication.</p>
+<pre>
+<code>
+class HelloEvent {
+   public String getWorld() {
+      return "World";
+   }
+}
+</code>
+</pre>
+<pre>
+<code>
+class MySubscriber implements EventSubscriber {
+   //EventSubscriber implementation
+   public void onEvent(Object event) {
+      HelloEvent helloEvent = (HelloEvent)event;
+      System.out.println(&quot;Hello&quot;+helloEvent.getWorld());
+   }
+}
+</code>
+<code>
+class HelloEventBus {
+   public static void main(String args[]) {
+      MySubscriber subscriber = new MySubscriber();
+      EventBus.subscribe(HelloEvent.class, subscriber);
+      EventBus.publish(new HelloEvent());
+   }
+}
+</code>
+</pre>
+<p>Though the term &quot;Event Bus&quot; refers to the entire library, the {@link org.bushe.swing.event.EventBus} class
+   used above is a static wrapper around a global instance of an {@link org.bushe.swing.event.EventService},
+   specifically the {@link org.bushe.swing.event.SwingEventService} implementation by default.&nbsp; MySubscriber
+   subscribes itself to the HelloEvent.class.  When main() publishes an instance of HelloEvent the Event Bus
+   calls MySubscriber's onEvent method, passing the HelloEvent as a parameter, and &quot;Hello World&quot; is printed.
+</p>
+<p>The above subscriber can be simplified by using a generic type.</p>
+<pre>
+<code>
+class MySubscriber implements EventSubscriber<HelloEvent> {
+   //EventSubscriber implementation
+   public void onEvent(HelloEvent helloEvent) {
+      System.out.println(&quot;Hello&quot;+helloEvent.getWorld());
+   }
+}
+</code>
+</pre>
+</p>
+<p>Alternatively, this example can be coded using EventBus annotations and the AnnotationProcessor, removing some boilerplate code:</p>
+<pre>
+<code>
+class MySubscriber {
+   &#64;EventSubscriber(eventClass=HelloEvent.class)
+   public void printOutHelloWorld(HelloEvent event) {
+   	System.out.println(&quot;Hello&quot;+helloEvent.getWorld());
+   }
+}
+class HelloEventBus {
+   public static void main(String args[]) {
+      MySubscriber subscriber = new MySubscriber();
+      AnnotationProcessor.process(subscriber);//makes a proxy subscriber to call subscriber.printOutHelloWorld
+      EventBus.publish(new HelloEvent());
+   }
+}
+</code>
+</pre>
+<p>This second example prints &quot;Hello World&quot; using topic-based publication.</p>
+<pre>
+<code>
+class MyTopicSubscriber implements EventTopicSubscriber {
+   //EventTopicSubscriber implementation
+   public void onEvent(String topic, Object event) {
+   	System.out.println(topic+&quot; &quot;+event);
+   }
+}
+
+class HelloEventBus {
+   public static void main(String args[]) {
+      MyTopicSubscriber subscriber = new MyTopicSubscriber();
+      EventBus.subscribe(&quot;Hello&quot;, subscriber);
+      EventBus.publish(&quot;Hello&quot;, &quot;World&quot;);
+   }
+}
+</code>
+</pre>
+<p>MyTopicSubscriber subscribes itself to the topic named &quot;Hello&quot;.&nbsp; When main() publishes the
+   String &quot;World&quot; (the "payload") on the event topic &quot;Hello&quot;,
+   the EventBus calls MyTopicSubscriber on the Swing EDT and &quot;Hello World&quot; is printed.
+</p>
+<p>Alternatively, this example can also be coded using EventBus annotations and the AnnotationProcessor:</p>
+<pre>
+<code>
+class MyTopicSubscriber {
+   &#64;EventTopicSubscriber(topic=&quot;Hello&quot;);
+   public void printOutHelloWorld(String topic, Object event) {
+   	System.out.println(topic+&quot; &quot;+event);
+   }
+}
+
+class HelloEventBus {
+   public static void main(String args[]) {
+      MySubscriber subscriber = new MySubscriber();
+      AnnotationProcessor.process(subscriber);//makes a subscriber to call subscriber.printOutHelloWorld
+      EventBus.publish(&quot;Hello&quot;, &quot;World&quot;);
+   }
+}
+</code>
+</pre>
+<p>
+   <em>Important:</em> The EventBus uses WeakReferences by default, so this WILL NOT WORK
+   since it uses an anonymous inner class:
+<pre>
+<code>
+   public static void main(String args[]) {
+      EventBus.subscribe(&quot;Hello&quot;, new MySubscriber());
+      //subscriber will likely get garbage collected - no Hello World!!!
+      EventBus.publish(&quot;Hello&quot;, &quot;World&quot;);
+   }
+</code>
+</pre>
+<p>
+   In the above example, the subscriber will likely be garbage collected before the publication occurs.
+   However you can subscribe strongly instead:
+   <pre>
+     <code>
+     public static void main(String args[]) {
+         EventBus.subscribeStrongly(&quot;Hello&quot;, new MySubscriber());
+         //subscriber will not get garbage collected
+         EventBus.publish(new HelloEvent());
+         //In real apps use unsubscribe to make sure you don't leave a subscriber hanging
+         //around in the EventBus forever (a memory leak), unless you really want to
+         EventBus.unsubscribe(subscriber);
+     }
+     </code>
+   </pre>
+</p>
+<p>
+   This last example shows support for generic types.  In the application for this example, there are
+   many List's that are published.  This subscriber only want to be notified of List's of Trades, or List&#60;Trade&#62;.
+   Due to type erasure, this feature requires an addition step - the use of a TypeReference object:
+   <pre>
+     <code>
+     public class TradeSubscriber implements EventSubscriber {
+        public TradeSubscriber() {
+           TypeReference&#60;List&#60;Trade&#62;&#62; subscribingTypeReference = new TypeReference&#60;List&#60;Trade&#62;&#62;(){};
+           EventBus.subscribe(subscribingTypeReference.getType(), this);
+        }
+        public void onEvent(Object object) {
+        }
+     }
+
+     //Publisher
+     List&#60;Trade&#62; trades = new ArrayList&#60;Trade&#62;();
+     trades.add(trade);
+     TypeReference&#60;List&#60;Trade&#62;&#62; publishingTypeReference = new TypeReference&#60;List&#60;Trade&#62;&#62;(){};
+     EventBus.publish(publishingTypeReference.getType(), trades);
+     </code>
+   </pre>
+</p>
+
+
+<p>
+   There are two EventService implementations provided  by the EventBus library.  One is the {@link org.bushe.swing.event.ThreadSafeEventService}.
+   As the name implies the ThreadSafeEventService can be used in multithreaded environments.  There are no extra threads created by the EventBus,
+   as notification generally happens on the publishing thread.  The exception to this rule is the {@link org.bushe.swing.event.SwingEventService}, 
+   which extends the ThreadSafeEventService and ensures that notifications of subscribers are later posted on the
+   Swing/AWT {@link java.awt.EventDispatchThread} if the publishing thread is not already the EventDispatchThread.
+
+<p>The key class in the EventBus library is the {@link org.bushe.swing.event.EventBus}.  The EventBus is a wrapper around an EventService, by default 
+	 a SwingEventService.  Non-Swing applications can change the default implementation, by using the {@link org.bushe.swing.event.EventServiceLocator}.</p>
+
+<p>
+   An application may use multiple event services.  The EventServiceLocator is a central registry of EventServices where any
+   number of EventServices can be registered by name, but there is only one EventService instance created by the EventBus library and it registered by default
+   under both the names {@link org.bushe.swing.event.EventServiceLocator#SERVICE_NAME_EVENT_BUS} ("EventBus") and {@link org.bushe.swing.event.EventServiceLocator#SERVICE_NAME_SWING_EVENT_SERVICE} ("SwingEventService"). 
+   The EventBus class wraps the EventService registered under the name "EventBus".  By default, the EventServiceLocator's "EventBus" defaults to the
+   EventService registered under the name "SwingEventService", which is an instance of a SwingEventService.  So out-of-the-box there is one global event
+   service that should only be used for Swing apps, but this can either be changed programmatically or via Java properties before the first time the EventServices
+   are requested from the EventServiceLocator or the first time the EventBus us used, whichever comes first.  
+</p>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+
+</head>
+
+<body bgcolor="white">
+<p>EventBus annotations to make it much simpler to publish and subscribe to events.</p>
+<p>Subscription annotations remove the boilerplate inner classes that often used for subscribers, especially when
+	one class subscribes to multiple events.</p>
+<p>When using annotations, the AnnotationProcessor must be used to create proxy subscribers.</p>
+<p>An annotation example:</p>
+<pre>
+<code>
+class MySubscriber {
+   &#64;EventSubscriber(eventClass=HelloEvent.class)
+   public void printOutHelloWorld(HelloEvent event) {
+   	System.out.println(&quot;Hello&quot;+helloEvent.getWorld());
+   }
+   &#64;EventTopicSubscriber(topic=&quot;Hello&quot;);
+   public void printOutHelloWorld(String topic, Object event) {
+   	System.out.println(topic+&quot; &quot;+event);
+   }
+}
+
+class HelloEventBus {
+   public static void main(String args[]) {
+      MySubscriber subscriber = new MySubscriber();
+      AnnotationProcessor.process(subscriber);//makes a proxy subscribers
+      EventBus.publish(new HelloEvent());
+      EventBus.publish(&quot;Hello&quot;, &quot;World&quot;);
+   }
+}
+</code>
+</pre>
+<p>
+</body>
+</html>
