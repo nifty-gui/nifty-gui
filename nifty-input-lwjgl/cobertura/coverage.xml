@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 
-<coverage line-rate="0.0" branch-rate="0.0" lines-covered="0" lines-valid="114" branches-covered="0" branches-valid="62" complexity="1.8518518518518519" version="2.1.1" timestamp="1458687687085">
+<coverage line-rate="0.0" branch-rate="0.0" lines-covered="0" lines-valid="114" branches-covered="0" branches-valid="62" complexity="1.8518518518518519" version="2.1.1" timestamp="1459690465112">
 	<sources>
-		<source>/Users/void/Documents/workspace-idea/nifty-gui/nifty-input-lwjgl/src/main/java</source>
 		<source>--source</source>
+		<source>/Users/jenshohmuth/intellij/nifty-gui/nifty-input-lwjgl/src/main/java</source>
 	</sources>
 	<packages>
 		<package name="de.lessvoid.nifty.input.lwjgl" line-rate="0.0" branch-rate="0.0" complexity="1.8518518518518519">

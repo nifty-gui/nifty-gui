@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 
-<coverage line-rate="0.0" branch-rate="1.0" lines-covered="0" lines-valid="23" branches-covered="0" branches-valid="0" complexity="1.0" version="2.1.1" timestamp="1458687653868">
+<coverage line-rate="0.0" branch-rate="1.0" lines-covered="0" lines-valid="24" branches-covered="0" branches-valid="0" complexity="1.0" version="2.1.1" timestamp="1459690446619">
 	<sources>
 		<source>--source</source>
-		<source>/Users/void/Documents/workspace-idea/nifty-gui/nifty-renderer-java2d/src/main/java</source>
+		<source>/Users/jenshohmuth/intellij/nifty-gui/nifty-renderer-java2d/src/main/java</source>
 	</sources>
 	<packages>
 		<package name="de.lessvoid.nifty.renderer.java2d" line-rate="0.0" branch-rate="1.0" complexity="1.0">
@@ -13,144 +13,150 @@
 					<methods>
 						<method name="&lt;init&gt;" signature="()V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="40" hits="0" branch="false"/>
+								<line number="41" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="activateCustomShader" signature="(Ljava/lang/String;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="165" hits="0" branch="false"/>
+								<line number="166" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="beginRender" signature="()V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="90" hits="0" branch="false"/>
+								<line number="91" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="beginRenderToTexture" signature="(Lde/lessvoid/nifty/spi/NiftyTexture;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="125" hits="0" branch="false"/>
+								<line number="126" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="changeCompositeOperation" signature="(Lde/lessvoid/nifty/types/NiftyCompositeOperation;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="153" hits="0" branch="false"/>
+								<line number="154" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="clearScreenBeforeRender" signature="(Z)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="64" hits="0" branch="false"/>
+								<line number="65" hits="0" branch="false"/>
+							</lines>
+						</method>
+						<method name="createFont" signature="(Ljava/lang/String;)Lde/lessvoid/nifty/spi/NiftyFont;" line-rate="0.0" branch-rate="1.0" complexity="0">
+							<lines>
+								<line number="170" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="createTexture" signature="(IILde/lessvoid/nifty/spi/NiftyRenderDevice$FilterMode;)Lde/lessvoid/nifty/spi/NiftyTexture;" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="69" hits="0" branch="false"/>
+								<line number="70" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="createTexture" signature="(IILjava/nio/ByteBuffer;Lde/lessvoid/nifty/spi/NiftyRenderDevice$FilterMode;)Lde/lessvoid/nifty/spi/NiftyTexture;" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="75" hits="0" branch="false"/>
+								<line number="76" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="endRender" signature="()V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="119" hits="0" branch="false"/>
+								<line number="120" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="endRenderToTexture" signature="(Lde/lessvoid/nifty/spi/NiftyTexture;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="131" hits="0" branch="false"/>
+								<line number="132" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="getDisplayHeight" signature="()I" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="57" hits="0" branch="false"/>
+								<line number="58" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="getDisplayWidth" signature="()I" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="51" hits="0" branch="false"/>
+								<line number="52" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="loadCustomShader" signature="(Ljava/lang/String;)Ljava/lang/String;" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="158" hits="0" branch="false"/>
+								<line number="159" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="loadTexture" signature="(Ljava/lang/String;Lde/lessvoid/nifty/spi/NiftyRenderDevice$FilterMode;Lde/lessvoid/nifty/spi/NiftyRenderDevice$PreMultipliedAlphaMode;)Lde/lessvoid/nifty/spi/NiftyTexture;" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="83" hits="0" branch="false"/>
+								<line number="84" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="maskBegin" signature="()V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="136" hits="0" branch="false"/>
+								<line number="137" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="maskClear" signature="()V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="147" hits="0" branch="false"/>
+								<line number="148" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="maskEnd" signature="()V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="141" hits="0" branch="false"/>
+								<line number="142" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="maskRenderFill" signature="(Ljava/nio/FloatBuffer;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="177" hits="0" branch="false"/>
+								<line number="183" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="maskRenderLines" signature="(Ljava/nio/FloatBuffer;FLde/lessvoid/nifty/types/NiftyLineCapType;Lde/lessvoid/nifty/types/NiftyLineJoinType;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="171" hits="0" branch="false"/>
+								<line number="177" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="renderColorQuads" signature="(Ljava/nio/FloatBuffer;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="102" hits="0" branch="false"/>
+								<line number="103" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="renderLinearGradientQuads" signature="(DDDDLjava/util/List;Ljava/nio/FloatBuffer;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="113" hits="0" branch="false"/>
+								<line number="114" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="renderTexturedQuads" signature="(Lde/lessvoid/nifty/spi/NiftyTexture;Ljava/nio/FloatBuffer;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="96" hits="0" branch="false"/>
+								<line number="97" hits="0" branch="false"/>
 							</lines>
 						</method>
 						<method name="setResourceLoader" signature="(Lde/lessvoid/niftyinternal/NiftyResourceLoader;)V" line-rate="0.0" branch-rate="1.0" complexity="0">
 							<lines>
-								<line number="46" hits="0" branch="false"/>
+								<line number="47" hits="0" branch="false"/>
 							</lines>
 						</method>
 					</methods>
 					<lines>
-						<line number="40" hits="0" branch="false"/>
-						<line number="46" hits="0" branch="false"/>
-						<line number="51" hits="0" branch="false"/>
-						<line number="57" hits="0" branch="false"/>
-						<line number="64" hits="0" branch="false"/>
-						<line number="69" hits="0" branch="false"/>
-						<line number="75" hits="0" branch="false"/>
-						<line number="83" hits="0" branch="false"/>
-						<line number="90" hits="0" branch="false"/>
-						<line number="96" hits="0" branch="false"/>
-						<line number="102" hits="0" branch="false"/>
-						<line number="113" hits="0" branch="false"/>
-						<line number="119" hits="0" branch="false"/>
-						<line number="125" hits="0" branch="false"/>
-						<line number="131" hits="0" branch="false"/>
-						<line number="136" hits="0" branch="false"/>
-						<line number="141" hits="0" branch="false"/>
-						<line number="147" hits="0" branch="false"/>
-						<line number="153" hits="0" branch="false"/>
-						<line number="158" hits="0" branch="false"/>
-						<line number="165" hits="0" branch="false"/>
-						<line number="171" hits="0" branch="false"/>
+						<line number="41" hits="0" branch="false"/>
+						<line number="47" hits="0" branch="false"/>
+						<line number="52" hits="0" branch="false"/>
+						<line number="58" hits="0" branch="false"/>
+						<line number="65" hits="0" branch="false"/>
+						<line number="70" hits="0" branch="false"/>
+						<line number="76" hits="0" branch="false"/>
+						<line number="84" hits="0" branch="false"/>
+						<line number="91" hits="0" branch="false"/>
+						<line number="97" hits="0" branch="false"/>
+						<line number="103" hits="0" branch="false"/>
+						<line number="114" hits="0" branch="false"/>
+						<line number="120" hits="0" branch="false"/>
+						<line number="126" hits="0" branch="false"/>
+						<line number="132" hits="0" branch="false"/>
+						<line number="137" hits="0" branch="false"/>
+						<line number="142" hits="0" branch="false"/>
+						<line number="148" hits="0" branch="false"/>
+						<line number="154" hits="0" branch="false"/>
+						<line number="159" hits="0" branch="false"/>
+						<line number="166" hits="0" branch="false"/>
+						<line number="170" hits="0" branch="false"/>
 						<line number="177" hits="0" branch="false"/>
+						<line number="183" hits="0" branch="false"/>
 					</lines>
 				</class>
 			</classes>
