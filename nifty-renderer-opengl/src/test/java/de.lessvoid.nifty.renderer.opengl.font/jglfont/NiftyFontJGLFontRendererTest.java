@@ -24,7 +24,13 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.render;
+package de.lessvoid.nifty.renderer.opengl.font.jglfont;
+
+import de.lessvoid.nifty.renderer.opengl.NiftyFontJGLFont;
+import de.lessvoid.niftyinternal.render.FontHelper;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.easymock.EasyMock.anyChar;
 import static org.easymock.EasyMock.anyFloat;
@@ -34,19 +40,13 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import de.lessvoid.nifty.NiftyFont;
-
-public class FontHelperTest {
+public class NiftyFontJGLFontRendererTest {
   private FontHelper fontHelper = new FontHelper();
-  private NiftyFont font;
+  private NiftyFontJGLFont font;
 
   @Before
   public void before() {
-    font = createMock(NiftyFont.class);
+    font = createMock(NiftyFontJGLFont.class);
     expect(font.getCharacterWidth(anyChar(), anyChar(), anyFloat())).andReturn(10).anyTimes();
     replay(font);
   }
@@ -75,5 +75,4 @@ public class FontHelperTest {
   public void testHitLastChar() {
     assertEquals(5, fontHelper.getVisibleCharactersFromStart(font, "Hello", 1000, 1.f));
   }
-
 }

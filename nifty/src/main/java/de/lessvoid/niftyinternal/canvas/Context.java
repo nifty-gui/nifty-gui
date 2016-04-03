@@ -26,30 +26,27 @@
  */
 package de.lessvoid.niftyinternal.canvas;
 
-import de.lessvoid.niftyinternal.InternalNiftyImage;
-import de.lessvoid.niftyinternal.accessor.NiftyFontAccessor;
-import de.lessvoid.niftyinternal.accessor.NiftyImageAccessor;
-import de.lessvoid.niftyinternal.accessor.NiftyLinearGradientAccessor;
-import de.lessvoid.niftyinternal.common.Statistics;
-import de.lessvoid.niftyinternal.render.batch.BatchManager;
-import de.lessvoid.niftyinternal.render.batch.ColorQuadBatch;
-import de.lessvoid.niftyinternal.render.batch.TextureBatch;
-import org.jglfont.JGLFont;
-
+import de.lessvoid.nifty.NiftyImage;
+import de.lessvoid.nifty.spi.NiftyFont;
+import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyTexture;
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
-import de.lessvoid.nifty.NiftyFont;
-import de.lessvoid.nifty.NiftyImage;
 import de.lessvoid.nifty.types.NiftyLineCapType;
 import de.lessvoid.nifty.types.NiftyLineJoinType;
 import de.lessvoid.nifty.types.NiftyLinearGradient;
+import de.lessvoid.niftyinternal.InternalNiftyImage;
+import de.lessvoid.niftyinternal.accessor.NiftyImageAccessor;
+import de.lessvoid.niftyinternal.accessor.NiftyLinearGradientAccessor;
 import de.lessvoid.niftyinternal.canvas.path.PathRenderer;
+import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.math.Mat4;
-import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyTexture;
+import de.lessvoid.niftyinternal.render.batch.BatchManager;
+import de.lessvoid.niftyinternal.render.batch.ColorQuadBatch;
+import de.lessvoid.niftyinternal.render.batch.TextureBatch;
 
-import static de.lessvoid.nifty.types.NiftyLineCapType.*;
-import static de.lessvoid.nifty.types.NiftyLineJoinType.*;
+import static de.lessvoid.nifty.types.NiftyLineCapType.Square;
+import static de.lessvoid.nifty.types.NiftyLineJoinType.Miter;
 
 public class Context {
   // contentTexture is the final content this Context draws to - what you think of when you think the content
@@ -291,11 +288,9 @@ public class Context {
   }
 
   public void text(final int x, final int y, final NiftyFont font, final String text) {
-    JGLFont jglFont = NiftyFontAccessor.getDefault().getJGLFont(font);
-    jglFont.setCustomRenderState(batchManager);
-
     NiftyColor textColor = getTextColor();
-    jglFont.renderText(
+    font.renderText(
+        batchManager,
         x, y, text, (float) getTextSize(), (float) getTextSize(),
         (float) textColor.getRed(),
         (float) textColor.getGreen(),

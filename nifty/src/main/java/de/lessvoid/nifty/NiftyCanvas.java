@@ -26,6 +26,7 @@
  */
 package de.lessvoid.nifty;
 
+import de.lessvoid.nifty.spi.NiftyFont;
 import de.lessvoid.nifty.types.*;
 import de.lessvoid.niftyinternal.accessor.NiftyCanvasAccessor;
 import de.lessvoid.niftyinternal.canvas.InternalNiftyCanvas;

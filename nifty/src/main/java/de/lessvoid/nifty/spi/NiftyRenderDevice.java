@@ -52,6 +52,10 @@ public interface NiftyRenderDevice {
    */
   void setResourceLoader(@Nonnull NiftyResourceLoader niftyResourceLoader);
 
+  ////////////////////////////////////////////////////////////////////////////
+  // Provide Display Properties
+  ////////////////////////////////////////////////////////////////////////////
+
   /**
    * Get the width of the display.
    * @return width of display mode
@@ -68,6 +72,10 @@ public interface NiftyRenderDevice {
    * Enable clearing the screen when rendering.
    */
   void clearScreenBeforeRender(boolean clearScreenBeforeRender);
+
+  ////////////////////////////////////////////////////////////////////////////
+  // NiftyTexture Creation
+  ////////////////////////////////////////////////////////////////////////////
 
   /**
    * Create a texture of the given width and height.
@@ -99,6 +107,10 @@ public interface NiftyRenderDevice {
    * @return NiftyTexture
    */
   NiftyTexture loadTexture(String filename, FilterMode filterMode, PreMultipliedAlphaMode preMultipliedAlphaMode);
+
+  ////////////////////////////////////////////////////////////////////////////
+  // Render
+  ////////////////////////////////////////////////////////////////////////////
 
   /**
    * Nifty will call this before it issues render*() calls.
@@ -155,6 +167,10 @@ public interface NiftyRenderDevice {
    */
   void endRenderToTexture(NiftyTexture texture);
 
+  ////////////////////////////////////////////////////////////////////////////
+  // Mask or Matte Rendering
+  ////////////////////////////////////////////////////////////////////////////
+
   /**
    * This call enables rendering to the internal hold full screen alpha texture.
    */
@@ -188,11 +204,19 @@ public interface NiftyRenderDevice {
    */
   void maskRenderFill(final FloatBuffer vertices);
 
+  ////////////////////////////////////////////////////////////////////////////
+  // Composition related
+  ////////////////////////////////////////////////////////////////////////////
+
   /**
    * Change the current composite operation (blend mode in GL) for subsequent render calls.
    * @param compositeOperation the new composite operation
    */
   void changeCompositeOperation(NiftyCompositeOperation compositeOperation);
+
+  ////////////////////////////////////////////////////////////////////////////
+  // Custom Shaders
+  ////////////////////////////////////////////////////////////////////////////
 
   /**
    * Load a custom shader to be used for rendering later.
@@ -206,6 +230,16 @@ public interface NiftyRenderDevice {
    * @param shaderId the shaderId to activate
    */
   void activateCustomShader(String shaderId);
+
+  ////////////////////////////////////////////////////////////////////////////
+  // Method specific to Text rendering and Font loading
+  ////////////////////////////////////////////////////////////////////////////
+
+  NiftyFont createFont(String name);
+
+  ////////////////////////////////////////////////////////////////////////////
+  // enums and types used in the NiftyRenderDevice
+  ////////////////////////////////////////////////////////////////////////////
 
   /**
    * The type of filtering to use when loading a texture (Actually this is the filtering mode of the texture after

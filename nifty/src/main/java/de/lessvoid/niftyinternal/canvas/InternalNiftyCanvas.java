@@ -31,7 +31,7 @@ import java.util.List;
 
 import de.lessvoid.nifty.types.NiftyColor;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
-import de.lessvoid.nifty.NiftyFont;
+import de.lessvoid.nifty.spi.NiftyFont;
 import de.lessvoid.nifty.NiftyImage;
 import de.lessvoid.nifty.types.NiftyLineCapType;
 import de.lessvoid.nifty.types.NiftyLineJoinType;

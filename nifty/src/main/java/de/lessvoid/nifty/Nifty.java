@@ -28,6 +28,7 @@ package de.lessvoid.nifty;
 
 import de.lessvoid.nifty.node.NiftyReferenceNode;
 import de.lessvoid.nifty.node.NiftyRootNode;
+import de.lessvoid.nifty.spi.NiftyFont;
 import de.lessvoid.nifty.spi.NiftyInputDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
@@ -50,10 +51,8 @@ import de.lessvoid.niftyinternal.animate.IntervalAnimator;
 import de.lessvoid.niftyinternal.animate.TickAnimator;
 import de.lessvoid.niftyinternal.common.Statistics;
 import de.lessvoid.niftyinternal.render.NiftyRenderer;
-import de.lessvoid.niftyinternal.render.font.FontRenderer;
 import de.lessvoid.niftyinternal.render.standard.StandardNiftyRenderer;
 import de.lessvoid.niftyinternal.tree.InternalNiftyTree;
-import org.jglfont.JGLFontFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,9 +100,6 @@ public class Nifty {
 
   // the class that interfaces us to input events (mouse, touch, keyboard)
   private NiftyInputDevice inputDevice;
-
-  // the FontFactory
-  private final JGLFontFactory fontFactory;
 
   // whenever we need to build a string we'll re-use this instance instead of creating new instances all the time
   private final StringBuilder str = new StringBuilder();
@@ -186,7 +182,6 @@ public class Nifty {
     statistics = new NiftyStatistics(new Statistics(timeProvider));
     stats = statistics.getImpl();
     renderer = new StandardNiftyRenderer(stats, renderDevice, configuration);
-    fontFactory = new JGLFontFactory(new FontRenderer(newRenderDevice));
 
     NiftyNodeImpl<NiftyRootNode> rootNodeImpl = niftyNodeImpl(new NiftyRootNode());
     tree = new InternalNiftyTree(rootNodeImpl);
@@ -402,7 +397,7 @@ public class Nifty {
     if (name == null) {
       return null;
     }
-    return new NiftyFont(fontFactory.loadFont(resourceLoader.getResourceAsStream(name), name, 12), name);
+    return renderDevice.createFont(name);
   }
 
   /////////////////////////////////////////////////////////////////////////////

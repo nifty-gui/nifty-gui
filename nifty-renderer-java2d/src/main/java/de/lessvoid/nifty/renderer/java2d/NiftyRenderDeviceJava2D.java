@@ -26,16 +26,17 @@
  */
 package de.lessvoid.nifty.renderer.java2d;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.util.List;
-
+import de.lessvoid.nifty.spi.NiftyFont;
+import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyTexture;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
 import de.lessvoid.nifty.types.NiftyLineCapType;
 import de.lessvoid.nifty.types.NiftyLineJoinType;
 import de.lessvoid.niftyinternal.NiftyResourceLoader;
-import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyTexture;
+
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.util.List;
 
 public class NiftyRenderDeviceJava2D implements NiftyRenderDevice {
 
@@ -162,6 +163,11 @@ public class NiftyRenderDeviceJava2D implements NiftyRenderDevice {
   public void activateCustomShader(String shaderId) {
     // TODO Auto-generated method stub
     
+  }
+
+  @Override
+  public NiftyFont createFont(final String name) {
+    return null;
   }
 
   @Override

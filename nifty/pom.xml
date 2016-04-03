@@ -13,11 +13,6 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>org.jglfont</groupId>
-      <artifactId>jglfont-core</artifactId>
-      <version>1.4</version>
-    </dependency>
-    <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
       <version>2.0.2</version>

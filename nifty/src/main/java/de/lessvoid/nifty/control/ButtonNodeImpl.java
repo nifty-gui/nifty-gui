@@ -28,7 +28,7 @@ package de.lessvoid.nifty.control;
 
 import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.NiftyCanvasPainter;
-import de.lessvoid.nifty.NiftyFont;
+import de.lessvoid.nifty.spi.NiftyFont;
 import de.lessvoid.nifty.NiftyNodeBuilder;
 import de.lessvoid.nifty.node.NiftyContentNode;
 import de.lessvoid.nifty.spi.node.NiftyControlNodeImpl;

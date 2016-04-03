@@ -26,9 +26,9 @@
  */
 package de.lessvoid.niftyinternal.render;
 
-import javax.annotation.Nonnull;
+import de.lessvoid.nifty.spi.NiftyFont;
 
-import de.lessvoid.nifty.NiftyFont;
+import javax.annotation.Nonnull;
 
 public class FontHelper {
 

@@ -24,15 +24,16 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.nifty;
+package de.lessvoid.nifty.spi;
 
-import org.jglfont.JGLFont;
+import de.lessvoid.niftyinternal.render.batch.BatchManager;
 
-import de.lessvoid.niftyinternal.accessor.NiftyFontAccessor;
+public interface NiftyFont {
+  int getCharacterWidth(char currentCharacter, char nextCharacter, float size);
 
-final class InternalNiftyFontAccessorImpl extends NiftyFontAccessor {
-    @Override
-    public JGLFont getJGLFont(final NiftyFont niftyFont) {
-      return niftyFont.getJGLFont();
-    }
+  int getWidth(String text);
+
+  int getHeight();
+
+  void renderText(final BatchManager batchManager, int x, int y, String text, float textSize, float textSize1, float red, float green, float blue, float alpha);
 }

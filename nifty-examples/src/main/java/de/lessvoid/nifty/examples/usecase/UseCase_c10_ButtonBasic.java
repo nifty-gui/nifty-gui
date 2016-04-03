@@ -27,7 +27,6 @@
 package de.lessvoid.nifty.examples.usecase;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.NiftyNodeCallback;
 import de.lessvoid.nifty.control.ButtonNode;
 import de.lessvoid.nifty.node.NiftyTransformationNode;
 import de.lessvoid.nifty.types.NiftyColor;
@@ -51,7 +50,7 @@ public class UseCase_c10_ButtonBasic {
   public UseCase_c10_ButtonBasic(final Nifty nifty) throws IOException {
     NiftyTransformationNode rootTransformation = transformationNode();
     ButtonNode button = button(nifty.createFont("fonts/aurulent-sans-16.fnt"), "Hello Nifty GUI");
-
+/*
     nifty.startAnimated(0, 15, rootTransformation, new NiftyNodeCallback<Float, NiftyTransformationNode>() {
       private float angle = 0;
       @Override
@@ -59,7 +58,7 @@ public class UseCase_c10_ButtonBasic {
         niftyTransformationNode.setAngleZ(angle+=2);
       }
     });
-
+*/
     nifty
       .addNode(backgroundFillColor(NiftyColor.fromString("#ccc")))
         .addNode(contentNode())

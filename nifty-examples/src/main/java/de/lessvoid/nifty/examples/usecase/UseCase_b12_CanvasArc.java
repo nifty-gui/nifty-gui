@@ -29,7 +29,7 @@ package de.lessvoid.nifty.examples.usecase;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyCanvas;
 import de.lessvoid.nifty.NiftyCanvasPainter;
-import de.lessvoid.nifty.NiftyFont;
+import de.lessvoid.nifty.spi.NiftyFont;
 import de.lessvoid.nifty.NiftyNodeCallback;
 import de.lessvoid.nifty.node.Horizontal;
 import de.lessvoid.nifty.node.NiftyContentNode;

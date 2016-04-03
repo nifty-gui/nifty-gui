@@ -35,6 +35,9 @@ import com.lessvoid.coregl.CoreShaderManager;
 import com.lessvoid.coregl.CoreVAO;
 import com.lessvoid.coregl.CoreVAO.FloatType;
 import com.lessvoid.coregl.spi.CoreGL;
+import de.lessvoid.nifty.NiftyRuntimeException;
+import de.lessvoid.nifty.renderer.opengl.font.jglfont.JGLFontFactory;
+import de.lessvoid.nifty.spi.NiftyFont;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 import de.lessvoid.nifty.types.NiftyCompositeOperation;
@@ -53,6 +56,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -547,6 +551,16 @@ public class NiftyRenderDeviceOpenGL implements NiftyRenderDevice {
 
     coreRender.renderTriangles(3 * 2);
     vaoCustomShader.unbind();
+  }
+
+  @Override
+  public NiftyFont createFont(final String name) {
+    JGLFontFactory fontFactory = new JGLFontFactory(new NiftyFontJGLFontRenderer(this));
+    try {
+      return new NiftyFontJGLFont(fontFactory.loadFont(resourceLoader.getResourceAsStream(name), name, 12), name);
+    } catch (IOException e) {
+      throw new NiftyRuntimeException(e);
+    }
   }
 
   @Override

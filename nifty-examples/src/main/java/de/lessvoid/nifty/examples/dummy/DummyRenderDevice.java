@@ -1,5 +1,6 @@
 package de.lessvoid.nifty.examples.dummy;
 
+import de.lessvoid.nifty.spi.NiftyFont;
 import de.lessvoid.nifty.spi.NiftyRenderDevice;
 import de.lessvoid.nifty.spi.NiftyTexture;
 import de.lessvoid.nifty.types.*;
@@ -149,6 +150,11 @@ public class DummyRenderDevice implements NiftyRenderDevice {
 
   @Override
   public void activateCustomShader(String shaderId) {
+  }
+
+  @Override
+  public NiftyFont createFont(final String name) {
+    return null;
   }
 
   @Override

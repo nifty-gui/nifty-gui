@@ -24,37 +24,36 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.lessvoid.niftyinternal.render.font;
+package de.lessvoid.nifty.renderer.opengl;
 
+import de.lessvoid.nifty.renderer.opengl.font.jglfont.spi.JGLFontRenderer;
+import de.lessvoid.nifty.spi.NiftyRenderDevice;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
+import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
+import de.lessvoid.nifty.spi.NiftyTexture;
+import de.lessvoid.nifty.types.NiftyColor;
+import de.lessvoid.nifty.types.NiftyMutableColor;
+import de.lessvoid.niftyinternal.common.ColorValueParser;
+import de.lessvoid.niftyinternal.math.Mat4;
+import de.lessvoid.niftyinternal.render.batch.BatchManager;
+
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-
-import org.jglfont.spi.JGLFontRenderer;
-
-import de.lessvoid.nifty.types.NiftyColor;
-import de.lessvoid.nifty.types.NiftyMutableColor;
-import de.lessvoid.niftyinternal.common.ColorValueParser;
-import de.lessvoid.niftyinternal.math.Mat4;
-import de.lessvoid.niftyinternal.render.batch.BatchManager;
-import de.lessvoid.nifty.spi.NiftyRenderDevice;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.FilterMode;
-import de.lessvoid.nifty.spi.NiftyRenderDevice.PreMultipliedAlphaMode;
-import de.lessvoid.nifty.spi.NiftyTexture;
-
-public class FontRenderer implements JGLFontRenderer {
+// FIXME font
+public class NiftyFontJGLFontRenderer implements JGLFontRenderer {
+  private final NiftyRenderDevice renderDevice;
   private final Map<String, BitmapInfo> textureInfos = new HashMap<>();
   private final ColorValueParser colorValueParser = new ColorValueParser();
-  private final NiftyRenderDevice renderDevice;
   private final NiftyMutableColor textColor = new NiftyMutableColor(NiftyColor.white());
   private boolean hasColor;
   private BatchManager batchManager;
 
-  public FontRenderer(final NiftyRenderDevice renderDevice) {
+  public NiftyFontJGLFontRenderer(final NiftyRenderDevice renderDevice) {
     this.renderDevice = renderDevice;
   }
 

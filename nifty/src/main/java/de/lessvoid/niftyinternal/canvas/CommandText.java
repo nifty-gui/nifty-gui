@@ -26,7 +26,7 @@
  */
 package de.lessvoid.niftyinternal.canvas;
 
-import de.lessvoid.nifty.NiftyFont;
+import de.lessvoid.nifty.spi.NiftyFont;
 
 public class CommandText implements Command {
   private final NiftyFont font;
