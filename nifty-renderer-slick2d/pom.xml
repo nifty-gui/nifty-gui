@@ -31,9 +31,9 @@
             <version>1.4.2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>slick</groupId>
-            <artifactId>slick</artifactId>
-            <version>20121001-264</version>
+            <groupId>org.slick2d</groupId>
+            <artifactId>slick2d-core</artifactId>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.lwjgl.lwjgl</groupId>
