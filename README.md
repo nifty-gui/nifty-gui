@@ -8,7 +8,7 @@ As of Nifty 1.4.2 we're targeting a Maven central release. It's not released yet
 <version>1.4.2-SNAPSHOT</version>
 ```
 
-You'll still need to add both repositories to your pom.xml for now, at least:
+To use SNAPSHOT builds of Nifty you'll still need to add the Sonatype snapshots repositories to your pom.xml. This step is not necessary after 1.4.2 has been released.
 
 ```XML
   <repositories>
