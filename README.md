@@ -17,12 +17,6 @@ You'll still need to add both repositories to your pom.xml for now, at least:
       <id>ossrh</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </repository>
-
-    <!-- still needed for some other dependencies not yet available in central like jglfont -->
-    <repository>
-      <id>nifty-maven-repo.sourceforge.net</id>
-      <url>http://nifty-gui.sourceforge.net/nifty-maven-repo</url>
-    </repository>
   </repositories>
 ```
 

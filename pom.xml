@@ -111,10 +111,6 @@
       <id>ossrh</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </repository>
-    <repository>
-      <id>nifty-maven-repo.sourceforge.net</id>
-      <url>http://nifty-gui.sourceforge.net/nifty-maven-repo</url>
-    </repository>
   </repositories>
   <profiles>
     <!-- profile for release signing all artifacts -->
