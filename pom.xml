@@ -52,6 +52,39 @@
     <maven.compiler.target>1.6</maven.compiler.target>
   </properties>
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.10.3</version>
+          <configuration>
+            <additionalparam>-Xdoclint:none</additionalparam>
+            <links>
+              <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+              <link>http://docs.oracle.com/javase/6/docs/api/</link>
+            </links>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.5</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-ssh</artifactId>
+              <version>2.0</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>2.3.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
@@ -114,7 +147,16 @@
   </repositories>
   <profiles>
     <!-- profile for release signing all artifacts -->
-    <!-- remember to call with: mvn release:perform -Darguments="-Dpgp.secretkey=keyfile:nifty-gui-private.asc -Dpgp.passphrase=literal:PASSWORD" -->
+    <!--
+          remember the following steps for a hopefully successful release:
+          a) ssh -t void256,nifty-gui@shell.sourceforge.net create
+          b) exit shell / remote shell should still be available
+          c) mvn site:site site:deploy    # just to make sure everything runs smoothly with the site plugin
+          d) mvn javadoc:jar              # just to make sure everything runs smoothly with the javadoc plugin
+          e) git pull origin 1.4          # just to make sure we're updated since the release plugin will git push stuff
+          f) mvn clean release:prepare
+          g) mvn release:perform -Darguments="-Dpgp.secretkey=keyfile:nifty-gui-private.asc -Dpgp.passphrase=literal:PASSWORD"
+    -->
     <profile>
       <id>release-sign-artifacts</id>
       <activation>
