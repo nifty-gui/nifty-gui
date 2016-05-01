@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.github.nifty-gui</groupId>
     <artifactId>nifty-main</artifactId>
-    <version>1.4.2</version>
+    <version>1.4.2-SNAPSHOT</version>
   </parent>
   <artifactId>nifty</artifactId>
   <packaging>jar</packaging>
