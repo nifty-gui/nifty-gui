@@ -7,6 +7,7 @@
     </parent>
     <artifactId>nifty-slick2d-renderer</artifactId>
     <name>Nifty Renderer for Slick2D</name>
+    <description>Nifty Renderer for Slick2D</description>
     <build>
         <plugins>
             <plugin>

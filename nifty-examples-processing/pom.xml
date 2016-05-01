@@ -10,6 +10,7 @@
   <artifactId>nifty-examples-processing</artifactId>
   <name>nifty-examples-processing</name>
   <url>http://maven.apache.org</url>
+  <description>Nifty Processing Examples</description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

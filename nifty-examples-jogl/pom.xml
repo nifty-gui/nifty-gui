@@ -6,6 +6,7 @@
     <version>1.4.2-SNAPSHOT</version>
   </parent>
   <artifactId>nifty-examples-jogl</artifactId>
+  <description />
   <properties>
     <jogamp.version>2.3.2</jogamp.version>
   </properties>

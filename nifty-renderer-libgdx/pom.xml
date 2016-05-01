@@ -11,7 +11,7 @@
 
     <artifactId>nifty-libgdx-renderer</artifactId>
     <name>Nifty Renderer for libGDX</name>
-
+    <description>Nifty Renderer for libGDX</description>
     <repositories>
         <repository>
             <id>gdx-releases</id>

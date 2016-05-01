@@ -8,6 +8,7 @@
     <artifactId>nifty-style-black</artifactId>
     <name>Nifty Controls Style Definition (Black)</name>
     <url>http://nifty-gui.sourceforge.net/nifty-style-black/project-info.html</url>
+    <description />
     <build>
         <plugins>
             <plugin>

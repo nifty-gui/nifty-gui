@@ -8,7 +8,7 @@
         <artifactId>nifty-main</artifactId>
         <version>1.4.2-SNAPSHOT</version>
     </parent>
-
+    <description />
     <artifactId>nifty-examples-libgdx</artifactId>
     <packaging>pom</packaging>
     <name>Nifty Examples for LibGDX - Main Parent</name>

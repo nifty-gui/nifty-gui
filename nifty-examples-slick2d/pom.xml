@@ -8,6 +8,7 @@
     </parent>
     <artifactId>nifty-examples-slick2d</artifactId>
     <name>Nifty Examples for Slick2D</name>
+    <description>Nifty Examples for Slick2D</description>
     <dependencies>
         <dependency>
             <groupId>com.github.nifty-gui</groupId>

@@ -7,6 +7,7 @@
     </parent>
     <artifactId>nifty-openal-soundsystem</artifactId>
     <name>Nifty Sound Device for OpenAL using LWJGL</name>
+    <description>Nifty Sound Device for OpenAL using LWJGL</description>
     <dependencies>
         <dependency>
             <groupId>ibxm</groupId>

@@ -7,6 +7,7 @@
     </parent>
     <name>Nifty Renderer for Java2d</name>
     <artifactId>nifty-java2d-renderer</artifactId>
+    <description>Nifty Renderer for Java2d</description>
     <dependencies>
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
