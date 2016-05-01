@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.nifty-gui</groupId>
         <artifactId>nifty-examples-libgdx</artifactId>
-        <version>1.4.2-SNAPSHOT</version>
+        <version>1.4.2</version>
     </parent>
 
     <artifactId>nifty-examples-libgdx-desktop</artifactId>
