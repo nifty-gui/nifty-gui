@@ -3,7 +3,7 @@
     <parent>
         <groupId>com.github.nifty-gui</groupId>
         <artifactId>nifty-main</artifactId>
-        <version>1.4.2</version>
+        <version>1.4.3-SNAPSHOT</version>
     </parent>
     <artifactId>nifty-pauls-soundsystem</artifactId>
     <name>Nifty Sound Device for Pauls-Soundsystem</name>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty</artifactId>
-            <version>1.4.2</version>
+            <version>1.4.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <reporting>
