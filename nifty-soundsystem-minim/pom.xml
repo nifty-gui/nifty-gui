@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.github.nifty-gui</groupId>
     <artifactId>nifty-main</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
   </parent>
   <artifactId>nifty-minim-soundsystem</artifactId>
   <name>Nifty Sound Device for Processing (minim)</name>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty</artifactId>
-      <version>1.4.3-SNAPSHOT</version>
+      <version>1.4.2-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
