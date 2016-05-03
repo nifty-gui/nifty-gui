@@ -1,5 +1,7 @@
 # Nifty GUI
 
+Nifty is available in the Maven central:
+
 ```XML
 <groupId>com.github.nifty-gui</groupId>
 <artifactId>nifty</artifactId>
