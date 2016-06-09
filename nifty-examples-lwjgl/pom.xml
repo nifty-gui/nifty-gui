@@ -7,41 +7,42 @@
     <relativePath>..</relativePath>
   </parent>
   <artifactId>nifty-examples-lwjgl</artifactId>
-  <name>Nifty Examples</name>
+  <name>Nifty Examples for LWJGL</name>
   <description>Lots of Nifty example code! You can find the source for nearly all demos/tutorials in here.</description>
   <properties>
-    <nifty-version>1.4.2</nifty-version>
+      <!-- default for command line, overwritten by Netbeans -->
+      <exec.args>-jar ${basedir}/target/${project.artifactId}-${project.version}.jar</exec.args>
   </properties>
   <dependencies>
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty</artifactId>
-      <version>${nifty-version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-examples</artifactId>
-      <version>${nifty-version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-lwjgl-renderer</artifactId>
-      <version>${nifty-version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-style-black</artifactId>
-      <version>${nifty-version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-default-controls</artifactId>
-      <version>${nifty-version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-openal-soundsystem</artifactId>
-      <version>${nifty-version}</version>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
   <build>
@@ -74,10 +75,10 @@
             This plugin detects if you have the maven plugin configured, and if you do
             it executes the unpacking of natives, and configures the Native Library Location.
 
-            This will allow you to run the examples from within eclipse without any more
-            setup of LWJGL required! Just execute the individual examples like any other
-            Java application from eclipse. Done! :) 
-           -->
+           This will allow you to run the examples from within eclipse without any more
+           setup of LWJGL required! Just execute the individual examples like any other
+           Java application from eclipse. Done! :) 
+          -->
           <execution>
             <id>unpacknatives</id>
             <phase>generate-resources</phase>
@@ -85,6 +86,56 @@
               <goal>copy</goal>
             </goals>
           </execution>
+        </executions>
+      </plugin>
+      
+      <!-- to make the example run via "mvn exec:exec", we need to put the potentially too long classpath into
+      a manifest: -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>            
+      <plugin> 
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>de.lessvoid.nifty.examples.lwjgl.all.AllDemoMain</mainClass>
+              <classpathPrefix>dependency/</classpathPrefix>
+              <classpathLayoutType>custom</classpathLayoutType>
+              <customClasspathLayout>${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}</customClasspathLayout>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+            
+      <!-- use "mvn exec:exec" to run the example -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>  
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <executions>  
+          <execution>
+            <id>default-cli</id>
+            <configuration>
+              <executable>java</executable>
+              <!-- this way it works with netbeans "run file" out of the box: -->
+              <commandlineArgs>-Djava.library.path=${basedir}/target/natives ${exec.args}</commandlineArgs>
+            </configuration>  
+          </execution>  
         </executions>
       </plugin>
     </plugins>

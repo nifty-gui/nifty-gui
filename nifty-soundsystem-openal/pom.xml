@@ -9,9 +9,9 @@
     <name>Nifty Sound Device for OpenAL using LWJGL</name>
     <dependencies>
         <dependency>
-            <groupId>ibxm</groupId>
-            <artifactId>ibxm</artifactId>
-            <version>unknown</version>
+            <groupId>org.slick2d</groupId>
+            <artifactId>slick2d-core</artifactId>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
@@ -50,10 +50,4 @@
             </plugin>
         </plugins>
     </reporting>
-    <repositories>
-        <repository>
-            <id>b2s-repo</id>
-            <url>http://b2s-repo.googlecode.com/svn/trunk/mvn-repo</url>
-        </repository>
-    </repositories>
 </project>

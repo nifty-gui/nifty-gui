@@ -9,24 +9,21 @@
   <artifactId>nifty-examples</artifactId>
   <name>Nifty Examples</name>
   <description>Lots of Nifty example code! You can find the source for nearly all demos/tutorials in here.</description>
-  <properties>
-    <nifty-version>1.4.2</nifty-version>
-  </properties>
   <dependencies>
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty</artifactId>
-      <version>${nifty-version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-style-black</artifactId>
-      <version>${nifty-version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-default-controls</artifactId>
-      <version>${nifty-version}</version>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 </project>
