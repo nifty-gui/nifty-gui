@@ -5,6 +5,9 @@ import java.util.List;
 
 public class ListBuilder {
 
+  private ListBuilder() {
+  }
+
   /**
    * Make a comma separated String from the list of given Strings.
    * @param values the values to convert into a comma separated String
