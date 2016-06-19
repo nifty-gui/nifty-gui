@@ -6,6 +6,8 @@ import de.lessvoid.nifty.spi.render.RenderFont;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -106,16 +108,16 @@ public interface DropDown<T> extends NiftyControl {
   /**
    * Add all items to the DropDown.
    *
-   * @param itemsToAdd all items to add
+   * @param itemsToAdd collection of items to add
    */
-  void addAllItems(@Nonnull List<T> itemsToAdd);
+  void addAllItems(@Nonnull Collection<T> itemsToAdd);
 
   /**
    * Remove all items given in the List from this DropDown.
    *
-   * @param itemsToRemove list of items to remove
+   * @param itemsToRemove collection of items to remove
    */
-  void removeAllItems(@Nonnull List<T> itemsToRemove);
+  void removeAllItems(@Nonnull Collection<T> itemsToRemove);
 
   /**
    * You'll need to implement this interface to change the way your model class T needs

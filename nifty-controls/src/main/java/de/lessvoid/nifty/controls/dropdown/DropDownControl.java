@@ -1,22 +1,29 @@
 package de.lessvoid.nifty.controls.dropdown;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.*;
+import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.FocusHandler;
+import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.listbox.ListBoxControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @deprecated Please use {@link de.lessvoid.nifty.controls.DropDown} when accessing NiftyControls.
@@ -356,7 +363,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
   }
 
   @Override
-  public void addAllItems(@Nonnull final List<T> itemsToAdd) {
+  public void addAllItems(@Nonnull final Collection<T> itemsToAdd) {
     if (listBox == null) {
       if (!isBound()) {
         throw new IllegalStateException("Can't add items before the binding is done.");
@@ -370,7 +377,7 @@ public class DropDownControl<T> extends AbstractController implements DropDown<T
   }
 
   @Override
-  public void removeAllItems(@Nonnull final List<T> itemsToRemove) {
+  public void removeAllItems(@Nonnull final Collection<T> itemsToRemove) {
     if (listBox == null) {
       if (!isBound()) {
         throw new IllegalStateException("Can't remove items before the binding is done.");
