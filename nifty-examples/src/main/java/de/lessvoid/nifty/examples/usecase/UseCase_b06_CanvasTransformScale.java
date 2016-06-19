@@ -67,7 +67,10 @@ public class UseCase_b06_CanvasTransformScale {
             }));
   }
 
-  public static void main(final String[] args) throws Exception {
+    private UseCase_b06_CanvasTransformScale() {
+    }
+
+    public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b06_CanvasTransformScale.class, args);
   }
 }

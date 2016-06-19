@@ -62,6 +62,9 @@ public class UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes {
                     .addNode(contentNode());
   }
 
+  private UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a02_QuarterRootNodeWithTwoHorizontalChildNodes.class, args);
   }

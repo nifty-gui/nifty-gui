@@ -87,6 +87,9 @@ public class UseCase_l03_DockLayoutCenter {
                 .addNode(contentNode());
   }
 
+  private UseCase_l03_DockLayoutCenter() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_l03_DockLayoutCenter.class, args);
   }

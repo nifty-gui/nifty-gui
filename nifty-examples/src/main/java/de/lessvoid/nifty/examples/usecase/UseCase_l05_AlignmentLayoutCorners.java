@@ -79,6 +79,9 @@ public final class UseCase_l05_AlignmentLayoutCorners {
                   .addNode(contentNode());
   }
 
+  private UseCase_l05_AlignmentLayoutCorners() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_l05_AlignmentLayoutCorners.class, args);
   }

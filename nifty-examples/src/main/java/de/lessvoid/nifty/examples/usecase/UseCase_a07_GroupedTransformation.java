@@ -94,6 +94,9 @@ public class UseCase_a07_GroupedTransformation {
     });
   }
 
+  private UseCase_a07_GroupedTransformation() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a07_GroupedTransformation.class, args, new NiftyConfiguration().clearScreen(true));
   }

@@ -64,6 +64,9 @@ public class UseCase_a04_RotatingRootNode {
                   .addNode(contentNode());
   }
 
+  private UseCase_a04_RotatingRootNode() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a04_RotatingRootNode.class, args, new NiftyConfiguration().clearScreen(true));
   }

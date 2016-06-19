@@ -82,6 +82,9 @@ public class UseCase_b02_CanvasLinearGradient {
 
   }
 
+  private UseCase_b02_CanvasLinearGradient() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b02_CanvasLinearGradient.class, args);
   }

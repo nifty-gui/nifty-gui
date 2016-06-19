@@ -97,6 +97,9 @@ public final class UseCase_l06_AlignmentLayoutStretching {
                   .addNode(contentNode());
   }
 
+  private UseCase_l06_AlignmentLayoutStretching() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_l06_AlignmentLayoutStretching.class, args);
   }

@@ -82,6 +82,9 @@ public class UseCase_l01_DockLayoutSimple {
                   .addNode(contentNode());
   }
 
+  private UseCase_l01_DockLayoutSimple() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_l01_DockLayoutSimple.class, args);
   }

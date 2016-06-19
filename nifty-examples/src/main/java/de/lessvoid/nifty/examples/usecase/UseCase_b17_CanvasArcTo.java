@@ -81,6 +81,9 @@ public class UseCase_b17_CanvasArcTo {
     });
   }
 
+  private UseCase_b17_CanvasArcTo() {
+  }
+
   public static void main(final String[] args) throws Exception {
     de.lessvoid.nifty.examples.usecase.UseCaseRunner.run(UseCase_b17_CanvasArcTo.class, args);
   }

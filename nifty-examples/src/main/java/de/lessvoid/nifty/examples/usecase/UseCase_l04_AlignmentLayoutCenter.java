@@ -54,6 +54,9 @@ public final class UseCase_l04_AlignmentLayoutCenter {
                 .addNode(contentNode());
   }
 
+  private UseCase_l04_AlignmentLayoutCenter() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_l04_AlignmentLayoutCenter.class, args);
   }

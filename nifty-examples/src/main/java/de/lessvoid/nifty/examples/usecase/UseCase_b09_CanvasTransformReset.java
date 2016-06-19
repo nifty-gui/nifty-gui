@@ -73,7 +73,10 @@ public class UseCase_b09_CanvasTransformReset {
             }));
   }
 
-  public static void main(final String[] args) throws Exception {
+    private UseCase_b09_CanvasTransformReset() {
+    }
+
+    public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b09_CanvasTransformReset.class, args);
   }
 }

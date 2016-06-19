@@ -111,6 +111,9 @@ public class UseCase_a05_RotatingChildNode {
     });
   }
 
+  private UseCase_a05_RotatingChildNode() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(
         UseCase_a05_RotatingChildNode.class,

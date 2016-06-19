@@ -44,6 +44,9 @@ public class UseCase_a01_FullScreenColorNode {
           .addNode(contentNode());
   }
 
+  private UseCase_a01_FullScreenColorNode() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_a01_FullScreenColorNode.class, args);
   }

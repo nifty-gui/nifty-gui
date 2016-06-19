@@ -84,6 +84,9 @@ public class UseCase_b03_CanvasText {
         }));
   }
 
+  private UseCase_b03_CanvasText() {
+  }
+
   public static void main(final String[] args) throws Exception {
     UseCaseRunner.run(UseCase_b03_CanvasText.class, args);
   }
