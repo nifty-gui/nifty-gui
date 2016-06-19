@@ -37,11 +37,35 @@ public class Lwjgl3InputSystem implements InputSystem {
   private final ConcurrentLinkedQueue<KeyboardInputEvent> keyboardEventsOut = new
       ConcurrentLinkedQueue<KeyboardInputEvent>();
   
+  public final GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
+    @Override
+    public void invoke(long window, int key, int scancode, int action, int mods) {
+      keyboardEventsOut.offer(createKeyEvent(key, scancode, action, mods));
+    }
+  };
+  
+  public final GLFWCursorPosCallback cursorPosCallback = new GLFWCursorPosCallback() {
+    @Override
+    public void invoke(long window, double xpos, double ypos) {
+      mouseEventsOut.offer(createMouseEvent((float)xpos, (float)ypos));
+    }
+  };
+  
+  public final GLFWMouseButtonCallback mouseButtonCallback = new GLFWMouseButtonCallback() {
+    @Override
+    public void invoke(long window, int button, int action, int mods) {
+      mouseEventsOut.offer(createMouseEvent(button, action == GLFW_PRESS));
+    }
+  };
+  
+  public final GLFWScrollCallback scrollCallback = new GLFWScrollCallback(){
+    @Override
+    public void invoke(long window, double xoffset, double yoffset) {
+      mouseEventsOut.offer(createMouseEvent((int) yoffset));
+    }
+  };
+  
   private boolean initialized = false;
-  
-  
-  public boolean niftyHasKeyboardFocus = true;
-  public boolean niftyTakesKeyboardFocusOnClick = false;
   
   public Lwjgl3InputSystem (final long glfwWindow) {
     this.glfwWindow = glfwWindow;
@@ -53,38 +77,7 @@ public class Lwjgl3InputSystem implements InputSystem {
 
   public void startup() throws Exception {
     log.finer("Initializing LWJGL3 input system...");
-    glfwSetKeyCallback(glfwWindow, new GLFWKeyCallback() {
-
-      @Override
-      public void invoke(long window, int key, int scancode, int action, int mods) {
-        keyboardEventsOut.offer(createKeyEvent(key, scancode, action, mods));
-      }
-      
-    });
-    glfwSetCursorPosCallback(glfwWindow, new GLFWCursorPosCallback() {
-
-      @Override
-      public void invoke(long window, double xpos, double ypos) {
-        mouseEventsOut.offer(createMouseEvent((float)xpos, (float)ypos));
-      }
-      
-    });
-    glfwSetMouseButtonCallback(glfwWindow, new GLFWMouseButtonCallback() {
-
-      @Override
-      public void invoke(long window, int button, int action, int mods) {
-        mouseEventsOut.offer(createMouseEvent(button, action == GLFW_PRESS));
-      }
-      
-    });
-    glfwSetScrollCallback(glfwWindow, new GLFWScrollCallback() {
-
-      @Override
-      public void invoke(long window, double xoffset, double yoffset) {
-        mouseEventsOut.offer(createMouseEvent((int) yoffset));
-      }
-      
-    });
+    
     initialized = true;
   }
 
@@ -92,12 +85,6 @@ public class Lwjgl3InputSystem implements InputSystem {
     log.finer("Shutting down LWJGL3 input system...");
     mouseEventsOut.clear();
     keyboardEventsOut.clear();
-    
-    // remove existing callback functions
-    glfwSetKeyCallback(glfwWindow, null);
-    glfwSetCursorPosCallback(glfwWindow, null);
-    glfwSetMouseButtonCallback(glfwWindow, null);
-    glfwSetScrollCallback(glfwWindow, null);
     
     initialized = false;
   }
