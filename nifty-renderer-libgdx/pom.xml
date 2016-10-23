@@ -20,7 +20,7 @@
     </repositories>
 
     <properties>
-        <gdx.version>0.9.9</gdx.version>
+        <gdx.version>1.9.4</gdx.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

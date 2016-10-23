@@ -15,12 +15,12 @@
 
     <properties>
         <skip.integration.tests>false</skip.integration.tests>
-        <gdx.version>0.9.9</gdx.version>
+        <gdx.version>1.9.4</gdx.version>
         <android.version>4.1.1.4</android.version>
         <android.maven.version>3.6.0</android.maven.version>
         <gwt.version>2.5.0</gwt.version>
         <gwt.maven.version>2.5.0</gwt.maven.version>
-        <niftyGui.version>1.4.2</niftyGui.version>
+        <niftyGui.version>1.4.3-SNAPSHOT</niftyGui.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
