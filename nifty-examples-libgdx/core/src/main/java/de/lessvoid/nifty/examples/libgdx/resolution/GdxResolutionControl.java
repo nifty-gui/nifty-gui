@@ -2,17 +2,15 @@ package de.lessvoid.nifty.examples.libgdx.resolution;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.utils.Array;
-
 import de.lessvoid.nifty.examples.libgdx.resolution.GdxResolutionControl.Resolution;
 import de.lessvoid.nifty.examples.resolution.ResolutionControl;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * @author Aaron Mahan &lt;aaron@forerunnergames.com&gt;
@@ -100,14 +98,14 @@ public class GdxResolutionControl implements ResolutionControl<Resolution> {
 
     // Returns true if the resolution was successfully applied, false otherwise.
     public boolean apply() {
-      boolean wasApplied = Gdx.graphics.setDisplayMode(width, height, false);
+      boolean wasApplied = Gdx.graphics.setWindowedMode(width, height);
       if (wasApplied) {
-        Gdx.gl10.glViewport(0, 0, width, height);
-        Gdx.gl10.glMatrixMode(GL10.GL_PROJECTION);
-        Gdx.gl10.glLoadIdentity();
-        Gdx.gl10.glOrthof(0.0f, (float) width, height, 0.0f, -9999.0f, 9999.0f);
-        Gdx.gl10.glMatrixMode(GL10.GL_MODELVIEW);
-        Gdx.gl10.glLoadIdentity();
+        Gdx.gl.glViewport(0, 0, width, height);
+/*        Gdx.gl.glMatr(GL11.GL_PROJECTION);
+        Gdx.gl.glLoadIdentity();
+        Gdx.gl.glOrthof(0.0f, (float) width, height, 0.0f, -9999.0f, 9999.0f);
+        Gdx.gl.glMatrixMode(GL11.GL_MODELVIEW);
+        Gdx.gl.glLoadIdentity();*/
       }
       return wasApplied;
     }

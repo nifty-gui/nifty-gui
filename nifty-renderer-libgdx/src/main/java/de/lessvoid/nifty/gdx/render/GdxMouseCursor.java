@@ -39,7 +39,7 @@ public final class GdxMouseCursor implements MouseCursor {
   public void enable() {
     try {
       if (cursorImage.hasPixmap()) {
-        Gdx.input.setCursorImage(cursorImage.getPixmap(), hotspotX, hotspotY);
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(cursorImage.getPixmap(), hotspotX, hotspotY));
       }
     } catch (GdxRuntimeException e) {
       log.log(Level.SEVERE, "Applying the mouse cursor failed!", e);
@@ -52,7 +52,7 @@ public final class GdxMouseCursor implements MouseCursor {
    */
   @Override
   public void disable() {
-    Gdx.input.setCursorImage(null, 0, 0);
+    Gdx.graphics.setCursor(Gdx.graphics.newCursor(null, hotspotX, hotspotY));
   }
 
   /**

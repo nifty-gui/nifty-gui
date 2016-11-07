@@ -11,7 +11,7 @@ import de.lessvoid.nifty.examples.libgdx.LibgdxExampleApplication;
 public class AllDemoMain {
   public static void main(String[] args) {
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-    config.useGL20 = false;
+    config.useGL30 = false;
     config.vSyncEnabled = true;
     config.width = 1024;
     config.height = 768;
