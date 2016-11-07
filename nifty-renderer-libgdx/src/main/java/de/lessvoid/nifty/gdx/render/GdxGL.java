@@ -1,22 +1,16 @@
 package de.lessvoid.nifty.gdx.render;
 
 import com.badlogic.gdx.Gdx;
-
 import com.badlogic.gdx.utils.BufferUtils;
 import de.lessvoid.nifty.render.batch.spi.GL;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
+import java.nio.*;
 
 public class GdxGL implements GL {
   @Override
   public int GL_ALPHA() {
-    return GL11.GL_ALPHA;
+    return Gdx.gl.GL_ALPHA;
   }
 
   @Override
@@ -26,7 +20,7 @@ public class GdxGL implements GL {
 
   @Override
   public int GL_BLEND() {
-    return GL11.GL_BLEND;
+    return Gdx.gl.GL_BLEND;
   }
 
   @Override
@@ -41,7 +35,7 @@ public class GdxGL implements GL {
 
   @Override
   public int GL_BYTE() {
-    return GL11.GL_BYTE;
+    return Gdx.gl.GL_BYTE;
   }
 
   @Override
@@ -51,47 +45,47 @@ public class GdxGL implements GL {
 
   @Override
   public int GL_COLOR_BUFFER_BIT() {
-    return GL11.GL_COLOR_BUFFER_BIT;
+    return Gdx.gl.GL_COLOR_BUFFER_BIT;
   }
 
   @Override
   public int GL_CULL_FACE() {
-    return GL11.GL_CULL_FACE;
+    return Gdx.gl.GL_CULL_FACE;
   }
 
   @Override
   public int GL_DEPTH_TEST() {
-    return GL11.GL_DEPTH_TEST;
+    return Gdx.gl.GL_DEPTH_TEST;
   }
 
   @Override
   public int GL_DST_COLOR() {
-    return GL11.GL_DST_COLOR;
+    return Gdx.gl.GL_DST_COLOR;
   }
 
   @Override
   public int GL_FALSE() {
-    return GL11.GL_FALSE;
+    return Gdx.gl.GL_FALSE;
   }
 
   @Override
   public int GL_FLOAT() {
-    return GL11.GL_FLOAT;
+    return Gdx.gl.GL_FLOAT;
   }
 
   @Override
   public int GL_INVALID_ENUM() {
-    return GL11.GL_INVALID_ENUM;
+    return Gdx.gl.GL_INVALID_ENUM;
   }
 
   @Override
   public int GL_INVALID_OPERATION() {
-    return GL11.GL_INVALID_OPERATION;
+    return Gdx.gl.GL_INVALID_OPERATION;
   }
 
   @Override
   public int GL_INVALID_VALUE() {
-    return GL11.GL_INVALID_VALUE;
+    return Gdx.gl.GL_INVALID_VALUE;
   }
 
   @Override
@@ -101,32 +95,32 @@ public class GdxGL implements GL {
 
   @Override
   public int GL_LINEAR() {
-    return GL11.GL_LINEAR;
+    return Gdx.gl.GL_LINEAR;
   }
 
   @Override
   public int GL_LINEAR_MIPMAP_LINEAR() {
-    return GL11.GL_LINEAR_MIPMAP_LINEAR;
+    return Gdx.gl.GL_LINEAR_MIPMAP_LINEAR;
   }
 
   @Override
   public int GL_LINEAR_MIPMAP_NEAREST() {
-    return GL11.GL_LINEAR_MIPMAP_NEAREST;
+    return Gdx.gl.GL_LINEAR_MIPMAP_NEAREST;
   }
 
   @Override
   public int GL_LUMINANCE() {
-    return GL11.GL_LUMINANCE;
+    return Gdx.gl.GL_LUMINANCE;
   }
 
   @Override
   public int GL_LUMINANCE_ALPHA() {
-    return GL11.GL_LUMINANCE_ALPHA;
+    return Gdx.gl.GL_LUMINANCE_ALPHA;
   }
 
   @Override
   public int GL_MAX_TEXTURE_SIZE() {
-    return GL11.GL_MAX_TEXTURE_SIZE;
+    return Gdx.gl.GL_MAX_TEXTURE_SIZE;
   }
 
   @Override
@@ -136,42 +130,42 @@ public class GdxGL implements GL {
 
   @Override
   public int GL_NEAREST() {
-    return GL11.GL_NEAREST;
+    return Gdx.gl.GL_NEAREST;
   }
 
   @Override
   public int GL_NEAREST_MIPMAP_LINEAR() {
-    return GL11.GL_NEAREST_MIPMAP_LINEAR;
+    return Gdx.gl.GL_NEAREST_MIPMAP_LINEAR;
   }
 
   @Override
   public int GL_NEAREST_MIPMAP_NEAREST() {
-    return GL11.GL_NEAREST_MIPMAP_NEAREST;
+    return Gdx.gl.GL_NEAREST_MIPMAP_NEAREST;
   }
 
   @Override
   public int GL_NO_ERROR() {
-    return GL11.GL_NO_ERROR;
+    return Gdx.gl.GL_NO_ERROR;
   }
 
   @Override
   public int GL_NOTEQUAL() {
-    return GL11.GL_NOTEQUAL;
+    return Gdx.gl.GL_NOTEQUAL;
   }
 
   @Override
   public int GL_ONE_MINUS_SRC_ALPHA() {
-    return GL11.GL_ONE_MINUS_SRC_ALPHA;
+    return Gdx.gl.GL_ONE_MINUS_SRC_ALPHA;
   }
 
   @Override
   public int GL_OUT_OF_MEMORY() {
-    return GL11.GL_OUT_OF_MEMORY;
+    return Gdx.gl.GL_OUT_OF_MEMORY;
   }
 
   @Override
   public int GL_POINTS() {
-    return GL11.GL_POINTS;
+    return Gdx.gl.GL_POINTS;
   }
 
   @Override
@@ -181,22 +175,22 @@ public class GdxGL implements GL {
 
   @Override
   public int GL_RGB() {
-    return GL11.GL_RGB;
+    return Gdx.gl.GL_RGB;
   }
 
   @Override
   public int GL_RGBA() {
-    return GL11.GL_RGBA;
+    return Gdx.gl.GL_RGBA;
   }
 
   @Override
   public int GL_SHORT() {
-    return GL11.GL_SHORT;
+    return Gdx.gl.GL_SHORT;
   }
 
   @Override
   public int GL_SRC_ALPHA() {
-    return GL11.GL_SRC_ALPHA;
+    return Gdx.gl.GL_SRC_ALPHA;
   }
 
   @Override
@@ -211,12 +205,12 @@ public class GdxGL implements GL {
 
   @Override
   public int GL_TEXTURE_2D() {
-    return GL11.GL_TEXTURE_2D;
+    return Gdx.gl.GL_TEXTURE_2D;
   }
 
   @Override
   public int GL_TEXTURE_BINDING_2D() {
-    return GL11.GL_TEXTURE_BINDING_2D;
+    return Gdx.gl.GL_TEXTURE_BINDING_2D;
   }
 
   @Override
@@ -226,57 +220,57 @@ public class GdxGL implements GL {
 
   @Override
   public int GL_TEXTURE_MAG_FILTER() {
-    return GL11.GL_TEXTURE_MAG_FILTER;
+    return Gdx.gl.GL_TEXTURE_MAG_FILTER;
   }
 
   @Override
   public int GL_TEXTURE_MIN_FILTER() {
-    return GL11.GL_TEXTURE_MIN_FILTER;
+    return Gdx.gl.GL_TEXTURE_MIN_FILTER;
   }
 
   @Override
   public int GL_TRIANGLES() {
-    return GL11.GL_TRIANGLES;
+    return Gdx.gl.GL_TRIANGLES;
   }
 
   @Override
   public int GL_TRIANGLE_STRIP() {
-    return GL11.GL_TRIANGLE_STRIP;
+    return Gdx.gl.GL_TRIANGLE_STRIP;
   }
 
   @Override
   public int GL_TRIANGLE_FAN() {
-    return GL11.GL_TRIANGLE_FAN;
+    return Gdx.gl.GL_TRIANGLE_FAN;
   }
 
   @Override
   public int GL_TRUE() {
-    return GL11.GL_TRUE;
+    return Gdx.gl.GL_TRUE;
   }
 
   @Override
   public int GL_UNSIGNED_BYTE() {
-    return GL11.GL_UNSIGNED_BYTE;
+    return Gdx.gl.GL_UNSIGNED_BYTE;
   }
 
   @Override
   public int GL_UNSIGNED_SHORT() {
-    return GL11.GL_UNSIGNED_SHORT;
+    return Gdx.gl.GL_UNSIGNED_SHORT;
   }
 
   @Override
   public int GL_UNSIGNED_SHORT_4_4_4_4() {
-    return GL12.GL_UNSIGNED_SHORT_4_4_4_4;
+    return Gdx.gl.GL_UNSIGNED_SHORT_4_4_4_4;
   }
 
   @Override
   public int GL_UNSIGNED_SHORT_5_5_5_1() {
-    return GL12.GL_UNSIGNED_SHORT_5_5_5_1;
+    return Gdx.gl.GL_UNSIGNED_SHORT_5_5_5_1;
   }
 
   @Override
   public int GL_UNSIGNED_SHORT_5_6_5() {
-    return GL12.GL_UNSIGNED_SHORT_5_6_5;
+    return Gdx.gl.GL_UNSIGNED_SHORT_5_6_5;
   }
 
   @Override
@@ -286,12 +280,12 @@ public class GdxGL implements GL {
 
   @Override
   public int GL_VIEWPORT() {
-    return GL11.GL_VIEWPORT;
+    return Gdx.gl.GL_VIEWPORT;
   }
 
   @Override
   public int GL_ZERO() {
-    return GL11.GL_ZERO;
+    return Gdx.gl.GL_ZERO;
   }
 
   @Override
