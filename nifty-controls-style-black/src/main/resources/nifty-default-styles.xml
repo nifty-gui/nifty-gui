@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-styles xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
     <useStyles filename="fonts.xml"/>
-    <useStyles filename="panel/nifty-panel.xml"/>
+    <useStyles filename="tabs/nifty-tabs.xml"/>
+    <!-- nifty-panel.xml is already imported by nifty-tabs.xml -->
+    <!-- <useStyles filename="panel/nifty-panel.xml"/> -->
     <useStyles filename="button/nifty-button.xml"/>
     <useStyles filename="label/nifty-label.xml"/>
     <useStyles filename="textfield/nifty-textfield.xml"/>
@@ -18,7 +20,6 @@
     <useStyles filename="listbox/nifty-listbox-style.xml"/>
     <useStyles filename="window/nifty-window.xml"/>
     <useStyles filename="hint/nifty-hint.xml"/>
-    <useStyles filename="tabs/nifty-tabs.xml"/>
     <useStyles filename="treebox/nifty-treebox.xml"/>
     <useStyles filename="messagebox/nifty-messagebox.xml"/>
 </nifty-styles>
