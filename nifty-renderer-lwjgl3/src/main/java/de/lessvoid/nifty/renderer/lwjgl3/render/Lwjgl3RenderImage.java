@@ -123,7 +123,7 @@ public class Lwjgl3RenderImage implements RenderImage {
     GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, magFilter);
     checkGLError();
 
-    GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, 4, width, height, 0, srcPixelFormat, GL11.GL_UNSIGNED_BYTE, textureBuffer);
+    GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, srcPixelFormat, GL11.GL_UNSIGNED_BYTE, textureBuffer);
 
     if (minFilter == GL11.GL_LINEAR_MIPMAP_LINEAR) {
       // FIXME: not compatible with GL versions < 3.0!!
