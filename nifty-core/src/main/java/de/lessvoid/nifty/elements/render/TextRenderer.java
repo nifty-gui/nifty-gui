@@ -53,7 +53,7 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
   private String[] textLines;
 
   /**
-   * If this line was started with a soft wrap (i.e. was created by a \n or just because there wasn't enough room)
+   * If this line was started with a soft wrap (i.e. was created by just because there wasn't enough room, not by a \n)
    */
   @Nullable
   private Boolean[] softWrapLines;
@@ -65,8 +65,15 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
 
   /**
    * can't remember what this is :>.
+   * (looks to be associated with left right scrolling within textfields
    */
   private int xOffsetHack = 0;
+
+  /**
+   * The number of lines the rendered area is offset by
+   * (effectively the number of lines to skip
+   */
+  private int yOffset = 0;
 
   /**
    * selection start.
@@ -248,7 +255,7 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
       int selectionStartThisLine = !anySelectionThisLine || (selectionStart == -1) ? -1 : clamp(selectionStart- charsSoFar, 0, line.length()-1);
       int selectionEndThisLine = !anySelectionThisLine || (selectionEnd == -1) ? -1 : clamp(selectionEnd-charsSoFar, 0, line.length());
 
-      int yy = w.getY() + y;
+      int yy = w.getY() + y + yOffset;
 
       if (Math.abs(xOffsetHack) > 0) {
         int fittingOffset = FontHelper.getVisibleCharactersFromStart(font, line, Math.abs(xOffsetHack), 1.0f);
@@ -410,6 +417,11 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
    */
   public void setxOffsetHack(final int newXoffsetHack) {
     this.xOffsetHack = newXoffsetHack;
+  }
+
+
+  public void setyOffset(int yOffset) {
+    this.yOffset = yOffset;
   }
 
   /**

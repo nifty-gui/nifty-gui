@@ -35,7 +35,22 @@ public class SplitLinesDetails {
     public LineDetails getLineDetail(int lineNumber){
         return lineDetails.get(lineNumber);
     }
-    
+
+    /**
+     * Produces from the lineToStart to the end of the string
+     */
+    public String subStringByLine(int lineToStart){
+        StringBuilder builder = new StringBuilder();
+        for(int i=lineToStart; i<lineDetails.size(); i++){
+            builder.append(lineDetails.get(i));
+
+            if(i<=lineDetails.size()-1){
+                builder.append('\n');
+            }
+        }
+        return builder.toString();
+    }
+
     static List<LineDetails> calculateLineStarts(String text){
         List<LineDetails> lineDetails = new ArrayList<LineDetails>();
         

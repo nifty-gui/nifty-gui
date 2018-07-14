@@ -34,6 +34,9 @@ import javax.annotation.Nullable;
 
 public class TextAreaControl extends AbstractController implements TextArea, TextFieldView {
 
+    private int linesOfScroll = 0;
+    private int currentYOffset = 0; //the current offset in pixels of the rendered text
+
     private static String ZERO_WIDTH_CHARACTER = "\u200E";
     private static final Logger log = Logger.getLogger(TextFieldControl.class.getName());
 
@@ -282,7 +285,7 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
         TextRenderer renderer = textElement.getRenderer(TextRenderer.class);
         String text = renderer.getWrappedText();
 
-        int mouseY_withinElement = mouseY - fieldElement.getY();
+        int mouseY_withinElement = mouseY - fieldElement.getY()- currentYOffset;
         int mouseX_withinElement = mouseX - fieldElement.getX();
         int row = mouseY_withinElement / renderer.getFont().getHeight();
 
@@ -384,9 +387,6 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
 
         final TextRenderer textRenderer = textElement.getRenderer(TextRenderer.class);
         textRenderer.setText(textField.getDisplayedText().toString());
-        if (textRenderer == null) {
-            return;
-        }
 
         final String textWrapped = textRenderer.getWrappedText();
 
@@ -409,11 +409,21 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
         final int textWidth = textRenderer.getFont().getWidth(textOnLine_beforeCursor);
         final int lineHeight = textRenderer.getFont().getHeight();
 
+        final int maximumRenderableLines = this.getElement().getHeight()/lineHeight;
 
+        //adjust the scroll so the cursor is onscreen
+
+
+        linesOfScroll = clamp(linesOfScroll, cursorPosOnLine.line-maximumRenderableLines+1, cursorPosOnLine.line);
+        currentYOffset = -linesOfScroll*lineHeight;
+
+        System.out.println(cursorPosOnLine.line + " -> " + linesOfScroll);
+
+        textRenderer.setyOffset(currentYOffset);
 
         cursorElement.setConstraintX(SizeValue.px(textWidth));
         //cursorElement.setConstraintY(SizeValue.px((getElement().getHeight() - cursorElement.getHeight()) / 2));
-        cursorElement.setConstraintY(SizeValue.px((lineHeight- cursorElement.getHeight())/2 + lineHeight * cursorPosOnLine.line)); //high numbers are at bottom
+        cursorElement.setConstraintY(SizeValue.px((lineHeight- cursorElement.getHeight())/2 + lineHeight * cursorPosOnLine.line + currentYOffset)); //high numbers are at bottom
         cursorElement.startEffect(EffectEventId.onActive, null);
 
         element.getParent().layoutElements();
