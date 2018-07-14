@@ -4,10 +4,10 @@
                        controller="de.lessvoid.nifty.controls.textarea.TextAreaControl"
                        inputMapping="de.lessvoid.nifty.controls.textfield.TextFieldInputMapping"
                        passwordChar="$passwordChar" maxLength="$maxLength">
-        <panel style="#panel" focusable="true">
+        <panel style="#panel" focusable="true" width="100%" height="100%" >
             <interact onClick="onClick()" onClickMouseMove="onClickMouseMove()"/>
             <panel id="#field" style="#field">
-                <text id="#text" style="#text" text="$text" wrap="true" width="$width" height="100%" valign="top" textVAlign="top"/>
+                <text id="#text" style="#text" text="$text" wrap="true" width="100%" height="100%" valign="top" textVAlign="top"/>
             </panel>
             <panel style="#cursor-panel">
                 <image id="#cursor" style="#cursor"/>
