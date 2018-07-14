@@ -2,10 +2,12 @@ package de.lessvoid.nifty.elements.render;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import de.lessvoid.xml.lwxs.Schema;
 import org.bushe.swing.event.EventSubscriber;
 
 import de.lessvoid.nifty.Nifty;
@@ -49,6 +51,12 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
    */
   @Nullable
   private String[] textLines;
+
+  /**
+   * If this line was started with a soft wrap (i.e. was created by a \n or just because there wasn't enough room)
+   */
+  @Nullable
+  private Boolean[] softWrapLines;
 
   /**
    * max width of all text strings.
@@ -133,6 +141,8 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
   private Element hasBeenLayoutedElement;
 
   private String originalTextBeforeSpecialValues;
+
+  private static final Logger log = Logger.getLogger(TextRenderer.class.getName());
 
   /**
    * default constructor.
@@ -228,22 +238,37 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
     boolean stateSaved = prepareRenderEngine(r, font);
 
     int y = getStartYWithVerticalAlign(lines.length * font.getHeight(), w.getHeight(), textVAlign);
-    for (String line : lines) {
+    int charsSoFar = 0;
+
+    for (int lineIndex = 0; lineIndex <lines.length; lineIndex++) {
+      String line = lines[lineIndex];
+
+      boolean anySelectionThisLine = selectionStart< (charsSoFar + line.length()) && selectionEnd>=charsSoFar;
+
+      int selectionStartThisLine = !anySelectionThisLine || (selectionStart == -1) ? -1 : clamp(selectionStart- charsSoFar, 0, line.length()-1);
+      int selectionEndThisLine = !anySelectionThisLine || (selectionEnd == -1) ? -1 : clamp(selectionEnd-charsSoFar, 0, line.length());
+
       int yy = w.getY() + y;
+
       if (Math.abs(xOffsetHack) > 0) {
         int fittingOffset = FontHelper.getVisibleCharactersFromStart(font, line, Math.abs(xOffsetHack), 1.0f);
         String cut = line.substring(0, fittingOffset);
         String substring = line.substring(fittingOffset, line.length());
         int xx = w.getX() + xOffsetHack + font.getWidth(cut);
-        renderLine(xx, yy, substring, r, selectionStart - fittingOffset, selectionEnd - fittingOffset);
+        renderLine(xx, yy, substring, r, selectionStartThisLine - fittingOffset, selectionEndThisLine - fittingOffset);
       } else {
         int xx = w.getX() + getStartXWithHorizontalAlign(font.getWidth(line), w.getWidth(), textHAlign);
-        renderLine(xx, yy, line, r, selectionStart, selectionEnd);
+        renderLine(xx, yy, line, r, selectionStartThisLine, selectionEndThisLine);
       }
       y += font.getHeight();
+      charsSoFar += line.length()+(softWrapLines==null || softWrapLines[lineIndex]?0:1); //+1 for the new line characters in original text
     }
 
     restoreRenderEngine(r, stateSaved);
+  }
+
+  private static int clamp(int value, int min, int max){
+    return Math.max(min, Math.min(max, value));
   }
 
   private boolean prepareRenderEngine(@Nonnull final NiftyRenderEngine r, RenderFont font) {
@@ -490,14 +515,24 @@ public class TextRenderer implements ElementRenderer, EventSubscriber<NiftyLocal
       return textLines;
     }
     List<String> lines = new ArrayList<String>();
-    for (String line : textLines) {
+    List<Boolean> softWraps =  new ArrayList<Boolean>();
+    for (int lineIndex = 0;  lineIndex<textLines.length; lineIndex++) {
+      String line = textLines[lineIndex];
+
       int lineLengthInPixel = font.getWidth(line);
       if (lineLengthInPixel > width) {
-        lines.addAll(new TextBreak(line, width, font).split());
+        List<String> linesInParagraph = new TextBreak(line, width, font).split();
+        softWraps.add(lineIndex==0); //first line in a paragraph is a real one, except the very first line which has no \n character causing it
+        for(int i=0;i<linesInParagraph.size()-1; i++){
+          softWraps.add(true);
+        }
+        lines.addAll(linesInParagraph);
       } else {
         lines.add(line);
+        softWraps.add(false);
       }
     }
+    softWrapLines = softWraps.toArray(new Boolean[softWraps.size()]);
     return lines.toArray(new String[lines.size()]);
   }
 
