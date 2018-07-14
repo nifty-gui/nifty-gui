@@ -56,6 +56,14 @@ public class TextAreaControlTest {
         assertEquals(1, convertCursorPositionWithoutWrappingToWith(1, textWithWrapping, text));
     }
 
+    @Test
+    public void convertCursorPositionWithoutWrappingToWith_wrapOnSpace(){ //when the text renderer wraps on a space it ommits the space in the output
+        String text =             "hi there";
+        String textWithWrapping = "hi\nthere";
+        assertEquals(8, convertCursorPositionWithoutWrappingToWith(8, textWithWrapping, text));
+
+    }
+
 
     @Test
     public void convertCursorPositionWithoutWrappingToWith_withSimpleWrapping(){

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls xmlns="http://nifty-gui.lessvoid.com/nifty-gui">
-    <controlDefinition style="nifty-textfield" name="textArea"
+    <controlDefinition style="nifty-textfield" name="textarea"
                        controller="de.lessvoid.nifty.controls.textarea.TextAreaControl"
                        inputMapping="de.lessvoid.nifty.controls.textfield.TextFieldInputMapping"
                        passwordChar="$passwordChar" maxLength="$maxLength">

@@ -1,11 +1,7 @@
 package de.lessvoid.nifty.controls.textarea;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.AbstractController;
-import de.lessvoid.nifty.controls.FocusHandler;
-import de.lessvoid.nifty.controls.Parameters;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.TextFieldChangedEvent;
+import de.lessvoid.nifty.controls.*;
 import de.lessvoid.nifty.controls.textfield.*;
 import de.lessvoid.nifty.controls.textfield.filter.delete.TextFieldDeleteFilter;
 import de.lessvoid.nifty.controls.textfield.filter.input.FilterAcceptDigits;
@@ -36,7 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
-public class TextAreaControl extends AbstractController implements TextField, TextFieldView {
+public class TextAreaControl extends AbstractController implements TextArea, TextFieldView {
 
     private static String ZERO_WIDTH_CHARACTER = "\u200E";
     private static final Logger log = Logger.getLogger(TextFieldControl.class.getName());
@@ -354,10 +350,15 @@ public class TextAreaControl extends AbstractController implements TextField, Te
     protected static int convertCursorPositionWithoutWrappingToWith(int cursorPositionWithoutWrapping, String textWithWrapping, String textWithoutWrapping){
         //track forward, adding an extra index every time we encounter a new line not in the without wrapping string
 
+        List<Character> wrapEquivalentChars = new ArrayList<Character>(); //characters in the original string which when appearing alongside a new line do not offer a bonus new line
+        wrapEquivalentChars.add('\n');
+        wrapEquivalentChars.add(' ');
+
         int extraNewLines = 0;
 
         for(int i=0;i<cursorPositionWithoutWrapping; i++){
-            while(textWithoutWrapping.charAt(i)!='\n' && textWithWrapping.charAt(i+extraNewLines) =='\n' ){
+            
+            while( !wrapEquivalentChars.contains(textWithoutWrapping.charAt(i)) && textWithWrapping.charAt(i+extraNewLines) =='\n' ){
                 extraNewLines++;
             }
         }
@@ -450,29 +451,13 @@ public class TextAreaControl extends AbstractController implements TextField, Te
     @Override
     public void onStartScreen() {}
 
-    @Override
-    public void disablePasswordChar() {
-        throw new UnsupportedOperationException("Password char not supported yet.");
-    }
 
     @Override
     public void disableDeleteFilter() {
         textField.setDeleteFilter(null);
     }
 
-    /**
-     * Enable the password overlay for this text field.
-     *
-     * @param passwordChar the character all characters of the real text are replaced with
-     * @deprecated Rather then using this function apply a new text format using {@link #setFormat
-     * (TextFieldDisplayFormat)} with the {@link FormatPassword}.
-     */
-    @Override
-    @Deprecated
-    public void enablePasswordChar(char passwordChar) {
-        setFormat(new FormatPassword(passwordChar));
-        updateTextAndCursor();
-    }
+
 
     @Override
     public void textChangeEvent(String newText) {
@@ -483,7 +468,7 @@ public class TextAreaControl extends AbstractController implements TextField, Te
             if (element != null) {
                 String id = getElement().getId();
                 if (id != null) {
-                    nifty.publishEvent(id, new TextFieldChangedEvent(this, newText));
+                    nifty.publishEvent(id, new TextAreaChangedEvent(this, newText));
                 }
             }
         }
@@ -497,11 +482,6 @@ public class TextAreaControl extends AbstractController implements TextField, Te
     @Override
     public String getDisplayedText() {
         return textField.getDisplayedText().toString();
-    }
-
-    @Override
-    public boolean isPasswordCharEnabled() {
-        return (textField != null ? textField.getFormat() : null) instanceof FormatPassword;
     }
 
     @Override
