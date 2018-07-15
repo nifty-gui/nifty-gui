@@ -428,9 +428,11 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
         final int maximumRenderableLines = this.getElement().getHeight()/lineHeight;
 
         //adjust the scroll so the cursor is onscreen
-
-
-        linesOfScroll = clamp(linesOfScroll, cursorPosOnLine.line-maximumRenderableLines+1, cursorPosOnLine.line);
+        if(maximumRenderableLines > 1) { //unfortunately on the first render maximumRenderableLines is zero which would kick the scroll to 1 automatically
+            linesOfScroll = clamp(linesOfScroll, cursorPosOnLine.line - maximumRenderableLines + 1, cursorPosOnLine.line);
+        }else{
+            linesOfScroll = cursorPosOnLine.line;
+        }
         currentYOffset = -linesOfScroll*lineHeight;
 
         textRenderer.setyOffset(currentYOffset);
