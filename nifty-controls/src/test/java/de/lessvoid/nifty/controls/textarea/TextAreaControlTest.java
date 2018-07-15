@@ -63,6 +63,60 @@ public class TextAreaControlTest {
         assertEquals(8, convertCursorPositionWithoutWrappingToWith(8, textWithWrapping, text));
 
     }
+    @Test
+    public void convertCursorPositionWithoutWrappingToWith_wrapOnMultipleSpace(){ //when the text renderer wraps on a space it ommits only one space in the output
+        String text =             "hi  there";
+        String textWithWrapping = "hi \nthere";
+        assertEquals(4, convertCursorPositionWithoutWrappingToWith(3, textWithWrapping, text));
+        assertEquals(4, convertCursorPositionWithoutWrappingToWith(4, textWithWrapping, text));
+        assertEquals(5, convertCursorPositionWithoutWrappingToWith(5, textWithWrapping, text));
+        assertEquals(9, convertCursorPositionWithoutWrappingToWith(9, textWithWrapping, text));
+
+    }
+    @Test
+    public void convertCursorPositionWithoutWrappingToWith_wrapOnSomeSpace(){
+        String text =             "hi there hello  world";
+        String textWithWrapping = "hi there\nhello \nworld";
+        assertEquals(7, convertCursorPositionWithoutWrappingToWith(7, textWithWrapping, text));
+        assertEquals(9, convertCursorPositionWithoutWrappingToWith(8, textWithWrapping, text)); //go to beginning of next line on soft wrap
+        assertEquals(9, convertCursorPositionWithoutWrappingToWith(9, textWithWrapping, text));
+        assertEquals(14, convertCursorPositionWithoutWrappingToWith(14, textWithWrapping, text));
+        assertEquals(16, convertCursorPositionWithoutWrappingToWith(15, textWithWrapping, text));
+    }
+    @Test
+    public void convertCursorPositionWithoutWrappingToWith_realExample() {
+        String text ="temp=Math.sqrt(N+W);; E=N; S=temp   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n" + //150
+                "\n" + //151
+                "ghfhfg\n" + //158
+                "_X_X_XxxX_X_";
+
+            String textWithWrapping = "temp=Math.sqrt(N+W);; E=N; S=temp  \n" + //36
+                    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n" + //114
+                    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n" + //150
+                    "\n" + //151
+                    "ghfhfg\n" + //158
+                    "_X_X_XxxX_X_";
+        //165 is between the two 'x's
+        assertEquals(165, convertCursorPositionWithWrappingToWithout(165, textWithWrapping, text));
+    }
+
+    @Test
+    public void convertCursorPositionWithoutWrappingToWith_realReducedExample() {
+        String text ="S=temp   bb bb\n" +
+                "\n" +
+                "ghfhfg\n" +
+                "_X_X_XxxX_X_";
+
+        String textWithWrapping = "S=temp  \n" +
+                "bb\n" +
+                "bb\n" +
+                "\n" +
+                "ghfhfg\n" +
+                "_X_X_XxxX_X_";
+        //cursor is between the two 'x's
+        assertEquals(30, convertCursorPositionWithWrappingToWithout(30, textWithWrapping, text));
+    }
+
 
 
     @Test

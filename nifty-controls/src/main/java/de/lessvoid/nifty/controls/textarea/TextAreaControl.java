@@ -311,7 +311,6 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
         }
 
         CursorPosition cursorPosition = new CursorPosition(row, bestIndex);
-
         return convertCursorPositionWithWrappingToWithout(splitLineDetails.convertLineCursorToAbsolute(cursorPosition));
     }
 
@@ -324,6 +323,7 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
     }
 
     protected static int convertCursorPositionWithWrappingToWithout(int cursorPositionWithWrapping, String textWithWrapping, String textWithoutWrapping){
+        
         textWithWrapping = textWithWrapping+"/n";
         String wrappedTextBeforeCursor = textWithWrapping.substring(0, cursorPositionWithWrapping);
         List<String> wrappedLines = new ArrayList<String>(Arrays.asList(wrappedTextBeforeCursor.split("\n", -1))); //split on new lines, some may be real, some wrapped
@@ -338,8 +338,15 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
         int absoluteCursorPosition = 0;
         for(String wrappedLine: wrappedLines){
             absoluteCursorPosition+=wrappedLine.length();
-            if(textWithoutWrapping.length()>absoluteCursorPosition+1 && textWithoutWrapping.charAt(absoluteCursorPosition) == '\n'){ //it was a real new line
-                absoluteCursorPosition++;
+
+            if(textWithoutWrapping.length()>absoluteCursorPosition+1){
+                char charWithoutWrapping = textWithoutWrapping.charAt(absoluteCursorPosition);
+                boolean realNewLine = charWithoutWrapping == '\n';
+                boolean wrappedOnSpace =charWithoutWrapping == ' ';
+
+                if(realNewLine || wrappedOnSpace) {
+                    absoluteCursorPosition++;
+                }
             }
         }
 
@@ -361,7 +368,7 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
 
         for(int i=0;i<cursorPositionWithoutWrapping; i++){
             
-            while( !wrapEquivalentChars.contains(textWithoutWrapping.charAt(i)) && textWithWrapping.charAt(i+extraNewLines) =='\n' ){
+            if( !wrapEquivalentChars.contains(textWithoutWrapping.charAt(i)) && textWithWrapping.charAt(i+extraNewLines) =='\n' ){
                 extraNewLines++;
             }
         }
@@ -417,8 +424,6 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
         linesOfScroll = clamp(linesOfScroll, cursorPosOnLine.line-maximumRenderableLines+1, cursorPosOnLine.line);
         currentYOffset = -linesOfScroll*lineHeight;
 
-        System.out.println(cursorPosOnLine.line + " -> " + linesOfScroll);
-
         textRenderer.setyOffset(currentYOffset);
 
         cursorElement.setConstraintX(SizeValue.px(textWidth));
@@ -429,13 +434,6 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
         element.getParent().layoutElements();
     }
 
-    /**
-     * Note this can only be called when the logical text and rendered text are in sync (i.e. not immediately after a
-     * character insert as the rerender won't have happened yet
-     */
-    private void updateCursor(){
-
-    }
     /**
      * Moves up (negative) or down (positive) the lines
      * @param numberOfLines
