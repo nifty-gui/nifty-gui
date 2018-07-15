@@ -96,6 +96,10 @@ public class TextAreaControlTest {
                     "\n" + //151
                     "ghfhfg\n" + //158
                     "_X_X_XxxX_X_";
+
+        //157 is just after the last g
+        assertEquals(157, convertCursorPositionWithWrappingToWithout(157, textWithWrapping, text));
+
         //165 is between the two 'x's
         assertEquals(165, convertCursorPositionWithWrappingToWithout(165, textWithWrapping, text));
     }
@@ -113,6 +117,9 @@ public class TextAreaControlTest {
                 "\n" +
                 "ghfhfg\n" +
                 "_X_X_XxxX_X_";
+
+        //22 is just after the last g
+        assertEquals(22, convertCursorPositionWithWrappingToWithout(22, textWithWrapping, text));
         //cursor is between the two 'x's
         assertEquals(30, convertCursorPositionWithWrappingToWithout(30, textWithWrapping, text));
     }

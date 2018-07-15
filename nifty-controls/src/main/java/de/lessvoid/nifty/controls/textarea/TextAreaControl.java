@@ -323,10 +323,15 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
     }
 
     protected static int convertCursorPositionWithWrappingToWithout(int cursorPositionWithWrapping, String textWithWrapping, String textWithoutWrapping){
-        
+        if(cursorPositionWithWrapping == textWithWrapping.length()){
+            return textWithoutWrapping.length();
+        }
+
         textWithWrapping = textWithWrapping+"/n";
         String wrappedTextBeforeCursor = textWithWrapping.substring(0, cursorPositionWithWrapping);
         List<String> wrappedLines = new ArrayList<String>(Arrays.asList(wrappedTextBeforeCursor.split("\n", -1))); //split on new lines, some may be real, some wrapped
+
+        boolean cursorStraightAfterNewLine = wrappedTextBeforeCursor.endsWith("\n");
 
         //if the very list line is "" then remove it as the new line is already considered at the end of the line before
 
@@ -339,13 +344,17 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
         for(String wrappedLine: wrappedLines){
             absoluteCursorPosition+=wrappedLine.length();
 
+            boolean lastLine = wrappedLine.equals(wrappedLines.get(wrappedLines.size()-1));
+
             if(textWithoutWrapping.length()>absoluteCursorPosition+1){
                 char charWithoutWrapping = textWithoutWrapping.charAt(absoluteCursorPosition);
                 boolean realNewLine = charWithoutWrapping == '\n';
                 boolean wrappedOnSpace =charWithoutWrapping == ' ';
 
                 if(realNewLine || wrappedOnSpace) {
-                    absoluteCursorPosition++;
+                    if(!lastLine || cursorStraightAfterNewLine) {
+                        absoluteCursorPosition++;
+                    }
                 }
             }
         }
