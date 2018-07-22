@@ -292,7 +292,7 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
         final SplitLinesDetails splitLineDetails = new SplitLinesDetails(text);
 
         if(row>=splitLineDetails.getNumberOfLines()){ //clamp to actually available lines
-            row = splitLineDetails.getNumberOfLines()-1;
+            row = Math.max(splitLineDetails.getNumberOfLines()-1,0); //max(x,0) is to prevent -1 for the empty string
         }
 
         LineDetails lineDetails = splitLineDetails.getLineDetail(row);
