@@ -452,28 +452,93 @@ public abstract class ElementBuilder {
   public void onCustomEffect(@Nonnull final EffectBuilder onCustomEffect) {
     onEffect(EffectEventId.onCustom, onCustomEffect);
   }
-
-  public void interactOnClick(@Nonnull String method) {
-    interactAttributes.setOnClick(method);
+  
+  public void interactOnClick(@Nonnull String onClick) {
+    interactAttributes.setOnClick(onClick);
   }
-
-  public void interactOnMultiClick(@Nonnull String method){
-    interactAttributes.setOnMultiClick(method);
+  
+  public void interactOnClickRepeat(@Nonnull final String onClickRepeat) {
+    interactAttributes.setOnClickRepeat(onClickRepeat);
   }
+  
   public void interactOnRelease(@Nonnull final String onRelease) {
     interactAttributes.setOnRelease(onRelease);
   }
+  
+  public void interactOnClickMouseMove(@Nonnull final String onClickMouseMove) {
+    interactAttributes.setOnClickMouseMove(onClickMouseMove);
+  }
+  
+  public void interactOnMultiClick(@Nonnull String onMultiClick){
+    interactAttributes.setOnMultiClick(onMultiClick);
+  }
+  
+  public void interactOnPrimaryClick(@Nonnull String onPrimaryClick) {
+    interactAttributes.setOnPrimaryClick(onPrimaryClick);
+  }
+  
+  public void interactOnPrimaryClickRepeat(@Nonnull final String onPrimaryClickRepeat) {
+    interactAttributes.setOnPrimaryClickRepeat(onPrimaryClickRepeat);
+  }
+  
+  public void interactOnPrimaryRelease(@Nonnull final String onPrimaryRelease) {
+    interactAttributes.setOnPrimaryRelease(onPrimaryRelease);
+  }
+  
+  public void interactOnPrimaryClickMouseMove(@Nonnull final String onPrimaryClickMouseMove) {
+    interactAttributes.setOnPrimaryClickMouseMove(onPrimaryClickMouseMove);
+  }
+  
+  public void interactOnPrimaryMultiClick(@Nonnull String onPrimaryMultiClick){
+    interactAttributes.setOnPrimaryMultiClick(onPrimaryMultiClick);
+  }
+  
+  public void interactOnSecondaryClick(@Nonnull String onSecondaryClick) {
+    interactAttributes.setOnSecondaryClick(onSecondaryClick);
+  }
+  
+  public void interactOnSecondaryClickRepeat(@Nonnull final String onSecondaryClickRepeat) {
+    interactAttributes.setOnSecondaryClickRepeat(onSecondaryClickRepeat);
+  }
+  
+  public void interactOnSecondaryRelease(@Nonnull final String onSecondaryRelease) {
+    interactAttributes.setOnSecondaryRelease(onSecondaryRelease);
+  }
+  
+  public void interactOnSecondaryClickMouseMove(@Nonnull final String onSecondaryClickMouseMove) {
+    interactAttributes.setOnSecondaryClickMouseMove(onSecondaryClickMouseMove);
+  }
+  
+  public void interactOnSecondaryMultiClick(@Nonnull String onSecondaryMultiClick){
+    interactAttributes.setOnSecondaryMultiClick(onSecondaryMultiClick);
+  }
 
+  public void interactOnTertiaryClick(@Nonnull String onTertiaryClick) {
+    interactAttributes.setOnTertiaryClick(onTertiaryClick);
+  }
+
+  public void interactOnTertiaryClickRepeat(@Nonnull final String onTertiaryClickRepeat) {
+    interactAttributes.setOnTertiaryClickRepeat(onTertiaryClickRepeat);
+  }
+  
+  public void interactOnTertiaryRelease(@Nonnull final String onTertiaryRelease) {
+    interactAttributes.setOnTertiaryRelease(onTertiaryRelease);
+  }
+
+  public void interactOnTertiaryClickMouseMove(@Nonnull final String onTertiaryClickMouseMove) {
+    interactAttributes.setOnTertiaryClickMouseMove(onTertiaryClickMouseMove);
+  }
+
+  public void interactOnTertiaryMultiClick(@Nonnull String onTertiaryMultiClick){
+    interactAttributes.setOnTertiaryMultiClick(onTertiaryMultiClick);
+  }
+  
   public void interactOnMouseOver(@Nonnull final String onMouseOver) {
     interactAttributes.setOnMouseOver(onMouseOver);
   }
 
-  public void interactOnClickRepeat(@Nonnull final String onClickRepeat) {
-    interactAttributes.setOnClickRepeat(onClickRepeat);
-  }
-
-  public void interactOnClickMouseMove(@Nonnull final String onClickMouseMove) {
-    interactAttributes.setOnClickMouseMove(onClickMouseMove);
+  public void interactOnMouseWheel(@Nonnull final String onMouseWheel) {
+    interactAttributes.setOnMouseWheel(onMouseWheel);
   }
 
   public void interactOnClickAlternateKey(@Nonnull final String onClickAlternateKey) {
