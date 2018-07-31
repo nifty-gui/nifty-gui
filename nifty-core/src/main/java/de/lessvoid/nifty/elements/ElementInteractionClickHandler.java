@@ -180,6 +180,7 @@ public class ElementInteractionClickHandler {
   }
 
   public void clickAndReleaseMouse(@Nonnull final Nifty nifty) {
+    element.startEffectWithoutChildren(EffectEventId.onClick); 
     mouseMethods.clickAndRelease(nifty);
   }
 
