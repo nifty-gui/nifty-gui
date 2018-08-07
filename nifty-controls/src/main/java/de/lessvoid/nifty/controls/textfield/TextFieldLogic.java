@@ -527,9 +527,17 @@ public class TextFieldLogic {
    * Put data from clipboard into text field.
    */
   public void put() {
+    put(true);
+  }
+
+  public void putRetainingNewLines() {
+    put(false);
+  }
+
+  private void put(boolean retainNewLines){
     final String clipboardText = clipboard.get();
     if (clipboardText != null) {
-      insert(filterNewLines(clipboardText));
+      insert(retainNewLines?filterNewLines(clipboardText):clipboardText);
     }
   }
 

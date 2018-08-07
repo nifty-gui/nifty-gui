@@ -212,7 +212,7 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
                         textField.copy();
                         break;
                     case Paste:
-                        textField.put();
+                        textField.putRetainingNewLines();
                         break;
                     case SelectAll:
                         textField.selectAll();
@@ -377,7 +377,8 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
 
         for(int i=0;i<cursorPositionWithoutWrapping; i++){
             
-            if( !wrapEquivalentChars.contains(textWithoutWrapping.charAt(i)) && textWithWrapping.charAt(i+extraNewLines) =='\n' ){
+            if( !wrapEquivalentChars.contains(textWithoutWrapping.charAt(i))
+                    && textWithWrapping.charAt(i+extraNewLines) == '\n' ){
                 extraNewLines++;
             }
         }
