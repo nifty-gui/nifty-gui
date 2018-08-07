@@ -302,7 +302,7 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
         int error = Integer.MAX_VALUE;
         for(int i=0;i<=textOnLine.length();i++){
             int newError = Math.abs(renderer.getFont().getWidth(textOnLine.substring(0, i)) - mouseX_withinElement);
-            if(newError<error){
+            if(newError<=error){
                 error = newError;
                 bestIndex = i;
             }else{
