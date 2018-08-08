@@ -1826,7 +1826,11 @@ public class Nifty {
       @Nonnull final ElementType type,
       @Nonnull final LayoutPart layoutPart,
       final int index) {
-    ElementType elementType = type.copy();
+    //ElementBuilder create a new type every time, so when ElementType#prepare() hasn't been called, it's not necessary to copy it
+    //this is required to fix the issue https://github.com/nifty-gui/nifty-gui/issues/316 where a controller instance is directly
+    //attached to the ElementType and would not be copied
+    ElementType elementType = type.isPrepared() ? type.copy() : type;
+
     elementType.prepare(this, screen, screen.getRootElement().getElementType());
     elementType.connectParentControls(parent);
     Element element = elementType.create(parent, this, screen, layoutPart, index);

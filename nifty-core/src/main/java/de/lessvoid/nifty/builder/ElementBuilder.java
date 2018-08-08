@@ -32,6 +32,9 @@ public abstract class ElementBuilder {
   @Nonnull
   private final EnumStorage<EffectEventId, Collection<EffectBuilder>> effectBuilders;
 
+  @Nullable
+  private Controller controller;
+
   protected ElementBuilder(@Nonnull final ControlAttributes attributes) {
     elementBuilders = new ArrayList<ElementBuilder>();
     interactAttributes = new ControlInteractAttributes();
@@ -122,6 +125,7 @@ public abstract class ElementBuilder {
 
   public void controller(@Nonnull final Controller controller) {
     attributes.set("controller", controller.getClass().getName());
+    this.controller = controller;
   }
 
   public void controller(@Nonnull final String controllerClass) {
@@ -573,6 +577,7 @@ public abstract class ElementBuilder {
     }
 
     attributes.connect(thisType);
+    thisType.attachController(controller);
     for (int i = 0; i < elementBuilders.size(); i++) {
       ElementType newType = elementBuilders.get(i).buildElementType();
       if (newType != null) {
