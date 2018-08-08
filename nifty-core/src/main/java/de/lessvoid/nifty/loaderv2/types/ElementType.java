@@ -40,6 +40,8 @@ public class ElementType extends XmlBaseType {
   @Nullable
   protected Controller controller;
 
+  private boolean prepared;
+
   public ElementType() {
     super();
   }
@@ -320,6 +322,8 @@ public class ElementType extends XmlBaseType {
       @Nonnull final Nifty nifty,
       @Nullable final Screen screen,
       @Nonnull final ElementType rootElementType) {
+    prepared = true;
+
     translateSpecialValues(nifty, screen);
     makeFlat();
     applyControls(nifty);
@@ -337,6 +341,10 @@ public class ElementType extends XmlBaseType {
     translateSpecialValues(nifty, screen);
 
     resolveControllers(nifty, new LinkedList<Object>());
+  }
+
+  public boolean isPrepared() {
+    return this.prepared;
   }
 
   @Override
@@ -405,9 +413,15 @@ public class ElementType extends XmlBaseType {
     return styleResolver;
   }
 
+  public void attachController(@Nullable final Controller controller) {
+    this.controller = controller;
+  }
+
   void resolveControllers(@Nonnull final Nifty nifty, @Nonnull final Collection<Object> controllerParam) {
     controllers = new LinkedList<Object>(controllerParam);
-    controller = nifty.getControllerFactory().create(getAttributes().get("controller"));
+    if(controller == null) {
+      controller = nifty.getControllerFactory().create(getAttributes().get("controller"));
+    }
     if (controller != null) {
       controllers.addFirst(controller);
     }
