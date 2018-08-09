@@ -558,9 +558,9 @@ public abstract class ElementBuilder {
    *
    * @return the element created
    */
-  public Element build(@Nonnull final Nifty nifty, @Nonnull final Screen screen, @Nonnull final Element parent) {
+  public Element build(@Nonnull final Element parent) {
     ElementType type = buildElementType();
-    Element result = nifty.createElementFromType(screen, parent, type);
+    Element result = parent.getNifty().createElementFromType(parent.getScreen(), parent, type);
     parent.layoutElements();
     return result;
   }
@@ -571,13 +571,10 @@ public abstract class ElementBuilder {
    * @return the Element created
    */
   @Nonnull
-  public Element build(
-      @Nonnull final Nifty nifty,
-      @Nonnull final Screen screen,
-      @Nonnull final Element parent,
-      final int index) {
+  public Element build(@Nonnull final Element parent, final int index) {
+    Screen screen = parent.getScreen();
     ElementType type = buildElementType();
-    Element result = nifty.createElementFromType(screen, parent, type, index);
+    Element result = parent.getNifty().createElementFromType(screen, parent, type, index);
     screen.layoutLayers();
     return result;
   }
@@ -588,11 +585,8 @@ public abstract class ElementBuilder {
    * @return the Element created
    */
   @Nonnull
-  public Element build(
-      @Nonnull final Nifty nifty,
-      @Nonnull final Screen screen,
-      @Nonnull final Element parent,
-      @Nullable final Element before) {
+  public Element build(@Nonnull final Element parent, @Nullable final Element before) {
+    Screen screen = parent.getScreen();
     List<Element> parentList = parent.getChildren();
     int index = parentList.size();
     for (int i = 0; i < parentList.size(); i++) {
@@ -602,9 +596,49 @@ public abstract class ElementBuilder {
       }
     }
     ElementType type = buildElementType();
-    Element result = nifty.createElementFromType(screen, parent, type, index);
+    Element result = parent.getNifty().createElementFromType(screen, parent, type, index);
     screen.layoutLayers();
     return result;
+  }
+
+  /**
+   * Build a element
+   *
+   * @return the element created
+   */
+  @Deprecated
+  public Element build(@Nonnull final Nifty nifty, @Nonnull final Screen screen, @Nonnull final Element parent) {
+    return build(parent);
+  }
+
+  /**
+   * Build an element in a specified position in parent element list
+   *
+   * @return the Element created
+   */
+  @Deprecated
+  @Nonnull
+  public Element build(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element parent,
+      final int index) {
+    return build(parent, index);
+  }
+
+  /**
+   * Build an element after a element in parent children list
+   *
+   * @return the Element created
+   */
+  @Deprecated
+  @Nonnull
+  public Element build(
+      @Nonnull final Nifty nifty,
+      @Nonnull final Screen screen,
+      @Nonnull final Element parent,
+      @Nullable final Element before) {
+    return build(parent, before);
   }
 
   /**

@@ -2618,6 +2618,11 @@ public class Element implements NiftyEvent, EffectManager.Notify {
     return nifty;
   }
 
+  @Nullable
+  public Screen getScreen() {
+	return screen;
+  }
+
   @Nonnull
   public <T extends EffectImpl> List<Effect> getEffects(
       @Nonnull final EffectEventId effectEventId,
