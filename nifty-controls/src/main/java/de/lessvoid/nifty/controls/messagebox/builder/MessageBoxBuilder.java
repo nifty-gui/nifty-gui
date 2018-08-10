@@ -15,26 +15,31 @@ public class MessageBoxBuilder extends ControlBuilder {
     super("nifty-messagebox", id);
   }
 
-  public void messageBoxType(@Nonnull String type) {
+  public MessageBoxBuilder messageBoxType(@Nonnull String type) {
     set("messageBoxType", type);
+    return this;
   }
 
-  public void message(@Nonnull String message) {
+  public MessageBoxBuilder message(@Nonnull String message) {
     set("message", message);
+    return this;
   }
 
-  public void icon(@Nullable String icon) {
+  public MessageBoxBuilder icon(@Nullable String icon) {
     if (icon != null) {
       set("icon", icon);
     }
+    return this;
   }
 
-  public void buttonCaption(@Nonnull String buttonCaption) {
+  public MessageBoxBuilder buttonCaption(@Nonnull String buttonCaption) {
     set("buttonCaption", buttonCaption);
+    return this;
   }
 
-  public void buttonCaptions(@Nonnull String buttonCaptions) {
+  public MessageBoxBuilder buttonCaptions(@Nonnull String buttonCaptions) {
     set("buttonCaptions", buttonCaptions);
+    return this;
   }
 
 }

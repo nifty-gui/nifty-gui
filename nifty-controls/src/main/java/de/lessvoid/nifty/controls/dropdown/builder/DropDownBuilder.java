@@ -13,11 +13,13 @@ public class DropDownBuilder extends ControlBuilder {
     super(id, "dropDown");
   }
 
-  public void viewConverterClass(@Nonnull final Class<?> clazz) {
+  public DropDownBuilder viewConverterClass(@Nonnull final Class<?> clazz) {
     set("viewConverterClass", clazz.getName());
+    return this;
   }
 
-  public void displayItems(final int displayItems) {
+  public DropDownBuilder displayItems(final int displayItems) {
     set("displayItems", String.valueOf(displayItems));
+    return this;
   }
 }

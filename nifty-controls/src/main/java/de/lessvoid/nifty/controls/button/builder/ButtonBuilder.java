@@ -14,7 +14,8 @@ public class ButtonBuilder extends ControlBuilder {
     label(buttonLabel);
   }
 
-  public void label(@Nonnull final String label) {
+  public ButtonBuilder label(@Nonnull final String label) {
     set("label", label);
+    return this;
   }
 }

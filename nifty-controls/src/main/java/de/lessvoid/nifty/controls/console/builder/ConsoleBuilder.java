@@ -14,11 +14,12 @@ public class ConsoleBuilder extends ControlBuilder {
     setLines(lines);
   }
 
-  public void lines(final int lines) {
+  public ConsoleBuilder lines(final int lines) {
     set("lines", String.valueOf(lines));
+    return this;
   }
 
-  private void setLines(final int lines) {
-    set("lines", String.valueOf(lines));
+  private ConsoleBuilder setLines(final int lines) {
+    return lines(lines);
   }
 }

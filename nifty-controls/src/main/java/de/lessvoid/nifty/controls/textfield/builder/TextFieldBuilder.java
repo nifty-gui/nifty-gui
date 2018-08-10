@@ -18,15 +18,18 @@ public class TextFieldBuilder extends ControlBuilder {
     text(initialText);
   }
 
-  public void passwordChar(final Character passwordChar) {
+  public TextFieldBuilder passwordChar(final Character passwordChar) {
     set("passwordChar", String.valueOf(passwordChar));
+    return this;
   }
 
-  public void maxLength(final int maxLength) {
+  public TextFieldBuilder maxLength(final int maxLength) {
     set("maxLength", Integer.toString(maxLength));
+    return this;
   }
 
-  public void filter(@Nonnull final CharSequence filter) {
+  public TextFieldBuilder filter(@Nonnull final CharSequence filter) {
     set("filter", filter.toString());
+    return this;
   }
 }

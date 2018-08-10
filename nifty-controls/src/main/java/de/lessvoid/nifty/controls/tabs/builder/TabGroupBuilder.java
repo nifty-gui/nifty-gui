@@ -81,8 +81,9 @@ public class TabGroupBuilder extends ControlBuilder {
    *
    * @param tabBuilder the builder of the new tab
    */
-  public void tab(@Nonnull final TabBuilder tabBuilder) {
+  public TabGroupBuilder tab(@Nonnull final TabBuilder tabBuilder) {
     super.control(tabBuilder);
+    return this;
   }
 
   /**

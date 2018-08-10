@@ -17,47 +17,58 @@ public class ListBoxBuilder extends ControlBuilder {
     super(id, name);
   }
 
-  public void displayItems(final int displayItems) {
+  public ListBoxBuilder displayItems(final int displayItems) {
     set("displayItems", String.valueOf(displayItems));
+    return this;
   }
 
-  public void selectionModeSingle() {
+  public ListBoxBuilder selectionModeSingle() {
     set("selectionMode", "Single");
+    return this;
   }
 
-  public void selectionModeMutliple() {
+  public ListBoxBuilder selectionModeMutliple() {
     set("selectionMode", "Multiple");
+    return this;
   }
 
-  public void selectionModeDisabled() {
+  public ListBoxBuilder selectionModeDisabled() {
     set("selectionMode", "Disabled");
+    return this;
   }
 
-  public void showVerticalScrollbar() {
+  public ListBoxBuilder showVerticalScrollbar() {
     set("vertical", "on");
+    return this;
   }
 
-  public void showHorizontalScrollbar() {
+  public ListBoxBuilder showHorizontalScrollbar() {
     set("horizontal", "on");
+    return this;
   }
 
-  public void hideVerticalScrollbar() {
+  public ListBoxBuilder hideVerticalScrollbar() {
     set("vertical", "off");
+    return this;
   }
 
-  public void hideHorizontalScrollbar() {
+  public ListBoxBuilder hideHorizontalScrollbar() {
     set("horizontal", "off");
+    return this;
   }
 
-  public void optionalVerticalScrollbar() {
+  public ListBoxBuilder optionalVerticalScrollbar() {
     set("vertical", "optional");
+    return this;
   }
 
-  public void optionalHorizontalScrollbar() {
+  public ListBoxBuilder optionalHorizontalScrollbar() {
     set("horizontal", "optional");
+    return this;
   }
 
-  public void viewConverterClass(@Nonnull final Class<?> clazz) {
+  public ListBoxBuilder viewConverterClass(@Nonnull final Class<?> clazz) {
     set("viewConverterClass", clazz.getName());
+    return this;
   }
 }

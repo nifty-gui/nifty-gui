@@ -18,11 +18,13 @@ public class LabelBuilder extends ControlBuilder {
     text(text);
   }
 
-  public void label(@Nonnull final String label) {
+  public LabelBuilder label(@Nonnull final String label) {
     text(label);
+    return this;
   }
 
-  public void wrap(final boolean enabled) {
+  public LabelBuilder wrap(final boolean enabled) {
     set("wrap", Boolean.toString(enabled));
+    return this;
   }
 }

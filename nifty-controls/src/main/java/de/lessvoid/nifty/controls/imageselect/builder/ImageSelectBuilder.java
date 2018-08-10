@@ -10,20 +10,23 @@ public class ImageSelectBuilder extends ControlBuilder {
     super(id, "imageSelect");
   }
 
-  public void setImageWidth(@Nonnull final SizeValue imageWidth) {
+  public ImageSelectBuilder setImageWidth(@Nonnull final SizeValue imageWidth) {
     set("imageWidth", imageWidth.getValueAsString());
+    return this;
   }
 
-  public void setImageHeight(@Nonnull final SizeValue imageHeight) {
+  public ImageSelectBuilder setImageHeight(@Nonnull final SizeValue imageHeight) {
     set("imageHeight", imageHeight.getValueAsString());
+    return this;
   }
 
-  public void addImage(@Nonnull final String filename) {
+  public ImageSelectBuilder addImage(@Nonnull final String filename) {
     String imageList = get("imageList");
     if (imageList == null || imageList.length() == 0) {
       set("imageList", filename);
-      return;
+      return this;
     }
     set("imageList", imageList + "," + filename);
+    return this;
   }
 }
