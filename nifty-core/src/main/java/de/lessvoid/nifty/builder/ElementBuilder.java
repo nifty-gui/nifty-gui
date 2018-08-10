@@ -111,273 +111,320 @@ public abstract class ElementBuilder {
     return attributes.isAutoId();
   }
 
-  public void name(@Nonnull final String name) {
+  public ElementBuilder name(@Nonnull final String name) {
     attributes.setName(name);
+    return this;
   }
 
-  public void backgroundColor(@Nonnull final String backgroundColor) {
+  public ElementBuilder backgroundColor(@Nonnull final String backgroundColor) {
     attributes.setBackgroundColor(backgroundColor);
+    return this;
   }
 
-  public void backgroundColor(@Nonnull final Color backgroundColor) {
+  public ElementBuilder backgroundColor(@Nonnull final Color backgroundColor) {
     attributes.setBackgroundColor(backgroundColor.getColorString());
+    return this;
   }
 
-  public void controller(@Nonnull final Controller controller) {
+  public ElementBuilder controller(@Nonnull final Controller controller) {
     attributes.set("controller", controller.getClass().getName());
     this.controller = controller;
+    return this;
   }
 
-  public void controller(@Nonnull final String controllerClass) {
+  public ElementBuilder controller(@Nonnull final String controllerClass) {
     attributes.set("controller", controllerClass);
+    return this;
   }
 
-  public void color(@Nonnull final String color) {
+  public ElementBuilder color(@Nonnull final String color) {
     attributes.setColor(color);
+    return this;
   }
 
-  public void color(@Nonnull final Color color) {
+  public ElementBuilder color(@Nonnull final Color color) {
     attributes.setColor(color.getColorString());
+    return this;
   }
 
-  public void selectionColor(@Nonnull final String color) {
+  public ElementBuilder selectionColor(@Nonnull final String color) {
     attributes.setSelectionColor(color);
+    return this;
   }
 
-  public void selectionColor(@Nonnull final Color color) {
+  public ElementBuilder selectionColor(@Nonnull final Color color) {
     attributes.setSelectionColor(color.getColorString());
+    return this;
   }
 
-  public void text(@Nonnull final String text) {
+  public ElementBuilder text(@Nonnull final String text) {
     attributes.setText(text);
+    return this;
   }
 
-  public void backgroundImage(@Nonnull final String backgroundImage) {
+  public ElementBuilder backgroundImage(@Nonnull final String backgroundImage) {
     attributes.setBackgroundImage(backgroundImage);
+    return this;
   }
 
-  public void imageMode(@Nonnull final String imageMode) {
+  public ElementBuilder imageMode(@Nonnull final String imageMode) {
     attributes.setImageMode(imageMode);
+    return this;
   }
 
-  public void inset(@Nonnull final String inset) {
+  public ElementBuilder inset(@Nonnull final String inset) {
     attributes.setInset(inset);
+    return this;
   }
 
-  public void inputMapping(@Nonnull final String inputMapping) {
+  public ElementBuilder inputMapping(@Nonnull final String inputMapping) {
     attributes.setInputMapping(inputMapping);
+    return this;
   }
 
-  public void style(@Nonnull final String style) {
+  public ElementBuilder style(@Nonnull final String style) {
     attributes.setStyle(style);
+    return this;
   }
 
-  public void childLayout(@Nonnull final ChildLayoutType childLayout) {
+  public ElementBuilder childLayout(@Nonnull final ChildLayoutType childLayout) {
     attributes.setChildLayout(childLayout.getLayout());
+    return this;
   }
 
-  public void childLayoutVertical() {
-    childLayout(ChildLayoutType.Vertical);
+  public ElementBuilder childLayoutVertical() {
+    return childLayout(ChildLayoutType.Vertical);
   }
 
-  public void childLayoutHorizontal() {
-    childLayout(ChildLayoutType.Horizontal);
+  public ElementBuilder childLayoutHorizontal() {
+    return childLayout(ChildLayoutType.Horizontal);
   }
 
-  public void childLayoutCenter() {
-    childLayout(ChildLayoutType.Center);
+  public ElementBuilder childLayoutCenter() {
+    return childLayout(ChildLayoutType.Center);
   }
 
-  public void childLayoutAbsolute() {
-    childLayout(ChildLayoutType.Absolute);
+  public ElementBuilder childLayoutAbsolute() {
+    return childLayout(ChildLayoutType.Absolute);
   }
 
-  public void childLayoutAbsoluteInside() {
-    childLayout(ChildLayoutType.AbsoluteInside);
+  public ElementBuilder childLayoutAbsoluteInside() {
+    return childLayout(ChildLayoutType.AbsoluteInside);
   }
 
-  public void childLayoutOverlay() {
-    childLayout(ChildLayoutType.Overlay);
+  public ElementBuilder childLayoutOverlay() {
+    return childLayout(ChildLayoutType.Overlay);
   }
 
-  public void height(@Nonnull final String height) {
+  public ElementBuilder height(@Nonnull final String height) {
     attributes.setHeight(height);
+    return this;
   }
 
-  public void width(@Nonnull final String width) {
+  public ElementBuilder width(@Nonnull final String width) {
     attributes.setWidth(width);
+    return this;
   }
 
-  public void height(@Nonnull final SizeValue height) {
+  public ElementBuilder height(@Nonnull final SizeValue height) {
     attributes.setHeight(height.getValueAsString());
+    return this;
   }
 
-  public void width(@Nonnull final SizeValue width) {
+  public ElementBuilder width(@Nonnull final SizeValue width) {
     attributes.setWidth(width.getValueAsString());
+    return this;
   }
 
-  public void x(@Nonnull final String x) {
+  public ElementBuilder x(@Nonnull final String x) {
     attributes.setX(x);
+    return this;
   }
 
-  public void y(@Nonnull final String y) {
+  public ElementBuilder y(@Nonnull final String y) {
     attributes.setY(y);
+    return this;
   }
 
-  public void x(@Nonnull final SizeValue x) {
+  public ElementBuilder x(@Nonnull final SizeValue x) {
     attributes.setX(x.getValueAsString());
+    return this;
   }
 
-  public void y(@Nonnull final SizeValue y) {
+  public ElementBuilder y(@Nonnull final SizeValue y) {
     attributes.setY(y.getValueAsString());
+    return this;
   }
 
-  public void childClip(final boolean childClip) {
+  public ElementBuilder childClip(final boolean childClip) {
     attributes.setChildClip(String.valueOf(childClip));
+    return this;
   }
 
-  public void renderOrder(final int renderOrder) {
+  public ElementBuilder renderOrder(final int renderOrder) {
     attributes.setRenderOrder(renderOrder);
+    return this;
   }
 
-  public void visible(final boolean visible) {
+  public ElementBuilder visible(final boolean visible) {
     attributes.setVisible(String.valueOf(visible));
+    return this;
   }
 
-  public void focusable(final boolean focusable) {
+  public ElementBuilder focusable(final boolean focusable) {
     attributes.setFocusable(String.valueOf(focusable));
+    return this;
   }
 
-  public void focusableInsertBeforeElementId(@Nonnull final String focusableInsertBeforeElementId) {
+  public ElementBuilder focusableInsertBeforeElementId(@Nonnull final String focusableInsertBeforeElementId) {
     attributes.setFocusableInsertBeforeElementId(focusableInsertBeforeElementId);
+    return this;
   }
 
-  public void textHAlign(@Nonnull final Align align) {
+  public ElementBuilder textHAlign(@Nonnull final Align align) {
     attributes.set("textHAlign", align.getLayout());
+    return this;
   }
 
-  public void textHAlignLeft() {
-    textHAlign(Align.Left);
+  public ElementBuilder textHAlignLeft() {
+    return textHAlign(Align.Left);
   }
 
-  public void textHAlignRight() {
-    textHAlign(Align.Right);
+  public ElementBuilder textHAlignRight() {
+    return textHAlign(Align.Right);
   }
 
-  public void textHAlignCenter() {
-    textHAlign(Align.Center);
+  public ElementBuilder textHAlignCenter() {
+    return textHAlign(Align.Center);
   }
 
-  public void textVAlign(@Nonnull final VAlign valign) {
+  public ElementBuilder textVAlign(@Nonnull final VAlign valign) {
     attributes.set("textVAlign", valign.getLayout());
+    return this;
   }
 
-  public void textVAlignTop() {
-    textVAlign(VAlign.Top);
+  public ElementBuilder textVAlignTop() {
+    return textVAlign(VAlign.Top);
   }
 
-  public void textVAlignBottom() {
-    textVAlign(VAlign.Bottom);
+  public ElementBuilder textVAlignBottom() {
+    return textVAlign(VAlign.Bottom);
   }
 
-  public void textVAlignCenter() {
-    textVAlign(VAlign.Center);
+  public ElementBuilder textVAlignCenter() {
+    return textVAlign(VAlign.Center);
   }
 
-  public void align(@Nonnull final Align align) {
+  public ElementBuilder align(@Nonnull final Align align) {
     attributes.setAlign(align.getLayout());
+    return this;
   }
 
-  public void alignLeft() {
-    align(Align.Left);
+  public ElementBuilder alignLeft() {
+    return align(Align.Left);
   }
 
-  public void alignRight() {
-    align(Align.Right);
+  public ElementBuilder alignRight() {
+    return align(Align.Right);
   }
 
-  public void alignCenter() {
-    align(Align.Center);
+  public ElementBuilder alignCenter() {
+    return align(Align.Center);
   }
 
-  public void valign(@Nonnull final VAlign valign) {
+  public ElementBuilder valign(@Nonnull final VAlign valign) {
     attributes.setVAlign(valign.getLayout());
+    return this;
   }
 
-  public void valignTop() {
-    valign(VAlign.Top);
+  public ElementBuilder valignTop() {
+    return valign(VAlign.Top);
   }
 
-  public void valignBottom() {
-    valign(VAlign.Bottom);
+  public ElementBuilder valignBottom() {
+    return valign(VAlign.Bottom);
   }
 
-  public void valignCenter() {
-    valign(VAlign.Center);
+  public ElementBuilder valignCenter() {
+    return valign(VAlign.Center);
   }
 
-  public void visibleToMouse(final boolean visibleToMouse) {
+  public ElementBuilder visibleToMouse(final boolean visibleToMouse) {
     attributes.setVisibleToMouse(String.valueOf(visibleToMouse));
+    return this;
   }
 
-  public void visibleToMouse() {
-    visibleToMouse(true);
+  public ElementBuilder visibleToMouse() {
+    return visibleToMouse(true);
   }
 
-  public void invisibleToMouse() {
-    visibleToMouse(false);
+  public ElementBuilder invisibleToMouse() {
+    return visibleToMouse(false);
   }
 
-  public void font(@Nonnull final String font) {
+  public ElementBuilder font(@Nonnull final String font) {
     attributes.setFont(font);
+    return this;
   }
 
-  public void filename(@Nonnull final String filename) {
+  public ElementBuilder filename(@Nonnull final String filename) {
     attributes.setFilename(filename);
+    return this;
   }
 
-  public void padding(@Nonnull final String padding) {
+  public ElementBuilder padding(@Nonnull final String padding) {
     attributes.setPadding(padding);
+    return this;
   }
 
-  public void paddingLeft(@Nonnull final String padding) {
+  public ElementBuilder paddingLeft(@Nonnull final String padding) {
     attributes.setPaddingLeft(padding);
+    return this;
   }
 
-  public void paddingRight(@Nonnull final String padding) {
+  public ElementBuilder paddingRight(@Nonnull final String padding) {
     attributes.setPaddingRight(padding);
+    return this;
   }
 
-  public void paddingTop(@Nonnull final String padding) {
+  public ElementBuilder paddingTop(@Nonnull final String padding) {
     attributes.setPaddingTop(padding);
+    return this;
   }
 
-  public void paddingBottom(@Nonnull final String padding) {
+  public ElementBuilder paddingBottom(@Nonnull final String padding) {
     attributes.setPaddingBottom(padding);
+    return this;
   }
 
-  public void margin(@Nonnull final String margin) {
+  public ElementBuilder margin(@Nonnull final String margin) {
     attributes.setMargin(margin);
+    return this;
   }
 
-  public void marginLeft(@Nonnull final String margin) {
+  public ElementBuilder marginLeft(@Nonnull final String margin) {
     attributes.setMarginLeft(margin);
+    return this;
   }
 
-  public void marginRight(@Nonnull final String margin) {
+  public ElementBuilder marginRight(@Nonnull final String margin) {
     attributes.setMarginRight(margin);
+    return this;
   }
 
-  public void marginTop(@Nonnull final String margin) {
+  public ElementBuilder marginTop(@Nonnull final String margin) {
     attributes.setMarginTop(margin);
+    return this;
   }
 
-  public void marginBottom(@Nonnull final String margin) {
+  public ElementBuilder marginBottom(@Nonnull final String margin) {
     attributes.setMarginBottom(margin);
+    return this;
   }
 
-  public void set(@Nonnull final String key, @Nonnull final String value) {
+  public ElementBuilder set(@Nonnull final String key, @Nonnull final String value) {
     attributes.set(key, value);
+    return this;
   }
 
   @Nullable
@@ -385,168 +432,196 @@ public abstract class ElementBuilder {
     return attributes.get(key);
   }
 
-  public void panel(@Nonnull final PanelBuilder panelBuilder) {
+  public ElementBuilder panel(@Nonnull final PanelBuilder panelBuilder) {
     elementBuilders.add(panelBuilder);
+    return this;
   }
 
-  public void text(@Nonnull final TextBuilder textBuilder) {
+  public ElementBuilder text(@Nonnull final TextBuilder textBuilder) {
     elementBuilders.add(textBuilder);
+    return this;
   }
 
-  public void image(@Nonnull final ImageBuilder imageBuilder) {
+  public ElementBuilder image(@Nonnull final ImageBuilder imageBuilder) {
     elementBuilders.add(imageBuilder);
+    return this;
   }
 
-  public void control(@Nonnull final ControlBuilder controlBuilder) {
+  public ElementBuilder control(@Nonnull final ControlBuilder controlBuilder) {
     elementBuilders.add(controlBuilder);
+    return this;
   }
 
-  public void onEffect(@Nonnull final EffectEventId eventId, @Nonnull final EffectBuilder builder) {
+  public ElementBuilder onEffect(@Nonnull final EffectEventId eventId, @Nonnull final EffectBuilder builder) {
     effectBuilders.get(eventId).add(builder);
+    return this;
   }
 
-  public void onStartScreenEffect(@Nonnull final EffectBuilder onStartScreenEffect) {
-    onEffect(EffectEventId.onStartScreen, onStartScreenEffect);
+  public ElementBuilder onStartScreenEffect(@Nonnull final EffectBuilder onStartScreenEffect) {
+    return onEffect(EffectEventId.onStartScreen, onStartScreenEffect);
   }
 
-  public void onEndScreenEffect(@Nonnull final EffectBuilder onEndScreenEffect) {
-    onEffect(EffectEventId.onEndScreen, onEndScreenEffect);
+  public ElementBuilder onEndScreenEffect(@Nonnull final EffectBuilder onEndScreenEffect) {
+    return onEffect(EffectEventId.onEndScreen, onEndScreenEffect);
   }
 
-  public void onHoverEffect(@Nonnull final HoverEffectBuilder onHoverEffect) {
-    onEffect(EffectEventId.onHover, onHoverEffect);
+  public ElementBuilder onHoverEffect(@Nonnull final HoverEffectBuilder onHoverEffect) {
+    return onEffect(EffectEventId.onHover, onHoverEffect);
   }
 
-  public void onStartHoverEffect(@Nonnull final HoverEffectBuilder onStartHoverEffect) {
-    onEffect(EffectEventId.onStartHover, onStartHoverEffect);
+  public ElementBuilder onStartHoverEffect(@Nonnull final HoverEffectBuilder onStartHoverEffect) {
+    return onEffect(EffectEventId.onStartHover, onStartHoverEffect);
   }
 
-  public void onEndHoverEffect(@Nonnull final HoverEffectBuilder onEndHoverEffect) {
-    onEffect(EffectEventId.onEndHover, onEndHoverEffect);
+  public ElementBuilder onEndHoverEffect(@Nonnull final HoverEffectBuilder onEndHoverEffect) {
+    return onEffect(EffectEventId.onEndHover, onEndHoverEffect);
   }
 
-  public void onClickEffect(@Nonnull final EffectBuilder onClickEffect) {
-    onEffect(EffectEventId.onClick, onClickEffect);
+  public ElementBuilder onClickEffect(@Nonnull final EffectBuilder onClickEffect) {
+    return onEffect(EffectEventId.onClick, onClickEffect);
   }
 
-  public void onFocusEffect(@Nonnull final EffectBuilder onFocusEffect) {
-    onEffect(EffectEventId.onFocus, onFocusEffect);
+  public ElementBuilder onFocusEffect(@Nonnull final EffectBuilder onFocusEffect) {
+    return onEffect(EffectEventId.onFocus, onFocusEffect);
   }
 
-  public void onLostFocusEffect(@Nonnull final EffectBuilder onLostFocusEffect) {
-    onEffect(EffectEventId.onLostFocus, onLostFocusEffect);
+  public ElementBuilder onLostFocusEffect(@Nonnull final EffectBuilder onLostFocusEffect) {
+    return onEffect(EffectEventId.onLostFocus, onLostFocusEffect);
   }
 
-  public void onGetFocusEffect(@Nonnull final EffectBuilder onGetFocusEffect) {
-    onEffect(EffectEventId.onGetFocus, onGetFocusEffect);
+  public ElementBuilder onGetFocusEffect(@Nonnull final EffectBuilder onGetFocusEffect) {
+    return onEffect(EffectEventId.onGetFocus, onGetFocusEffect);
   }
 
-  public void onActiveEffect(@Nonnull final EffectBuilder onActiveEffect) {
-    onEffect(EffectEventId.onActive, onActiveEffect);
+  public ElementBuilder onActiveEffect(@Nonnull final EffectBuilder onActiveEffect) {
+    return onEffect(EffectEventId.onActive, onActiveEffect);
   }
 
-  public void onShowEffect(@Nonnull final EffectBuilder onShowEffect) {
-    onEffect(EffectEventId.onShow, onShowEffect);
+  public ElementBuilder onShowEffect(@Nonnull final EffectBuilder onShowEffect) {
+    return onEffect(EffectEventId.onShow, onShowEffect);
   }
 
-  public void onHideEffect(@Nonnull final EffectBuilder onHideEffect) {
-    onEffect(EffectEventId.onHide, onHideEffect);
+  public ElementBuilder onHideEffect(@Nonnull final EffectBuilder onHideEffect) {
+    return onEffect(EffectEventId.onHide, onHideEffect);
   }
 
-  public void onCustomEffect(@Nonnull final EffectBuilder onCustomEffect) {
-    onEffect(EffectEventId.onCustom, onCustomEffect);
+  public ElementBuilder onCustomEffect(@Nonnull final EffectBuilder onCustomEffect) {
+    return onEffect(EffectEventId.onCustom, onCustomEffect);
   }
   
-  public void interactOnClick(@Nonnull String onClick) {
+  public ElementBuilder interactOnClick(@Nonnull String onClick) {
     interactAttributes.setOnClick(onClick);
+    return this;
   }
   
-  public void interactOnClickRepeat(@Nonnull final String onClickRepeat) {
+  public ElementBuilder interactOnClickRepeat(@Nonnull final String onClickRepeat) {
     interactAttributes.setOnClickRepeat(onClickRepeat);
+    return this;
   }
   
-  public void interactOnRelease(@Nonnull final String onRelease) {
+  public ElementBuilder interactOnRelease(@Nonnull final String onRelease) {
     interactAttributes.setOnRelease(onRelease);
+    return this;
   }
   
-  public void interactOnClickMouseMove(@Nonnull final String onClickMouseMove) {
+  public ElementBuilder interactOnClickMouseMove(@Nonnull final String onClickMouseMove) {
     interactAttributes.setOnClickMouseMove(onClickMouseMove);
+    return this;
   }
   
-  public void interactOnMultiClick(@Nonnull String onMultiClick){
+  public ElementBuilder interactOnMultiClick(@Nonnull String onMultiClick){
     interactAttributes.setOnMultiClick(onMultiClick);
+    return this;
   }
   
-  public void interactOnPrimaryClick(@Nonnull String onPrimaryClick) {
+  public ElementBuilder interactOnPrimaryClick(@Nonnull String onPrimaryClick) {
     interactAttributes.setOnPrimaryClick(onPrimaryClick);
+    return this;
   }
   
-  public void interactOnPrimaryClickRepeat(@Nonnull final String onPrimaryClickRepeat) {
+  public ElementBuilder interactOnPrimaryClickRepeat(@Nonnull final String onPrimaryClickRepeat) {
     interactAttributes.setOnPrimaryClickRepeat(onPrimaryClickRepeat);
+    return this;
   }
   
-  public void interactOnPrimaryRelease(@Nonnull final String onPrimaryRelease) {
+  public ElementBuilder interactOnPrimaryRelease(@Nonnull final String onPrimaryRelease) {
     interactAttributes.setOnPrimaryRelease(onPrimaryRelease);
+    return this;
   }
   
-  public void interactOnPrimaryClickMouseMove(@Nonnull final String onPrimaryClickMouseMove) {
+  public ElementBuilder interactOnPrimaryClickMouseMove(@Nonnull final String onPrimaryClickMouseMove) {
     interactAttributes.setOnPrimaryClickMouseMove(onPrimaryClickMouseMove);
+    return this;
   }
   
-  public void interactOnPrimaryMultiClick(@Nonnull String onPrimaryMultiClick){
+  public ElementBuilder interactOnPrimaryMultiClick(@Nonnull String onPrimaryMultiClick){
     interactAttributes.setOnPrimaryMultiClick(onPrimaryMultiClick);
+    return this;
   }
   
-  public void interactOnSecondaryClick(@Nonnull String onSecondaryClick) {
+  public ElementBuilder interactOnSecondaryClick(@Nonnull String onSecondaryClick) {
     interactAttributes.setOnSecondaryClick(onSecondaryClick);
+    return this;
   }
   
-  public void interactOnSecondaryClickRepeat(@Nonnull final String onSecondaryClickRepeat) {
+  public ElementBuilder interactOnSecondaryClickRepeat(@Nonnull final String onSecondaryClickRepeat) {
     interactAttributes.setOnSecondaryClickRepeat(onSecondaryClickRepeat);
+    return this;
   }
   
-  public void interactOnSecondaryRelease(@Nonnull final String onSecondaryRelease) {
+  public ElementBuilder interactOnSecondaryRelease(@Nonnull final String onSecondaryRelease) {
     interactAttributes.setOnSecondaryRelease(onSecondaryRelease);
+    return this;
   }
   
-  public void interactOnSecondaryClickMouseMove(@Nonnull final String onSecondaryClickMouseMove) {
+  public ElementBuilder interactOnSecondaryClickMouseMove(@Nonnull final String onSecondaryClickMouseMove) {
     interactAttributes.setOnSecondaryClickMouseMove(onSecondaryClickMouseMove);
+    return this;
   }
   
-  public void interactOnSecondaryMultiClick(@Nonnull String onSecondaryMultiClick){
+  public ElementBuilder interactOnSecondaryMultiClick(@Nonnull String onSecondaryMultiClick){
     interactAttributes.setOnSecondaryMultiClick(onSecondaryMultiClick);
+    return this;
   }
 
-  public void interactOnTertiaryClick(@Nonnull String onTertiaryClick) {
+  public ElementBuilder interactOnTertiaryClick(@Nonnull String onTertiaryClick) {
     interactAttributes.setOnTertiaryClick(onTertiaryClick);
+    return this;
   }
 
-  public void interactOnTertiaryClickRepeat(@Nonnull final String onTertiaryClickRepeat) {
+  public ElementBuilder interactOnTertiaryClickRepeat(@Nonnull final String onTertiaryClickRepeat) {
     interactAttributes.setOnTertiaryClickRepeat(onTertiaryClickRepeat);
+    return this;
   }
   
-  public void interactOnTertiaryRelease(@Nonnull final String onTertiaryRelease) {
+  public ElementBuilder interactOnTertiaryRelease(@Nonnull final String onTertiaryRelease) {
     interactAttributes.setOnTertiaryRelease(onTertiaryRelease);
+    return this;
   }
 
-  public void interactOnTertiaryClickMouseMove(@Nonnull final String onTertiaryClickMouseMove) {
+  public ElementBuilder interactOnTertiaryClickMouseMove(@Nonnull final String onTertiaryClickMouseMove) {
     interactAttributes.setOnTertiaryClickMouseMove(onTertiaryClickMouseMove);
+    return this;
   }
 
-  public void interactOnTertiaryMultiClick(@Nonnull String onTertiaryMultiClick){
+  public ElementBuilder interactOnTertiaryMultiClick(@Nonnull String onTertiaryMultiClick){
     interactAttributes.setOnTertiaryMultiClick(onTertiaryMultiClick);
+    return this;
   }
   
-  public void interactOnMouseOver(@Nonnull final String onMouseOver) {
+  public ElementBuilder interactOnMouseOver(@Nonnull final String onMouseOver) {
     interactAttributes.setOnMouseOver(onMouseOver);
+    return this;
   }
 
-  public void interactOnMouseWheel(@Nonnull final String onMouseWheel) {
+  public ElementBuilder interactOnMouseWheel(@Nonnull final String onMouseWheel) {
     interactAttributes.setOnMouseWheel(onMouseWheel);
+    return this;
   }
 
-  public void interactOnClickAlternateKey(@Nonnull final String onClickAlternateKey) {
+  public ElementBuilder interactOnClickAlternateKey(@Nonnull final String onClickAlternateKey) {
     interactAttributes.setOnClickAlternateKey(onClickAlternateKey);
+    return this;
   }
 
   public List<ElementBuilder> getElementBuilders() {

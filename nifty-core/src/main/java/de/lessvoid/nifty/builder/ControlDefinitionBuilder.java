@@ -21,13 +21,15 @@ public class ControlDefinitionBuilder extends ElementBuilder {
   }
 
   @Override
-  public void controller(@Nonnull final Controller controller) {
+  public ControlDefinitionBuilder controller(@Nonnull final Controller controller) {
     creator.setController(controller.getClass().getName());
+    return this;
   }
 
   @Override
-  public void controller(@Nonnull final String controllerClass) {
+  public ControlDefinitionBuilder controller(@Nonnull final String controllerClass) {
     creator.setController(controllerClass);
+    return this;
   }
 
   @Nonnull

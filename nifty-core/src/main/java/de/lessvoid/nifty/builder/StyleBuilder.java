@@ -88,328 +88,390 @@ public class StyleBuilder {
 
   // these two attributes are applied directly to the style (<style id="this" base="another">)
 
-  public void id(@Nonnull final String id) {
+  public StyleBuilder id(@Nonnull final String id) {
     styleAttributes.set("id", id);
+    return this;
   }
 
-  public void base(@Nonnull final String baseStyle) {
+  public StyleBuilder base(@Nonnull final String baseStyle) {
     styleAttributes.set("base", baseStyle);
+    return this;
   }
 
   // all other attributes are applied to the attribute tag (<style><attributes .../></style>)
 
-  public void name(@Nonnull final String name) {
+  public StyleBuilder name(@Nonnull final String name) {
     attributes.setName(name);
+    return this;
   }
 
-  public void backgroundColor(@Nonnull final String backgroundColor) {
+  public StyleBuilder backgroundColor(@Nonnull final String backgroundColor) {
     attributes.setBackgroundColor(backgroundColor);
+    return this;
   }
 
-  public void backgroundColor(@Nonnull final Color backgroundColor) {
+  public StyleBuilder backgroundColor(@Nonnull final Color backgroundColor) {
     attributes.setBackgroundColor(backgroundColor.getColorString());
+    return this;
   }
 
-  public void color(@Nonnull final String color) {
+  public StyleBuilder color(@Nonnull final String color) {
     attributes.setColor(color);
+    return this;
   }
 
-  public void color(@Nonnull final Color color) {
+  public StyleBuilder color(@Nonnull final Color color) {
     attributes.setColor(color.getColorString());
+    return this;
   }
 
-  public void selectionColor(@Nonnull final String color) {
+  public StyleBuilder selectionColor(@Nonnull final String color) {
     attributes.setSelectionColor(color);
+    return this;
   }
 
-  public void selectionColor(@Nonnull final Color color) {
+  public StyleBuilder selectionColor(@Nonnull final Color color) {
     attributes.setSelectionColor(color.getColorString());
+    return this;
   }
 
-  public void text(@Nonnull final String text) {
+  public StyleBuilder text(@Nonnull final String text) {
     attributes.setText(text);
+    return this;
   }
 
-  public void backgroundImage(@Nonnull final String backgroundImage) {
+  public StyleBuilder backgroundImage(@Nonnull final String backgroundImage) {
     attributes.setBackgroundImage(backgroundImage);
+    return this;
   }
 
-  public void imageMode(@Nonnull final String imageMode) {
+  public StyleBuilder imageMode(@Nonnull final String imageMode) {
     attributes.setImageMode(imageMode);
+    return this;
   }
 
-  public void inset(@Nonnull final String inset) {
+  public StyleBuilder inset(@Nonnull final String inset) {
     attributes.setInset(inset);
+    return this;
   }
 
-  public void inputMapping(@Nonnull final String inputMapping) {
+  public StyleBuilder inputMapping(@Nonnull final String inputMapping) {
     attributes.setInputMapping(inputMapping);
+    return this;
   }
 
-  public void style(@Nonnull final String style) {
+  public StyleBuilder style(@Nonnull final String style) {
     attributes.setStyle(style);
+    return this;
   }
 
-  public void childLayout(@Nonnull final ChildLayoutType childLayout) {
+  public StyleBuilder childLayout(@Nonnull final ChildLayoutType childLayout) {
     attributes.setChildLayout(childLayout.getLayout());
+    return this;
   }
 
-  public void childLayoutVertical() {
-    childLayout(ChildLayoutType.Vertical);
+  public StyleBuilder childLayoutVertical() {
+    return childLayout(ChildLayoutType.Vertical);
   }
 
-  public void childLayoutHorizontal() {
-    childLayout(ChildLayoutType.Horizontal);
+  public StyleBuilder childLayoutHorizontal() {
+    return childLayout(ChildLayoutType.Horizontal);
   }
 
-  public void childLayoutCenter() {
-    childLayout(ChildLayoutType.Center);
+  public StyleBuilder childLayoutCenter() {
+    return childLayout(ChildLayoutType.Center);
   }
 
-  public void childLayoutAbsolute() {
-    childLayout(ChildLayoutType.Absolute);
+  public StyleBuilder childLayoutAbsolute() {
+    return childLayout(ChildLayoutType.Absolute);
   }
 
-  public void childLayoutOverlay() {
-    childLayout(ChildLayoutType.Overlay);
+  public StyleBuilder childLayoutOverlay() {
+    return childLayout(ChildLayoutType.Overlay);
   }
 
-  public void height(@Nonnull final String height) {
+  public StyleBuilder height(@Nonnull final String height) {
     attributes.setHeight(height);
+    return this;
   }
 
-  public void width(@Nonnull final String width) {
+  public StyleBuilder width(@Nonnull final String width) {
     attributes.setWidth(width);
+    return this;
   }
 
-  public void x(@Nonnull final String x) {
+  public StyleBuilder x(@Nonnull final String x) {
     attributes.setX(x);
+    return this;
   }
 
-  public void y(@Nonnull final String y) {
+  public StyleBuilder y(@Nonnull final String y) {
     attributes.setY(y);
+    return this;
   }
 
-  public void childClip(final boolean childClip) {
+  public StyleBuilder childClip(final boolean childClip) {
     attributes.setChildClip(String.valueOf(childClip));
+    return this;
   }
 
-  public void renderOrder(final int renderOrder) {
+  public StyleBuilder renderOrder(final int renderOrder) {
     attributes.setRenderOrder(renderOrder);
+    return this;
   }
 
-  public void visible(final boolean visible) {
+  public StyleBuilder visible(final boolean visible) {
     attributes.setVisible(String.valueOf(visible));
+    return this;
   }
 
-  public void focusable(final boolean focusable) {
+  public StyleBuilder focusable(final boolean focusable) {
     attributes.setFocusable(String.valueOf(focusable));
+    return this;
   }
 
-  public void textHAlign(@Nonnull final Align align) {
+  public StyleBuilder textHAlign(@Nonnull final Align align) {
     attributes.set("textHAlign", align.getLayout());
+    return this;
   }
 
-  public void textHAlignLeft() {
-    textHAlign(Align.Left);
+  public StyleBuilder textHAlignLeft() {
+    return textHAlign(Align.Left);
   }
 
-  public void textHAlignRight() {
-    textHAlign(Align.Right);
+  public StyleBuilder textHAlignRight() {
+    return textHAlign(Align.Right);
   }
 
-  public void textHAlignCenter() {
-    textHAlign(Align.Center);
+  public StyleBuilder textHAlignCenter() {
+    return textHAlign(Align.Center);
   }
 
-  public void textVAlign(@Nonnull final VAlign valign) {
+  public StyleBuilder textVAlign(@Nonnull final VAlign valign) {
     attributes.set("textVAlign", valign.getLayout());
+    return this;
   }
 
-  public void textVAlignTop() {
-    textVAlign(VAlign.Top);
+  public StyleBuilder textVAlignTop() {
+    return textVAlign(VAlign.Top);
   }
 
-  public void textVAlignBottom() {
-    textVAlign(VAlign.Bottom);
+  public StyleBuilder textVAlignBottom() {
+    return textVAlign(VAlign.Bottom);
   }
 
-  public void textVAlignCenter() {
-    textVAlign(VAlign.Center);
+  public StyleBuilder textVAlignCenter() {
+    return textVAlign(VAlign.Center);
   }
 
-  public void align(@Nonnull final Align align) {
+  public StyleBuilder align(@Nonnull final Align align) {
     attributes.setAlign(align.getLayout());
+    return this;
   }
 
-  public void alignLeft() {
-    align(Align.Left);
+  public StyleBuilder alignLeft() {
+    return align(Align.Left);
   }
 
-  public void alignRight() {
-    align(Align.Right);
+  public StyleBuilder alignRight() {
+    return align(Align.Right);
   }
 
-  public void alignCenter() {
-    align(Align.Center);
+  public StyleBuilder alignCenter() {
+    return align(Align.Center);
   }
 
-  public void valign(@Nonnull final VAlign valign) {
+  public StyleBuilder valign(@Nonnull final VAlign valign) {
     attributes.setVAlign(valign.getLayout());
+    return this;
   }
 
-  public void valignTop() {
-    valign(VAlign.Top);
+  public StyleBuilder valignTop() {
+    return valign(VAlign.Top);
   }
 
-  public void valignBottom() {
-    valign(VAlign.Bottom);
+  public StyleBuilder valignBottom() {
+    return valign(VAlign.Bottom);
   }
 
-  public void valignCenter() {
-    valign(VAlign.Center);
+  public StyleBuilder valignCenter() {
+    return valign(VAlign.Center);
   }
 
-  public void visibleToMouse(final boolean visibleToMouse) {
+  public StyleBuilder visibleToMouse(final boolean visibleToMouse) {
     attributes.setVisibleToMouse(String.valueOf(visibleToMouse));
+    return this;
   }
 
-  public void visibleToMouse() {
-    visibleToMouse(true);
+  public StyleBuilder visibleToMouse() {
+    return visibleToMouse(true);
   }
 
-  public void invisibleToMouse() {
-    visibleToMouse(false);
+  public StyleBuilder invisibleToMouse() {
+    return visibleToMouse(false);
   }
 
-  public void font(@Nonnull final String font) {
+  public StyleBuilder font(@Nonnull final String font) {
     attributes.setFont(font);
+    return this;
   }
 
-  public void filename(@Nonnull final String filename) {
+  public StyleBuilder filename(@Nonnull final String filename) {
     attributes.setFilename(filename);
+    return this;
   }
 
-  public void padding(@Nonnull final String padding) {
+  public StyleBuilder padding(@Nonnull final String padding) {
     attributes.setPadding(padding);
+    return this;
   }
 
-  public void paddingLeft(@Nonnull final String padding) {
+  public StyleBuilder paddingLeft(@Nonnull final String padding) {
     attributes.setPaddingLeft(padding);
+    return this;
   }
 
-  public void paddingRight(@Nonnull final String padding) {
+  public StyleBuilder paddingRight(@Nonnull final String padding) {
     attributes.setPaddingRight(padding);
+    return this;
   }
 
-  public void paddingTop(@Nonnull final String padding) {
+  public StyleBuilder paddingTop(@Nonnull final String padding) {
     attributes.setPaddingTop(padding);
+    return this;
   }
 
-  public void paddingBottom(@Nonnull final String padding) {
+  public StyleBuilder paddingBottom(@Nonnull final String padding) {
     attributes.setPaddingBottom(padding);
+    return this;
   }
 
-  public void margin(@Nonnull final String margin) {
+  public StyleBuilder margin(@Nonnull final String margin) {
     attributes.setMargin(margin);
+    return this;
   }
 
-  public void marginLeft(@Nonnull final String margin) {
+  public StyleBuilder marginLeft(@Nonnull final String margin) {
     attributes.setMarginLeft(margin);
+    return this;
   }
 
-  public void marginRight(@Nonnull final String margin) {
+  public StyleBuilder marginRight(@Nonnull final String margin) {
     attributes.setMarginRight(margin);
+    return this;
   }
 
-  public void marginTop(@Nonnull final String margin) {
+  public StyleBuilder marginTop(@Nonnull final String margin) {
     attributes.setMarginTop(margin);
+    return this;
   }
 
-  public void marginBottom(@Nonnull final String margin) {
+  public StyleBuilder marginBottom(@Nonnull final String margin) {
     attributes.setMarginBottom(margin);
+    return this;
   }
 
-  public void set(@Nonnull final String key, @Nonnull final String value) {
+  public StyleBuilder set(@Nonnull final String key, @Nonnull final String value) {
     attributes.set(key, value);
+    return this;
   }
 
-  public void onStartScreenEffect(final EffectBuilder onStartScreenEffect) {
+  public StyleBuilder onStartScreenEffect(final EffectBuilder onStartScreenEffect) {
     onStartScreen.add(onStartScreenEffect);
+    return this;
   }
 
-  public void onEndScreenEffect(final EffectBuilder onEndScreenEffect) {
+  public StyleBuilder onEndScreenEffect(final EffectBuilder onEndScreenEffect) {
     onEndScreen.add(onEndScreenEffect);
+    return this;
   }
 
-  public void onHoverEffect(final HoverEffectBuilder onHoverEffect) {
+  public StyleBuilder onHoverEffect(final HoverEffectBuilder onHoverEffect) {
     onHover.add(onHoverEffect);
+    return this;
   }
 
-  public void onStartHoverEffect(final HoverEffectBuilder onStartHoverEffect) {
+  public StyleBuilder onStartHoverEffect(final HoverEffectBuilder onStartHoverEffect) {
     onStartHover.add(onStartHoverEffect);
+    return this;
   }
 
-  public void onEndHoverEffect(final HoverEffectBuilder onEndHoverEffect) {
+  public StyleBuilder onEndHoverEffect(final HoverEffectBuilder onEndHoverEffect) {
     onEndHover.add(onEndHoverEffect);
+    return this;
   }
 
-  public void onClickEffect(final EffectBuilder onClickEffect) {
+  public StyleBuilder onClickEffect(final EffectBuilder onClickEffect) {
     onClick.add(onClickEffect);
+    return this;
   }
 
-  public void onFocusEffect(final EffectBuilder onFocusEffect) {
+  public StyleBuilder onFocusEffect(final EffectBuilder onFocusEffect) {
     onFocus.add(onFocusEffect);
+    return this;
   }
 
-  public void onLostFocusEffect(final EffectBuilder onLostFocusEffect) {
+  public StyleBuilder onLostFocusEffect(final EffectBuilder onLostFocusEffect) {
     onLostFocus.add(onLostFocusEffect);
+    return this;
   }
 
-  public void onGetFocusEffect(final EffectBuilder onGetFocusEffect) {
+  public StyleBuilder onGetFocusEffect(final EffectBuilder onGetFocusEffect) {
     onGetFocus.add(onGetFocusEffect);
+    return this;
   }
 
-  public void onActiveEffect(final EffectBuilder onActiveEffect) {
+  public StyleBuilder onActiveEffect(final EffectBuilder onActiveEffect) {
     onActive.add(onActiveEffect);
+    return this;
   }
 
-  public void onShowEffect(final EffectBuilder onShowEffect) {
+  public StyleBuilder onShowEffect(final EffectBuilder onShowEffect) {
     onShow.add(onShowEffect);
+    return this;
   }
 
-  public void onHideEffect(final EffectBuilder onHideEffect) {
+  public StyleBuilder onHideEffect(final EffectBuilder onHideEffect) {
     onHide.add(onHideEffect);
+    return this;
   }
 
-  public void onCustomEffect(final EffectBuilder onCustomEffect) {
+  public StyleBuilder onCustomEffect(final EffectBuilder onCustomEffect) {
     onCustom.add(onCustomEffect);
+    return this;
   }
 
-  public void interactOnClick(@Nonnull String method) {
+  public StyleBuilder interactOnClick(@Nonnull String method) {
     attributes.setInteractOnClick(method);
+    return this;
   }
-  public void interactOnMultiClick(@Nonnull String method){
+  public StyleBuilder interactOnMultiClick(@Nonnull String method){
     attributes.setIneractOnMultiClick(method);
+    return this;
   }
-  public void interactOnRelease(@Nonnull final String onRelease) {
+  public StyleBuilder interactOnRelease(@Nonnull final String onRelease) {
     attributes.setInteractOnRelease(onRelease);
+    return this;
   }
 
-  public void interactOnMouseOver(@Nonnull final String onMouseOver) {
+  public StyleBuilder interactOnMouseOver(@Nonnull final String onMouseOver) {
     attributes.setInteractOnMouseOver(onMouseOver);
+    return this;
   }
 
-  public void interactOnClickRepeat(@Nonnull final String onClickRepeat) {
+  public StyleBuilder interactOnClickRepeat(@Nonnull final String onClickRepeat) {
     attributes.setInteractOnClickRepeat(onClickRepeat);
+    return this;
   }
 
-  public void interactOnClickMouseMove(@Nonnull final String onClickMouseMove) {
+  public StyleBuilder interactOnClickMouseMove(@Nonnull final String onClickMouseMove) {
     attributes.setInteractOnClickMouseMove(onClickMouseMove);
+    return this;
   }
 
-  public void interactOnClickAlternateKey(@Nonnull final String onClickAlternateKey) {
+  public StyleBuilder interactOnClickAlternateKey(@Nonnull final String onClickAlternateKey) {
     attributes.setInteractOnClickAlternateKey(onClickAlternateKey);
+    return this;
   }
 
   @Nonnull

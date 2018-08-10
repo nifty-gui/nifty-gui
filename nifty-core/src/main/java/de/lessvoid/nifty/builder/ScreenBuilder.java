@@ -25,24 +25,29 @@ public class ScreenBuilder {
     creator.setScreenController(controller);
   }
 
-  public void controller(final ScreenController controller) {
+  public ScreenBuilder controller(final ScreenController controller) {
     creator.setScreenController(controller);
+    return this;
   }
 
-  public void defaultFocusElement(final String defaultFocusElement) {
+  public ScreenBuilder defaultFocusElement(final String defaultFocusElement) {
     creator.setDefaultFocusElement(defaultFocusElement);
+    return this;
   }
 
-  public void inputMapping(final String inputMapping) {
+  public ScreenBuilder inputMapping(final String inputMapping) {
     creator.setInputMapping(inputMapping);
+    return this;
   }
 
-  public void inputMappingPre(final String inputMappingPre) {
+  public ScreenBuilder inputMappingPre(final String inputMappingPre) {
     creator.setInputMappingPre(inputMappingPre);
+    return this;
   }
 
-  public void layer(final LayerBuilder layerBuilder) {
+  public ScreenBuilder layer(final LayerBuilder layerBuilder) {
     layerBuilders.add(layerBuilder);
+    return this;
   }
 
   @Nonnull
