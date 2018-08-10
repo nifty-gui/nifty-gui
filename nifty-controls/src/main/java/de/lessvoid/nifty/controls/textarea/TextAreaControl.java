@@ -323,43 +323,37 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
     }
 
     protected static int convertCursorPositionWithWrappingToWithout(int cursorPositionWithWrapping, String textWithWrapping, String textWithoutWrapping){
+        cursorPositionWithWrapping = clamp(cursorPositionWithWrapping, 0, textWithWrapping.length());
+
         if(cursorPositionWithWrapping == textWithWrapping.length()){
             return textWithoutWrapping.length();
         }
-
-        textWithWrapping = textWithWrapping+"/n";
-        String wrappedTextBeforeCursor = textWithWrapping.substring(0, cursorPositionWithWrapping);
-        List<String> wrappedLines = new ArrayList<String>(Arrays.asList(wrappedTextBeforeCursor.split("\n", -1))); //split on new lines, some may be real, some wrapped
-
-        boolean cursorStraightAfterNewLine = wrappedTextBeforeCursor.endsWith("\n");
-
-        //if the very list line is "" then remove it as the new line is already considered at the end of the line before
-
-        if(wrappedLines.get(wrappedLines.size()-1).equals("")){
-            wrappedLines.remove(wrappedLines.size()-1);
+        if(textWithWrapping.equals("")){
+            return 0;
         }
 
-        //use each wrapped line to track forward in the real text. If a wrappedLines line end alignes with a real line end add a bonus 1
-        int absoluteCursorPosition = 0;
-        for(String wrappedLine: wrappedLines){
-            absoluteCursorPosition+=wrappedLine.length();
+        //track forward, adding an extra index every time we encounter a new line not in the without wrapping string
+        int withWrappingPosition = 0;
+        int withoutWrappingPosition = 0;
+        while(withWrappingPosition<cursorPositionWithWrapping){
+            char nextProposedWithWrapped = textWithWrapping.charAt(withWrappingPosition);
+            char nextProposedWithoutWrapping = textWithoutWrapping.charAt(withoutWrappingPosition);
 
-            boolean lastLine = wrappedLine.equals(wrappedLines.get(wrappedLines.size()-1));
+            if(nextProposedWithWrapped == nextProposedWithoutWrapping){
+                withoutWrappingPosition++;
+                withWrappingPosition++;
+            }else if(nextProposedWithWrapped == '\n'){
+                withWrappingPosition++;
+            }else{
+                withoutWrappingPosition++;
+            }
 
-            if(textWithoutWrapping.length()>absoluteCursorPosition+1){
-                char charWithoutWrapping = textWithoutWrapping.charAt(absoluteCursorPosition);
-                boolean realNewLine = charWithoutWrapping == '\n';
-                boolean wrappedOnSpace =charWithoutWrapping == ' ';
-
-                if(realNewLine || wrappedOnSpace) {
-                    if(!lastLine || cursorStraightAfterNewLine) {
-                        absoluteCursorPosition++;
-                    }
-                }
+            if(withWrappingPosition == textWithWrapping.length()){
+                return withWrappingPosition;
             }
         }
 
-        return absoluteCursorPosition;
+        return withoutWrappingPosition;
     }
 
     private int convertCursorPositionWithoutWrappingToWith(int cursorPositionWithoutWrapping){

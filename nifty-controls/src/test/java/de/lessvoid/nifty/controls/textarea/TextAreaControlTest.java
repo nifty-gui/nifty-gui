@@ -24,6 +24,23 @@ public class TextAreaControlTest {
     }
 
     @Test
+    public void convertCursorPositionWithWrappingToWithout_supressedLeadingSpaces(){
+        String textWithWrapping =
+                "    message = 'Go Away'\n" +
+                "exclamationMarksToShow = permittedDistance - distanceAway //closer they get the more exclamation\n" +
+                "marks";
+        String textWithoutWrapping =
+                "    message = 'Go Away'\n" +
+                "    exclamationMarksToShow = permittedDistance - distanceAway //closer they get the more exclamation marks\n";
+
+        assertEquals(0, convertCursorPositionWithWrappingToWithout(0, textWithWrapping, textWithoutWrapping));
+        //just after the "e" of exclamationMarksToShow
+        assertEquals(29, convertCursorPositionWithWrappingToWithout(25, textWithWrapping, textWithoutWrapping));
+        //end
+        assertEquals(131, convertCursorPositionWithWrappingToWithout(126, textWithWrapping, textWithoutWrapping));
+    }
+
+    @Test
     public void convertCursorPositionWithWrappingToCursorPositionWithoutWrapping_withWrapping(){
         String text = "abcdef\n\nabcdef";
         String textWithWrapping = "abc\ndef\n\nabc\ndef";
@@ -173,7 +190,7 @@ public class TextAreaControlTest {
     }
 
     @Test
-    public void convertCursorPositionWithoutWrappingToWith_loosesLeadingSpaces(){ //when a line is wrapped it looses and leading spaces
+    public void convertCursorPositionWithoutWrappingToWith_loosesLeadingSpaces(){ //when a line is wrapped it looses any leading spaces
         String textWithWrapping =
                 "    message = 'Go Away'\n" +
                 "exclamationMarksToShow = permittedDistance - distanceAway //closer they get the more exclamation\n" +
