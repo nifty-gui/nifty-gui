@@ -586,7 +586,7 @@ public abstract class ElementBuilder {
    */
   @Nonnull
   public Element build(@Nonnull final Element parent, @Nullable final Element before) {
-    Screen screen = parent.getScreen();
+    //find the index of 'before' element
     List<Element> parentList = parent.getChildren();
     int index = parentList.size();
     for (int i = 0; i < parentList.size(); i++) {
@@ -595,10 +595,8 @@ public abstract class ElementBuilder {
         break;
       }
     }
-    ElementType type = buildElementType();
-    Element result = parent.getNifty().createElementFromType(screen, parent, type, index);
-    screen.layoutLayers();
-    return result;
+
+    return this.build(parent, index);
   }
 
   /**

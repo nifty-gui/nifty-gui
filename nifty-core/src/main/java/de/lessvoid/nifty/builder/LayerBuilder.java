@@ -1,6 +1,5 @@
 package de.lessvoid.nifty.builder;
 
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.dynamic.LayerCreator;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -19,8 +18,18 @@ public class LayerBuilder extends ElementBuilder {
   }
 
   @Override
-  public Element build(@Nonnull final Nifty nifty, @Nonnull final Screen screen, @Nonnull final Element parent) {
-    Element e = super.build(nifty, screen, parent);
+  public Element build(@Nonnull final Element parent) {
+    Element e = super.build(parent);
+    Screen screen = parent.getScreen();
+    screen.addLayerElement(e);
+    screen.processAddAndRemoveLayerElements();
+    return e;
+  }
+
+  @Override
+  public Element build(@Nonnull final Element parent, final int index) {
+    Element e = super.build(parent, index);
+    Screen screen = parent.getScreen();
     screen.addLayerElement(e);
     screen.processAddAndRemoveLayerElements();
     return e;
