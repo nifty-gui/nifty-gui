@@ -172,4 +172,18 @@ public class TextAreaControlTest {
 
     }
 
+    @Test
+    public void convertCursorPositionWithoutWrappingToWith_loosesLeadingSpaces(){ //when a line is wrapped it looses and leading spaces
+        String textWithWrapping =
+                "    message = 'Go Away'\n" +
+                "exclamationMarksToShow = permittedDistance - distanceAway //closer they get the more exclamation\n" +
+                "marks";
+        String textWithoutWrapping =
+                "    message = 'Go Away'\n" +
+                "    exclamationMarksToShow = permittedDistance - distanceAway //closer they get the more exclamation marks\n";
+
+        assertEquals(126, convertCursorPositionWithoutWrappingToWith(131, textWithWrapping, textWithoutWrapping));
+
+    }
+
 }

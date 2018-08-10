@@ -367,34 +367,43 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
     }
 
     protected static int convertCursorPositionWithoutWrappingToWith(int cursorPositionWithoutWrapping, String textWithWrapping, String textWithoutWrapping){
+        cursorPositionWithoutWrapping = clamp(cursorPositionWithoutWrapping, 0, textWithoutWrapping.length() );
+
+        if(textWithWrapping.equals("")){
+            return 0;
+        }
+
         //track forward, adding an extra index every time we encounter a new line not in the without wrapping string
+        int withWrappingPosition = 0;
+        int withoutWrappingPosition = 0;
+        while(withoutWrappingPosition<cursorPositionWithoutWrapping){
+            char nextProposedWithWrapped = textWithWrapping.charAt(withWrappingPosition);
+            char nextProposedWithoutWrapping = textWithoutWrapping.charAt(withoutWrappingPosition);
 
-        List<Character> wrapEquivalentChars = new ArrayList<Character>(); //characters in the original string which when appearing alongside a new line do not offer a bonus new line
-        wrapEquivalentChars.add('\n');
-        wrapEquivalentChars.add(' ');
+            if(nextProposedWithWrapped == nextProposedWithoutWrapping){
+                withoutWrappingPosition++;
+                withWrappingPosition++;
+            }else if(nextProposedWithWrapped == '\n'){
+                withWrappingPosition++;
+            }else{
+                withoutWrappingPosition++;
+            }
 
-        int extraNewLines = 0;
-
-        for(int i=0;i<cursorPositionWithoutWrapping; i++){
-            
-            if( !wrapEquivalentChars.contains(textWithoutWrapping.charAt(i))
-                    && textWithWrapping.charAt(i+extraNewLines) == '\n' ){
-                extraNewLines++;
+            if(withWrappingPosition == textWithWrapping.length()){
+                return withWrappingPosition;
             }
         }
 
-        //because of soft wraps the end of one line and the beginning of the next are the same cursorPosition, we choose
-        //the beginning of the next line as that feels more normal
-        if(cursorPositionWithoutWrapping+1<textWithoutWrapping.length()){
-            char nextCharInWrapped = textWithWrapping.charAt(cursorPositionWithoutWrapping+extraNewLines);
-            char nextCharInNonWrapped = textWithoutWrapping.charAt(cursorPositionWithoutWrapping);
+        char finalCharWrapped = textWithWrapping.charAt(withWrappingPosition);
+        char finalCharNonWrapped = textWithoutWrapping.charAt(withoutWrappingPosition);
 
-            if(nextCharInWrapped=='\n' && nextCharInNonWrapped!='\n'){
-                extraNewLines++;
-            }
+        if(finalCharWrapped!=finalCharNonWrapped && finalCharWrapped == '\n'){
+            //favour the beginning of the next line
+            withWrappingPosition++;
         }
 
-        return cursorPositionWithoutWrapping + extraNewLines;
+
+        return withWrappingPosition;
     }
 
     private void updateTextAndCursor() {
@@ -530,7 +539,7 @@ public class TextAreaControl extends AbstractController implements TextArea, Tex
         updateTextAndCursor();
     }
 
-    private int clamp(int value, int min, int max){
+    private static int clamp(int value, int min, int max){
         return Math.max(min, Math.min(max, value));
     }
 
