@@ -2,6 +2,7 @@ package de.lessvoid.nifty.elements;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyMethodInvoker;
+import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.input.NiftyMouseInputEvent;
 
 import javax.annotation.Nonnull;
@@ -180,7 +181,7 @@ public class ElementInteractionClickHandler {
   }
 
   public void clickAndReleaseMouse(@Nonnull final Nifty nifty) {
-    element.startEffectWithoutChildren(EffectEventId.onClick); 
+    element.startEffectWithoutChildren(EffectEventId.onClick);
     mouseMethods.clickAndRelease(nifty);
   }
 
