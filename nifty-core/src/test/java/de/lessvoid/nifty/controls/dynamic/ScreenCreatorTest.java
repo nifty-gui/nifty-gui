@@ -50,6 +50,7 @@ public class ScreenCreatorTest {
         eq(timeProvider))).andReturn(rootElement);
     replay(rootLayerFactoryMock);
 
+    rootElement.bindControls(isA(Screen.class));
     replay(rootElement);
   }
 
