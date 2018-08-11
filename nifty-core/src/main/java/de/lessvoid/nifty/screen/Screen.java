@@ -653,6 +653,7 @@ public class Screen {
   @SuppressWarnings("NullableProblems")
   public void setRootElement(@Nonnull final Element rootElementParam) {
     rootElement = rootElementParam;
+    rootElement.bindControls(this);
   }
 
   /**
