@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.html;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -34,7 +35,7 @@ public class NiftyBuilderFactoryBreakBuilderTest {
 
   @Test
   public void testCreateBreakBuilderMinimal() {
-    panelBuilderMock.height("42");
+    expect(panelBuilderMock.height("42")).andReturn(panelBuilderMock);
     replay(panelBuilderMock);
 
     assertEquals(panelBuilderMock, builderFactory.createBreakPanelBuilder("42"));

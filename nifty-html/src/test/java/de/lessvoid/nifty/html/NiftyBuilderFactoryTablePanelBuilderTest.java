@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.html;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -36,7 +37,7 @@ public class NiftyBuilderFactoryTablePanelBuilderTest {
 
   @Test
   public void testCreateTableTagPanelBuilderNoAttributes() {
-    panelBuilderMock.childLayoutVertical();
+    expect(panelBuilderMock.childLayoutVertical()).andReturn(panelBuilderMock);
     replay(panelBuilderMock);
 
     assertEquals(panelBuilderMock, builderFactory.createTableTagPanelBuilder(null, null, null, null));
@@ -44,7 +45,7 @@ public class NiftyBuilderFactoryTablePanelBuilderTest {
 
   @Test
   public void testCreateTableTagPanelBuilderFull() {
-    panelBuilderMock.childLayoutVertical();
+    expect(panelBuilderMock.childLayoutVertical()).andReturn(panelBuilderMock);
     assertGeneralAttributes(panelBuilderMock);
     replay(panelBuilderMock);
 
@@ -53,7 +54,7 @@ public class NiftyBuilderFactoryTablePanelBuilderTest {
 
   @Test
   public void testCreateTableRowPanelBuilderNoAttributes() {
-    panelBuilderMock.childLayoutHorizontal();
+    expect(panelBuilderMock.childLayoutHorizontal()).andReturn(panelBuilderMock);
     replay(panelBuilderMock);
 
     assertEquals(panelBuilderMock, builderFactory.createTableRowPanelBuilder(null, null, null, null));
@@ -61,7 +62,7 @@ public class NiftyBuilderFactoryTablePanelBuilderTest {
 
   @Test
   public void testCreateTableRowPanelBuilderFull() {
-    panelBuilderMock.childLayoutHorizontal();
+    expect(panelBuilderMock.childLayoutHorizontal()).andReturn(panelBuilderMock);
     assertGeneralAttributes(panelBuilderMock);
     replay(panelBuilderMock);
 
@@ -70,7 +71,7 @@ public class NiftyBuilderFactoryTablePanelBuilderTest {
 
   @Test
   public void testCreateTableDataPanelBuilderNoAttributes() {
-    panelBuilderMock.childLayoutVertical();
+    expect(panelBuilderMock.childLayoutVertical()).andReturn(panelBuilderMock);
     replay(panelBuilderMock);
 
     assertEquals(panelBuilderMock, builderFactory.createTableDataPanelBuilder(null, null, null, null));
@@ -78,7 +79,7 @@ public class NiftyBuilderFactoryTablePanelBuilderTest {
 
   @Test
   public void testCreateTableDataPanelBuilderFull() {
-    panelBuilderMock.childLayoutVertical();
+    expect(panelBuilderMock.childLayoutVertical()).andReturn(panelBuilderMock);
     assertGeneralAttributes(panelBuilderMock);
     replay(panelBuilderMock);
 
@@ -86,8 +87,8 @@ public class NiftyBuilderFactoryTablePanelBuilderTest {
   }
 
   private void assertGeneralAttributes(final PanelBuilder panelBuilder) {
-    panelBuilder.width("20");
-    panelBuilder.backgroundColor("#ff00ff");
-    panelBuilder.onActiveEffect(isA(EffectBuilder.class)); // can't test the actual effect values unfortunatly
+    expect(panelBuilder.width("20")).andReturn(panelBuilder);
+    expect(panelBuilder.backgroundColor("#ff00ff")).andReturn(panelBuilder);
+    expect(panelBuilder.onActiveEffect(isA(EffectBuilder.class))).andReturn(panelBuilder); // can't test the actual effect values unfortunatly
   }
 }

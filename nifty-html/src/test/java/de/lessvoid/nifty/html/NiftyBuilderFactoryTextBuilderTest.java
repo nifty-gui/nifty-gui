@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.html;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -34,14 +35,14 @@ public class NiftyBuilderFactoryTextBuilderTest {
 
   @Test
   public void testCreateTextBuilderWithoutColor() {
-    textBuilderMock.text("huhu");
-    textBuilderMock.wrap(true);
-    textBuilderMock.alignLeft();
-    textBuilderMock.valignTop();
-    textBuilderMock.textHAlignLeft();
-    textBuilderMock.textVAlignTop();
-    textBuilderMock.font("fontname");
-    textBuilderMock.width("100%");
+    expect(textBuilderMock.text("huhu")).andReturn(textBuilderMock);
+    expect(textBuilderMock.wrap(true)).andReturn(textBuilderMock);
+    expect(textBuilderMock.alignLeft()).andReturn(textBuilderMock);
+    expect(textBuilderMock.valignTop()).andReturn(textBuilderMock);
+    expect(textBuilderMock.textHAlignLeft()).andReturn(textBuilderMock);
+    expect(textBuilderMock.textVAlignTop()).andReturn(textBuilderMock);
+    expect(textBuilderMock.font("fontname")).andReturn(textBuilderMock);
+    expect(textBuilderMock.width("100%")).andReturn(textBuilderMock);
     replay(textBuilderMock);
 
     assertEquals(textBuilderMock, builderFactory.createTextBuilder("huhu", "fontname", null));
@@ -49,14 +50,14 @@ public class NiftyBuilderFactoryTextBuilderTest {
 
   @Test
   public void testCreateTextBuilderWithoutColorWithNewLine() {
-    textBuilderMock.text("huhu\ntest");
-    textBuilderMock.wrap(true);
-    textBuilderMock.alignLeft();
-    textBuilderMock.valignTop();
-    textBuilderMock.textHAlignLeft();
-    textBuilderMock.textVAlignTop();
-    textBuilderMock.font("fontname");
-    textBuilderMock.width("100%");
+    expect(textBuilderMock.text("huhu\ntest")).andReturn(textBuilderMock);
+    expect(textBuilderMock.wrap(true)).andReturn(textBuilderMock);
+    expect(textBuilderMock.alignLeft()).andReturn(textBuilderMock);
+    expect(textBuilderMock.valignTop()).andReturn(textBuilderMock);
+    expect(textBuilderMock.textHAlignLeft()).andReturn(textBuilderMock);
+    expect(textBuilderMock.textVAlignTop()).andReturn(textBuilderMock);
+    expect(textBuilderMock.font("fontname")).andReturn(textBuilderMock);
+    expect(textBuilderMock.width("100%")).andReturn(textBuilderMock);
     replay(textBuilderMock);
 
     assertEquals(textBuilderMock, builderFactory.createTextBuilder("huhu\ntest", "fontname", null));
