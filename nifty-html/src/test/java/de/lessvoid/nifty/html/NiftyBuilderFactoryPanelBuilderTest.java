@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.html;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -34,9 +35,9 @@ public class NiftyBuilderFactoryPanelBuilderTest {
 
   @Test
   public void testCreateBodyPanelBuilder() {
-    panelBuilderMock.width("100%");
-    panelBuilderMock.height("100%");
-    panelBuilderMock.childLayoutVertical();
+    expect(panelBuilderMock.width("100%")).andReturn(panelBuilderMock);
+    expect(panelBuilderMock.height("100%")).andReturn(panelBuilderMock);
+    expect(panelBuilderMock.childLayoutVertical()).andReturn(panelBuilderMock);
     replay(panelBuilderMock);
 
     assertEquals(panelBuilderMock, builderFactory.createBodyPanelBuilder());
@@ -44,8 +45,8 @@ public class NiftyBuilderFactoryPanelBuilderTest {
 
   @Test
   public void testCreateParagraphBuilder() {
-    panelBuilderMock.width("100%");
-    panelBuilderMock.childLayoutVertical();
+    expect(panelBuilderMock.width("100%")).andReturn(panelBuilderMock);
+    expect(panelBuilderMock.childLayoutVertical()).andReturn(panelBuilderMock);
     replay(panelBuilderMock);
 
     assertEquals(panelBuilderMock, builderFactory.createParagraphPanelBuilder());

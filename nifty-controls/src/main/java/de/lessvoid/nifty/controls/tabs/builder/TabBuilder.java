@@ -53,7 +53,8 @@ public class TabBuilder extends ControlBuilder {
    *
    * @param caption the caption on the button that will be assigned to this tab
    */
-  public void caption(@Nonnull final String caption) {
+  public TabBuilder caption(@Nonnull final String caption) {
     set("caption", caption);
+    return this;
   }
 }

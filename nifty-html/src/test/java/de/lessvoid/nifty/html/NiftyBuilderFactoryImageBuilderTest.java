@@ -1,6 +1,7 @@
 package de.lessvoid.nifty.html;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -35,7 +36,7 @@ public class NiftyBuilderFactoryImageBuilderTest {
 
   @Test
   public void testCreateImageBuilderMinimal() {
-    imageBuilderMock.filename("src");
+    expect(imageBuilderMock.filename("src")).andReturn(imageBuilderMock);
     replay(imageBuilderMock);
 
     assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", null, null, null, null, null));
@@ -43,11 +44,11 @@ public class NiftyBuilderFactoryImageBuilderTest {
 
   @Test
   public void testCreateImageBuilderComplete() {
-    imageBuilderMock.filename("src");
-    imageBuilderMock.width("100");
-    imageBuilderMock.height("100");
-    imageBuilderMock.backgroundColor("bgcolor");
-    imageBuilderMock.align(Align.Center);
+    expect(imageBuilderMock.filename("src")).andReturn(imageBuilderMock);
+    expect(imageBuilderMock.width("100")).andReturn(imageBuilderMock);
+    expect(imageBuilderMock.height("100")).andReturn(imageBuilderMock);
+    expect(imageBuilderMock.backgroundColor("bgcolor")).andReturn(imageBuilderMock);
+    expect(imageBuilderMock.align(Align.Center)).andReturn(imageBuilderMock);
     replay(imageBuilderMock);
 
     assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", "middle", "100", "100", "bgcolor", null));
@@ -55,11 +56,11 @@ public class NiftyBuilderFactoryImageBuilderTest {
 
   @Test
   public void testCreateImageBuilderWithPercent() {
-    imageBuilderMock.filename("src");
-    imageBuilderMock.width("100%");
-    imageBuilderMock.height("100%");
-    imageBuilderMock.backgroundColor("bgcolor");
-    imageBuilderMock.align(Align.Center);
+    expect(imageBuilderMock.filename("src")).andReturn(imageBuilderMock);
+    expect(imageBuilderMock.width("100%")).andReturn(imageBuilderMock);
+    expect(imageBuilderMock.height("100%")).andReturn(imageBuilderMock);
+    expect(imageBuilderMock.backgroundColor("bgcolor")).andReturn(imageBuilderMock);
+    expect(imageBuilderMock.align(Align.Center)).andReturn(imageBuilderMock);
     replay(imageBuilderMock);
 
     assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", "middle", "100%", "100%", "bgcolor", null));
@@ -81,10 +82,10 @@ public class NiftyBuilderFactoryImageBuilderTest {
   }
 
   private void performAlignTest(final Align expectedAlign, final String sourceAlign) {
-    imageBuilderMock.filename("src");
-    imageBuilderMock.backgroundColor("bgcolor");
-    imageBuilderMock.align(expectedAlign);
-    imageBuilderMock.padding("12");
+    expect(imageBuilderMock.filename("src")).andReturn(imageBuilderMock);
+    expect(imageBuilderMock.backgroundColor("bgcolor")).andReturn(imageBuilderMock);
+    expect(imageBuilderMock.align(expectedAlign)).andReturn(imageBuilderMock);
+    expect(imageBuilderMock.padding("12")).andReturn(imageBuilderMock);
     replay(imageBuilderMock);
 
     assertEquals(imageBuilderMock, builderFactory.createImageBuilder("src", sourceAlign, null, null, "bgcolor", "12"));

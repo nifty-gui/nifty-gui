@@ -13,7 +13,8 @@ public class RadioButtonBuilder extends ControlBuilder {
     super(id, "radioButton");
   }
 
-  public void group(@Nonnull final String group) {
+  public RadioButtonBuilder group(@Nonnull final String group) {
     set("group", group);
+    return this;
   }
 }

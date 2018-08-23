@@ -19,23 +19,28 @@ public class ChatBuilder extends ControlBuilder {
     lines(lines);
   }
 
-  public void lines(final int lines) {
+  public ChatBuilder lines(final int lines) {
     set("lines", String.valueOf(lines));
+    return this;
   }
 
-  public void sendLabel(@Nonnull final String sendLabel) {
+  public ChatBuilder sendLabel(@Nonnull final String sendLabel) {
     set("sendLabel", sendLabel);
+    return this;
   }
 
-  public void chatLineIconWidth(@Nonnull final SizeValue value) {
+  public ChatBuilder chatLineIconWidth(@Nonnull final SizeValue value) {
     set("chatLineIconWidth", value.getValueAsString());
+    return this;
   }
 
-  public void chatLineIconHeight(@Nonnull final SizeValue value) {
+  public ChatBuilder chatLineIconHeight(@Nonnull final SizeValue value) {
     set("chatLineIconHeight", value.getValueAsString());
+    return this;
   }
 
-  public void chatLineHeight(@Nonnull final SizeValue value) {
+  public ChatBuilder chatLineHeight(@Nonnull final SizeValue value) {
     set("chatLineHeight", value.getValueAsString());
+    return this;
   }
 }

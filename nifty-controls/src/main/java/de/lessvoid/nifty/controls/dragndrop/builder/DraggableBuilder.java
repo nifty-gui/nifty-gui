@@ -13,15 +13,18 @@ public class DraggableBuilder extends ControlBuilder {
     super(id, "draggable");
   }
 
-  public void handle(@Nonnull final String handleId) {
+  public DraggableBuilder handle(@Nonnull final String handleId) {
     set("handle", handleId);
+    return this;
   }
 
-  public void revert(final boolean revert) {
+  public DraggableBuilder revert(final boolean revert) {
     set("revert", String.valueOf(revert));
+    return this;
   }
 
-  public void drop(final boolean drop) {
+  public DraggableBuilder drop(final boolean drop) {
     set("drop", String.valueOf(drop));
+    return this;
   }
 }

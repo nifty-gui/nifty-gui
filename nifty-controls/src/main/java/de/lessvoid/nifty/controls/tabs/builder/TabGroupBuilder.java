@@ -49,9 +49,10 @@ public class TabGroupBuilder extends ControlBuilder {
    * @throws UnsupportedOperationException in case the control is no {@link TabBuilder}
    */
   @Override
-  public void control(@Nonnull final ControlBuilder controlBuilder) {
+  public TabGroupBuilder control(@Nonnull final ControlBuilder controlBuilder) {
     if (controlBuilder instanceof TabBuilder) {
       super.control(controlBuilder);
+      return this;
     } else {
       throw new UnsupportedOperationException("Tab groups do not accept any controls other then tabs as children");
     }
@@ -62,7 +63,7 @@ public class TabGroupBuilder extends ControlBuilder {
    */
   @Override
   @SuppressWarnings("RefusedBequest")
-  public void image(@Nonnull final ImageBuilder imageBuilder) {
+  public TabGroupBuilder image(@Nonnull final ImageBuilder imageBuilder) {
     throw new UnsupportedOperationException("Tab groups do not accept any elements other then tabs as children");
   }
 
@@ -71,7 +72,7 @@ public class TabGroupBuilder extends ControlBuilder {
    */
   @Override
   @SuppressWarnings("RefusedBequest")
-  public void panel(@Nonnull final PanelBuilder panelBuilder) {
+  public TabGroupBuilder panel(@Nonnull final PanelBuilder panelBuilder) {
     throw new UnsupportedOperationException("Tab groups do not accept any elements other then tabs as children");
   }
 
@@ -80,8 +81,9 @@ public class TabGroupBuilder extends ControlBuilder {
    *
    * @param tabBuilder the builder of the new tab
    */
-  public void tab(@Nonnull final TabBuilder tabBuilder) {
+  public TabGroupBuilder tab(@Nonnull final TabBuilder tabBuilder) {
     super.control(tabBuilder);
+    return this;
   }
 
   /**
@@ -89,7 +91,7 @@ public class TabGroupBuilder extends ControlBuilder {
    */
   @Override
   @SuppressWarnings("RefusedBequest")
-  public void text(@Nonnull final TextBuilder textBuilder) {
+  public TabGroupBuilder text(@Nonnull final TextBuilder textBuilder) {
     throw new UnsupportedOperationException("Tab groups do not accept any elements other then tabs as children");
   }
 }

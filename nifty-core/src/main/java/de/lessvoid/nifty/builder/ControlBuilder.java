@@ -21,7 +21,8 @@ public class ControlBuilder extends ElementBuilder {
     this(new CustomControlCreator(id, name));
   }
 
-  public void parameter(@Nonnull final String name, @Nonnull final String value) {
+  public ControlBuilder parameter(@Nonnull final String name, @Nonnull final String value) {
     creator.parameter(name, value);
+    return this;
   }
 }

@@ -13,7 +13,8 @@ public class CheckboxBuilder extends ControlBuilder {
     super(id, "checkbox");
   }
 
-  public void checked(final boolean checked) {
+  public CheckboxBuilder checked(final boolean checked) {
     set("checked", String.valueOf(checked));
+    return this;
   }
 }

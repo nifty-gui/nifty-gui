@@ -13,24 +13,29 @@ public class SliderBuilder extends ControlBuilder {
     super(id, getName(vertical));
   }
 
-  public void min(final float min) {
+  public SliderBuilder min(final float min) {
     set("min", String.valueOf(min));
+    return this;
   }
 
-  public void max(final float max) {
+  public SliderBuilder max(final float max) {
     set("max", String.valueOf(max));
+    return this;
   }
 
-  public void initial(final float initial) {
+  public SliderBuilder initial(final float initial) {
     set("initial", String.valueOf(initial));
+    return this;
   }
 
-  public void stepSize(final float stepSize) {
+  public SliderBuilder stepSize(final float stepSize) {
     set("stepSize", String.valueOf(stepSize));
+    return this;
   }
 
-  public void buttonStepSize(final float buttonStepSize) {
+  public SliderBuilder buttonStepSize(final float buttonStepSize) {
     set("buttonStepSize", String.valueOf(buttonStepSize));
+    return this;
   }
 
   @Nonnull
