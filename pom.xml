@@ -4,7 +4,7 @@
   <groupId>com.github.nifty-gui</groupId>
   <artifactId>nifty-main</artifactId>
   <packaging>pom</packaging>
-  <version>1.4.3-SNAPSHOT</version>
+  <version>1.4.3</version>
   <name>Nifty Main Parent Project</name>
   <modules>
     <module>nifty-core</module>
@@ -131,6 +131,7 @@
     <connection>scm:git:git://github.com/nifty-gui/nifty-gui.git</connection>
     <developerConnection>scm:git:git@github.com:nifty-gui/nifty-gui.git</developerConnection>
     <url>scm:git:https://github.com/nifty-gui/nifty-gui.git</url>
+    <tag>nifty-main-1.4.3</tag>
   </scm>
   <distributionManagement>
     <repository>

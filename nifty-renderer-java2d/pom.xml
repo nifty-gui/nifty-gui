@@ -3,7 +3,7 @@
     <parent>
         <groupId>com.github.nifty-gui</groupId>
         <artifactId>nifty-main</artifactId>
-        <version>1.4.3-SNAPSHOT</version>
+        <version>1.4.3</version>
     </parent>
     <name>Nifty Renderer for Java2d</name>
     <artifactId>nifty-java2d-renderer</artifactId>
@@ -12,7 +12,7 @@
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty</artifactId>
-            <version>1.4.3-SNAPSHOT</version>
+            <version>1.4.3</version>
         </dependency>
     </dependencies>
 </project>
