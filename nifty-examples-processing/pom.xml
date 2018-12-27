@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.github.nifty-gui</groupId>
     <artifactId>nifty-main</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.3</version>
   </parent>
   <artifactId>nifty-examples-processing</artifactId>
   <name>nifty-examples-processing</name>
