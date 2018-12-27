@@ -3,7 +3,7 @@
     <parent>
         <artifactId>nifty-main</artifactId>
         <groupId>com.github.nifty-gui</groupId>
-        <version>1.4.3</version>
+        <version>1.4.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>nifty-examples-slick2d</artifactId>
@@ -13,27 +13,27 @@
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty</artifactId>
-            <version>1.4.3</version>
+            <version>1.4.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty-examples</artifactId>
-            <version>1.4.3</version>
+            <version>1.4.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty-style-black</artifactId>
-            <version>1.4.3</version>
+            <version>1.4.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty-default-controls</artifactId>
-            <version>1.4.3</version>
+            <version>1.4.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty-slick2d-renderer</artifactId>
-            <version>1.4.3</version>
+            <version>1.4.4-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.jcraft</groupId>

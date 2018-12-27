@@ -3,7 +3,7 @@
     <parent>
         <groupId>com.github.nifty-gui</groupId>
         <artifactId>nifty-main</artifactId>
-        <version>1.4.3</version>
+        <version>1.4.4-SNAPSHOT</version>
     </parent>
     <artifactId>nifty-lwjgl3-renderer</artifactId>
     <name>Nifty Renderer for LWJGL3</name>
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty</artifactId>
-            <version>1.4.3</version>
+            <version>1.4.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

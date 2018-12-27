@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.github.nifty-gui</groupId>
     <artifactId>nifty-main</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.4-SNAPSHOT</version>
   </parent>
   <artifactId>nifty-examples-jogl</artifactId>
   <description />
@@ -15,17 +15,17 @@
   	<dependency>
   		<groupId>com.github.nifty-gui</groupId>
   		<artifactId>nifty-jogl-renderer</artifactId>
-  		<version>1.4.3</version>
+  		<version>1.4.4-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>com.github.nifty-gui</groupId>
   		<artifactId>nifty</artifactId>
-  		<version>1.4.3</version>
+  		<version>1.4.4-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>com.github.nifty-gui</groupId>
   		<artifactId>nifty-examples</artifactId>
-  		<version>1.4.3</version>
+  		<version>1.4.4-SNAPSHOT</version>
   		<exclusions>
   		  <exclusion>
   		    <groupId>org.lwjgl.lwjgl</groupId>
@@ -40,7 +40,7 @@
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-pauls-soundsystem</artifactId>
-      <version>1.4.3</version>
+      <version>1.4.4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.jogamp.jogl</groupId>

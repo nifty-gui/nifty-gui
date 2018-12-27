@@ -3,7 +3,7 @@
     <parent>
         <groupId>com.github.nifty-gui</groupId>
         <artifactId>nifty-main</artifactId>
-        <version>1.4.3</version>
+        <version>1.4.4-SNAPSHOT</version>
     </parent>
     <artifactId>nifty-style-black</artifactId>
     <name>Nifty Controls Style Definition (Black)</name>
