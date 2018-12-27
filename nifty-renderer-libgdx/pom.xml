@@ -6,7 +6,7 @@
     <parent>
         <artifactId>nifty-main</artifactId>
         <groupId>com.github.nifty-gui</groupId>
-        <version>1.4.3</version>
+        <version>1.4.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>nifty-libgdx-renderer</artifactId>
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty</artifactId>
-            <version>1.4.3</version>
+            <version>1.4.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>

@@ -3,7 +3,7 @@
     <parent>
         <groupId>com.github.nifty-gui</groupId>
         <artifactId>nifty-main</artifactId>
-        <version>1.4.3</version>
+        <version>1.4.3-SNAPSHOT</version>
     </parent>
     <artifactId>nifty-default-controls</artifactId>
     <name>Nifty Controls</name>
@@ -13,7 +13,7 @@
         <dependency>
             <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty</artifactId>
-            <version>1.4.3</version>
+            <version>1.4.3-SNAPSHOT</version>
         </dependency>
         </dependencies>
     <build>
