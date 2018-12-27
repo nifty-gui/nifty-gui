@@ -3,7 +3,6 @@ package de.lessvoid.nifty.controls;
 /**
  * The CheckBox interface is the Nifty control API view of a Nifty CheckBox control.
  *
- * @param <T>
  * @author void
  */
 public interface CheckBox extends NiftyControl {

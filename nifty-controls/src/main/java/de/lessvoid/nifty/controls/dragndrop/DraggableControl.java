@@ -1,17 +1,23 @@
 package de.lessvoid.nifty.controls.dragndrop;
 
-import java.util.List;
-import java.util.logging.Logger;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.*;
+import de.lessvoid.nifty.controls.AbstractController;
+import de.lessvoid.nifty.controls.Draggable;
+import de.lessvoid.nifty.controls.DraggableDragCanceledEvent;
+import de.lessvoid.nifty.controls.DraggableDragStartedEvent;
+import de.lessvoid.nifty.controls.Droppable;
+import de.lessvoid.nifty.controls.NiftyInputControl;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * The controller class for a draggable element.
@@ -85,7 +91,7 @@ public class DraggableControl extends AbstractController implements Draggable {
   }
 
   /**
-   * Called by <interact onClick="" />
+   * Called by &lt;interact onClick="" /&gt;
    */
   public void bringToFront() {
     if (!dragged) {
@@ -129,7 +135,7 @@ public class DraggableControl extends AbstractController implements Draggable {
   }
 
   /**
-   * Called by <interact onMouseMove="" /
+   * Called by &lt;interact onMouseMove="" /&gt;
    *
    * @param mouseX mouse x
    * @param mouseY mouse y
@@ -156,7 +162,7 @@ public class DraggableControl extends AbstractController implements Draggable {
   }
 
   /**
-   * Called by <interact onRelease="" />
+   * Called by &lt;interact onRelease="" /&gt;
    */
   public void dragStop() {
     triedDragging = false;
