@@ -3,14 +3,14 @@
   <parent>
     <artifactId>nifty-main</artifactId>
     <groupId>com.github.nifty-gui</groupId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <artifactId>nifty-examples-lwjgl</artifactId>
-  <name>Nifty Examples</name>
+  <artifactId>nifty-examples-lwjgl3</artifactId>
+  <name>Nifty Examples LWJGL 3</name>
   <description>Lots of Nifty example code! You can find the source for nearly all demos/tutorials in here.</description>
   <properties>
-    <nifty-version>1.4.3-SNAPSHOT</nifty-version>
+    <nifty-version>1.5.0-SNAPSHOT</nifty-version>
   </properties>
   <dependencies>
     <dependency>
@@ -38,17 +38,24 @@
       <artifactId>nifty-default-controls</artifactId>
       <version>${nifty-version}</version>
     </dependency>
+    <!--
+     Could not find artifact javax.jnlp:jnlp-api:jar:5.0 at specified
+     path /Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home/lib/javaws.jar
+
+     The soundsystem openal has a dependency to Slick2D as well and
+     therefore is not compatible with jdk 11. Sigh :(
+
     <dependency>
       <groupId>com.github.nifty-gui</groupId>
       <artifactId>nifty-openal-soundsystem</artifactId>
       <version>${nifty-version}</version>
     </dependency>
+    -->
   </dependencies>
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.3</version>
         <configuration>
           <descriptors>
             <descriptor>src/assemble/assemble.xml</descriptor>
@@ -63,7 +70,6 @@
       <plugin>
         <groupId>com.googlecode.mavennatives</groupId>
         <artifactId>maven-nativedependencies-plugin</artifactId>
-        <version>0.0.5</version>
         <executions>
           <!-- 
             If you use this pom.xml with eclipse m2e plugin you'll need to install the

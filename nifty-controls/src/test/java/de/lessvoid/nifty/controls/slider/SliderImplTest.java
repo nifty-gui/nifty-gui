@@ -1,16 +1,17 @@
 package de.lessvoid.nifty.controls.slider;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 public class SliderImplTest {
+  private static final float EPSILON = 0.000001f;
   private SliderImpl slider = new SliderImpl();
   private SliderView sliderView;
 
@@ -31,7 +32,7 @@ public class SliderImplTest {
   public void testDefaultPosition() {
     replay(sliderView);
     bindToView();
-    assertEquals(0.f, slider.getValue());
+    assertEquals(0.f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -41,7 +42,7 @@ public class SliderImplTest {
     replay(sliderView);
     bindToView();
     slider.setValue(1.0f);
-    assertEquals(1.f, slider.getValue());
+    assertEquals(1.f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -51,7 +52,7 @@ public class SliderImplTest {
     replay(sliderView);
     bindToView();
     slider.setValue(.5f);
-    assertEquals(.5f, slider.getValue());
+    assertEquals(.5f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -61,7 +62,7 @@ public class SliderImplTest {
     replay(sliderView);
     bindToView();
     slider.stepUp();
-    assertEquals(.1f, slider.getValue());
+    assertEquals(.1f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -70,7 +71,7 @@ public class SliderImplTest {
     replay(sliderView);
     bindToView();
     slider.stepDown();
-    assertEquals(0.f, slider.getValue());
+    assertEquals(0.f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -83,7 +84,7 @@ public class SliderImplTest {
     bindToView();
     slider.setValue(1.f);
     slider.stepDown();
-    assertEquals(.9f, slider.getValue());
+    assertEquals(.9f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -93,7 +94,7 @@ public class SliderImplTest {
     replay(sliderView);
     bindToView();
     slider.setValueFromPosition(0, 0);
-    assertEquals(0.f, slider.getValue());
+    assertEquals(0.f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -104,7 +105,7 @@ public class SliderImplTest {
     replay(sliderView);
     bindToView();
     slider.setValueFromPosition(100, 0);
-    assertEquals(1.f, slider.getValue());
+    assertEquals(1.f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -115,7 +116,7 @@ public class SliderImplTest {
     replay(sliderView);
     bindToView();
     slider.setValueFromPosition(50, 0);
-    assertEquals(0.5f, slider.getValue());
+    assertEquals(0.5f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -126,7 +127,7 @@ public class SliderImplTest {
     replay(sliderView);
     slider.bindToView(sliderView, 0f, 1.f, .25f, .25f);
     slider.setValueFromPosition(35, 0);
-    assertEquals(0.25f, slider.getValue());
+    assertEquals(0.25f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -153,7 +154,7 @@ public class SliderImplTest {
     replay(sliderView);
     bindToView();
     slider.setMin(.5f);
-    assertEquals(.5f, slider.getValue());
+    assertEquals(.5f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -162,7 +163,7 @@ public class SliderImplTest {
     replay(sliderView);
     bindToView();
     slider.setMax(.5f);
-    assertEquals(0.f, slider.getValue());
+    assertEquals(0.f, slider.getValue(), EPSILON);
   }
 
   @Test
@@ -175,7 +176,7 @@ public class SliderImplTest {
     bindToView();
     slider.setValue(0.1f);
     slider.setStepSize(0.25f);
-    assertEquals(.25f, slider.getValue());
+    assertEquals(0.f, slider.getValue(), EPSILON);
   }
 
   private void bindToView() {

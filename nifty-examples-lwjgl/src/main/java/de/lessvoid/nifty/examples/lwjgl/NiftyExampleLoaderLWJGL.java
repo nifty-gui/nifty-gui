@@ -3,6 +3,7 @@ package de.lessvoid.nifty.examples.lwjgl;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.examples.LoggerShortFormat;
 import de.lessvoid.nifty.examples.NiftyExample;
+import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.render.batch.CheckGL;
 import de.lessvoid.nifty.render.batch.spi.GL;
@@ -10,9 +11,20 @@ import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendCoreProfileFactory;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglBatchRenderBackendFactory;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglGL;
-import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.LWJGLUtil;
+import org.lwjgl.opengl.ContextAttribs;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.util.glu.GLU;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,14 +32,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.LWJGLUtil;
-import org.lwjgl.opengl.*;
-import org.lwjgl.util.glu.GLU;
 
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
@@ -288,7 +292,8 @@ public class NiftyExampleLoaderLWJGL {
       log.info ("\n\nRunning in OpenGL " + (USE_CORE_PROFILE ? "Core Profile Mode (3.2+)" : "Compatibility Mode (1.2)") + ".\n\n");
       nifty = new Nifty(
               new BatchRenderDevice(USE_CORE_PROFILE ? LwjglBatchRenderBackendCoreProfileFactory.create() : LwjglBatchRenderBackendFactory.create()),
-              new OpenALSoundDevice(),
+// :(              new OpenALSoundDevice(),
+              new NullSoundDevice(),
               inputSystem,
               new AccurateTimeProvider());
       return true;

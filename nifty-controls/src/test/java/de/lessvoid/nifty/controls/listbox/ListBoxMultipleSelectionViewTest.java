@@ -1,29 +1,27 @@
 package de.lessvoid.nifty.controls.listbox;
 
+import de.lessvoid.nifty.controls.ListBox.SelectionMode;
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import org.easymock.Capture;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.easymock.Capture;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import de.lessvoid.nifty.controls.ListBox.SelectionMode;
-import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-
 public class ListBoxMultipleSelectionViewTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
   private ListBoxView<TestItem> viewMock;
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
-  private Capture<ListBoxSelectionChangedEvent<TestItem>> lastEvent = new
-      Capture<ListBoxSelectionChangedEvent<TestItem>>();
+  private Capture<ListBoxSelectionChangedEvent<TestItem>> lastEvent = Capture.newInstance();
   private SelectionCheck selectionCheck = new SelectionCheck(listBox);
 
   @Before

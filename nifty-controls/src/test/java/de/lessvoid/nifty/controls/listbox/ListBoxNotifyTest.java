@@ -1,24 +1,22 @@
 package de.lessvoid.nifty.controls.listbox;
 
-import static org.easymock.EasyMock.capture;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-
+import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import org.easymock.Capture;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 
 public class ListBoxNotifyTest {
   private ListBoxImpl<TestItem> listBox = new ListBoxImpl<TestItem>(null);
   private ListBoxView<TestItem> view;
   private TestItem o1 = new TestItem("o1");
   private TestItem o2 = new TestItem("o2");
-  private Capture<ListBoxSelectionChangedEvent<TestItem>> lastEvent = new
-      Capture<ListBoxSelectionChangedEvent<TestItem>>();
+  private Capture<ListBoxSelectionChangedEvent<TestItem>> lastEvent = Capture.newInstance();
   private SelectionCheck selectionCheck = new SelectionCheck(listBox);
 
   @Before

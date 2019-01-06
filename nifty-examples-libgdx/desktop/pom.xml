@@ -54,7 +54,6 @@
             <plugin>
                 <groupId>com.googlecode.mavennatives</groupId>
                 <artifactId>maven-nativedependencies-plugin</artifactId>
-                <version>0.0.6</version>
                 <executions>
                     <execution>
                         <id>unpacknatives</id>
@@ -67,7 +66,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.6</version>
+                <version>1.8</version>
                 <configuration>
                     <target>
                         <java fork="true" classname="${mainClass}" classpathref="maven.test.classpath">
@@ -80,7 +79,6 @@
             <!-- this builds a totally standalone jar file when you invoke: mvn package -Pdesktop -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
                 <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>

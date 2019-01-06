@@ -1,5 +1,11 @@
 package de.lessvoid.nifty.controls.checkbox;
 
+import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
+import org.easymock.Capture;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
@@ -7,17 +13,10 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import org.easymock.Capture;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
-
 public class CheckBoxImplTest {
   private CheckBoxImpl checkBox = new CheckBoxImpl(null);
   private CheckBoxView view;
-  private Capture<CheckBoxStateChangedEvent> capturedEvent = new Capture<CheckBoxStateChangedEvent>();
+  private Capture<CheckBoxStateChangedEvent> capturedEvent = Capture.newInstance();
 
   @Before
   public void before() {

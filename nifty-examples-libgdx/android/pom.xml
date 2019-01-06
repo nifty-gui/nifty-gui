@@ -68,7 +68,6 @@
             <plugin>
                 <groupId>com.googlecode.mavennatives</groupId>
                 <artifactId>maven-nativedependencies-plugin</artifactId>
-                <version>0.0.7</version>
                 <configuration>
                     <nativesTargetDir>libs</nativesTargetDir>
                     <separateDirs>true</separateDirs>
@@ -175,7 +174,7 @@
                                         <artifactId>
                                             maven-antrun-plugin
                                         </artifactId>
-                                        <versionRange>[1.3,)</versionRange>
+                                        <version>1.8</version>
                                         <goals>
                                             <goal>run</goal>
                                         </goals>

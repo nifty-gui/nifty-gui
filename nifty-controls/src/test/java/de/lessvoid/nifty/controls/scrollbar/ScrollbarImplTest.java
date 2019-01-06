@@ -1,14 +1,14 @@
 package de.lessvoid.nifty.controls.scrollbar;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * Test the ScrollbarImpl.
@@ -16,6 +16,8 @@ import org.junit.Test;
  * @author void
  */
 public class ScrollbarImplTest {
+  private static final float EPSILON = 0.000001f;
+
   private ScrollbarImpl scrollbar = new ScrollbarImpl();
   private ScrollbarView view;
   private float viewSize = 4.f;
@@ -39,7 +41,7 @@ public class ScrollbarImplTest {
     replay(view);
 
     scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
-    assertEquals(0.f, scrollbar.getValue());
+    assertEquals(0.f, scrollbar.getValue(), EPSILON);
   }
 
   @Test
@@ -197,7 +199,7 @@ public class ScrollbarImplTest {
 
     scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
     scrollbar.setValue(4.f);
-    assertEquals(0.f, scrollbar.getValue());
+    assertEquals(0.f, scrollbar.getValue(), EPSILON);
   }
 
   @Test
@@ -209,7 +211,7 @@ public class ScrollbarImplTest {
 
     scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
     scrollbar.setValue(-4.f);
-    assertEquals(0.f, scrollbar.getValue());
+    assertEquals(0.f, scrollbar.getValue(), EPSILON);
   }
 
   @Test
@@ -221,7 +223,7 @@ public class ScrollbarImplTest {
 
     scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
     scrollbar.setValue(40.f);
-    assertEquals(0.f, scrollbar.getValue());
+    assertEquals(0.f, scrollbar.getValue(), EPSILON);
   }
 
   @Test
@@ -234,9 +236,9 @@ public class ScrollbarImplTest {
 
     scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
     scrollbar.setup(4.f, 8.f, viewSize, 2.f, 4.f);
-    assertEquals(2.f, scrollbar.getButtonStepSize());
-    assertEquals(4.f, scrollbar.getValue());
-    assertEquals(4.f, scrollbar.getPageStepSize());
+    assertEquals(2.f, scrollbar.getButtonStepSize(), EPSILON);
+    assertEquals(4.f, scrollbar.getValue(), EPSILON);
+    assertEquals(4.f, scrollbar.getPageStepSize(), EPSILON);
   }
 
   @Test
@@ -248,14 +250,14 @@ public class ScrollbarImplTest {
 
     scrollbar.bindToView(view, 0.f, 4.f, viewSize, 1.f, 4.f);
     scrollbar.setWorldMax(8.f);
-    assertEquals(8.f, scrollbar.getWorldMax());
+    assertEquals(8.f, scrollbar.getWorldMax(), EPSILON);
   }
 
   @Test
   public void testSetPageStepSize() {
     replay(view);
     scrollbar.setPageStepSize(12.f);
-    assertEquals(12.f, scrollbar.getPageStepSize());
+    assertEquals(12.f, scrollbar.getPageStepSize(), EPSILON);
   }
 
   @Test

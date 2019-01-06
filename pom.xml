@@ -15,15 +15,41 @@
     <module>nifty-renderer-libgdx</module>
     <module>nifty-renderer-lwjgl</module>
     <module>nifty-renderer-lwjgl3</module>
+    <!--
+     Could not find artifact javax.jnlp:jnlp-api:jar:5.0 at specified
+     path /Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home/lib/javaws.jar
+
+     Until Slick2D can be used with jdk 11 we have to drop support for now
+     since I couldn't come up with a workaround for the missing Webstart dependency :(
+
     <module>nifty-renderer-slick2d</module>
+    -->
+
+    <!--
+     Could not find artifact javax.jnlp:jnlp-api:jar:5.0 at specified
+     path /Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home/lib/javaws.jar
+
+     The soundsystem openal has a dependency to Slick2D as well and
+     therefore is not compatible with jdk 11. Sigh :(
+
     <module>nifty-soundsystem-openal</module>
+    -->
     <module>nifty-soundsystem-pauls-sound</module>
     <module>nifty-html</module>
     <module>nifty-examples</module>
     <module>nifty-examples-jogl</module>
     <module>nifty-examples-libgdx</module>
     <module>nifty-examples-lwjgl</module>
+    <module>nifty-examples-lwjgl3</module>
+    <!--
+     Could not find artifact javax.jnlp:jnlp-api:jar:5.0 at specified
+     path /Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home/lib/javaws.jar
+
+     Until Slick2D can be used with jdk 11 we have to drop support for now
+     since I couldn't come up with a workaround for the missing Webstart dependency :(
+
     <module>nifty-examples-slick2d</module>
+    -->
     <module>nifty-renderer-processing</module>
     <module>nifty-soundsystem-minim</module>
     <module>nifty-examples-processing</module>
@@ -50,16 +76,21 @@
   </developers>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
   </properties>
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>2.10.3</version>
+          <version>3.0.1</version>
           <configuration>
             <additionalparam>-Xdoclint:none</additionalparam>
             <links>
@@ -71,7 +102,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.5</version>
+          <version>3.7.1</version>
           <dependencies>
             <dependency>
               <groupId>org.apache.maven.wagon</groupId>
@@ -83,11 +114,86 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>2.3.1</version>
+          <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.0.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-report-plugin</artifactId>
+          <version>3.0.0-M3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.0.0-M1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.0.0-M1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.1.1</version>
+        </plugin>
+        <plugin>
+          <groupId>com.googlecode.mavennatives</groupId>
+          <artifactId>maven-nativedependencies-plugin</artifactId>
+          <version>0.0.7</version>
         </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.0.0-M2</version>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.6.0</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
@@ -96,7 +202,7 @@
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.3</version>
+        <version>1.6.8</version>
         <extensions>true</extensions>
         <configuration>
           <serverId>ossrh</serverId>
@@ -117,13 +223,13 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.3.1</version>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>3.2</version>
+      <version>4.0.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
