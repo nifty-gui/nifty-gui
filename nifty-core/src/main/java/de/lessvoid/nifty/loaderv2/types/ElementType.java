@@ -8,7 +8,6 @@ import de.lessvoid.nifty.controls.dynamic.attributes.ControlAttributes;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ElementRenderer;
 import de.lessvoid.nifty.input.NiftyInputMapping;
-import de.lessvoid.nifty.input.mapping.DefaultInputMapping;
 import de.lessvoid.nifty.layout.LayoutPart;
 import de.lessvoid.nifty.loaderv2.types.helper.CollectionLogger;
 import de.lessvoid.nifty.loaderv2.types.helper.ElementRendererCreator;
@@ -361,7 +360,7 @@ public class ElementType extends XmlBaseType {
     getAttributes().resolveParameters(parentAttributes);
 
     Attributes newParent = new Attributes(parentAttributes);
-    newParent.merge(getAttributes());
+    newParent.mergeAndOverride(getAttributes());
 
     interact.resolveParameters(newParent);
     effects.resolveParameters(newParent);

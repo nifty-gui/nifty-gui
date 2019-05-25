@@ -1,6 +1,8 @@
 package de.lessvoid.nifty.loaderv2;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.spi.input.InputSystem;
@@ -8,13 +10,21 @@ import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.sound.SoundDevice;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
-import junit.framework.TestCase;
 import org.easymock.EasyMock;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.PrintWriter;
 
-public class NiftyLoaderTest extends TestCase {
+import static junit.framework.Assert.assertEquals;
+
+public class NiftyLoaderTest {
 
   public class DummyScreenController implements ScreenController {
     @Override
@@ -30,28 +40,31 @@ public class NiftyLoaderTest extends TestCase {
     }
   }
 
-  @Override
-  public void setUp() {
-    LoggerShortFormat.intialize();
-  }
+  @Rule
+  public TemporaryFolder folder = new TemporaryFolder();
 
-  public void testLoader() throws Exception {
+  private Nifty nifty;
+  private NiftyLoader niftyLoader;
+
+  @Before
+  public void setUp() throws Exception {
+    LoggerShortFormat.intialize();
     RenderDevice renderDeviceMock = EasyMock.createNiceMock(RenderDevice.class);
     SoundDevice soundDeviceMock = EasyMock.createNiceMock(SoundDevice.class);
     InputSystem inputSystemMock = EasyMock.createNiceMock(InputSystem.class);
-
     EasyMock.expect(renderDeviceMock.getWidth()).andReturn(800).anyTimes();
     EasyMock.expect(renderDeviceMock.getHeight()).andReturn(600).anyTimes();
-
     EasyMock.replay(renderDeviceMock, soundDeviceMock, inputSystemMock);
-
     TimeProvider timeProvider = new AccurateTimeProvider();
-    Nifty nifty = new Nifty(renderDeviceMock, soundDeviceMock, inputSystemMock, timeProvider);
-
-    NiftyLoader niftyLoader = new NiftyLoader(nifty, timeProvider);
+    nifty = new Nifty(renderDeviceMock, soundDeviceMock, inputSystemMock, timeProvider);
+    niftyLoader = new NiftyLoader(nifty, timeProvider);
     niftyLoader.registerSchema("nifty.nxs", nifty.getResourceAsStream("nifty.nxs"));
+    niftyLoader.registerSchema("nifty-controls.nxs", nifty.getResourceAsStream("nifty-controls.nxs"));
     niftyLoader.registerSchema("nifty-styles.nxs", nifty.getResourceAsStream("nifty-styles.nxs"));
+  }
 
+  @Test
+  public void testLoader() throws Exception {
     String testXml = "<nifty>"
         + "<registerSound id=\"gong\" filename=\"sound/19546__tobi123__Gong_mf2.wav\" />"
         + "<style id=\"test\" base=\"else\">"
@@ -86,5 +99,42 @@ public class NiftyLoaderTest extends TestCase {
         + "</screen>"
         + "</nifty>";
     niftyLoader.loadNiftyXml("nifty.nxs", new ByteArrayInputStream(testXml.getBytes("ISO-8859-1")));
+  }
+
+  @Test
+  public void testThatCustomAttributeIsResolvedForNestedControl() throws Exception {
+    String controlXml =
+        "<nifty-controls xmlns=\"http://nifty-gui.lessvoid.com/nifty-gui\">\n" +
+        "    <controlDefinition name=\"treeMenu\" childRootId=\"#content\">\n" +
+        "       <panel childLayout=\"horizontal\">\n" +
+        "           <text id=\"#text\" text=\"$caption\"/>\n" +
+        "           <panel id=\"#content\" childLayout=\"vertical\"/>\n" +
+        "       </panel>\n" +
+        "    </controlDefinition>\n" +
+        "</nifty-controls>";
+    File controlFile = folder.newFile();
+    PrintWriter writer = new PrintWriter(controlFile);
+    writer.print(controlXml);
+    writer.close();
+
+    String mainXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            "<nifty xmlns=\"http://nifty-gui.lessvoid.com/nifty-gui\">\n" +
+            "    <useControls filename=\"" + controlFile.getPath() + "\"/>\n" +
+            "    <screen id=\"start\">\n" +
+            "        <layer childLayout=\"vertical\">\n" +
+            "            <control id=\"test1\" name=\"treeMenu\" caption=\"Test1\">\n" +
+            "                <control id=\"test2\" name=\"treeMenu\" caption=\"Test2\"/>\n" +
+            "            </control>\n" +
+            "        </layer>\n" +
+            "    </screen>\n" +
+            "</nifty>";
+
+    InputStream inputStream = new ByteArrayInputStream(mainXml.getBytes("ISO-8859-1"));
+    niftyLoader.loadNiftyXml("nifty.nxs", inputStream).create(nifty, nifty.getTimeProvider());
+    Screen screen = nifty.getScreen("start");
+    Element outerElement = screen.findElementById("test1#text");
+    assertEquals("Test1", outerElement.getRenderer(TextRenderer.class).getOriginalText());
+    Element innerElement = screen.findElementById("test2#text");
+    assertEquals("Test2", innerElement.getRenderer(TextRenderer.class).getOriginalText());
   }
 }

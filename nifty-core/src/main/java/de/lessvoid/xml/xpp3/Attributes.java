@@ -256,13 +256,18 @@ public class Attributes {
   }
 
   public void merge(@Nonnull final Attributes src) {
-    Map<String, String> srcAttributes = src.attributes;
+    merge(src, false);
+  }
 
-    for (Map.Entry<String, String> srcAttribute : srcAttributes.entrySet()) {
+  public void mergeAndOverride(@Nonnull final Attributes src) {
+    merge(src, true);
+  }
+
+  private void merge(@Nonnull final Attributes src, boolean override) {
+    for (Map.Entry<String, String> srcAttribute : src.attributes.entrySet()) {
       String srcKey = srcAttribute.getKey();
-      if (!attributes.containsKey(srcKey)) {
+      if (override || !attributes.containsKey(srcKey)) {
         attributes.put(srcKey, srcAttribute.getValue());
-
         for (Map.Entry<String, Set<String>> tag : src.taggedAttributes.entrySet()) {
           if (tag.getValue().contains(srcKey)) {
             Set<String> attribForTag = taggedAttributes.get(tag.getKey());
