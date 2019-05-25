@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class InputCharFilterWrapper implements TextFieldInputCharSequenceFilter {
+public class InputCharFilterWrapper implements TextFieldInputCharSequenceFilter {
   /**
    * The single character filter that will be queried on all input.
    */
@@ -23,7 +23,7 @@ class InputCharFilterWrapper implements TextFieldInputCharSequenceFilter {
    *
    * @param filter the filter that will be asked if all input is accepted
    */
-  InputCharFilterWrapper(@Nonnull final TextFieldInputCharFilter filter) {
+  public InputCharFilterWrapper(@Nonnull final TextFieldInputCharFilter filter) {
     wrappedFilter = filter;
   }
 
