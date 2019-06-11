@@ -103,6 +103,30 @@ public class LayoutPart {
   }
 
   /**
+   * Calculates the minimum width of the given child elements. This takes padding of this LayoutPart
+   * as well as the margin values of the child elements into account.
+   *
+   * @param children List<LayoutPart> to calculate min width
+   * @return min width
+   */
+  @Nonnull
+  public SizeValue getMinWidth(@Nonnull final List<LayoutPart> children) {
+    if (children.isEmpty()) {
+      return SizeValue.px(0);
+    }
+    int newWidth = Integer.MAX_VALUE;
+    for (LayoutPart e : children) {
+      int partWidth = e.getBoxConstraints().getWidth().getValueAsInt(0);
+      partWidth += e.getBoxConstraints().getMarginLeft().getValueAsInt(0);
+      partWidth += e.getBoxConstraints().getMarginRight().getValueAsInt(0);
+      if (partWidth < newWidth) {
+        newWidth = partWidth;
+      }
+    }
+    return SizeValue.px(newWidth);
+  }
+
+  /**
    * Calculates the maximum height of the given child elements. This takes padding of this LayoutPart
    * as well as the margin values of the child elements into account.
    *
@@ -117,6 +141,30 @@ public class LayoutPart {
       partHeight += e.getBoxConstraints().getMarginTop().getValueAsInt(0);
       partHeight += e.getBoxConstraints().getMarginBottom().getValueAsInt(0);
       if (partHeight > newHeight) {
+        newHeight = partHeight;
+      }
+    }
+    return SizeValue.px(newHeight);
+  }
+
+  /**
+   * Calculates the minimum height of the given child elements. This takes padding of this LayoutPart
+   * as well as the margin values of the child elements into account.
+   *
+   * @param children List<LayoutPart> to calculate min height
+   * @return min height
+   */
+  @Nonnull
+  public SizeValue getMinHeight(@Nonnull final List<LayoutPart> children) {
+    if (children.isEmpty()) {
+      return SizeValue.px(0);
+    }
+    int newHeight = Integer.MAX_VALUE;
+    for (LayoutPart e : children) {
+      int partHeight = e.getBoxConstraints().getHeight().getValueAsInt(0);
+      partHeight += e.getBoxConstraints().getMarginTop().getValueAsInt(0);
+      partHeight += e.getBoxConstraints().getMarginBottom().getValueAsInt(0);
+      if (partHeight < newHeight) {
         newHeight = partHeight;
       }
     }
