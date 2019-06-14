@@ -100,8 +100,7 @@ public class Effect {
   public void enableHover(final Falloff falloffParameter) {
     hoverEffect = true;
     falloff = falloffParameter;
-
-    element.setVisibleToMouseEvents(true);
+    setVisibleToMouse(true);
   }
 
   public void disableHover() {
@@ -122,6 +121,10 @@ public class Effect {
       infiniteEffect = infinite;
       timeInterpolator.initialize(parameter, infinite);
     }
+  }
+
+  public void setVisibleToMouse(final boolean visibleToMouse) {
+    element.setVisibleToMouseEvents(visibleToMouse);
   }
 
   public void updateParameters() {
