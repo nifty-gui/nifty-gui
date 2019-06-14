@@ -157,6 +157,9 @@ public class EffectType extends XmlBaseType implements Cloneable {
         EffectEventId.onDisabled.equals(effectEventId)) {
       effect.enableInfinite();
     }
+    if (EffectEventId.onClick.equals(effectEventId)) {
+      effect.setVisibleToMouse(true);
+    }
   }
 
   @Nullable
