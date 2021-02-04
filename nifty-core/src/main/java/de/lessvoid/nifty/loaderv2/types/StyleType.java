@@ -3,7 +3,6 @@ package de.lessvoid.nifty.loaderv2.types;
 import de.lessvoid.nifty.loaderv2.types.resolver.style.StyleResolver;
 import de.lessvoid.nifty.tools.StringHelper;
 import de.lessvoid.xml.xpp3.Attributes;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -88,4 +87,44 @@ public class StyleType extends XmlBaseType {
       baseStyle.applyTo(elementType, styleResolver);
     }
   }
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    String styleId = this.getStyleId();
+    String baseStyleId = this.getBaseStyleId();
+    hash = 97 * hash + (styleId != null ? styleId.hashCode() : 0);
+    hash = 97 * hash + (baseStyleId != null ? baseStyleId.hashCode() : 0);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final StyleType other = (StyleType) obj;
+    String styleId = this.getStyleId();
+    String baseStyleId = this.getBaseStyleId();
+    String otherStyleId = other.getStyleId();
+    String otherBaseStyleId = other.getBaseStyleId();
+    if ((styleId == null) ? (otherStyleId != null) : !styleId.equals(otherStyleId)) {
+      return false;
+    }
+    if ((baseStyleId == null) ? (otherBaseStyleId != null) : !baseStyleId.equals(otherBaseStyleId)) {
+      return false;
+    }
+
+    String output = this.output(0);
+    String otherOutput = other.output(0);
+
+    return output.equals(otherOutput);
+  }
+
 }

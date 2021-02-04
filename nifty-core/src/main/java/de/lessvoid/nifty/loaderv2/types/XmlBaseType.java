@@ -4,7 +4,6 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.lwxs.XmlType;
 import de.lessvoid.xml.xpp3.Attributes;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -61,4 +60,37 @@ public class XmlBaseType implements Cloneable, XmlType {
   public void applyAttributes(@Nonnull final Attributes attributes) {
     this.attributes.overwrite(attributes);
   }
+
+  @Override
+  public String toString() {
+    return output(0);
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    String output = this.output(0);
+    hash = 97 * hash + (output != null ? output.hashCode() : 0);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final StyleType other = (StyleType) obj;
+
+    String output = this.output(0);
+    String otherOutput = other.output(0);
+
+    return output.equals(otherOutput);
+  }
+
 }

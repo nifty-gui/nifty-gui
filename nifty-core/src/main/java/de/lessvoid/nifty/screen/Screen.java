@@ -15,12 +15,11 @@ import de.lessvoid.nifty.input.keyboard.KeyboardInputEvent;
 import de.lessvoid.nifty.render.NiftyRenderEngine;
 import de.lessvoid.nifty.spi.time.TimeProvider;
 import de.lessvoid.nifty.tools.StringHelper;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * A single screen with elements and input focus.
@@ -424,6 +423,19 @@ public class Screen {
       }
     }
     return null;
+  }
+
+  public List<Element> findElementsByStyle(@Nullable final String... styleIds) {
+    if (styleIds == null || styleIds.length == 0) {
+      return Collections.emptyList();
+    }
+
+    List<Element> elements = new ArrayList<Element>();
+    for (Element e : layerElements) {
+      elements.addAll(e.findElementsByStyle(styleIds));
+    }
+
+    return elements;
   }
 
   @Nullable
