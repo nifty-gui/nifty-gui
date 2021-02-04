@@ -1,34 +1,5 @@
 package de.lessvoid.nifty;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.WillClose;
-
-import org.bushe.swing.event.EventService;
-import org.bushe.swing.event.EventServiceExistsException;
-import org.bushe.swing.event.EventServiceLocator;
-import org.bushe.swing.event.EventTopicSubscriber;
-import org.bushe.swing.event.ProxySubscriber;
-import org.bushe.swing.event.ThreadSafeEventService;
-import org.bushe.swing.event.annotation.ReferenceStrength;
-
 import de.lessvoid.nifty.controls.StandardControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Action;
@@ -78,6 +49,32 @@ import de.lessvoid.xml.tools.BundleInfoBasename;
 import de.lessvoid.xml.tools.BundleInfoResourceBundle;
 import de.lessvoid.xml.tools.SpecialValuesReplace;
 import de.lessvoid.xml.xpp3.Attributes;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.WillClose;
+import org.bushe.swing.event.EventService;
+import org.bushe.swing.event.EventServiceExistsException;
+import org.bushe.swing.event.EventServiceLocator;
+import org.bushe.swing.event.EventTopicSubscriber;
+import org.bushe.swing.event.ProxySubscriber;
+import org.bushe.swing.event.ThreadSafeEventService;
+import org.bushe.swing.event.annotation.ReferenceStrength;
 
 /**
  * The main Nifty class.
@@ -114,13 +111,13 @@ public class Nifty {
   private final Map<String, Element> popups;
   @Nonnull
   private final Map<String, StyleType> styles;
-  
+
   /**
    * When nifty loads a new style also the styles of controls need to be
    * updated.The only way to do this is to collect here all the style id of updated
-   * styles and then fire an event with eventbus 
-   * @see Nifty#loadStyleFile(java.lang.String) 
-   * @see Nifty#registerStyle(de.lessvoid.nifty.loaderv2.types.StyleType) 
+   * styles and then fire an event with eventbus
+   * @see Nifty#loadStyleFile(java.lang.String)
+   * @see Nifty#registerStyle(de.lessvoid.nifty.loaderv2.types.StyleType)
    * for further details.
    */
   @Nonnull
@@ -385,7 +382,7 @@ public class Nifty {
   private boolean forwardMouseEventToScreen(
       @Nonnull final NiftyMouseInputEvent mouseEvent,
       @Nonnull final Screen screen) {
-    // update the nifty mouse that keeps track of the current mouse position too 
+    // update the nifty mouse that keeps track of the current mouse position too
     niftyMouse.updateMousePosition(mouseEvent.getMouseX(), mouseEvent.getMouseY());
 
     // and forward the event to the current screen
@@ -1337,6 +1334,14 @@ public class Nifty {
     return timeProvider;
   }
 
+  private void refreshStyles(String... styleIds) {
+    for (Screen screen : screens.values()) {
+      for (Element e : screen.findElementsByStyle(styleIds)) {
+        e.refreshStyle(e.getStyle());
+      }
+    }
+  }
+
   public class ClosePopUp {
     @Nonnull
     private final String removePopupId;
@@ -1373,7 +1378,7 @@ public class Nifty {
 
   public void registerStyle(@Nonnull final StyleType style) {
     final String styleId = style.getStyleId();
-    log.fine("registerStyle " + styleId);
+    log.log(Level.FINE, "registerStyle {0}", styleId);
 
     // Handle the simple, normal case.
     // This is a new style, register it and return early.
@@ -1383,14 +1388,17 @@ public class Nifty {
     }
 
     // This style has already been registered.
+    if (styles.get(styleId).equals(style)) {
+      return; // Identical re-register, skip
+    }
+
     // Log a warning and re-register it, overriding the previous value.
 
-    log.warning("Style: " + styleId + " was already registered. The "
-            + "new definition will override the previous.");
+    log.log(Level.WARNING, "Style: {0} was already registered. The new definition will override the previous.", styleId);
 
     styles.put(styleId, style);
 
-    // Handle re-registration of control styles (containing a '#') 
+    // Handle re-registration of control styles (containing a '#')
     // & regular styles.
     if (styleId.contains("#")) {
       // A sub-style has been changed. We need to take its base style name that
@@ -1402,13 +1410,13 @@ public class Nifty {
       controlStylesChanged.add(simpleId);
     } else {
       // This is a regular style, so just fire the event now.
-      getEventService().publish("style-refresh:" + styleId, styleId);
+      refreshStyles(styleId);
     }
   }
 
   public void registerControlDefintion(@Nonnull final ControlDefinitionType controlDefinition) {
     controlDefinitions.put(controlDefinition.getName(), controlDefinition);
-    // TODO: add the same behaviour of register style and try to updating 
+    // TODO: add the same behaviour of register style and try to updating
     // already registered control defintions.
   }
 
@@ -1536,15 +1544,13 @@ public class Nifty {
         log.fine("loadStyleFile");
         log.fine(niftyType.output());
       }
-      for (String id : controlStylesChanged) {
-        getEventService().publish("style-refresh:" + id, id);
-      }
+      refreshStyles(controlStylesChanged.toArray(new String[0]));
       controlStylesChanged.clear();
     } catch (Exception e) {
       log.log(Level.WARNING, e.getMessage(), e);
     }
   }
-  
+
   public void loadControlFile(@Nonnull final String controlFile) {
     try {
       NiftyType niftyType = new NiftyType();
@@ -2051,8 +2057,8 @@ public class Nifty {
     this.niftyInputConsumerNotify = newNotify;
   }
   /**
-   * This method clip a rectangle area. This is meant to be used outside {@code nifty.render(true) } call, it 
-   * will clip an area like a camera . <b>Note:</b> Some elements with childClip=true could modify this clip within {@code nifty.render(true) } loop. 
+   * This method clip a rectangle area. This is meant to be used outside {@code nifty.render(true) } call, it
+   * will clip an area like a camera . <b>Note:</b> Some elements with childClip=true could modify this clip within {@code nifty.render(true) } loop.
    * Tested on Java2d renderer.
    * @param x0 X coordinates of left-upper corner
    * @param y0 Y coordinates of left-upper corner
@@ -2066,8 +2072,8 @@ public class Nifty {
    * {@link #setAbsoluteClip(int, int, int, int) setAbsoluteClip} but this use position and size of a rectangle
    * @param x
    * @param y
-   * @param width 
-   * @param height 
+   * @param width
+   * @param height
    */
   public void setAbsoluteClipRect(int x,int y,int width,int height){
       this.setAbsoluteClip(x, y, x+width, y+height);
