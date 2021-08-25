@@ -1,5 +1,7 @@
 # Nifty GUI
 
+**Please see this comment https://github.com/nifty-gui/nifty-gui/issues/474#issuecomment-905892240 for the current state of this project.**
+
 Nifty is available in the Maven central:
 
 ```XML
