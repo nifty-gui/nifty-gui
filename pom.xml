@@ -15,25 +15,8 @@
     <module>nifty-renderer-libgdx</module>
     <module>nifty-renderer-lwjgl</module>
     <module>nifty-renderer-lwjgl3</module>
-    <!--
-     Could not find artifact javax.jnlp:jnlp-api:jar:5.0 at specified
-     path /Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home/lib/javaws.jar
-
-     Until Slick2D can be used with jdk 11 we have to drop support for now
-     since I couldn't come up with a workaround for the missing Webstart dependency :(
-
     <module>nifty-renderer-slick2d</module>
-    -->
-
-    <!--
-     Could not find artifact javax.jnlp:jnlp-api:jar:5.0 at specified
-     path /Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home/lib/javaws.jar
-
-     The soundsystem openal has a dependency to Slick2D as well and
-     therefore is not compatible with jdk 11. Sigh :(
-
     <module>nifty-soundsystem-openal</module>
-    -->
     <module>nifty-soundsystem-pauls-sound</module>
     <module>nifty-html</module>
     <module>nifty-examples</module>
