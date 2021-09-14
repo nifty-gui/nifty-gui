@@ -33,6 +33,12 @@ public final class SizeValue {
   private static final SizeValue MAX = new SizeValue(SizeValueType.Maximum);
 
   /**
+   * The shared instance of a minimum size value.
+   */
+  @Nonnull
+  private static final SizeValue MIN = new SizeValue(SizeValueType.Minimum);
+
+  /**
    * The shared instance of the 0px size value. This is used to extremely often that it comes in handy to share the
    * instance for some minor optimization.
    */
@@ -348,6 +354,17 @@ public final class SizeValue {
   }
 
   /**
+   * Get a minimum size value.
+   *
+   * @return the size value instance representing the minimum value
+   * @see de.lessvoid.nifty.tools.SizeValueType#Minimum
+   */
+  @Nonnull
+  public static SizeValue min() {
+    return MIN;
+  }
+
+  /**
    * Create a maximum size value that stores a computed value.
    *
    * @param computedValue the computed size
@@ -357,6 +374,18 @@ public final class SizeValue {
   @Nonnull
   public static SizeValue max(final int computedValue) {
     return new SizeValue(SizeValueType.Maximum, computedValue);
+  }
+
+  /**
+   * Create a minimum size value that stores a computed value.
+   *
+   * @param computedValue the computed size
+   * @return the size value instance representing the minimum with computed size
+   * @see de.lessvoid.nifty.tools.SizeValueType#Minimum
+   */
+  @Nonnull
+  public static SizeValue min(final int computedValue) {
+    return new SizeValue(SizeValueType.Minimum, computedValue);
   }
 
   /**
@@ -511,6 +540,10 @@ public final class SizeValue {
 
   public boolean hasMax() {
     return type == SizeValueType.Maximum;
+  }
+
+  public boolean hasMin() {
+    return type == SizeValueType.Minimum;
   }
 
   @Override

@@ -23,24 +23,35 @@ public enum SizeValueType {
   /**
    * The sum size type.
    * <p/>
-   * When set, this size value will be the sum of the sizes of the content/children  of the element it is used on.
-   * Only children with absolute size values will be considered, or children that also have a sum/max size value.
+   * When set, this size value will be the sum of the sizes of the content/children of the element it is used on.
+   * Only children with absolute size values will be considered, or children that also have a sum/max/min size value.
    * <p/>
    * Builders or XML should use the value "s" or "sum". A pixel value can also be given in the form of "100s",
-   * but this is for internal use (it represents the calculated width).
+   * but this is for internal use (it represents the calculated size).
    */
   Sum("s", true, ValueRequirement.CalculatedOnly),
 
   /**
    * The maximum size type.
    * <p/>
-   * When set, this size value will be the highest of the sizes of the content/children  of the element it is used on.
-   * Only children with absolute size values will be considered, or children that also have a sum/max size value.
+   * When set, this size value will be the highest of the sizes of the content/children of the element it is used on.
+   * Only children with absolute size values will be considered, or children that also have a sum/max/min size value.
    * <p/>
    * Builders or XML should use the value "m" or "max". A pixel value can also be given in the form of "100m",
-   * but this is for internal use (it represents the calculated width).
+   * but this is for internal use (it represents the calculated size).
    */
   Maximum("m", true, ValueRequirement.CalculatedOnly),
+
+  /**
+   * The minimum size type.
+   * <p/>
+   * When set, this size value will be the lowest of the sizes of the content/children of the element it is used on.
+   * Only children with absolute size values will be considered, or children that also have a sum/max/min size value.
+   * <p/>
+   * Builders or XML should use the value "min". A pixel value can also be given in the form of "100min",
+   * but this is for internal use (it represents the calculated size).
+   */
+  Minimum("min", true, ValueRequirement.CalculatedOnly),
 
   /**
    * The percent value type. This will resolve to a percentage of the parents size.

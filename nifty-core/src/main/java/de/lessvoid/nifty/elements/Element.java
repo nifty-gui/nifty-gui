@@ -763,7 +763,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
     if (layoutManager != null) {
 
-      // unset width, or width="sum" or width="max"
+      // unset width, or width="sum", width="max" or width="min"
       // try to calculate the width constraint using the children
       // but only if all child elements have a fixed pixel width.
 
@@ -818,6 +818,19 @@ public class Element implements NiftyEvent, EffectManager.Notify {
           setConstraintWidth(SizeValue.max(0));
         }
 
+      } else if (myWidth.hasMin()) {
+        List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentWidth();
+        SizeValue newWidth = layoutPart.getMinWidth(layoutPartChild);
+        if (newWidth.hasValue()) {
+          int newWidthPx = newWidth.getValueAsInt(0);
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingLeft().getValueAsInt(newWidth.getValueAsInt
+                  (newWidthPx));
+          newWidthPx += this.layoutPart.getBoxConstraints().getPaddingRight().getValueAsInt(newWidth.getValueAsInt
+                  (newWidthPx));
+          setConstraintWidth(SizeValue.min(newWidthPx));
+        } else {
+          setConstraintWidth(SizeValue.min(0));
+        }
       }
     }
   }
@@ -857,7 +870,7 @@ public class Element implements NiftyEvent, EffectManager.Notify {
 
     if (layoutManager != null) {
 
-      // unset height, or height="sum" or height="max"
+      // unset height, or height="sum", height="max" or height="min"
       // try to calculate the height constraint using the children
       // but only if all child elements have a fixed pixel height.
 
@@ -913,6 +926,19 @@ public class Element implements NiftyEvent, EffectManager.Notify {
           setConstraintHeight(SizeValue.max(0));
         }
 
+      } else if (myHeight.hasMin()) {
+        List<LayoutPart> layoutPartChild = getLayoutChildrenWithIndependentHeight();
+        SizeValue newHeight = layoutPart.getMinHeight(layoutPartChild);
+        if (newHeight.hasValue()) {
+          int newHeightPx = newHeight.getValueAsInt(0);
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingTop().getValueAsInt(newHeight.getValueAsInt
+                  (newHeightPx));
+          newHeightPx += this.layoutPart.getBoxConstraints().getPaddingBottom().getValueAsInt(newHeight.getValueAsInt
+                  (newHeightPx));
+          setConstraintHeight(SizeValue.min(newHeightPx));
+        } else {
+          setConstraintHeight(SizeValue.min(0));
+        }
       }
     }
   }
