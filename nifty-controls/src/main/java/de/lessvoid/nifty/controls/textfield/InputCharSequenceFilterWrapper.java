@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
  *
  * @author Martin Karing &lt;nitram@illarion.org&gt;
  */
-class InputCharSequenceFilterWrapper implements TextFieldInputCharFilter {
+public class InputCharSequenceFilterWrapper implements TextFieldInputCharFilter {
   /**
    * The filter that is wrapped by the class and that will be queries to find out if the input is acceptable.
    */
@@ -23,7 +23,7 @@ class InputCharSequenceFilterWrapper implements TextFieldInputCharFilter {
    *
    * @param filter the filter that will be asked if all input is accepted
    */
-  InputCharSequenceFilterWrapper(@Nonnull final TextFieldInputCharSequenceFilter filter) {
+  public InputCharSequenceFilterWrapper(@Nonnull final TextFieldInputCharSequenceFilter filter) {
     wrappedFilter = filter;
   }
 

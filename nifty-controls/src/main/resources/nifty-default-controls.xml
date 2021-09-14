@@ -10,6 +10,7 @@
     <useControls filename="nifty-controls/nifty-image-select.xml"/>
     <useControls filename="nifty-controls/nifty-label.xml"/>
     <useControls filename="nifty-controls/nifty-textfield.xml"/>
+    <useControls filename="nifty-controls/nifty-textarea.xml"/>
     <useControls filename="nifty-controls/nifty-menu.xml"/>
     <useControls filename="nifty-controls/nifty-messagebox.xml"/>
     <useControls filename="nifty-controls/nifty-scrollbar.xml"/>
